@@ -1,26 +1,22 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.time.LocalDate;
 
 
 @SpringBootTest
-class SolutionRepositoryTest {
+class SolutionServiceTest {
 
     @Autowired
-    private SolutionRepository solutionRepository;
+    private SolutionService solutionService;
 
     @Test
-    @Transactional
-    void 정상_입력_저장_테스트(){
+    void 저장_테스트(){
         // given
         Solution solution = Solution.builder()
                 .level(Level.THREE)
@@ -34,11 +30,14 @@ class SolutionRepositoryTest {
                 .build();
 
         // when
-        Solution saved = solutionRepository.save(solution);
+        Solution saved = solutionService.save(solution);
 
-        //then
+        // then
         Assertions.assertThat(saved).isEqualTo(solution);
+
     }
+
+
 
 
 
