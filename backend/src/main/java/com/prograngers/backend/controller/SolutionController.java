@@ -35,6 +35,7 @@ public class SolutionController {
             return ResponseEntity.badRequest().body(new ErrorResponse("백준, 프로그래머스에 대한 문제의 풀이만 작성할 수 있습니다"));
         }
 
+        // 리포지토리 활용해 저장
         Solution solution = Solution.toEntity(solutionRequest);
         solutionService.save(solution);
 
@@ -45,10 +46,5 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
 
     }
-
-
-
-
-
 
 }
