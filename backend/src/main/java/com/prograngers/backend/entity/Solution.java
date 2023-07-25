@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,7 @@ public class Solution {
 
     @OneToOne
     @JoinColumn(name="id")
+    @Nullable
     private Solution scrapId;
 
     private LocalDate date;
