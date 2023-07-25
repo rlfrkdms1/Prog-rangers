@@ -12,28 +12,28 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/solutions")
 @Slf4j
 public class SolutionController {
-
     private final SolutionService solutionService;
 
     // solution 쓰기
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionRequest solutionRequest, BindingResult bindingResult,
-                                     HttpServletResponse response) throws IOException, URISyntaxException {
+    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionRequest solutionRequest) throws URISyntaxException {
 
-        log.info("===========컨트롤러 호출됨===============");
-
-        //Valid를 통과하지 못할 경우 MethodArgumentValidException 발생
+        // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
         Solution solution = Solution.toEntity(solutionRequest);
@@ -46,6 +46,8 @@ public class SolutionController {
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
+
+
 
 
 
