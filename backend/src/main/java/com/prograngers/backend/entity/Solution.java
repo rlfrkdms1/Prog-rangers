@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -35,7 +37,8 @@ public class Solution {
 
     private String description;
 
-    private Like likes;
+    @OneToMany(mappedBy = "solution")
+    private List<Like> likes = new ArrayList<>();
 
     private Integer scraps;
 
@@ -45,5 +48,13 @@ public class Solution {
     private Solution scrapId;
 
     private LocalDate date;
+
+    @OneToOne
+    @JoinColumn(name="id")
+    private Algorithm algorithm;
+
+    @OneToOne
+    @JoinColumn(name="id")
+    private DataStructure dataStructure;
 
 }
