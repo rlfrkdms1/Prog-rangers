@@ -1,6 +1,7 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
