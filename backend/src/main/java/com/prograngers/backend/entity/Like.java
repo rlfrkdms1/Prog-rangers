@@ -17,11 +17,11 @@ public class Like {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="solution_id")
     private Solution solution;
 
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="member_id")
     private Member member;
 
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,19 +17,20 @@ public class SolutionService {
     private final SolutionRepository solutionRepository;
 
     public Solution  save(){
-
+        return new Solution();
     }
 
     public Solution update(){
-
+        return new Solution();
     }
 
     public Solution delete(){
-
+        return new Solution();
     }
 
     public List<Solution> index(Long id){
-
+        List<Solution> list = new ArrayList<>();
+        return list;
     }
 
 }

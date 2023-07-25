@@ -22,11 +22,11 @@ public class Solution {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="problem_id")
     private Problem problem;
 
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="member_id")
     private Member member;
 
     private String title;
@@ -43,18 +43,18 @@ public class Solution {
     private Integer scraps;
 
     @OneToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="scrap_id")
     @Nullable
     private Solution scrapId;
 
     private LocalDate date;
 
     @OneToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="algorithm_id")
     private Algorithm algorithm;
 
     @OneToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="dataStructure_id")
     private DataStructure dataStructure;
 
     @Enumerated(EnumType.STRING)
