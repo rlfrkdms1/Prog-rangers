@@ -57,4 +57,7 @@ public class Solution {
     @JoinColumn(name="id")
     private DataStructure dataStructure;
 
+    @Enumerated(EnumType.STRING)
+    private Level level;
+
 }
