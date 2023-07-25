@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller;
 
+import com.prograngers.backend.dto.ErrorResponse;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.SolutionService;
@@ -25,8 +26,6 @@ public class SolutionController {
         if (bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(new ErrorResponse());
         }
-
-        // 아직 API 설계 X
 
         Solution solution = solutionService.save();
 
