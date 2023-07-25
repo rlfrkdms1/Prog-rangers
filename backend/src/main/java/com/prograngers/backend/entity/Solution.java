@@ -3,10 +3,7 @@ package com.prograngers.backend.entity;
 import com.prograngers.backend.dto.SolutionRequest;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Solution {
 
     @Id @GeneratedValue
@@ -50,11 +48,11 @@ public class Solution {
 
     private LocalDate date;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="algorithm_id")
     private Algorithm algorithm;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="dataStructure_id")
     private DataStructure dataStructure;
 

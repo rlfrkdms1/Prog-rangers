@@ -6,6 +6,7 @@ import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.net.URISyntaxException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/solutions")
+@Slf4j
 public class SolutionController {
 
     private final SolutionService solutionService;
@@ -31,7 +33,11 @@ public class SolutionController {
     public ResponseEntity<?> newForm(@RequestBody @Validated SolutionRequest solutionRequest, BindingResult bindingResult,
                                      HttpServletResponse response) throws IOException, URISyntaxException {
 
+        log.info("===========컨트롤러 호출됨===============");
+        log.info(solutionRequest.toString());
+
         if (bindingResult.hasErrors()){
+            log.info("===========bindingResult에 에러 있음===============");
             return ResponseEntity.badRequest().body(new ErrorResponse("백준, 프로그래머스에 대한 문제의 풀이만 작성할 수 있습니다"));
         }
 
@@ -40,7 +46,7 @@ public class SolutionController {
         solutionService.save(solution);
 
         // 성공할 시 problemId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/"); //ㅔ개ㅠ
+        URI redirectUri = new URI("http://localhost:8080/solutions");
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
