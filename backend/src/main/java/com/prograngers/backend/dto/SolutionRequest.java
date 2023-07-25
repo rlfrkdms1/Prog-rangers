@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,25 +14,25 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SolutionRequest {
 
-    @NotBlank
+    @NotBlank(message = "문제 제목을 입력해주세요")
     private String problemTitle;
-    @NotBlank
+    @NotBlank(message = "풀이 제목을 입력해주세요")
     private String solutionTitle;
-    @NotBlank
+    @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
-    @NotBlank
+    @NotBlank(message = "문제 난이도를 입력해주세요")
     private String  level;
 
-    @NotBlank
+    @NotBlank(message = "알고리즘을 입력해주세요")
     private String algorithm;
 
-    @NotBlank
+    @NotBlank(message = "자료구조를 입력해주세요")
     private String dataStructure;
 
-    @NotBlank
+    @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
 
-    @NotBlank
+    @NotBlank(message = "문제 소스 코드를 입력해주세요")
     private String code;
 
 }

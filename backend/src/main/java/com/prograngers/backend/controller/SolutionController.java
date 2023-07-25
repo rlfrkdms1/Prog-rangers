@@ -5,17 +5,14 @@ import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -29,28 +26,28 @@ public class SolutionController {
 
     private final SolutionService solutionService;
 
+    // solution 쓰기
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@RequestBody @Validated SolutionRequest solutionRequest, BindingResult bindingResult,
+    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionRequest solutionRequest, BindingResult bindingResult,
                                      HttpServletResponse response) throws IOException, URISyntaxException {
 
         log.info("===========컨트롤러 호출됨===============");
-        log.info(solutionRequest.toString());
 
-        if (bindingResult.hasErrors()){
-            log.info("===========bindingResult에 에러 있음===============");
-            return ResponseEntity.badRequest().body(new ErrorResponse("백준, 프로그래머스에 대한 문제의 풀이만 작성할 수 있습니다"));
-        }
+        //Valid를 통과하지 못할 경우 MethodArgumentValidException 발생
 
         // 리포지토리 활용해 저장
         Solution solution = Solution.toEntity(solutionRequest);
-        solutionService.save(solution);
+        Solution saved = solutionService.save(solution);
+        Long solutionId = saved.getId();
 
-        // 성공할 시 problemId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions");
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        URI redirectUri = new URI("http://localhost:8080/solutions/"+solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
-
     }
+
+
+
 
 }
