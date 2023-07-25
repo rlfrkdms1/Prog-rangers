@@ -20,11 +20,11 @@ public class Solution {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="problem_id")
     private Problem problem;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="member_id")
     private Member member;
 
@@ -77,13 +77,12 @@ public class Solution {
         }
 
           Solution soultion = Solution.builder()
-                  .title(dto.getProblemTitle())
+                  .title(dto.getSolutionTitle())
+                  .problem(new Problem(null, dto.getProblemTitle(),dto.getProblemLink(), "백준"))
                   .pubilc(true) //API 스펙에 dto에 public이 없음
                   .code(dto.getCode())
                   .description(dto.getDescription())
-                  .likes(null)
                   .scraps(0)
-                  .scrapId(null)
                   .date(LocalDate.now())
                   .algorithm(new Algorithm(null, dto.getAlgorithm()))
                   .dataStructure(new DataStructure(null, dto.getDataStructure()))
