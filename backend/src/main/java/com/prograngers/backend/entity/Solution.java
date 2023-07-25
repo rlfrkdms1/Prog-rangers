@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity;
 
+import com.prograngers.backend.dto.SolutionRequest;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -59,5 +60,39 @@ public class Solution {
 
     @Enumerated(EnumType.STRING)
     private Level level;
+
+    // 정적 팩토리 메소드
+    public static Solution toEntity(SolutionRequest dto){
+
+        Level level;
+        String dtoLevel = dto.getLevel();
+        if (dtoLevel.equals("ONE")) {
+            level = Level.ONE;
+        } else if (dtoLevel.equals("TWO")) {
+            level = Level.TWO;
+        } else if (dtoLevel.equals("THREE")){
+            level = Level.THREE;
+        } else if (dtoLevel.equals("FOUR")){
+            level = Level.FOUR;
+        } else {
+            level = Level.FIVE;
+        }
+
+          Solution soultion = Solution.builder()
+                  .title(dto.getProblemTitle())
+                  .pubilc(true) //API 스펙에 dto에 public이 없음
+                  .code(dto.getCode())
+                  .description(dto.getDescription())
+                  .likes(null)
+                  .scraps(0)
+                  .scrapId(null)
+                  .date(LocalDate.now())
+                  .algorithm(new Algorithm(null, dto.getAlgorithm()))
+                  .dataStructure(new DataStructure(null, dto.getDataStructure()))
+                  .level(level)
+                  .build();
+
+        return soultion;
+    }
 
 }

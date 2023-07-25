@@ -35,8 +35,8 @@ public class SolutionController {
             return ResponseEntity.badRequest().body(new ErrorResponse("백준, 프로그래머스에 대한 문제의 풀이만 작성할 수 있습니다"));
         }
 
-        Solution solution = solutionService.save();
-
+        Solution solution = Solution.toEntity(solutionRequest);
+        solutionService.save(solution);
 
         // 성공할 시 problemId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI("http://localhost:8080/solutions/"); //ㅔ개ㅠ
