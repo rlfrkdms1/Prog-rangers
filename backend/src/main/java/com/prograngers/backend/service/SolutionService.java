@@ -1,6 +1,7 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
