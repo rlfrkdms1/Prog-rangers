@@ -52,4 +52,7 @@ public class SolutionService {
         return solutionList;
     }
 
+    public Optional<Solution> findById(Long solutionId) {
+        return solutionRepository.findById(solutionId);
+    }
 }
