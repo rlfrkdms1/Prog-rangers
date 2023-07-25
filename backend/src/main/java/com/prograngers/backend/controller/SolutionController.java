@@ -12,9 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -45,9 +45,11 @@ public class SolutionController {
     @GetMapping("/{solutionId}/update-form")
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId){
         Optional<Solution> optionalTarget = solutionService.findById(solutionId);
-        Solution target = optionalTarget.get();
+        Solution target = optionalTarget.orElse(null);
         if (target==null){
-            return ResponseEntity.badRequest().body(new ErrorResponse("풀이를 찾을 수 없습니다."));
+            log.info("internal server error 발생");
+            throw new NoSuchElementException("풀이를 찾을 수 없습니다");
+            // return ResponseEntity.badRequest().body(new ErrorResponse("풀이를 찾을 수 없습니다."));
         }
         return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
     }
