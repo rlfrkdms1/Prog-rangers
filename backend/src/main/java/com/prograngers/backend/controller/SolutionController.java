@@ -1,6 +1,5 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.ErrorResponse;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
@@ -56,6 +55,7 @@ public class SolutionController {
     @PatchMapping("/{solutionId}")
     public ResponseEntity<?> update(@PathVariable Long solutionId,
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
+
         // SolutionPatchRequest에서 Valid 검증에 실패할 경우 MethodArgumentNotValidException을 던지고 ExControllerAdvice에서 처리한다
 
         // solutionId에 해당하는 solution  찾기, 없을 경우 NoSuchElementException을 던지고 ExControllerAdvice에서 처리한다
@@ -73,6 +73,24 @@ public class SolutionController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    // 삭제 요청
+    @DeleteMapping("{solutionId}")
+    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException {
+        // solutionId에 해당하는 solution  찾기, 없을 경우 NoSuchElementException을 던지고 ExControllerAdvice에서 처리한다
+        Optional<Solution> optionalTarget = solutionService.findById(solutionId);
+        Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
+
+        // solutionService로 delete한다
+        solutionService.delete(target);
+
+        // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
+        URI redirectUri = new URI("http://localhost:8080/solutions/");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(redirectUri);
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+
     }
 
 
