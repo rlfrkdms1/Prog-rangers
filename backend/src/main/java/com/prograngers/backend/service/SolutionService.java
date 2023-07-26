@@ -28,9 +28,8 @@ public class SolutionService {
             return updated;
     }
 
-    public Solution delete(Solution solution){
+    public void delete(Solution solution){
             solutionRepository.delete(solution);
-            return solution;
     }
 
     public List<Solution> index(Member member){
