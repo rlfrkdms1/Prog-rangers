@@ -47,12 +47,8 @@ public class SolutionController {
     @GetMapping("/{solutionId}/update-form")
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId){
         Optional<Solution> optionalTarget = solutionService.findById(solutionId);
-        Solution target = optionalTarget.orElse(null);
-        if (target==null){
-            throw new NoSuchElementException("풀이를 찾을 수 없습니다");
-            // return ResponseEntity.badRequest().body(new ErrorResponse("풀이를 찾을 수 없습니다."));
-        }
-        log.info("정상로직");
+        Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
+
         return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
     }
 
@@ -64,19 +60,16 @@ public class SolutionController {
 
         // solutionId에 해당하는 solution  찾기, 없을 경우 NoSuchElementException을 던지고 ExControllerAdvice에서 처리한다
         Optional<Solution> optionalTarget = solutionService.findById(solutionId);
-        Solution target = optionalTarget.orElse(null);
-        if (target==null){
-            throw new NoSuchElementException("풀이를 찾을 수 없습니다");
-        }
+        Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
 
         // target을 고치려는 값으로 바꾼다
-        solutionPatchRequest.toEntity(target);
+        Solution solution = solutionPatchRequest.toEntity(target);
 
         // solutionService로 update한다
-        Solution updated = solutionService.update(target);
+        Solution updated = solutionService.update(solution);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/"+solutionId);
+        URI redirectUri = new URI("http://localhost:8080/solutions/"+updated.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
