@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @SpringBootTest
@@ -77,6 +79,31 @@ class SolutionRepositoryTest {
         Assertions.assertThat(patchedSolution.getTitle()).isEqualTo(patchSolution.getTitle());
     }
 
+    @Test
+    @Transactional
+    void 솔루션_삭제_테스트(){
+        // given
+        Solution solution = Solution.builder()
+                .level(Level.THREE)
+                .title("풀이 제목")
+                .algorithm(new Algorithm(null, "알고리즘명"))
+                .dataStructure(new DataStructure(null, "자료구조명"))
+                .code("int a=10")
+                .description("풀이 설명")
+                .date(LocalDate.now())
+                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .build();
+        Solution saved = solutionRepository.save(solution);
+        log.info("saved id : {}",saved.getId());
 
+        // when
+        solutionRepository.delete(solution);
+
+        // then
+        org.junit.jupiter.api.Assertions.assertThrows(NoSuchElementException.class,
+                ()->{
+                    solutionRepository.findById(solution.getId()).orElseThrow(()->new NoSuchElementException());
+                });
+    }
 
 }
