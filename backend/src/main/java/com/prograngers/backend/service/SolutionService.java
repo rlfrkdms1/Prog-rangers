@@ -24,25 +24,13 @@ public class SolutionService {
     }
 
     public Solution update(Solution solution){
-        Optional<Solution> optionalTarget = solutionRepository.findById(solution.getId());
-        Solution target = optionalTarget.get();
-        if (target==null){
-            return null;
-        } else {
             Solution updated = solutionRepository.save(solution);
             return updated;
-        }
     }
 
     public Solution delete(Solution solution){
-        Optional<Solution> optionalTarget = solutionRepository.findById(solution.getId());
-        Solution target = optionalTarget.get();
-        if (target==null){
-            return null;
-        } else {
             solutionRepository.delete(solution);
-            return target;
-        }
+            return solution;
     }
 
     public List<Solution> index(Member member){
