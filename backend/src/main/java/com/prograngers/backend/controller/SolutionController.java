@@ -56,17 +56,8 @@ public class SolutionController {
     public ResponseEntity<?> update(@PathVariable Long solutionId,
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
-        // SolutionPatchRequest에서 Valid 검증에 실패할 경우 MethodArgumentNotValidException을 던지고 ExControllerAdvice에서 처리한다
-
-        // solutionId에 해당하는 solution  찾기, 없을 경우 NoSuchElementException을 던지고 ExControllerAdvice에서 처리한다
-        Optional<Solution> optionalTarget = solutionService.findById(solutionId);
-        Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
-
-        // target을 고치려는 값으로 바꾼다
-        Solution solution = solutionPatchRequest.toEntity(target);
-
         // solutionService로 update한다
-        Solution updated = solutionService.update(solution);
+        Solution updated = solutionService.update(solutionId,  solutionPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI("http://localhost:8080/solutions/"+updated.getId());
@@ -78,12 +69,9 @@ public class SolutionController {
     // 삭제 요청
     @DeleteMapping("{solutionId}")
     public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException {
-        // solutionId에 해당하는 solution  찾기, 없을 경우 NoSuchElementException을 던지고 ExControllerAdvice에서 처리한다
-        Optional<Solution> optionalTarget = solutionService.findById(solutionId);
-        Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
 
         // solutionService로 delete한다
-        solutionService.delete(target);
+        solutionService.delete(solutionId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
         URI redirectUri = new URI("http://localhost:8080/solutions/");
@@ -92,9 +80,4 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
 
     }
-
-
-
-
-
 }
