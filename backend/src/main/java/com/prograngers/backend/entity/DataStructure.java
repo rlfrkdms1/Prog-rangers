@@ -17,6 +17,6 @@ public class DataStructure {
 
     @Id @GeneratedValue
     private Long id;
-    private String name;
+    private DataStructures name;
 
 }

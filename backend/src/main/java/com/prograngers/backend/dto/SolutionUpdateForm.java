@@ -1,5 +1,7 @@
 package com.prograngers.backend.dto;
 
+import com.prograngers.backend.entity.Algorithms;
+import com.prograngers.backend.entity.DataStructures;
 import com.prograngers.backend.entity.Solution;
 import lombok.*;
 
@@ -11,8 +13,8 @@ public class SolutionUpdateForm {
 
     private String title;
     private String link;
-    private String algorithmName;
-    private String dataStructureName;
+    private Algorithms algorithmName;
+    private DataStructures dataStructureName;
 
     private String code;
 

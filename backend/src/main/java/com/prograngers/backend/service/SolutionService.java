@@ -32,7 +32,7 @@ public class SolutionService {
 //    }
 
     public Solution update(Long solutionId, SolutionPatchRequest request) throws SolutionNotFoundException {
-        Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException("풀이가 존재하지 않습니다"));
+        Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
         return updated;
@@ -43,7 +43,7 @@ public class SolutionService {
 //    }
 
         public void delete(Long solutionId) throws SolutionNotFoundException {
-            Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException("풀이가 존재하지 않습니다"));
+            Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
             solutionRepository.delete(target);
     }
 

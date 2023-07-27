@@ -19,7 +19,7 @@ class SolutionServiceTest {
     void 저장_테스트(){
         // given
         Solution solution = Solution.builder()
-                .level(Level.THREE)
+                .level(Levels.THREE)
                 .title("풀이 제목")
                 .algorithm(new Algorithm(null, "알고리즘명"))
                 .dataStructure(new DataStructure(null, "자료구조명"))
@@ -41,7 +41,7 @@ class SolutionServiceTest {
     void 수정_테스트(){
         // given
         Solution solution = Solution.builder()
-                .level(Level.THREE)
+                .level(Levels.THREE)
                 .title("풀이 제목")
                 .algorithm(new Algorithm(null, "알고리즘명"))
                 .dataStructure(new DataStructure(null, "자료구조명"))
@@ -54,7 +54,7 @@ class SolutionServiceTest {
         Long solutionId = solution.getId();
 
         Solution tou = Solution.builder()
-                .level(Level.THREE)
+                .level(Levels.THREE)
                 .title("풀이 제목")
                 .algorithm(new Algorithm(null, "알고리즘명"))
                 .dataStructure(new DataStructure(null, "자료구조명"))

@@ -1,5 +1,8 @@
 package com.prograngers.backend.dto;
 
+import com.prograngers.backend.entity.Algorithms;
+import com.prograngers.backend.entity.DataStructures;
+import com.prograngers.backend.entity.Levels;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,13 +24,13 @@ public class SolutionRequest {
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
     @NotBlank(message = "문제 난이도를 입력해주세요")
-    private String  level;
+    private Levels level;
 
     @NotBlank(message = "알고리즘을 입력해주세요")
-    private String algorithm;
+    private Algorithms algorithm;
 
     @NotBlank(message = "자료구조를 입력해주세요")
-    private String dataStructure;
+    private DataStructures dataStructure;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;

@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @SpringBootTest
@@ -23,10 +22,10 @@ class SolutionRepositoryTest {
     void 정상_입력_저장_테스트(){
         // given
         Solution solution = Solution.builder()
-                .level(Level.THREE)
+                .level(Levels.THREE)
                 .title("풀이 제목")
-                .algorithm(new Algorithm(null, "알고리즘명"))
-                .dataStructure(new DataStructure(null, "자료구조명"))
+                .algorithm(new Algorithm(null, Algorithms.BFS))
+                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
@@ -45,10 +44,10 @@ class SolutionRepositoryTest {
     void 솔루션_수정_테스트(){
         // given
         Solution solution = Solution.builder()
-                .level(Level.THREE)
+                .level(Levels.THREE)
                 .title("풀이 제목")
-                .algorithm(new Algorithm(null, "알고리즘명"))
-                .dataStructure(new DataStructure(null, "자료구조명"))
+                .algorithm(new Algorithm(null, Algorithms.BFS))
+                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
@@ -76,7 +75,8 @@ class SolutionRepositoryTest {
         log.info("patchedSolution id : {}",patchedSolution.getId());
 
         // then
-        Assertions.assertThat(patchedSolution.getTitle()).isEqualTo(patchSolution.getTitle());
+        // Assertions.assertThat(patchedSolution.getTitle()).isEqualTo(patchSolution.getTitle());
+        Assertions.assertThat(patchedSolution).isEqualTo(patchSolution);
     }
 
     @Test
@@ -84,10 +84,10 @@ class SolutionRepositoryTest {
     void 솔루션_삭제_테스트(){
         // given
         Solution solution = Solution.builder()
-                .level(Level.THREE)
+                .level(Levels.THREE)
                 .title("풀이 제목")
-                .algorithm(new Algorithm(null, "알고리즘명"))
-                .dataStructure(new DataStructure(null, "자료구조명"))
+                .algorithm(new Algorithm(null, Algorithms.BFS))
+                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())

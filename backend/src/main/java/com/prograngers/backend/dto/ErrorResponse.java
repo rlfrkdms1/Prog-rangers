@@ -1,6 +1,6 @@
 package com.prograngers.backend.dto;
 
-import com.prograngers.backend.exception.Errorcode;
+import com.prograngers.backend.exception.ErrorCode;
 import lombok.*;
 
 @AllArgsConstructor
@@ -10,6 +10,6 @@ import lombok.*;
 public class ErrorResponse {
    // String description;
 
-    Errorcode errocode;
+    ErrorCode errocode;
     String descriptions;
 }

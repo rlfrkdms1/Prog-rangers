@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Algorithm {
-
     @Id @GeneratedValue
     private Long id;
-    private String name;
+    private Algorithms name;
 }

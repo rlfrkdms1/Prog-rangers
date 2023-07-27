@@ -56,24 +56,10 @@ public class Solution {
     private DataStructure dataStructure;
 
     @Enumerated(EnumType.STRING)
-    private Level level;
+    private Levels level;
 
     // 정적 팩토리 메소드
     public static Solution toEntity(SolutionRequest dto){
-
-        Level level;
-        String dtoLevel = dto.getLevel();
-        if (dtoLevel.equals("ONE")) {
-            level = Level.ONE;
-        } else if (dtoLevel.equals("TWO")) {
-            level = Level.TWO;
-        } else if (dtoLevel.equals("THREE")){
-            level = Level.THREE;
-        } else if (dtoLevel.equals("FOUR")){
-            level = Level.FOUR;
-        } else {
-            level = Level.FIVE;
-        }
 
           Solution soultion = Solution.builder()
                   .title(dto.getSolutionTitle())
@@ -85,7 +71,7 @@ public class Solution {
                   .date(LocalDate.now())
                   .algorithm(new Algorithm(null, dto.getAlgorithm()))
                   .dataStructure(new DataStructure(null, dto.getDataStructure()))
-                  .level(level)
+                  .level(dto.getLevel())
                   .build();
 
         return soultion;

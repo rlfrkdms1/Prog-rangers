@@ -1,7 +1,8 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.ErrorResponse;
-import com.prograngers.backend.exception.Errorcode;
+import com.prograngers.backend.exception.ErrorCode;
+import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class ExControllerAdvice {
         List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
             ErrorResponse errorResponse = ErrorResponse.builder()
-                    .errocode(Errorcode.INVALID_SOLUTION_BODY)
+                    .errocode(ErrorCode.INVALID_SOLUTION_BODY)
                     .descriptions(error.getDefaultMessage())
                     .build();
             errorList.add(errorResponse);
@@ -34,20 +35,11 @@ public class ExControllerAdvice {
         return new ResponseEntity(errorList,HttpStatus.BAD_REQUEST);
     }
 
-    // 요청한 PathVariable에 대한 데이터가 db에 없는 경우 에러메세지와 함께 NoSuchElementException 던짐
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> noSuchElementEx(NoSuchElementException exception){
-//        String message = exception.getMessage();
-//        log.info("NoSuchElementException 발생! : message : {}",message);
-//        ErrorResponse errorResponse = new ErrorResponse(message);
-//        return ResponseEntity.badRequest().body(errorResponse);
-//    }
-
      // 요청한 PathVariable에 대한 데이터가 db에 없는 경우 에러메세지와 함께 NoSuchElementException 던짐
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> noSuchElementEx(SolutionNotFoundException exception){
+    public ResponseEntity<ErrorResponse> noSuchElementEx(NotFoundException exception){
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(Errorcode.SOLUTION_NOT_EXISTS, message);
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.SOLUTION_NOT_EXISTS, message);
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
