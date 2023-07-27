@@ -2,6 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
+import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,14 @@ public class ExControllerAdvice {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> noSuchElementEx(NotFoundException exception){
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.SOLUTION_NOT_EXISTS, message);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> enumTypeEx(EnumTypeException exception){
+        String message = exception.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
         return ResponseEntity.badRequest().body(errorResponse);
     }
 

@@ -2,10 +2,8 @@ package com.prograngers.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.prograngers.backend.exception.notfound.DataStructureNotFoundException;
-import com.prograngers.backend.exception.notfound.LevelNotFoundException;
+import com.prograngers.backend.exception.enumtype.LevelNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum Levels {

@@ -2,9 +2,8 @@ package com.prograngers.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.prograngers.backend.exception.notfound.AlgorithmNotFoundException;
+import com.prograngers.backend.exception.enumtype.AlgorithmNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum Algorithms {
