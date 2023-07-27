@@ -29,7 +29,7 @@ public class Solution {
 
     private String title;
 
-    private boolean pubilc;
+    private boolean isPublic;
 
     private String code;
 

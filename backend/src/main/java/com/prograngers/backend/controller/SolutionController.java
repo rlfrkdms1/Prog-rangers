@@ -32,7 +32,7 @@ public class SolutionController {
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Solution solution = Solution.toEntity(solutionRequest);
+        Solution solution = solutionRequest.toEntity();
         Solution saved = solutionService.save(solution);
         Long solutionId = saved.getId();
 
