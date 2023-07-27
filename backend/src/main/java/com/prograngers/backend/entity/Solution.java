@@ -69,6 +69,16 @@ public class Solution {
         }
     }
 
+    public void updateTitle(String title){
+        if (title!=null){
+            this.title = title;
+        }
+    }
+
+    public void updateIsPublic(boolean isPublic){
+        this.isPublic = isPublic;
+    }
+
     public void updateCode(String code){
         if (!code.isEmpty()){
             this.code = code;
@@ -86,9 +96,11 @@ public class Solution {
             this.likes.add(like);
         }
     }
+
     public void upScraps(){
         this.scraps+=1;
     }
+
     public void downScraps(){
         this.scraps-=1;
     }

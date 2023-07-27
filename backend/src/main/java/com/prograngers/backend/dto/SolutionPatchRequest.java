@@ -29,22 +29,6 @@ public class SolutionPatchRequest {
     private String description;
 
     public Solution toEntity(Solution target) {
-        return Solution.builder()
-                .id(target.getId())
-                .problem(target.getProblem())
-                .member(target.getMember())
-                .title(title)
-                .pubilc(target.isPubilc())
-                .description(description)
-                .likes(target.getLikes())
-                .scraps(target.getScraps())
-                .scrapId(target.getScrapId())
-                .date(target.getDate())
-                .algorithm(new Algorithm(null,target.getAlgorithm().getName()))
-                .dataStructure(new DataStructure(null, target.getDataStructure().getName()))
-                .level(target.getLevel())
-                .code(code)
-                .description(description)
-                .build();
+        target.
     }
 }
