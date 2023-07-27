@@ -37,6 +37,40 @@ class SolutionServiceTest {
 
     }
 
+    @Test
+    void 수정_테스트(){
+        // given
+        Solution solution = Solution.builder()
+                .level(Level.THREE)
+                .title("풀이 제목")
+                .algorithm(new Algorithm(null, "알고리즘명"))
+                .dataStructure(new DataStructure(null, "자료구조명"))
+                .code("int a=10")
+                .description("풀이 설명")
+                .date(LocalDate.now())
+                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .build();
+
+        Long solutionId = solution.getId();
+
+        Solution tou = Solution.builder()
+                .level(Level.THREE)
+                .title("풀이 제목")
+                .algorithm(new Algorithm(null, "알고리즘명"))
+                .dataStructure(new DataStructure(null, "자료구조명"))
+                .code("int a=10")
+                .description("풀이 설명")
+                .date(LocalDate.now())
+                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .build();
+
+
+        // when
+
+
+        // then
+    }
+
 
 
 

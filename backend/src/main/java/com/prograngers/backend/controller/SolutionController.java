@@ -4,6 +4,7 @@ import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class SolutionController {
     // 수정 요청
     @PatchMapping("/{solutionId}")
     public ResponseEntity<?> update(@PathVariable Long solutionId,
-                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
+                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException, SolutionNotFoundException {
 
         // solutionService로 update한다
         Solution updated = solutionService.update(solutionId,  solutionPatchRequest);
@@ -68,7 +69,7 @@ public class SolutionController {
 
     // 삭제 요청
     @DeleteMapping("{solutionId}")
-    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException {
+    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException, SolutionNotFoundException {
 
         // solutionService로 delete한다
         solutionService.delete(solutionId);

@@ -3,6 +3,7 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,8 @@ public class SolutionService {
 //            return updated;
 //    }
 
-    public Solution update(Long solutionId, SolutionPatchRequest request){
-        Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new NoSuchElementException("풀이가 존재하지 않습니다"));
+    public Solution update(Long solutionId, SolutionPatchRequest request) throws SolutionNotFoundException {
+        Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException("풀이가 존재하지 않습니다"));
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
         return updated;
@@ -41,8 +42,8 @@ public class SolutionService {
 //            solutionRepository.delete(solution);
 //    }
 
-        public void delete(Long solutionId){
-            Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new NoSuchElementException("풀이가 존재하지 않습니다"));
+        public void delete(Long solutionId) throws SolutionNotFoundException {
+            Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException("풀이가 존재하지 않습니다"));
             solutionRepository.delete(target);
     }
 

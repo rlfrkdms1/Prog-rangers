@@ -32,7 +32,7 @@ public class SolutionRequest {
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
 
-    @NotBlank(message = "문제 소스 코드를 입력해주세요")
+    @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
 }

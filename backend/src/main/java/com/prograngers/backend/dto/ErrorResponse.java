@@ -1,10 +1,15 @@
 package com.prograngers.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.prograngers.backend.exception.Errorcode;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
+@Builder
 public class ErrorResponse {
-    String description;
+   // String description;
+
+    Errorcode errocode;
+    String descriptions;
 }
