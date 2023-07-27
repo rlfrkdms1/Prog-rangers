@@ -58,23 +58,56 @@ public class Solution {
     @Enumerated(EnumType.STRING)
     private Levels level;
 
-    // 정적 팩토리 메소드
-    public static Solution toEntity(SolutionRequest dto){
-
-          Solution soultion = Solution.builder()
-                  .title(dto.getSolutionTitle())
-                  .problem(new Problem(null, dto.getProblemTitle(),dto.getProblemLink(), "백준"))
-                  .pubilc(true) //API 스펙에 dto에 public이 없음
-                  .code(dto.getCode())
-                  .description(dto.getDescription())
-                  .scraps(0)
-                  .date(LocalDate.now())
-                  .algorithm(new Algorithm(null, dto.getAlgorithm()))
-                  .dataStructure(new DataStructure(null, dto.getDataStructure()))
-                  .level(dto.getLevel())
-                  .build();
-
-        return soultion;
+    public void updateProblem(Problem problem){
+        if (problem!=null){
+            this.problem = problem;
+        }
+    }
+    public void updateMember(Member member){
+        if (member!=null){
+            this.member = member;
+        }
     }
 
+    public void updateCode(String code){
+        if (!code.isEmpty()){
+            this.code = code;
+        }
+    }
+
+    public void updateDescription(String description){
+        if (!code.isEmpty()){
+            this.description = description;
+        }
+    }
+
+    public void updateLike(Like like){
+        if (like!=null){
+            this.likes.add(like);
+        }
+    }
+    public void upScraps(){
+        this.scraps+=1;
+    }
+    public void downScraps(){
+        this.scraps-=1;
+    }
+
+    public void updateScrapId(Solution solution){
+        if (solution!=null){
+            this.scrapId = solution;
+        }
+    }
+
+    public void updateAlgorithm(Algorithms algorithm){
+        this.algorithm = new Algorithm(null,algorithm);
+    }
+
+    public void updateDataStructure(DataStructures dataStructure){
+        this.dataStructure = new DataStructure(null,dataStructure);
+    }
+
+    public void updateLevel(Levels level){
+        this.level = level;
+    }
 }
