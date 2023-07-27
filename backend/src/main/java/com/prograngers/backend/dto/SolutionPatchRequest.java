@@ -1,8 +1,6 @@
 package com.prograngers.backend.dto;
 
-import com.prograngers.backend.entity.Algorithm;
-import com.prograngers.backend.entity.DataStructure;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,11 +15,11 @@ public class SolutionPatchRequest {
     @NotBlank(message = "문제 제목을 입력해주세요")
     private String title;
 
-    @NotBlank(message = "알고리즘 이름을 입력해 주세요")
-    private String algorithmName;
+   //  @NotBlank(message = "알고리즘 이름을 입력해 주세요")
+    private Algorithms algorithmName;
 
-    @NotBlank(message = "자료구조 이름을 입력해 주세요")
-    private String dataStructureName;
+    // @NotBlank(message = "자료구조 이름을 입력해 주세요")
+    private DataStructures dataStructureName;
     @NotBlank(message = "문제 소스 코드를 입력해 주세요")
     private String code;
 
@@ -29,6 +27,11 @@ public class SolutionPatchRequest {
     private String description;
 
     public Solution toEntity(Solution target) {
-        target.
+        target.updateTitle(title);
+        target.updateAlgorithm(algorithmName);
+        target.updateDataStructure(dataStructureName);
+        target.updateCode(code);
+        target.updateDescription(description);
+        return target;
     }
 }

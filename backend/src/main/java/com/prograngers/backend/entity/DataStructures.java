@@ -1,13 +1,14 @@
 package com.prograngers.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.prograngers.backend.exception.notfound.AlgorithmNotFoundException;
 import com.prograngers.backend.exception.notfound.DataStructureNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
-@Getter
 public enum DataStructures {
     LIST("리스트"),
     ARRAY("배열"),
@@ -25,5 +26,10 @@ public enum DataStructures {
             }
         }
         throw new DataStructureNotFoundException();
+    }
+
+    @JsonValue
+    public String getKrName(){
+        return krName;
     }
 }

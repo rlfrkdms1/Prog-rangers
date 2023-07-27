@@ -1,9 +1,12 @@
 package com.prograngers.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.prograngers.backend.exception.notfound.DataStructureNotFoundException;
+import com.prograngers.backend.exception.notfound.LevelNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
 public enum Levels {
     ONE("레벨1"),
@@ -13,4 +16,20 @@ public enum Levels {
     FIVE("레벨5");
 
     private final String krName;
+
+    @JsonCreator
+    public static Levels from(String krName){
+        for (Levels level : Levels.values()){
+            if (level.getKrName().equals(krName)){
+                return level;
+            }
+        }
+        throw new LevelNotFoundException();
+    }
+
+    @JsonValue
+    public String getKrName(){
+        return krName;
+    }
+
 }

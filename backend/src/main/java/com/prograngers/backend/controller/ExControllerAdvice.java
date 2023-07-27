@@ -31,7 +31,6 @@ public class ExControllerAdvice {
                     .build();
             errorList.add(errorResponse);
         }
-
         return new ResponseEntity(errorList,HttpStatus.BAD_REQUEST);
     }
 

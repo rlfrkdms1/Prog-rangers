@@ -23,13 +23,13 @@ public class SolutionRequest {
     private String solutionTitle;
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
-    @NotBlank(message = "문제 난이도를 입력해주세요")
+    // @NotBlank(message = "문제 난이도를 입력해주세요")
     private Levels level;
 
-    @NotBlank(message = "알고리즘을 입력해주세요")
+    // @NotBlank(message = "알고리즘을 입력해주세요")
     private Algorithms algorithm;
 
-    @NotBlank(message = "자료구조를 입력해주세요")
+    // @NotBlank(message = "자료구조를 입력해주세요")
     private DataStructures dataStructure;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")

@@ -1,8 +1,6 @@
 package com.prograngers.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +15,8 @@ public class DataStructure {
 
     @Id @GeneratedValue
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     private DataStructures name;
 
 }
