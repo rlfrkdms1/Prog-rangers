@@ -45,7 +45,8 @@ public class SolutionController {
     }
 
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionRequest request) throws URISyntaxException {
+    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionRequest request)
+            throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Solution saved = solutionService.saveScrap(scrapId, request);
 
@@ -66,7 +67,7 @@ public class SolutionController {
     // 수정 요청
     @PatchMapping("/{solutionId}")
     public ResponseEntity<?> update(@PathVariable Long solutionId,
-                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException, SolutionNotFoundException {
+                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
         // solutionService로 update한다
         Solution updated = solutionService.update(solutionId,  solutionPatchRequest);
@@ -80,7 +81,7 @@ public class SolutionController {
 
     // 삭제 요청
     @DeleteMapping("{solutionId}")
-    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException, SolutionNotFoundException {
+    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException {
 
         // solutionService로 delete한다
         solutionService.delete(solutionId);
@@ -92,4 +93,5 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
 
     }
+
 }
