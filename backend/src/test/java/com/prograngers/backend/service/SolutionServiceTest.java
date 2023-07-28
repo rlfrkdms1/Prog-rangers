@@ -1,80 +1,62 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.*;
+import com.prograngers.backend.repository.SolutionRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+@Slf4j
 class SolutionServiceTest {
     // Mokito , SpringBootTest 빼고
-
-    @Autowired
+    @Mock
+   private  SolutionRepository solutionRepository;
+    @InjectMocks
     private SolutionService solutionService;
 
     @Test
     void 저장_테스트(){
+        if (solutionService==null){
+            log.info("SolutionService가 null 입니다!!");
+        }
         // given
         Solution solution = Solution.builder()
-                .level(Levels.THREE)
-                .title("풀이 제목")
-                .algorithm(new Algorithm(null, Algorithms.BFS))
-                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
-                .code("int a=10")
-                .description("풀이 설명")
+                .id(1L)
+                .problem(new Problem(null,"문제제목","https://www.acmicpc.net/problem/1000",Judges.백준))
+                .member(new Member(null,"이름","닉네임","email@naver.com",null,null,"password","01012345678"))
+                .title("풀이제목")
+                .isPublic(true)
+                .code("코드")
+                .description("설명")
+                .scraps(0)
+                .scrapId(null)
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", Judges.백준))
+                .algorithm(new Algorithm(null,Algorithms.BFS))
+                .dataStructure(new DataStructure(null,DataStructures.ARRAY))
+                .level(Levels.THREE)
                 .build();
+
+        given(solutionRepository.save(solution)).willReturn(solution);
 
         // when
         Solution saved = solutionService.save(solution);
 
         // then
         Assertions.assertThat(saved).isEqualTo(solution);
-
     }
-
-    @Test
-    void 수정_테스트(){
-        // given
-        Solution solution = Solution.builder()
-                .level(Levels.THREE)
-                .title("풀이 제목")
-                .algorithm(new Algorithm(null, Algorithms.BFS))
-                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", Judges.백준))
-                .build();
-
-        Long solutionId = solution.getId();
-
-        Solution tou = Solution.builder()
-                .level(Levels.THREE)
-                .title("풀이 제목")
-                .algorithm(new Algorithm(null, Algorithms.BFS))
-                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", Judges.백준))
-                .build();
-
-
-        // when
-
-
-        // then
-    }
-
-
-
-
-
 
 }
