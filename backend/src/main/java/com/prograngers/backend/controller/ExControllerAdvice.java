@@ -40,14 +40,14 @@ public class ExControllerAdvice {
     public ResponseEntity<ErrorResponse> noSuchElementEx(NotFoundException exception){
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return ResponseEntity.badRequest().body(errorResponse);
+        return new ResponseEntity(errorResponse,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> enumTypeEx(EnumTypeException exception){
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return ResponseEntity.badRequest().body(errorResponse);
+        return new ResponseEntity(errorResponse,HttpStatus.BAD_REQUEST);
     }
 
 }

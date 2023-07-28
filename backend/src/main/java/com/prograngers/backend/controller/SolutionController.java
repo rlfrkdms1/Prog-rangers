@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller;
 
+import com.prograngers.backend.dto.ScarpSolutionRequest;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
@@ -38,6 +39,18 @@ public class SolutionController {
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI("http://localhost:8080/solutions/"+solutionId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(redirectUri);
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    @PostMapping("/new-form/{scarpId}")
+    public ResponseEntity<?> scrapForm(@PathVariable Long id, @RequestBody ScarpSolutionRequest request) throws URISyntaxException {
+        // 입력 폼과 스크랩 id로 새로운 Solution 생성
+        Solution saved = solutionService.saveScrap(id, request);
+
+        // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
+        URI redirectUri = new URI("http://localhost:8080/solutions/"+saved.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);

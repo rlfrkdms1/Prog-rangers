@@ -62,6 +62,7 @@ public class SolutionRequest {
                 .algorithm(new Algorithm(null,algorithm))
                 .dataStructure(new DataStructure(null,dataStructure))
                 .description(description)
+                .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
                 .build();
     }
