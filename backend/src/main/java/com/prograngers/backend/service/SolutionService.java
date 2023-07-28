@@ -30,13 +30,8 @@ public class SolutionService {
         return saved;
     }
 
-//    public Solution update(Solution solution){
-//            Solution updated = solutionRepository.save(solution);
-//            return updated;
-//    }
-
     public Solution update(Long solutionId, SolutionPatchRequest request) throws SolutionNotFoundException {
-        Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
+        Solution target = findById(solutionId);
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
         return updated;
@@ -47,7 +42,7 @@ public class SolutionService {
 //    }
 
         public void delete(Long solutionId) throws SolutionNotFoundException {
-            Solution target = solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
+            Solution target = findById(solutionId);
             solutionRepository.delete(target);
     }
 
@@ -58,12 +53,12 @@ public class SolutionService {
         return solutionList;
     }
 
-    public Optional<Solution> findById(Long solutionId) {
-        return solutionRepository.findById(solutionId);
+    public Solution findById(Long solutionId) {
+        return solutionRepository.findById(solutionId).orElseThrow(()->new SolutionNotFoundException());
     }
 
     public Solution saveScrap(Long id, ScarpSolutionRequest request) {
-        Solution scrap = solutionRepository.findById(id).orElseThrow(() -> new SolutionNotFoundException());
+        Solution scrap = findById(id);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
         Solution solution = Solution.builder()

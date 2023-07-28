@@ -59,8 +59,7 @@ public class SolutionController {
     // 수정 폼 반환
     @GetMapping("/{solutionId}/update-form")
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId){
-        Optional<Solution> optionalTarget = solutionService.findById(solutionId);
-        Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
+        Solution target = solutionService.findById(solutionId);
         return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
     }
 
