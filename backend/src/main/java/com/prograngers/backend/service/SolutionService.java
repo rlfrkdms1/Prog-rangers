@@ -2,6 +2,8 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.ScarpSolutionRequest;
 import com.prograngers.backend.dto.SolutionPatchRequest;
+import com.prograngers.backend.entity.Algorithm;
+import com.prograngers.backend.entity.DataStructure;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -76,8 +78,8 @@ public class SolutionService {
                 .code(scrap.getCode())
                 .scraps(0)
                 .scrapId(scrap)
-                .algorithm(scrap.getAlgorithm())
-                .dataStructure(scrap.getDataStructure())
+                .algorithm(new Algorithm(null, scrap.getAlgorithm().getName()))
+                .dataStructure(new DataStructure(null,scrap.getDataStructure().getName()))
                 .build();
 
         Solution saved = solutionRepository.save(solution);

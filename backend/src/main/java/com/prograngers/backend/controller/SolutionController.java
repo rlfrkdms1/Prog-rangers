@@ -44,10 +44,10 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
-    @PostMapping("/new-form/{scarpId}")
-    public ResponseEntity<?> scrapForm(@PathVariable Long id, @RequestBody ScarpSolutionRequest request) throws URISyntaxException {
+    @PostMapping("/new-form/{scrapId}")
+    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionRequest request) throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
-        Solution saved = solutionService.saveScrap(id, request);
+        Solution saved = solutionService.saveScrap(scrapId, request);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
         URI redirectUri = new URI("http://localhost:8080/solutions/"+saved.getId());
@@ -61,7 +61,6 @@ public class SolutionController {
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId){
         Optional<Solution> optionalTarget = solutionService.findById(solutionId);
         Solution target = optionalTarget.orElseThrow(()->new NoSuchElementException("풀이를 찾을 수 없습니다"));
-
         return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
     }
 
