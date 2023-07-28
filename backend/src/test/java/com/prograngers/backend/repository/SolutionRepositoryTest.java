@@ -1,25 +1,30 @@
 package com.prograngers.backend.repository;
 
 import com.prograngers.backend.entity.*;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 
-@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DataJpaTest
 @Slf4j
 class SolutionRepositoryTest {
     @Autowired
     private SolutionRepository solutionRepository;
 
     @Test
-    @Transactional
     void 정상_입력_저장_테스트(){
+
         // given
         Solution solution = Solution.builder()
                 .level(Levels.THREE)
@@ -54,29 +59,15 @@ class SolutionRepositoryTest {
                 .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
         Solution saved = solutionRepository.save(solution);
-        log.info("saved id : {}",saved.getId());
 
-
-        Solution patchSolution = Solution.builder()
-                .id(saved.getId())
-                .level(saved.getLevel())
-                .title("풀이 제목 수정")
-                .algorithm(saved.getAlgorithm())
-                .dataStructure(saved.getDataStructure())
-                .code(saved.getCode())
-                .description(saved.getDescription())
-                .date(saved.getDate())
-                .problem(saved.getProblem())
-                .build();
-        log.info("patchSolution id : {}",patchSolution.getId());
+        saved.updateDescription("수정한 설명입니다");
+        saved.updateAlgorithm(Algorithms.DFS);
 
         // when
-        Solution patchedSolution = solutionRepository.save(patchSolution);
-        log.info("patchedSolution id : {}",patchedSolution.getId());
+        Solution updated = solutionRepository.save(saved);
 
         // then
-        // Assertions.assertThat(patchedSolution.getTitle()).isEqualTo(patchSolution.getTitle());
-        Assertions.assertThat(patchedSolution).isEqualTo(patchSolution);
+        Assertions.assertThat(updated).isEqualTo(saved);
     }
 
     @Test
@@ -100,9 +91,9 @@ class SolutionRepositoryTest {
         solutionRepository.delete(solution);
 
         // then
-        org.junit.jupiter.api.Assertions.assertThrows(NoSuchElementException.class,
+        org.junit.jupiter.api.Assertions.assertThrows(SolutionNotFoundException.class,
                 ()->{
-                    solutionRepository.findById(solution.getId()).orElseThrow(()->new NoSuchElementException());
+                    solutionRepository.findById(solution.getId()).orElseThrow(()->new SolutionNotFoundException());
                 });
     }
 

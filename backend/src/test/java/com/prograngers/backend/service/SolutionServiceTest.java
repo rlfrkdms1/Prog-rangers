@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 @SpringBootTest
 class SolutionServiceTest {
+    // Mokito , SpringBootTest 빼고
 
     @Autowired
     private SolutionService solutionService;
