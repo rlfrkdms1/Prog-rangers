@@ -67,13 +67,6 @@ public class SolutionRequest {
     }
 
     private Judges checkLink(String problemLink) {
-//        if (problemLink.contains("acmicpc.net/problem")){
-//            return "백준";
-//        } else if (problemLink.contains("programmers.co.kr/learn/courses")){
-//            return "프로그래머스";
-//        } else{
-//            throw new ProblemLinkNotFoundException();
-//        }
         return Judges.from(problemLink);
     }
 }
