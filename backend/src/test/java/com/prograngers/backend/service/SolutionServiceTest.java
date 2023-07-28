@@ -21,12 +21,12 @@ class SolutionServiceTest {
         Solution solution = Solution.builder()
                 .level(Levels.THREE)
                 .title("풀이 제목")
-                .algorithm(new Algorithm(null, "알고리즘명"))
-                .dataStructure(new DataStructure(null, "자료구조명"))
+                .algorithm(new Algorithm(null, Algorithms.BFS))
+                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
 
         // when
@@ -43,12 +43,12 @@ class SolutionServiceTest {
         Solution solution = Solution.builder()
                 .level(Levels.THREE)
                 .title("풀이 제목")
-                .algorithm(new Algorithm(null, "알고리즘명"))
-                .dataStructure(new DataStructure(null, "자료구조명"))
+                .algorithm(new Algorithm(null, Algorithms.BFS))
+                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
 
         Long solutionId = solution.getId();
@@ -56,12 +56,12 @@ class SolutionServiceTest {
         Solution tou = Solution.builder()
                 .level(Levels.THREE)
                 .title("풀이 제목")
-                .algorithm(new Algorithm(null, "알고리즘명"))
-                .dataStructure(new DataStructure(null, "자료구조명"))
+                .algorithm(new Algorithm(null, Algorithms.BFS))
+                .dataStructure(new DataStructure(null, DataStructures.ARRAY))
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
 
 

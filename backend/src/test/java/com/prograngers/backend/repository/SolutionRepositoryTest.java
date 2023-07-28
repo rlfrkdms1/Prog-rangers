@@ -29,7 +29,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
 
         // when
@@ -51,7 +51,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
         Solution saved = solutionRepository.save(solution);
         log.info("saved id : {}",saved.getId());
@@ -91,7 +91,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", "저지명"))
+                .problem(new Problem(null, "문제", "링크", Judges.백준))
                 .build();
         Solution saved = solutionRepository.save(solution);
         log.info("saved id : {}",saved.getId());

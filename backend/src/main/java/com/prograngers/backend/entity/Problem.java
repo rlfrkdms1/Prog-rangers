@@ -1,8 +1,6 @@
 package com.prograngers.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +20,8 @@ public class Problem {
 
     private String link;
 
-    private String ojName;
+    @Enumerated(EnumType.STRING)
+    private Judges ojName;
 
     public void updateTitle(String title){
         if (title!=null){
@@ -34,7 +33,7 @@ public class Problem {
             this.link=link;
         }
     }
-    public void updateOjName(String ojName){
+    public void updateOjName(Judges ojName){
         if (ojName!=null){
             this.ojName=ojName;
         }
