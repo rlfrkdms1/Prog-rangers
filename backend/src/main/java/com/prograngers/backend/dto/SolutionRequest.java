@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto;
 
 import com.prograngers.backend.entity.*;
+import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,8 +45,12 @@ public class SolutionRequest {
         로그인정보로 멤버 알아내서 넣기
         스크랩 여부 알아내서 넣기
          */
+
+        // 입력 링크 파싱해서 저지 정보 알아내기 아닐 경우 ProblemLinkNotFoundException
+        String ojName = checkLink(problemLink);
+
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, "백준")) // 파싱해서 ojname 알아내야함
+                .problem(new Problem(null, problemTitle, problemLink, ojName)) // 파싱해서 ojname 알아내야함
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .isPublic(true)
@@ -59,5 +64,15 @@ public class SolutionRequest {
                 .description(description)
                 .code(code)
                 .build();
+    }
+
+    private String checkLink(String problemLink) {
+        if (problemLink.contains("acmicpc.net/problem")){
+            return "백준";
+        } else if (problemLink.contains("programmers.co.kr/learn/courses")){
+            return "프로그래머스";
+        } else{
+            throw new ProblemLinkNotFoundException();
+        }
     }
 }
