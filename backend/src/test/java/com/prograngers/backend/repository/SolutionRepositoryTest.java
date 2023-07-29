@@ -7,12 +7,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
+
+
+import static com.prograngers.backend.SolutionFixture.*;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -24,6 +24,9 @@ class SolutionRepositoryTest {
 
     @Test
     void 정상_입력_저장_테스트(){
+
+        // given
+        // Solution solution = SOLUTION.getSolution(1L,null,null,null);
 
         // given
         Solution solution = Solution.builder()
