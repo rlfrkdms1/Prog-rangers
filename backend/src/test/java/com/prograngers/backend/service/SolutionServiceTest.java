@@ -30,9 +30,6 @@ class SolutionServiceTest {
 
     @Test
     void 저장_테스트(){
-        if (solutionService==null){
-            log.info("SolutionService가 null 입니다!!");
-        }
         // given
         Solution solution = Solution.builder()
                 .id(1L)
@@ -57,6 +54,39 @@ class SolutionServiceTest {
 
         // then
         Assertions.assertThat(saved).isEqualTo(solution);
+    }
+
+    @Test
+    void 수정_테스트(){
+        // given
+        Solution solution = Solution.builder()
+                .id(1L)
+                .problem(new Problem(null,"문제제목","https://www.acmicpc.net/problem/1000",Judges.백준))
+                .member(new Member(null,"이름","닉네임","email@naver.com",null,null,"password","01012345678"))
+                .title("풀이제목")
+                .isPublic(true)
+                .code("코드")
+                .description("설명")
+                .scraps(0)
+                .scrapId(null)
+                .date(LocalDate.now())
+                .algorithm(new Algorithm(null,Algorithms.BFS))
+                .dataStructure(new DataStructure(null,DataStructures.ARRAY))
+                .level(Levels.THREE)
+                .build();
+
+        given(solutionRepository.save(solution)).willReturn(solution);
+        solutionRepository.save(solution);
+
+        solution.updateTitle("수정 제목");
+        Solution updated = solutionRepository.save(solution);
+
+        Assertions.assertThat(updated).isEqualTo(solution);
+    }
+
+    @Test
+    void 삭제_테스트(){
+
     }
 
 }
