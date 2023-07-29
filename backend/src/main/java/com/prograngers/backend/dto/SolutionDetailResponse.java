@@ -12,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SolutionDetailResponse {
-    private SolutionDetailResponseSolution solutionDetailResponseSolution;
-    private List<SolutionDetailResponseComment> solutionDetailResponseCommentList;
+    private SolutionDetailResponseSolution solution;
+    private List<SolutionDetailResponseComment> comments;
 
     public static SolutionDetailResponse toEntity(Solution solution, List<Comment> comments) {
         SolutionDetailResponse response = new SolutionDetailResponse();
@@ -53,8 +53,8 @@ public class SolutionDetailResponse {
             );
         }
 
-        response.solutionDetailResponseCommentList = commentResponseList;
-        response.solutionDetailResponseSolution = responseSolution;
+        response.comments = commentResponseList;
+        response.solution = responseSolution;
 
         return response;
     }
