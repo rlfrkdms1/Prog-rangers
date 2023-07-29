@@ -23,7 +23,6 @@ public class Comment {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="solution_id")
-
     private Solution solution;
     private Integer orderParent;
     private Integer orderChild;
