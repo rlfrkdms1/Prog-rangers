@@ -1,12 +1,11 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.CommentReqeust;
 import com.prograngers.backend.dto.ScarpSolutionRequest;
 import com.prograngers.backend.dto.SolutionPatchRequest;
-import com.prograngers.backend.entity.Algorithm;
-import com.prograngers.backend.entity.DataStructure;
-import com.prograngers.backend.entity.Member;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.*;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.repository.CommentRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,7 @@ import java.util.Optional;
 public class SolutionService {
 
     private final SolutionRepository solutionRepository;
+    private final CommentRepository commentRepository;
 
     public Solution  save(Solution solution){
         Solution saved = solutionRepository.save(solution);
@@ -81,5 +81,22 @@ public class SolutionService {
 
         return saved;
 
+    }
+
+    public Comment addComment(Long solutionId, CommentReqeust commentReqeust) {
+        Solution solution = findById(solutionId);
+        Comment comment = Comment.builder()
+                .solution(solution)
+                .orderParent(commentReqeust.getOrderParent())
+                .mention(commentReqeust.getMention())
+                .content(commentReqeust.getContent())
+                .date(LocalDate.now())
+                .parentId(commentReqeust.getParentId())
+                .groupNumber(commentReqeust.getGroupNumber())
+                .fixed(false)
+                .build();
+
+        Comment saved = commentRepository.save(comment);
+        return saved;
     }
 }
