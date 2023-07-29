@@ -12,25 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 public enum SolutionFixture {
     SOLUTION(
-            1L,
-            new Problem(null,"문제제목","https://www.acmicpc.net/problem/1000",Judges.백준),
-            new Member(null,"이름","닉네임","email@naver.com",null,null,"password","01012345678"),
             "풀이제목",
             true,
             "코드",
             "설명",
-            null,
-            null,
+            0,
             LocalDate.now(),
             new Algorithm(null,Algorithms.BFS),
             new DataStructure(null, DataStructures.ARRAY),
             Levels.ONE
             );
-
-    private final Long id;
-    private final Problem problem;
-
-    private final Member member;
 
     private final String title;
 
@@ -40,11 +31,7 @@ public enum SolutionFixture {
 
     private final String description;
 
-    private final List<Like> likes = new ArrayList<>();
-
     private final Integer scraps;
-
-    private final Solution scrapId;
 
     private final LocalDate date;
 
@@ -54,7 +41,22 @@ public enum SolutionFixture {
 
     private final Levels level;
 
-    public Solution getSolution(){
-        return new Solution(id,problem,member,title,isPublic,code,description,likes,scraps,scrapId,date,algorithm,dataStructure,level);
+    public Solution getSolution(Long id, Problem problem, Member member, Solution scrapSolution){
+        Solution build = Solution.builder()
+                .id(id)
+                .problem(problem)
+                .member(member)
+                .scrapId(scrapSolution)
+                .title(this.title)
+                .isPublic(this.isPublic)
+                .code(this.code)
+                .description(this.description)
+                .scraps(scraps)
+                .date(this.date)
+                .algorithm(this.algorithm)
+                .dataStructure(this.dataStructure)
+                .level(this.level)
+                .build();
+        return build;
     }
 }
