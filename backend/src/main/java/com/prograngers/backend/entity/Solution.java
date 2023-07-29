@@ -37,6 +37,9 @@ public class Solution {
 
     private Integer scraps;
 
+    @OneToMany(mappedBy = "solution")
+    private List<Likes> likes = new ArrayList<>();
+
     @OneToOne
     @JoinColumn(name="scrap_id")
     @Nullable
