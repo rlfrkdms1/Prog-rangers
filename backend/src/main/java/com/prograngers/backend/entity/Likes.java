@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Like {
+public class Likes {
 
     @Id @GeneratedValue
     private Long id;
