@@ -4,6 +4,7 @@ import com.prograngers.backend.dto.ScarpSolutionRequest;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
+import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.SolutionService;
