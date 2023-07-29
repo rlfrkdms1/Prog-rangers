@@ -88,11 +88,6 @@ public class Solution {
         }
     }
 
-    public void updateLike(Like like){
-        if (like!=null){
-            this.likes.add(like);
-        }
-    }
 
     public void upScraps(){
         this.scraps+=1;
