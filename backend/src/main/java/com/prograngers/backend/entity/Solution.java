@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Solution {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
