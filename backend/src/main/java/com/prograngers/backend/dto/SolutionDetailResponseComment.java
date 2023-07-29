@@ -1,10 +1,11 @@
 package com.prograngers.backend.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Builder
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class SolutionDetailResponseComment {
     String nickname;
     Integer orderParent;
