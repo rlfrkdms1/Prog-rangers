@@ -1,12 +1,10 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.ScarpSolutionRequest;
-import com.prograngers.backend.dto.SolutionPatchRequest;
-import com.prograngers.backend.dto.SolutionRequest;
-import com.prograngers.backend.dto.SolutionUpdateForm;
+import com.prograngers.backend.dto.*;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +23,7 @@ import java.util.List;
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;
+    private final CommentService commentService;
 
     // solution 쓰기
     @PostMapping("/new-form")
@@ -102,4 +101,20 @@ public class SolutionController {
         SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution,comments);
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
+
+
+    // 댓글 작성
+    @PostMapping("/{solutionId}/comments")
+    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentReqeust commentReqeust)
+            throws URISyntaxException {
+
+        Comment added = solutionService.addComment(solutionId, commentReqeust);
+
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        URI redirectUri = new URI("http://localhost:8080/solutions/"+added.getSolution().getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(redirectUri);
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
 }
