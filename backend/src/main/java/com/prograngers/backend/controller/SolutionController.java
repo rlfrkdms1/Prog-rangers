@@ -4,6 +4,7 @@ import com.prograngers.backend.dto.ScarpSolutionRequest;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
+import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -91,6 +93,12 @@ public class SolutionController {
 
     }
 
-
-
+    // Solution 상세보기 요청
+    @GetMapping("/{solutionId}")
+    public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId){
+        Solution solution = solutionService.findById(solutionId);
+        List<Review> reviews  = reviewService.findBySolution(solution);
+        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution,reviews);
+        return ResponseEntity.ok().body(solutionDetailResponse);
+    }
 }
