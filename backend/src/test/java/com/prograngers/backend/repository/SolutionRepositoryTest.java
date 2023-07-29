@@ -11,10 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
-
-import static com.prograngers.backend.SolutionFixture.*;
-
-
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Slf4j
@@ -25,8 +21,8 @@ class SolutionRepositoryTest {
     @Test
     void 정상_입력_저장_테스트(){
 
-        // given
-        // Solution solution = SOLUTION.getSolution(1L,null,null,null);
+//        // given
+//         Solution solution = SOLUTION.getSolution(1L,null,null,null);
 
         // given
         Solution solution = Solution.builder()

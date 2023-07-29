@@ -41,7 +41,7 @@ public class SolutionService {
 //            solutionRepository.delete(solution);
 //    }
 
-        public void delete(Long solutionId) throws SolutionNotFoundException {
+    public void delete(Long solutionId) throws SolutionNotFoundException {
             Solution target = findById(solutionId);
             solutionRepository.delete(target);
     }
