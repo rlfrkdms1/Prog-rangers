@@ -1,10 +1,13 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.entity.*;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 
@@ -76,17 +80,19 @@ class SolutionServiceTest {
                 .build();
 
         given(solutionRepository.save(solution)).willReturn(solution);
-        solutionRepository.save(solution);
+        solutionService.save(solution);
+        given(solutionRepository.findById(solution.getId())).willReturn(Optional.ofNullable(solution));
 
+        // when
         solution.updateTitle("수정 제목");
-        Solution updated = solutionRepository.save(solution);
+        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest(
+                "수정 제목",Algorithms.BFS,DataStructures.ARRAY,"코드","설명");
+        Solution updated = solutionService.update(solution.getId(),solutionPatchRequest);
 
+        // then
         Assertions.assertThat(updated).isEqualTo(solution);
     }
 
-    @Test
-    void 삭제_테스트(){
 
-    }
 
 }
