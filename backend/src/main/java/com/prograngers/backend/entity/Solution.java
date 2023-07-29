@@ -35,9 +35,6 @@ public class Solution {
 
     private String description;
 
-    @OneToMany(mappedBy = "solution")
-    private List<Like> likes = new ArrayList<>();
-
     private Integer scraps;
 
     @OneToOne
