@@ -97,8 +97,8 @@ public class SolutionController {
     @GetMapping("/{solutionId}")
     public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId){
         Solution solution = solutionService.findById(solutionId);
-        List<Review> reviews  = reviewService.findBySolution(solution);
-        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution,reviews);
+        List<Comment> comments  = commentService.findBySolution(solution);
+        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution,comments);
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
 }
