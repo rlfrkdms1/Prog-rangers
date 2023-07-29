@@ -85,7 +85,15 @@ public class SolutionService {
 
     public Comment addComment(Long solutionId, CommentReqeust commentReqeust) {
         Solution solution = findById(solutionId);
+
+        //가상 Member 생성
+        Member member = Member.builder()
+                .name("멤버이름")
+                .nickname("닉네임")
+                .build();
+
         Comment comment = Comment.builder()
+                .member(member)
                 .solution(solution)
                 .orderParent(commentReqeust.getOrderParent())
                 .mention(commentReqeust.getMention())
