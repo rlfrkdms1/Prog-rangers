@@ -15,9 +15,7 @@ public class SolutionUpdateForm {
     private String link;
     private Algorithms algorithmName;
     private DataStructures dataStructureName;
-
     private String code;
-
     private String description;
 
 

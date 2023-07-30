@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 public class SolutionController {
     private final SolutionService solutionService;
 
-    private final String REDIRECT_PATH = "http://localhost:8080/solutions/"
+    private final String REDIRECT_PATH = "http://localhost:8080/solutions/";
 
     // solution 쓰기
     @PostMapping("/new-form")
