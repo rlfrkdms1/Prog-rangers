@@ -28,7 +28,7 @@ public class ExControllerAdvice {
         for (ObjectError error : errors) {
             ErrorResponse errorResponse = ErrorResponse.builder()
                     .errorCode(ErrorCode.INVALID_SOLUTION_BODY)
-                    .descriptions(error.getDefaultMessage())
+                    .description(error.getDefaultMessage())
                     .build();
             errorList.add(errorResponse);
         }
