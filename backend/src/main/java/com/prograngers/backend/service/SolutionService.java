@@ -43,7 +43,12 @@ public class SolutionService {
 
     public void delete(Long solutionId) throws SolutionNotFoundException {
             Solution target = findById(solutionId);
-            solutionRepository.delete(target);
+        List<Comment> comments = commentRepository.findAllBySolution(target);
+        for (Comment comment : comments){
+            comment.updateSolution(null);
+            commentRepository.delete(comment);
+        }
+        solutionRepository.delete(target);
     }
 
     public List<Solution> index(Member member){
