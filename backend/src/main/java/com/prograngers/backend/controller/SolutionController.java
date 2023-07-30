@@ -117,4 +117,19 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+    // 댓글 수정
+    @PatchMapping("comments/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable Long commentId,
+                                           @RequestBody CommentPatchRequest commentPatchRequest){
+
+        Comment updated = commentService.updateComment(commentId);
+
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        URI redirectUri = new URI("http://localhost:8080/solutions/"+updated.getSolution().getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(redirectUri);
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+
 }
