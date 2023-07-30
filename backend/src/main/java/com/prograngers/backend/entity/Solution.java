@@ -104,11 +104,15 @@ public class Solution {
     }
 
     public void updateAlgorithm(AlgorithmConstant algorithm){
-        this.algorithm = new Algorithm(null,algorithm);
+        this.algorithm = Algorithm.builder()
+                .name(algorithm)
+                .build();
     }
 
     public void updateDataStructure(DataStructureConstant dataStructure){
-        this.dataStructure = new DataStructure(null,dataStructure);
+        this.dataStructure = DataStructure.builder()
+                .name(dataStructure)
+                .build();
     }
 
     public void updateLevel(LevelConstant level){
