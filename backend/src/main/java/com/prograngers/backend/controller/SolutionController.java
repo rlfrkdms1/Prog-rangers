@@ -122,7 +122,7 @@ public class SolutionController {
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
                                            @RequestBody CommentPatchRequest commentPatchRequest) throws URISyntaxException {
 
-        Comment updated = commentService.updateComment(commentId);
+        Comment updated = commentService.updateComment(commentId,commentPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI("http://localhost:8080/solutions/"+updated.getSolution().getId());
