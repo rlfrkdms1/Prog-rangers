@@ -28,7 +28,7 @@ public class SolutionService {
         return saved;
     }
     @Transactional(readOnly = false)
-    public Solution update(Long solutionId, SolutionPatchRequest request) throws SolutionNotFoundException {
+    public Solution update(Long solutionId, SolutionPatchRequest request) {
         Solution target = findById(solutionId);
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
