@@ -131,5 +131,16 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+    @DeleteMapping("comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) throws URISyntaxException {
+        Comment deleted = commentService.deleteComment(commentId);
+
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        URI redirectUri = new URI("http://localhost:8080/solutions/"+deleted.getSolution().getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(redirectUri);
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
 
 }
