@@ -38,6 +38,10 @@ public class Comment {
 
     private boolean fixed;
 
+    public void updateSolution(Solution solution){
+        this.solution =solution;
+    }
+
     public void updateMention(String mention){
         if (mention!=null){
             this.mention = mention;
