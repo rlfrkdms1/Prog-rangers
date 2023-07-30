@@ -3,7 +3,11 @@ package com.prograngers.backend.dto;
 import com.prograngers.backend.entity.Algorithms;
 import com.prograngers.backend.entity.DataStructures;
 import com.prograngers.backend.entity.Solution;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 
 @Getter
 @NoArgsConstructor
