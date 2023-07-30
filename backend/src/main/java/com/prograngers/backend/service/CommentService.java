@@ -34,4 +34,12 @@ public class CommentService {
 
         return saved;
     }
+
+    public Comment deleteComment(Long commentId) {
+        Comment comment = findById(commentId);
+
+        commentRepository.delete(comment);
+
+        return comment;
+    }
 }
