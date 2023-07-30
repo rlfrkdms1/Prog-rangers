@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class NotFoundException extends RuntimeException{
-    ErrorCode errorCode;
+    final ErrorCode errorCode;
 
     public NotFoundException(String message, ErrorCode errorCode) {
         super(message);

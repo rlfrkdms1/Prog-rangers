@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class EnumTypeException extends RuntimeException{
-    ErrorCode errorCode;
+    final ErrorCode errorCode;
 
     public EnumTypeException(String message, ErrorCode errorCode) {
         super(message);
