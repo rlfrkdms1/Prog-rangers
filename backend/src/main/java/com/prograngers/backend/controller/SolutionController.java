@@ -120,7 +120,7 @@ public class SolutionController {
     // 댓글 수정
     @PatchMapping("comments/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @RequestBody CommentPatchRequest commentPatchRequest){
+                                           @RequestBody CommentPatchRequest commentPatchRequest) throws URISyntaxException {
 
         Comment updated = commentService.updateComment(commentId);
 
