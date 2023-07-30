@@ -1,9 +1,11 @@
 package com.prograngers.backend.dto;
 
 import com.prograngers.backend.entity.*;
-import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +27,13 @@ public class SolutionRequest {
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
     // @NotBlank(message = "문제 난이도를 입력해주세요")
-    private Levels level;
+    private LevelConstant level;
 
     // @NotBlank(message = "알고리즘을 입력해주세요")
-    private Algorithms algorithm;
+    private AlgorithmConstant algorithm;
 
     // @NotBlank(message = "자료구조를 입력해주세요")
-    private DataStructures dataStructure;
+    private DataStructureConstant dataStructure;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
@@ -47,7 +49,7 @@ public class SolutionRequest {
          */
 
         // 입력 링크 파싱해서 저지 정보 알아내기 아닐 경우 ProblemLinkNotFoundException
-        Judges judge = checkLink(problemLink);
+        JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
                 .problem(new Problem(null, problemTitle, problemLink, judge)) // 파싱해서 ojname 알아내야함
@@ -67,7 +69,7 @@ public class SolutionRequest {
                 .build();
     }
 
-    private Judges checkLink(String problemLink) {
-        return Judges.from(problemLink);
+    private JudgeConstant checkLink(String problemLink) {
+        return JudgeConstant.from(problemLink);
     }
 }

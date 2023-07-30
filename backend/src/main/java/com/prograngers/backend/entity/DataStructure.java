@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity;
 
+import com.prograngers.backend.entity.constants.DataStructureConstant;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +23,6 @@ public class DataStructure {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private DataStructures name;
+    private DataStructureConstant name;
 
 }

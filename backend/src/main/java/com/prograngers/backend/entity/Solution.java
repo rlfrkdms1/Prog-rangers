@@ -1,13 +1,13 @@
 package com.prograngers.backend.entity;
 
-import com.prograngers.backend.dto.SolutionRequest;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Builder
@@ -53,7 +53,7 @@ public class Solution {
     private DataStructure dataStructure;
 
     @Enumerated(EnumType.STRING)
-    private Levels level;
+    private LevelConstant level;
 
     public void updateProblem(Problem problem){
         if (problem!=null){
@@ -103,15 +103,15 @@ public class Solution {
         }
     }
 
-    public void updateAlgorithm(Algorithms algorithm){
+    public void updateAlgorithm(AlgorithmConstant algorithm){
         this.algorithm = new Algorithm(null,algorithm);
     }
 
-    public void updateDataStructure(DataStructures dataStructure){
+    public void updateDataStructure(DataStructureConstant dataStructure){
         this.dataStructure = new DataStructure(null,dataStructure);
     }
 
-    public void updateLevel(Levels level){
+    public void updateLevel(LevelConstant level){
         this.level = level;
     }
 }

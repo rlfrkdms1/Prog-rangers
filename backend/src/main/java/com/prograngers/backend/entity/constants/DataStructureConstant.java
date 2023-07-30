@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.constants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -6,7 +6,7 @@ import com.prograngers.backend.exception.enumtype.DataStructureNotFoundException
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum DataStructures {
+public enum DataStructureConstant {
     LIST("리스트"),
     ARRAY("배열"),
     STACK("스택"),
@@ -16,8 +16,8 @@ public enum DataStructures {
     private final String krName;
 
     @JsonCreator
-    public static DataStructures from(String krName){
-        for (DataStructures dataStructure : DataStructures.values()){
+    public static DataStructureConstant from(String krName){
+        for (DataStructureConstant dataStructure : DataStructureConstant.values()){
             if (dataStructure.getKrName().equals(krName)){
                 return dataStructure;
             }

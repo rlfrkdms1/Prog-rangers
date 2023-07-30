@@ -1,13 +1,12 @@
 package com.prograngers.backend;
 
 import com.prograngers.backend.entity.*;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LevelConstant;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 public enum SolutionFixture {
@@ -18,9 +17,9 @@ public enum SolutionFixture {
             "설명",
             0,
             LocalDate.now(),
-            new Algorithm(null,Algorithms.BFS),
-            new DataStructure(null, DataStructures.ARRAY),
-            Levels.ONE
+            new Algorithm(null, AlgorithmConstant.BFS),
+            new DataStructure(null, DataStructureConstant.ARRAY),
+            LevelConstant.ONE
             );
 
     private final String title;
@@ -39,7 +38,7 @@ public enum SolutionFixture {
 
     private final DataStructure dataStructure;
 
-    private final Levels level;
+    private final LevelConstant level;
 
     public Solution getSolution(Long id, Problem problem, Member member, Solution scrapSolution){
         Solution build = Solution.builder()

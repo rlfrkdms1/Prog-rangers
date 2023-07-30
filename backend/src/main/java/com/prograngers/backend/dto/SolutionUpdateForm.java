@@ -1,7 +1,7 @@
 package com.prograngers.backend.dto;
 
-import com.prograngers.backend.entity.Algorithms;
-import com.prograngers.backend.entity.DataStructures;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,8 +17,8 @@ public class SolutionUpdateForm {
 
     private String title;
     private String link;
-    private Algorithms algorithmName;
-    private DataStructures dataStructureName;
+    private AlgorithmConstant algorithmName;
+    private DataStructureConstant dataStructureName;
     private String code;
     private String description;
 

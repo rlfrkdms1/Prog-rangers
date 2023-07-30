@@ -1,6 +1,8 @@
 package com.prograngers.backend.dto;
 
 import com.prograngers.backend.entity.*;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +16,8 @@ import lombok.Setter;
 public class SolutionPatchRequest {
     @NotBlank(message = "문제 제목을 입력해주세요")
     private String title;
-    private Algorithms algorithmName;
-    private DataStructures dataStructureName;
+    private AlgorithmConstant algorithmName;
+    private DataStructureConstant dataStructureName;
     @NotBlank(message = "문제 소스 코드를 입력해 주세요")
     private String code;
 

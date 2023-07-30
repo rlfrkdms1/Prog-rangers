@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity;
 
+import com.prograngers.backend.entity.constants.JudgeConstant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class Problem {
     private String link;
 
     @Enumerated(EnumType.STRING)
-    private Judges ojName;
+    private JudgeConstant ojName;
 
     public void updateTitle(String title){
         if (title!=null){
@@ -33,7 +34,7 @@ public class Problem {
             this.link=link;
         }
     }
-    public void updateOjName(Judges ojName){
+    public void updateOjName(JudgeConstant ojName){
         if (ojName!=null){
             this.ojName=ojName;
         }

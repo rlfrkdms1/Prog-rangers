@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.constants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -6,7 +6,7 @@ import com.prograngers.backend.exception.enumtype.AlgorithmNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum Algorithms {
+public enum AlgorithmConstant {
     BUBBLE_SORT("버블정렬"),
     SELECTION_SORT("선택정렬"),
     INSERTION_SORT("삽입정렬"),
@@ -23,8 +23,8 @@ public enum Algorithms {
 
 
     @JsonCreator
-    public static Algorithms from(String krName){
-        for (Algorithms algorithm : Algorithms.values()){
+    public static AlgorithmConstant from(String krName){
+        for (AlgorithmConstant algorithm : AlgorithmConstant.values()){
             if (algorithm.getKrName().equals(krName)){
                 return algorithm;
             }
