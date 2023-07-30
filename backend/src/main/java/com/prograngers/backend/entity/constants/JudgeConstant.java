@@ -12,13 +12,13 @@ public enum JudgeConstant {
     백준("acmicpc"),
     프로그래머스("programmers");
 
-    private final String link;
+    private final String value;
 
     public static JudgeConstant from(String link){
         log.info(link);
         for (JudgeConstant judge : JudgeConstant.values()){
-            String judgeLink = judge.getLink();
-            if (link.contains(judgeLink)){
+            String judgeValue = judge.getValue();
+            if (link.contains(judgeValue)){
               return judge;
           }
         }
