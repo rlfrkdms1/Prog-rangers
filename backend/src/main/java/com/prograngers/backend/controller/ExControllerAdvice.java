@@ -4,7 +4,6 @@ import com.prograngers.backend.dto.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
-import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class ExControllerAdvice {
 
     // Valid를 통과하지 못할 경우 ErrorResponse dto로 해당하는 에러 반환
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ErrorResponse>> validEx(MethodArgumentNotValidException exception){
+    public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception){
         List<ErrorResponse> errorList = new ArrayList<>();
         List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
