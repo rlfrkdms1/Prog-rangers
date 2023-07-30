@@ -14,11 +14,7 @@ import lombok.Setter;
 public class SolutionPatchRequest {
     @NotBlank(message = "문제 제목을 입력해주세요")
     private String title;
-
-   //  @NotBlank(message = "알고리즘 이름을 입력해 주세요")
     private Algorithms algorithmName;
-
-    // @NotBlank(message = "자료구조 이름을 입력해 주세요")
     private DataStructures dataStructureName;
     @NotBlank(message = "문제 소스 코드를 입력해 주세요")
     private String code;
