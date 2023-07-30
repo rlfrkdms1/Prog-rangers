@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,11 +23,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class SolutionService {
     private final SolutionRepository solutionRepository;
+
     @Transactional(readOnly = false)
-    public Solution  save(Solution solution){
+    public Solution save(Solution solution) {
         Solution saved = solutionRepository.save(solution);
         return saved;
     }
+
     @Transactional(readOnly = false)
     public Solution update(Long solutionId, SolutionPatchRequest request) {
         Solution target = findById(solutionId);
@@ -34,14 +37,17 @@ public class SolutionService {
         Solution updated = solutionRepository.save(solution);
         return updated;
     }
+
     @Transactional(readOnly = false)
     public void delete(Long solutionId) throws SolutionNotFoundException {
-            Solution target = findById(solutionId);
-            solutionRepository.delete(target);
+        Solution target = findById(solutionId);
+        solutionRepository.delete(target);
     }
+
     public Solution findById(Long solutionId) {
-        return solutionRepository.findById(solutionId).orElseThrow(()->new SolutionNotFoundException());
+        return solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
     }
+
     @Transactional(readOnly = false)
     public Solution saveScrap(Long id, ScarpSolutionRequest request) {
         Solution scrap = findById(id);
@@ -60,7 +66,7 @@ public class SolutionService {
                 .scraps(0)
                 .scrapId(scrap)
                 .algorithm(new Algorithm(null, scrap.getAlgorithm().getName()))
-                .dataStructure(new DataStructure(null,scrap.getDataStructure().getName()))
+                .dataStructure(new DataStructure(null, scrap.getDataStructure().getName()))
                 .build();
 
         Solution saved = solutionRepository.save(solution);

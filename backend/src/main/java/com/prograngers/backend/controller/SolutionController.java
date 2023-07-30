@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -35,7 +36,7 @@ public class SolutionController {
         Solution saved = solutionService.save(solutionRequest.toEntity());
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH+ saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + saved.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -48,7 +49,7 @@ public class SolutionController {
         Solution saved = solutionService.saveScrap(scrapId, request);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH+saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + saved.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -56,7 +57,7 @@ public class SolutionController {
 
     // 수정 폼 반환
     @GetMapping("/{solutionId}/update-form")
-    public ResponseEntity<?> updateForm(@PathVariable Long solutionId){
+    public ResponseEntity<?> updateForm(@PathVariable Long solutionId) {
         Solution target = solutionService.findById(solutionId);
         return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
     }
@@ -67,10 +68,10 @@ public class SolutionController {
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
         // solutionService로 update한다
-        Solution updated = solutionService.update(solutionId,  solutionPatchRequest);
+        Solution updated = solutionService.update(solutionId, solutionPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH+updated.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + updated.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);

@@ -41,7 +41,7 @@ public class SolutionRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Solution toEntity(){
+    public Solution toEntity() {
         /*
         파싱해서 ojname 알아내서 문제에 넣기
         로그인정보로 멤버 알아내서 넣기
@@ -61,8 +61,8 @@ public class SolutionRequest {
                 .scraps(0)
                 .date(LocalDate.now())
                 .level(level)
-                .algorithm(new Algorithm(null,algorithm))
-                .dataStructure(new DataStructure(null,dataStructure))
+                .algorithm(new Algorithm(null, algorithm))
+                .dataStructure(new DataStructure(null, dataStructure))
                 .description(description)
                 .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)

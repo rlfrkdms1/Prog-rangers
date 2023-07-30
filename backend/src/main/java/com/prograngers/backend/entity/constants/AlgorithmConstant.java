@@ -23,9 +23,9 @@ public enum AlgorithmConstant {
 
 
     @JsonCreator
-    public static AlgorithmConstant from(String krName){
-        for (AlgorithmConstant algorithm : AlgorithmConstant.values()){
-            if (algorithm.getKrName().equals(krName)){
+    public static AlgorithmConstant from(String krName) {
+        for (AlgorithmConstant algorithm : AlgorithmConstant.values()) {
+            if (algorithm.getKrName().equals(krName)) {
                 return algorithm;
             }
         }
@@ -33,7 +33,7 @@ public enum AlgorithmConstant {
     }
 
     @JsonValue
-    public String getKrName(){
+    public String getKrName() {
         return krName;
     }
 }

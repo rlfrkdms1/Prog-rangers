@@ -16,9 +16,9 @@ public enum LevelConstant {
     private final String krName;
 
     @JsonCreator
-    public static LevelConstant from(String krName){
-        for (LevelConstant level : LevelConstant.values()){
-            if (level.getKrName().equals(krName)){
+    public static LevelConstant from(String krName) {
+        for (LevelConstant level : LevelConstant.values()) {
+            if (level.getKrName().equals(krName)) {
                 return level;
             }
         }
@@ -26,7 +26,7 @@ public enum LevelConstant {
     }
 
     @JsonValue
-    public String getKrName(){
+    public String getKrName() {
         return krName;
     }
 

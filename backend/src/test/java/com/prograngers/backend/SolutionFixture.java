@@ -20,7 +20,7 @@ public enum SolutionFixture {
             new Algorithm(null, AlgorithmConstant.BFS),
             new DataStructure(null, DataStructureConstant.ARRAY),
             LevelConstant.ONE
-            );
+    );
 
     private final String title;
 
@@ -40,7 +40,7 @@ public enum SolutionFixture {
 
     private final LevelConstant level;
 
-    public Solution getSolution(Long id, Problem problem, Member member, Solution scrapSolution){
+    public Solution getSolution(Long id, Problem problem, Member member, Solution scrapSolution) {
         Solution build = Solution.builder()
                 .id(id)
                 .problem(problem)

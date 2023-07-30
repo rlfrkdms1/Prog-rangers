@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SolutionRepository extends JpaRepository<Solution,Long> {
+public interface SolutionRepository extends JpaRepository<Solution, Long> {
 
     List<Solution> findAllByMember(Member member);
 

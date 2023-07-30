@@ -25,19 +25,19 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @Slf4j
 class SolutionServiceTest {
-    // Mokito , SpringBootTest 빼고
+
     @Mock
-   private  SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
     @InjectMocks
     private SolutionService solutionService;
 
     @Test
-    void 저장_테스트(){
+    void 저장_테스트() {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null,"문제제목","https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null,"이름","닉네임","email@naver.com",null,null,"password","01012345678"))
+                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
+                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")
@@ -60,12 +60,12 @@ class SolutionServiceTest {
     }
 
     @Test
-    void 수정_테스트(){
+    void 수정_테스트() {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null,"문제제목","https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null,"이름","닉네임","email@naver.com",null,null,"password","01012345678"))
+                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
+                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")
@@ -85,20 +85,20 @@ class SolutionServiceTest {
         // when
         solution.updateTitle("수정 제목");
         SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest(
-                "수정 제목", AlgorithmConstant.BFS, DataStructureConstant.ARRAY,"코드","설명");
-        Solution updated = solutionService.update(solution.getId(),solutionPatchRequest);
+                "수정 제목", AlgorithmConstant.BFS, DataStructureConstant.ARRAY, "코드", "설명");
+        Solution updated = solutionService.update(solution.getId(), solutionPatchRequest);
 
         // then
         Assertions.assertThat(updated).isEqualTo(solution);
     }
 
     @Test
-    void 삭제_테스트(){
+    void 삭제_테스트() {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null,"문제제목","https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null,"이름","닉네임","email@naver.com",null,null,"password","01012345678"))
+                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
+                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")

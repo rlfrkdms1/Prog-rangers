@@ -11,6 +11,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ExControllerAdvice {
 
     // Valid를 통과하지 못할 경우 ErrorResponse dto로 해당하는 에러 반환
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception){
+    public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception) {
         List<ErrorResponse> errorList = new ArrayList<>();
         List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
@@ -30,22 +31,22 @@ public class ExControllerAdvice {
                     .build();
             errorList.add(errorResponse);
         }
-        return new ResponseEntity(errorList,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(errorList, HttpStatus.BAD_REQUEST);
     }
 
-     // 요청한 PathVariable에 대한 데이터가 db에 없는 경우 에러메세지와 함께 NoSuchElementException 던짐
+    // 요청한 PathVariable에 대한 데이터가 db에 없는 경우 에러메세지와 함께 NoSuchElementException 던짐
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> notFoundException(NotFoundException exception){
+    public ResponseEntity<ErrorResponse> notFoundException(NotFoundException exception) {
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse,HttpStatus.NOT_FOUND);
+        return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EnumTypeException.class)
-    public ResponseEntity<ErrorResponse> enumTypeException(EnumTypeException exception){
+    public ResponseEntity<ErrorResponse> enumTypeException(EnumTypeException exception) {
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

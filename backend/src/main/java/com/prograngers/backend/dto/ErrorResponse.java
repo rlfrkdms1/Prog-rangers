@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ErrorResponse {
-   // String description;
+    // String description;
 
     ErrorCode errocode;
     String descriptions;

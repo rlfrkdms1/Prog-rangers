@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -23,10 +24,7 @@ class SolutionRepositoryTest {
     private SolutionRepository solutionRepository;
 
     @Test
-    void 정상_입력_저장_테스트(){
-
-//        // given
-//         Solution solution = SOLUTION.getSolution(1L,null,null,null);
+    void 정상_입력_저장_테스트() {
 
         // given
         Solution solution = Solution.builder()
@@ -49,7 +47,7 @@ class SolutionRepositoryTest {
 
     @Test
     @Transactional
-    void 솔루션_수정_테스트(){
+    void 솔루션_수정_테스트() {
         // given
         Solution solution = Solution.builder()
                 .level(LevelConstant.THREE)
@@ -75,7 +73,7 @@ class SolutionRepositoryTest {
 
     @Test
     @Transactional
-    void 솔루션_삭제_테스트(){
+    void 솔루션_삭제_테스트() {
         // given
         Solution solution = Solution.builder()
                 .level(LevelConstant.THREE)
@@ -88,15 +86,15 @@ class SolutionRepositoryTest {
                 .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
                 .build();
         Solution saved = solutionRepository.save(solution);
-        log.info("saved id : {}",saved.getId());
+        log.info("saved id : {}", saved.getId());
 
         // when
         solutionRepository.delete(solution);
 
         // then
         org.junit.jupiter.api.Assertions.assertThrows(SolutionNotFoundException.class,
-                ()->{
-                    solutionRepository.findById(solution.getId()).orElseThrow(()->new SolutionNotFoundException());
+                () -> {
+                    solutionRepository.findById(solution.getId()).orElseThrow(() -> new SolutionNotFoundException());
                 });
     }
 

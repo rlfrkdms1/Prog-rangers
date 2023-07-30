@@ -14,13 +14,13 @@ public enum JudgeConstant {
 
     private final String value;
 
-    public static JudgeConstant from(String link){
+    public static JudgeConstant from(String link) {
         log.info(link);
-        for (JudgeConstant judge : JudgeConstant.values()){
+        for (JudgeConstant judge : JudgeConstant.values()) {
             String judgeValue = judge.getValue();
-            if (link.contains(judgeValue)){
-              return judge;
-          }
+            if (link.contains(judgeValue)) {
+                return judge;
+            }
         }
         throw new ProblemLinkNotFoundException();
     }
