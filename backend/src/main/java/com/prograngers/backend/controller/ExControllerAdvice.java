@@ -34,14 +34,14 @@ public class ExControllerAdvice {
     }
 
      // 요청한 PathVariable에 대한 데이터가 db에 없는 경우 에러메세지와 함께 NoSuchElementException 던짐
-    @ExceptionHandler
+    @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> notFoundException(NotFoundException exception){
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
         return new ResponseEntity(errorResponse,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(EnumTypeException.class)
     public ResponseEntity<ErrorResponse> enumTypeException(EnumTypeException exception){
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
