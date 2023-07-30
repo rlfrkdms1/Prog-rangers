@@ -1,7 +1,11 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.SolutionPatchRequest;
-import com.prograngers.backend.entity.*;
+import com.prograngers.backend.entity.Algorithm;
+import com.prograngers.backend.entity.DataStructure;
+import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.Problem;
+import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
