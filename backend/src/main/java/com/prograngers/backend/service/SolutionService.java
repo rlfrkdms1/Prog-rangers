@@ -11,52 +11,38 @@ import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class SolutionService {
-
     private final SolutionRepository solutionRepository;
-
+    @Transactional(readOnly = false)
     public Solution  save(Solution solution){
         Solution saved = solutionRepository.save(solution);
         return saved;
     }
-
+    @Transactional(readOnly = false)
     public Solution update(Long solutionId, SolutionPatchRequest request) throws SolutionNotFoundException {
         Solution target = findById(solutionId);
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
         return updated;
     }
-
-//    public void delete(Solution solution){
-//            solutionRepository.delete(solution);
-//    }
-
+    @Transactional(readOnly = false)
     public void delete(Long solutionId) throws SolutionNotFoundException {
             Solution target = findById(solutionId);
             solutionRepository.delete(target);
     }
-
-    public List<Solution> index(Member member){
-
-        List<Solution> solutionList = solutionRepository.findAllByMember(member);
-
-        return solutionList;
-    }
-
     public Solution findById(Long solutionId) {
         return solutionRepository.findById(solutionId).orElseThrow(()->new SolutionNotFoundException());
     }
-
+    @Transactional(readOnly = false)
     public Solution saveScrap(Long id, ScarpSolutionRequest request) {
         Solution scrap = findById(id);
 
