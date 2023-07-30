@@ -2,7 +2,6 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.*;
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,6 +24,8 @@ public class SolutionController {
     private final SolutionService solutionService;
     private final CommentService commentService;
 
+    private final String REDIRECT_PATH = "http://localhost:8080/solutions";
+
     // solution 쓰기
     @PostMapping("/new-form")
     public ResponseEntity<?> newForm(@RequestBody @Valid SolutionRequest solutionRequest) throws URISyntaxException {
@@ -33,12 +33,10 @@ public class SolutionController {
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Solution solution = solutionRequest.toEntity();
-        Solution saved = solutionService.save(solution);
-        Long solutionId = saved.getId();
+        Solution saved = solutionService.save(solutionRequest.toEntity());
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/" + solutionId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saved.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -51,7 +49,7 @@ public class SolutionController {
         Solution saved = solutionService.saveScrap(scrapId, request);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/" + saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saved.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -73,7 +71,7 @@ public class SolutionController {
         Solution updated = solutionService.update(solutionId, solutionPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/" + updated.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + updated.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -87,7 +85,7 @@ public class SolutionController {
         solutionService.delete(solutionId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions");
+        URI redirectUri = new URI(REDIRECT_PATH);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -112,7 +110,7 @@ public class SolutionController {
         Comment added = solutionService.addComment(solutionId, commentReqeust);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/" + added.getSolution().getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + added.getSolution().getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -126,7 +124,7 @@ public class SolutionController {
         Comment updated = commentService.updateComment(commentId, commentPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/" + updated.getSolution().getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + updated.getSolution().getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -137,7 +135,7 @@ public class SolutionController {
         Comment deleted = commentService.deleteComment(commentId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI("http://localhost:8080/solutions/" + solutionId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);

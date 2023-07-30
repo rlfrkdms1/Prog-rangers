@@ -4,8 +4,8 @@ import com.prograngers.backend.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class NotFoundException extends RuntimeException{
-    ErrorCode errorCode;
+public class NotFoundException extends RuntimeException {
+    final ErrorCode errorCode;
 
     public NotFoundException(String message, ErrorCode errorCode) {
         super(message);

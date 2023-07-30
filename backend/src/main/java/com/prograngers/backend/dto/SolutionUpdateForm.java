@@ -1,9 +1,12 @@
 package com.prograngers.backend.dto;
 
-import com.prograngers.backend.entity.Algorithms;
-import com.prograngers.backend.entity.DataStructures;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.Solution;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -13,22 +16,12 @@ public class SolutionUpdateForm {
 
     private String title;
     private String link;
-    private Algorithms algorithmName;
-    private DataStructures dataStructureName;
-
+    private AlgorithmConstant algorithmName;
+    private DataStructureConstant dataStructureName;
     private String code;
-
     private String description;
 
-
     public static SolutionUpdateForm toDto(Solution target) {
-        return SolutionUpdateForm.builder()
-                .title(target.getTitle())
-                .link(target.getProblem().getLink())
-                .algorithmName(target.getAlgorithm().getName())
-                .dataStructureName(target.getDataStructure().getName())
-                .code(target.getCode())
-                .description(target.getDescription())
-                .build();
+        return SolutionUpdateForm.builder().title(target.getTitle()).link(target.getProblem().getLink()).algorithmName(target.getAlgorithm().getName()).dataStructureName(target.getDataStructure().getName()).code(target.getCode()).description(target.getDescription()).build();
     }
 }

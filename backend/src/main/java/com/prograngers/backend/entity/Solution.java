@@ -1,6 +1,8 @@
 package com.prograngers.backend.entity;
 
-import com.prograngers.backend.dto.SolutionRequest;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,15 +18,16 @@ import java.util.List;
 @AllArgsConstructor
 public class Solution {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="problem_id")
+    @JoinColumn(name = "problem_id")
     private Problem problem;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String title;
@@ -41,80 +44,85 @@ public class Solution {
     private List<Likes> likes = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name="scrap_id")
+    @JoinColumn(name = "scrap_id")
     @Nullable
     private Solution scrapId;
 
     private LocalDate date;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="algorithm_id")
+    @JoinColumn(name = "algorithm_id")
     private Algorithm algorithm;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="dataStructure_id")
+    @JoinColumn(name = "dataStructure_id")
     private DataStructure dataStructure;
 
     @Enumerated(EnumType.STRING)
-    private Levels level;
+    private LevelConstant level;
 
-    public void updateProblem(Problem problem){
-        if (problem!=null){
+    public void updateProblem(Problem problem) {
+        if (problem != null) {
             this.problem = problem;
         }
     }
-    public void updateMember(Member member){
-        if (member!=null){
+
+    public void updateMember(Member member) {
+        if (member != null) {
             this.member = member;
         }
     }
 
-    public void updateTitle(String title){
-        if (title!=null){
+    public void updateTitle(String title) {
+        if (title != null) {
             this.title = title;
         }
     }
 
-    public void updateIsPublic(boolean isPublic){
+    public void updateIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
 
-    public void updateCode(String code){
-        if (!code.isEmpty()){
+    public void updateCode(String code) {
+        if (!code.isEmpty()) {
             this.code = code;
         }
     }
 
-    public void updateDescription(String description){
-        if (!code.isEmpty()){
+    public void updateDescription(String description) {
+        if (!code.isEmpty()) {
             this.description = description;
         }
     }
 
 
-    public void upScraps(){
-        this.scraps+=1;
+    public void upScraps() {
+        this.scraps += 1;
     }
 
-    public void downScraps(){
-        this.scraps-=1;
+    public void downScraps() {
+        this.scraps -= 1;
     }
 
-    public void updateScrapId(Solution solution){
-        if (solution!=null){
+    public void updateScrapId(Solution solution) {
+        if (solution != null) {
             this.scrapId = solution;
         }
     }
 
-    public void updateAlgorithm(Algorithms algorithm){
-        this.algorithm = new Algorithm(null,algorithm);
+    public void updateAlgorithm(AlgorithmConstant algorithm) {
+        this.algorithm = Algorithm.builder()
+                .name(algorithm)
+                .build();
     }
 
-    public void updateDataStructure(DataStructures dataStructure){
-        this.dataStructure = new DataStructure(null,dataStructure);
+    public void updateDataStructure(DataStructureConstant dataStructure) {
+        this.dataStructure = DataStructure.builder()
+                .name(dataStructure)
+                .build();
     }
 
-    public void updateLevel(Levels level){
+    public void updateLevel(LevelConstant level) {
         this.level = level;
     }
 }

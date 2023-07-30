@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.constants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -6,7 +6,7 @@ import com.prograngers.backend.exception.enumtype.LevelNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum Levels {
+public enum LevelConstant {
     ONE("레벨1"),
     TWO("레벨2"),
     THREE("레벨3"),
@@ -16,9 +16,9 @@ public enum Levels {
     private final String krName;
 
     @JsonCreator
-    public static Levels from(String krName){
-        for (Levels level : Levels.values()){
-            if (level.getKrName().equals(krName)){
+    public static LevelConstant from(String krName) {
+        for (LevelConstant level : LevelConstant.values()) {
+            if (level.getKrName().equals(krName)) {
                 return level;
             }
         }
@@ -26,7 +26,7 @@ public enum Levels {
     }
 
     @JsonValue
-    public String getKrName(){
+    public String getKrName() {
         return krName;
     }
 

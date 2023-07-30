@@ -10,4 +10,5 @@ import lombok.*;
 public class ErrorResponse {
     ErrorCode errorCode;
     String description;
+
 }

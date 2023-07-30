@@ -1,9 +1,11 @@
 package com.prograngers.backend.dto;
 
-import com.prograngers.backend.entity.Algorithms;
-import com.prograngers.backend.entity.DataStructures;
-import lombok.*;
-
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -14,8 +16,8 @@ public class SolutionDetailResponseSolution {
     String nickname;
     String title;
     String link;
-    Algorithms algorithmName;
-    DataStructures dataStructureName;
+    AlgorithmConstant algorithmName;
+    DataStructureConstant dataStructureName;
     String code;
     String description;
     Integer likes;
