@@ -29,7 +29,7 @@ public class Comment {
     @JoinColumn(name="member_id")
     private Member member;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="solution_id")
     private Solution solution;
     private Integer orderParent;
