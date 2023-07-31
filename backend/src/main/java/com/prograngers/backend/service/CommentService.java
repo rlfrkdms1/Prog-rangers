@@ -40,8 +40,6 @@ public class CommentService {
     @Transactional(readOnly = false)
     public Comment deleteComment(Long commentId) {
         Comment comment = findById(commentId);
-        // 삭제 전에 null로 만들어준다
-        comment.updateSolution(null);
         commentRepository.delete(comment);
         return comment;
     }
