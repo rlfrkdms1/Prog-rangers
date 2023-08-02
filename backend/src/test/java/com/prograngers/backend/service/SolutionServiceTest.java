@@ -8,6 +8,7 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
+import com.prograngers.backend.repository.CommentRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -30,6 +31,9 @@ class SolutionServiceTest {
 
     @Mock
     private SolutionRepository solutionRepository;
+    @Mock
+    private CommentRepository commentRepository;
+
     @InjectMocks
     private SolutionService solutionService;
 
@@ -118,7 +122,8 @@ class SolutionServiceTest {
 
         Long saveId = solutionService.save(solution);
         Solution target = solutionService.findById(saveId);
-        solutionService.delete(saveId);
+
+        solutionService.delete(target.getId());
 
         verify(solutionRepository).delete(target);
 
