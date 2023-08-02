@@ -19,8 +19,8 @@ public enum SolutionFixture {
             "설명",
             0,
             LocalDate.now(),
-            new Algorithm(null, AlgorithmConstant.BFS),
-            new DataStructure(null, DataStructureConstant.ARRAY),
+            AlgorithmConstant.BFS,
+            DataStructureConstant.ARRAY,
             LevelConstant.ONE
     );
 
@@ -36,9 +36,9 @@ public enum SolutionFixture {
 
     private final LocalDate date;
 
-    private final Algorithm algorithm;
+    private final AlgorithmConstant algorithm;
 
-    private final DataStructure dataStructure;
+    private final DataStructureConstant dataStructure;
 
     private final LevelConstant level;
 

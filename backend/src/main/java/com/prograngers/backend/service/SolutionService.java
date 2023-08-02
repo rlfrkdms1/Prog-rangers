@@ -64,7 +64,8 @@ public class SolutionService {
                 // 위 내용까지 스크랩 한 사용자가 수정할 수 있는 내용
                 .isPublic(true) //스크랩한 풀이이기 때문에 무조건 공개한다
                 .problem(scrap.getProblem()).date(LocalDate.now()).member(null) //로그인정보로 member를 알도록 수정해야함
-                .code(scrap.getCode()).scraps(0).scrapId(scrap).algorithm(new Algorithm(null, scrap.getAlgorithm().getName())).dataStructure(new DataStructure(null, scrap.getDataStructure().getName())).build();
+                .code(scrap.getCode()).scraps(0).scrapId(scrap).algorithm(scrap.getAlgorithm()).dataStructure(scrap.getDataStructure())
+                .build();
 
         Solution saved = solutionRepository.save(solution);
 

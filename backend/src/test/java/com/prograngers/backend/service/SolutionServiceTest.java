@@ -47,8 +47,8 @@ class SolutionServiceTest {
                 .scraps(0)
                 .scrapId(null)
                 .date(LocalDate.now())
-                .algorithm(new Algorithm(null, AlgorithmConstant.BFS))
-                .dataStructure(new DataStructure(null, DataStructureConstant.ARRAY))
+                .algorithm(AlgorithmConstant.BFS)
+                .dataStructure(DataStructureConstant.ARRAY)
                 .level(LevelConstant.THREE)
                 .build();
 
@@ -75,8 +75,8 @@ class SolutionServiceTest {
                 .scraps(0)
                 .scrapId(null)
                 .date(LocalDate.now())
-                .algorithm(new Algorithm(null, AlgorithmConstant.BFS))
-                .dataStructure(new DataStructure(null, DataStructureConstant.ARRAY))
+                .algorithm(AlgorithmConstant.BFS)
+                .dataStructure(DataStructureConstant.ARRAY)
                 .level(LevelConstant.THREE)
                 .build();
 
@@ -108,8 +108,8 @@ class SolutionServiceTest {
                 .scraps(0)
                 .scrapId(null)
                 .date(LocalDate.now())
-                .algorithm(new Algorithm(null, AlgorithmConstant.BFS))
-                .dataStructure(new DataStructure(null, DataStructureConstant.ARRAY))
+                .algorithm(AlgorithmConstant.BFS)
+                .dataStructure(DataStructureConstant.ARRAY)
                 .level(LevelConstant.THREE)
                 .build();
 
