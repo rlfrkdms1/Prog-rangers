@@ -26,7 +26,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = false)
-    public Comment updateComment(Long commentId, CommentPatchRequest commentPatchRequest) {
+    public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest) {
         Comment comment = findById(commentId);
 
         comment.updateContent(commentPatchRequest.getContent());
@@ -34,13 +34,13 @@ public class CommentService {
 
         Comment saved = commentRepository.save(comment);
 
-        return saved;
+        // 리다이렉트 하기 위해 Solution의 Id 반환
+        return saved.getSolution().getId();
     }
 
     @Transactional(readOnly = false)
-    public Comment deleteComment(Long commentId) {
+    public void deleteComment(Long commentId) {
         Comment comment = findById(commentId);
         commentRepository.delete(comment);
-        return comment;
     }
 }

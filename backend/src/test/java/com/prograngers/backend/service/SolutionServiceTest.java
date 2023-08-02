@@ -55,10 +55,10 @@ class SolutionServiceTest {
         given(solutionRepository.save(solution)).willReturn(solution);
 
         // when
-        Solution saved = solutionService.save(solution);
+        Long saveId = solutionService.save(solution);
 
         // then
-        Assertions.assertThat(saved).isEqualTo(solution);
+        Assertions.assertThat(saveId).isEqualTo(solution.getId());
     }
 
     @Test
@@ -88,10 +88,10 @@ class SolutionServiceTest {
         solution.updateTitle("수정 제목");
         SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest(
                 "수정 제목", AlgorithmConstant.BFS, DataStructureConstant.ARRAY, "코드", "설명");
-        Solution updated = solutionService.update(solution.getId(), solutionPatchRequest);
+        Long updateId = solutionService.update(solution.getId(), solutionPatchRequest);
 
         // then
-        Assertions.assertThat(updated).isEqualTo(solution);
+        Assertions.assertThat(updateId).isEqualTo(solution.getId());
     }
 
     @Test
@@ -116,10 +116,11 @@ class SolutionServiceTest {
         given(solutionRepository.save(solution)).willReturn(solution);
         given(solutionRepository.findById(solution.getId())).willReturn(Optional.ofNullable(solution));
 
-        Solution saved = solutionService.save(solution);
-        solutionService.delete(saved.getId());
+        Long saveId = solutionService.save(solution);
+        Solution target = solutionService.findById(saveId);
+        solutionService.delete(saveId);
 
-        verify(solutionRepository).delete(saved);
+        verify(solutionRepository).delete(target);
 
     }
 

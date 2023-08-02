@@ -7,8 +7,6 @@ import com.prograngers.backend.dto.SolutionDetailResponse;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
-import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
@@ -39,10 +37,10 @@ public class SolutionController {
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Solution saved = solutionService.save(solutionRequest.toEntity());
+        Long saveId = solutionService.save(solutionRequest.toEntity());
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -52,10 +50,10 @@ public class SolutionController {
     public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionRequest request)
             throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
-        Solution saved = solutionService.saveScrap(scrapId, request);
+        Long saveId = solutionService.saveScrap(scrapId, request);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -64,8 +62,8 @@ public class SolutionController {
     // 수정 폼 반환
     @GetMapping("/{solutionId}/update-form")
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId) {
-        Solution target = solutionService.findById(solutionId);
-        return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
+        SolutionUpdateForm updateForm = solutionService.getUpdateForm(solutionId);
+        return ResponseEntity.ok().body(updateForm);
     }
 
     // 수정 요청
@@ -74,10 +72,10 @@ public class SolutionController {
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
         // solutionService로 update한다
-        Solution updated = solutionService.update(solutionId, solutionPatchRequest);
+        Long updateId = solutionService.update(solutionId, solutionPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + updated.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + updateId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -101,9 +99,7 @@ public class SolutionController {
     // Solution 상세보기 요청
     @GetMapping("/{solutionId}")
     public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId) {
-        Solution solution = solutionService.findById(solutionId);
-        List<Comment> comments = commentService.findBySolution(solution);
-        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments);
+        SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId);
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
 
@@ -113,10 +109,10 @@ public class SolutionController {
     public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentReqeust commentReqeust)
             throws URISyntaxException {
 
-        Comment added = solutionService.addComment(solutionId, commentReqeust);
+        solutionService.addComment(solutionId, commentReqeust);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + added.getSolution().getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -127,10 +123,10 @@ public class SolutionController {
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
                                            @RequestBody CommentPatchRequest commentPatchRequest) throws URISyntaxException {
 
-        Comment updated = commentService.updateComment(commentId, commentPatchRequest);
+        Long solutionId = commentService.updateComment(commentId, commentPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + updated.getSolution().getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -138,7 +134,7 @@ public class SolutionController {
 
     @DeleteMapping("comments/{solutionId}/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId) throws URISyntaxException {
-        Comment deleted = commentService.deleteComment(commentId);
+        commentService.deleteComment(commentId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);

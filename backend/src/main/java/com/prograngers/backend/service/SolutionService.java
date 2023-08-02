@@ -2,7 +2,9 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.CommentReqeust;
 import com.prograngers.backend.dto.ScarpSolutionRequest;
+import com.prograngers.backend.dto.SolutionDetailResponse;
 import com.prograngers.backend.dto.SolutionPatchRequest;
+import com.prograngers.backend.dto.SolutionUpdateForm;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Solution;
@@ -27,17 +29,17 @@ public class SolutionService {
     private final CommentRepository commentRepository;
 
     @Transactional(readOnly = false)
-    public Solution save(Solution solution) {
+    public Long save(Solution solution) {
         Solution saved = solutionRepository.save(solution);
-        return saved;
+        return saved.getId();
     }
 
     @Transactional(readOnly = false)
-    public Solution update(Long solutionId, SolutionPatchRequest request) {
+    public Long  update(Long solutionId, SolutionPatchRequest request) {
         Solution target = findById(solutionId);
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
-        return updated;
+        return updated.getId();
     }
 
     @Transactional(readOnly = false)
@@ -56,7 +58,7 @@ public class SolutionService {
     }
 
     @Transactional(readOnly = false)
-    public Solution saveScrap(Long id, ScarpSolutionRequest request) {
+    public Long saveScrap(Long id, ScarpSolutionRequest request) {
         Solution scrap = findById(id);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
@@ -69,12 +71,12 @@ public class SolutionService {
 
         Solution saved = solutionRepository.save(solution);
 
-        return saved;
+        return saved.getId();
 
     }
 
     @Transactional(readOnly = false)
-    public Comment addComment(Long solutionId, CommentReqeust commentReqeust) {
+    public void  addComment(Long solutionId, CommentReqeust commentReqeust) {
         Solution solution = findById(solutionId);
 
         //가상 Member 생성
@@ -83,6 +85,18 @@ public class SolutionService {
         Comment comment = Comment.builder().member(member).solution(solution).orderParent(commentReqeust.getOrderParent()).mention(commentReqeust.getMention()).content(commentReqeust.getContent()).date(LocalDate.now()).parentId(commentReqeust.getParentId()).groupNumber(commentReqeust.getGroupNumber()).fixed(false).build();
 
         Comment saved = commentRepository.save(comment);
-        return saved;
+    }
+
+    public SolutionUpdateForm getUpdateForm(Long solutionId) {
+        Solution target = findById(solutionId);
+        SolutionUpdateForm solutionUpdateForm = SolutionUpdateForm.toDto(target);
+        return solutionUpdateForm;
+    }
+
+    public SolutionDetailResponse getSolutionDetail(Long solutionId) {
+        Solution solution = findById(solutionId);
+        List<Comment> comments = commentRepository.findAllBySolution(solution);
+        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments);
+        return  solutionDetailResponse;
     }
 }
