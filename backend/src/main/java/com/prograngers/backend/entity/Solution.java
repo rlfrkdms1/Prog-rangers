@@ -64,13 +64,11 @@ public class Solution {
 
     private LocalDate date;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "algorithm_id")
-    private Algorithm algorithm;
+    @Enumerated(EnumType.STRING)
+    private AlgorithmConstant algorithm;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "dataStructure_id")
-    private DataStructure dataStructure;
+    @Enumerated(EnumType.STRING)
+    private DataStructureConstant dataStructure;
 
     @Enumerated(EnumType.STRING)
     private LevelConstant level;
@@ -125,15 +123,11 @@ public class Solution {
     }
 
     public void updateAlgorithm(AlgorithmConstant algorithm) {
-        this.algorithm = Algorithm.builder()
-                .name(algorithm)
-                .build();
+        this.algorithm = algorithm;
     }
 
     public void updateDataStructure(DataStructureConstant dataStructure) {
-        this.dataStructure = DataStructure.builder()
-                .name(dataStructure)
-                .build();
+        this.dataStructure =dataStructure;
     }
 
     public void updateLevel(LevelConstant level) {

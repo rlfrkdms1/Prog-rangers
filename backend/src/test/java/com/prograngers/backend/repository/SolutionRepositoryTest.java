@@ -1,7 +1,5 @@
 package com.prograngers.backend.repository;
 
-import com.prograngers.backend.entity.Algorithm;
-import com.prograngers.backend.entity.DataStructure;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
