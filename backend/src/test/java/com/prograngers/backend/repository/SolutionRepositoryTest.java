@@ -9,6 +9,7 @@ import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,7 +26,8 @@ class SolutionRepositoryTest {
     private SolutionRepository solutionRepository;
 
     @Test
-    void 정상_입력_저장_테스트() {
+    @DisplayName("저장_테스트")
+    void 저장_테스트() {
 
         // given
         Solution solution = Solution.builder()
@@ -48,7 +50,8 @@ class SolutionRepositoryTest {
 
     @Test
     @Transactional
-    void 솔루션_수정_테스트() {
+    @DisplayName("수정 테스트")
+    void 수정_테스트() {
         // given
         Solution solution = Solution.builder()
                 .level(LevelConstant.THREE)
@@ -60,6 +63,7 @@ class SolutionRepositoryTest {
                 .date(LocalDate.now())
                 .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
                 .build();
+
         Solution saved = solutionRepository.save(solution);
 
         saved.updateDescription("수정한 설명입니다");
@@ -74,7 +78,8 @@ class SolutionRepositoryTest {
 
     @Test
     @Transactional
-    void 솔루션_삭제_테스트() {
+    @DisplayName("삭제 테스트")
+    void 삭제_테스트() {
         // given
         Solution solution = Solution.builder()
                 .level(LevelConstant.THREE)
