@@ -20,14 +20,8 @@ public class ProblemController {
 
     private final ProblemService problemService;
 
-    public ResponseEntity<?> problems(
-            @RequestParam String language,
-            @RequestParam String algorithm,
-            @RequestParam String dataStructure,
-            @RequestParam String sortBy
-                                      ){
-        List<Problem> problemList = problemService.getProblemList();
-        return ResponseEntity.ok(problemList);
+    public ResponseEntity<?> problems() {
+        List<ProblemListResponse> problemListResponses = problemService.getProblemList();
+        return ResponseEntity.ok(problemListResponses);
     }
-
 }
