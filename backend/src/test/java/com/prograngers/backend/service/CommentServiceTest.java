@@ -76,7 +76,7 @@ class CommentServiceTest {
         // when
         Comment saved = commentRepository.save(comment1);
         commentRepository.save(comment2);
-        Comment found = commentRepository.findById(1L).orElse(null);
+        Comment found = commentService.findById(1L);
 
         // then
         Assertions.assertThat(found).isEqualTo(saved);
@@ -98,5 +98,6 @@ class CommentServiceTest {
 
         Assertions.assertThat(updated).isEqualTo(saved);
     }
+
 
 }
