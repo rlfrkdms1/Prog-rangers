@@ -59,5 +59,4 @@ class CommentServiceTest {
         Assertions.assertThat(bySolution.size()).isEqualTo(2);
     }
 
-
 }
