@@ -82,4 +82,21 @@ class CommentServiceTest {
         Assertions.assertThat(found).isEqualTo(saved);
     }
 
+    @Test
+    void 댓글_수정_테스트(){
+        // given
+        Comment comment1 = Comment.builder()
+                .content("내용1")
+                .build();
+
+        given(commentRepository.save(comment1)).willReturn(comment1);
+
+        // when
+        Comment saved = commentRepository.save(comment1);
+        saved.updateContent("수정내용");
+        Comment updated = commentRepository.save(saved);
+
+        Assertions.assertThat(updated).isEqualTo(saved);
+    }
+
 }
