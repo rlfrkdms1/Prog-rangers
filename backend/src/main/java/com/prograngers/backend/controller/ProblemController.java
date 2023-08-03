@@ -27,4 +27,5 @@ public class ProblemController {
         List<ProblemListResponse> problemListResponses = problemService.getProblemList();
         return ResponseEntity.ok(problemListResponses);
     }
+
 }

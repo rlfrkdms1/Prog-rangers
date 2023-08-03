@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 
@@ -57,6 +58,28 @@ class CommentServiceTest {
 
         // then
         Assertions.assertThat(bySolution.size()).isEqualTo(2);
+    }
+
+    @Test
+    void 아이디로_댓글_찾기_테스트(){
+        // given
+        Comment comment1 = Comment.builder()
+                .content("내용1")
+                .build();
+        Comment comment2 = Comment.builder()
+                .content("내용2")
+                .build();
+
+        given(commentRepository.save(comment1)).willReturn(comment1);
+        given(commentRepository.findById(1L)).willReturn(Optional.ofNullable(comment1));
+
+        // when
+        Comment saved = commentRepository.save(comment1);
+        commentRepository.save(comment2);
+        Comment found = commentRepository.findById(1L).orElse(null);
+
+        // then
+        Assertions.assertThat(found).isEqualTo(saved);
     }
 
 }
