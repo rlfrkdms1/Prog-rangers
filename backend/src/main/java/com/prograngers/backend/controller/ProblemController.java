@@ -1,6 +1,7 @@
 package com.prograngers.backend.controller;
 
 
+import com.prograngers.backend.dto.ProblemListResponse;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;

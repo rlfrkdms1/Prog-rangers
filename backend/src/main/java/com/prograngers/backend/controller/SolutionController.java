@@ -40,7 +40,7 @@ public class SolutionController {
         Long saveId = solutionService.save(solutionRequest.toEntity());
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH + "/" + saveId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -53,7 +53,7 @@ public class SolutionController {
         Long saveId = solutionService.saveScrap(scrapId, request);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH + "/" + saveId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -75,7 +75,7 @@ public class SolutionController {
         Long updateId = solutionService.update(solutionId, solutionPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH + "/" + updateId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + updateId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -89,7 +89,7 @@ public class SolutionController {
         solutionService.delete(solutionId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH);
+        URI redirectUri = new URI(REDIRECT_PATH);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -112,7 +112,7 @@ public class SolutionController {
         solutionService.addComment(solutionId, commentReqeust);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH + "/" + solutionId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -126,7 +126,7 @@ public class SolutionController {
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH + "/" + solutionId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -137,7 +137,7 @@ public class SolutionController {
         commentService.deleteComment(commentId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REAL_PATH + "/" + solutionId);
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);

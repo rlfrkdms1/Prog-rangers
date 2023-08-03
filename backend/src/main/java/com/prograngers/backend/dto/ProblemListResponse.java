@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto;
 
+import com.prograngers.backend.entity.constants.JudgeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProblemListResponse {
     String title;
-    String ojName;
+    JudgeConstant ojName;
 }
