@@ -1,6 +1,7 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.CommentPatchRequest;
+import com.prograngers.backend.dto.CommentReqeust;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.repository.CommentRepository;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -108,6 +110,25 @@ class CommentServiceTest {
         // then
         Assertions.assertThat(updated.getContent()).isEqualTo("수정내용");
 
+    }
+
+    @Test
+    void 댓글_삭제_테스트(){
+        // given
+        Comment comment = Comment.builder()
+                .id(1L)
+                .content("댓글내용")
+                .build();
+
+        given(commentRepository.save(comment)).willReturn(comment);
+        given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
+        commentRepository.save(comment);
+
+        // when
+        commentService.deleteComment(1L);
+
+        // then
+        verify(commentRepository).delete(comment);
     }
 
 
