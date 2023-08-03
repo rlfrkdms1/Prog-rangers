@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.CommentPatchRequest;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.repository.CommentRepository;
@@ -35,7 +36,7 @@ class CommentServiceTest {
     private SolutionService solutionService;
 
     @Test
-    void 솔루션으로_댓글_찾기_테스트(){
+    void 솔루션으로_댓글_찾기_테스트() {
 
         // given
         Solution solution = Solution.builder()
@@ -61,7 +62,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void 아이디로_댓글_찾기_테스트(){
+    void 아이디로_댓글_찾기_테스트() {
         // given
         Comment comment1 = Comment.builder()
                 .content("내용1")
@@ -83,20 +84,30 @@ class CommentServiceTest {
     }
 
     @Test
-    void 댓글_수정_테스트(){
+    void 댓글_수정_테스트() {
+
         // given
-        Comment comment1 = Comment.builder()
-                .content("내용1")
+        Solution solution = Solution.builder()
+                .id(null)
+                .description("풀이설명")
                 .build();
 
-        given(commentRepository.save(comment1)).willReturn(comment1);
+        Comment comment = Comment.builder()
+                .id(1L)
+                .solution(solution)
+                .content("댓글내용")
+                .build();
+        given(commentRepository.save(comment)).willReturn(comment);
+        given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
+        CommentPatchRequest request = new CommentPatchRequest("수정내용",null);
 
         // when
-        Comment saved = commentRepository.save(comment1);
-        saved.updateContent("수정내용");
-        Comment updated = commentRepository.save(saved);
+        commentService.updateComment(comment.getId(),request);
+        Comment updated = commentRepository.findById(1L).orElse(null);
 
-        Assertions.assertThat(updated).isEqualTo(saved);
+        // then
+        Assertions.assertThat(updated.getContent()).isEqualTo("수정내용");
+
     }
 
 
