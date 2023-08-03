@@ -2,6 +2,7 @@ package com.prograngers.backend.controller;
 
 
 import com.prograngers.backend.entity.Problem;
+import com.prograngers.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
