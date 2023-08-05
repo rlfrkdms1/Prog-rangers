@@ -1,0 +1,37 @@
+package com.prograngers.backend;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+
+@Component
+public class JwtTokenProvider {
+
+    private final Key key;
+    private final long validTimeInMillisecond;
+
+    @Autowired
+    public JwtTokenProvider(@Value("${security-secret-key}") String key,
+                            @Value("${security-valid-time}") long validTimeInMillisecond) {
+        this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
+        this.validTimeInMillisecond = validTimeInMillisecond;
+    }
+
+    public String createJtwToken(Long memberId){
+        Date now = new Date();
+        Date validTime = new Date(now.getTime() + validTimeInMillisecond);
+        return Jwts.builder()
+                .claim("memberId", memberId)
+                .setExpiration(validTime)
+                .setIssuedAt(now)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+}
