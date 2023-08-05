@@ -44,7 +44,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token);
     }
 
-    public Long getMemberId(Jws<Claims> claimsJws){
-        return claimsJws.getBody().get("memberId", Long.class);
+    public Long getMemberId(String accessToken){
+        return getClaimsJwt(accessToken).getBody().get("memberId", Long.class);
     }
 }
