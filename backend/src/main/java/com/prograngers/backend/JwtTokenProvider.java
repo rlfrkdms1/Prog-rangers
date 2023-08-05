@@ -1,5 +1,7 @@
 package com.prograngers.backend;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -33,5 +35,16 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public Jws<Claims> getClaimsJwt(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
+    }
+
+    public Long getMemberId(Jws<Claims> claimsJws){
+        return claimsJws.getBody().get("memberId", Long.class);
     }
 }
