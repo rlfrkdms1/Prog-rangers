@@ -19,7 +19,7 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
 
-    public List<ProblemListResponse> getProblemList(Integer page) {
+    public List<ProblemListResponse> getProblemList(Integer page, String algorithm, String dataStructure, String sortBy) {
         List<ProblemListResponse> problemListResponses = new ArrayList<>();
         List<Problem> list = problemRepository.findAllByOrderByDateDesc();
 

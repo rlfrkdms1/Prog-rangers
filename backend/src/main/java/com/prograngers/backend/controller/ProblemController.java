@@ -23,8 +23,8 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @GetMapping
-    public ResponseEntity<?> problems(@RequestParam Integer page) {
-        List<ProblemListResponse> problemListResponses = problemService.getProblemList(page);
+    public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam String algorithm, @RequestParam String dataStructure, @RequestParam String sortBy) {
+        List<ProblemListResponse> problemListResponses = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemListResponses);
     }
 }
