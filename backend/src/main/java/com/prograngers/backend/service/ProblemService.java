@@ -17,7 +17,7 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
 
-    public List<ProblemListResponse> getProblemList() {
+    public List<ProblemListResponse> getProblemList(String algorithm, String dataStructure, String sortBy) {
         List<ProblemListResponse> problemListResponses = new ArrayList<>();
         List<Problem> list = problemRepository.findAll();
         for (Problem problem : list) {
