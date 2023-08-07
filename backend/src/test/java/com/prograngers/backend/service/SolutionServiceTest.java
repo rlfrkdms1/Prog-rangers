@@ -9,6 +9,7 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.CommentRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -173,5 +174,12 @@ class SolutionServiceTest {
 
     }
 
-
+    @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")
+    @Test
+    void 없는_풀이_조회(){
+        // then
+        org.junit.jupiter.api.Assertions.assertThrows(SolutionNotFoundException.class
+        , ()->solutionService.findById(1L)
+                );
+    }
 }
