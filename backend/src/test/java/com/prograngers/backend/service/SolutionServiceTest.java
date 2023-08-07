@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.ScarpSolutionRequest;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
@@ -23,8 +24,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -65,6 +68,43 @@ class SolutionServiceTest {
 
         // then
         Assertions.assertThat(saveId).isEqualTo(solution.getId());
+    }
+
+    @DisplayName("스크랩 해서 풀이를 저장할 수 있다")
+    @Test
+    void 스크랩_저장_테스트(){
+        // given
+        Solution solution = Solution.builder()
+                .id(1L)
+                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
+                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
+                .title("풀이제목")
+                .isPublic(true)
+                .code("코드")
+                .description("설명")
+                .scraps(0)
+                .scrapId(null)
+                .date(LocalDate.now())
+                .algorithm(AlgorithmConstant.BFS)
+                .dataStructure(DataStructureConstant.ARRAY)
+                .level(LevelConstant.THREE)
+                .build();
+
+        ScarpSolutionRequest request = new ScarpSolutionRequest("스크랩풀이", "스크랩풀이설명", LevelConstant.FIVE);
+        Solution made = request.toEntity(solution);
+
+        when(solutionRepository.save(any())).thenReturn(solution).thenReturn(made);
+        when(solutionRepository.findById(any())).
+                thenReturn(Optional.ofNullable(solution)).
+                thenReturn(Optional.ofNullable(made));
+
+        solutionService.save(solution);
+
+        // when
+        Long scrapedId = solutionService.saveScrap(solution.getId(), request);
+
+        // then
+        Assertions.assertThat(solutionService.findById(scrapedId).getTitle()).isEqualTo("스크랩풀이");
     }
 
     @DisplayName("풀이를 수정할 수 있다")
@@ -132,5 +172,6 @@ class SolutionServiceTest {
         verify(solutionRepository).delete(target);
 
     }
+
 
 }
