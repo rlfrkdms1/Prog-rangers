@@ -18,11 +18,11 @@ public class ProblemService {
     private final ProblemRepository problemRepository;
 
     public List<ProblemListResponse> getProblemList() {
-        List<ProblemListResponse> dto = new ArrayList<>();
+        List<ProblemListResponse> problemListResponses = new ArrayList<>();
         List<Problem> list = problemRepository.findAll();
         for (Problem problem : list) {
-            dto.add(new ProblemListResponse(problem.getTitle(), problem.getOjName()));
+            problemListResponses.add(new ProblemListResponse(problem.getTitle(), problem.getOjName()));
         }
-        return dto;
+        return problemListResponses;
     }
 }
