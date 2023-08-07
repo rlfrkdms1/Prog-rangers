@@ -19,7 +19,7 @@ public class ProblemService {
 
     public List<ProblemListResponse> getProblemList(Long page) {
         List<ProblemListResponse> problemListResponses = new ArrayList<>();
-        List<Problem> list = problemRepository.findAllOrderByDateDesc();
+        List<Problem> list = problemRepository.findAllByOrderByDateDesc();
 
         // 전체 페이지 개수 계산
         double totalPage = Math.ceil(list.size() / 4);

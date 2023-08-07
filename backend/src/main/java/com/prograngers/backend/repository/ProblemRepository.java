@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
-    List<Problem> findAllOrderByDateDesc();
+    List<Problem> findAllByOrderByDateDesc();
 }
