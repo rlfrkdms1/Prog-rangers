@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long  update(Long solutionId, SolutionPatchRequest request) {
+    public Long update(Long solutionId, SolutionPatchRequest request) {
         Solution target = findById(solutionId);
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
@@ -66,7 +67,11 @@ public class SolutionService {
                 // 위 내용까지 스크랩 한 사용자가 수정할 수 있는 내용
                 .isPublic(true) //스크랩한 풀이이기 때문에 무조건 공개한다
                 .problem(scrap.getProblem()).date(LocalDate.now()).member(null) //로그인정보로 member를 알도록 수정해야함
-                .code(scrap.getCode()).scraps(0).scrapId(scrap).algorithm(scrap.getAlgorithm()).dataStructure(scrap.getDataStructure())
+                .code(scrap.getCode()).
+                scraps(0).
+                scrapId(scrap).
+                algorithm(scrap.getAlgorithm()).
+                dataStructure(scrap.getDataStructure())
                 .build();
 
         Solution saved = solutionRepository.save(solution);
@@ -76,13 +81,21 @@ public class SolutionService {
     }
 
     @Transactional
-    public void  addComment(Long solutionId, CommentReqeust commentReqeust) {
+    public void addComment(Long solutionId, CommentReqeust commentReqeust) {
         Solution solution = findById(solutionId);
 
         //가상 Member 생성
         Member member = Member.builder().name("멤버이름").nickname("닉네임").build();
 
-        Comment comment = Comment.builder().member(member).solution(solution).orderParent(commentReqeust.getOrderParent()).mention(commentReqeust.getMention()).content(commentReqeust.getContent()).date(LocalDate.now()).parentId(commentReqeust.getParentId()).groupNumber(commentReqeust.getGroupNumber()).fixed(false).build();
+        Comment comment = Comment.builder().
+                member(member).
+                solution(solution).
+                orderParent(commentReqeust.getOrderParent()).
+                mention(commentReqeust.getMention()).
+                content(commentReqeust.getContent()).
+                date(LocalDate.now()).parentId(commentReqeust.getParentId()).
+                groupNumber(commentReqeust.getGroupNumber()).fixed(false).
+                build();
 
         Comment saved = commentRepository.save(comment);
     }
@@ -97,6 +110,6 @@ public class SolutionService {
         Solution solution = findById(solutionId);
         List<Comment> comments = commentRepository.findAllBySolution(solution);
         SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments);
-        return  solutionDetailResponse;
+        return solutionDetailResponse;
     }
 }
