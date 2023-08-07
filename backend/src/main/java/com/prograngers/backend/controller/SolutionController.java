@@ -7,6 +7,7 @@ import com.prograngers.backend.dto.SolutionDetailResponse;
 import com.prograngers.backend.dto.SolutionPatchRequest;
 import com.prograngers.backend.dto.SolutionRequest;
 import com.prograngers.backend.dto.SolutionUpdateForm;
+import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
@@ -143,5 +144,11 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+    // 상세보기 한 줄 리뷰
+    @GetMapping("{soultionId}/reviews")
+    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
+        solutionService.getReviewDetail(solutionId);
+
+    }
 
 }

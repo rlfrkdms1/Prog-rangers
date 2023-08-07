@@ -102,4 +102,9 @@ public class SolutionService {
         SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments);
         return solutionDetailResponse;
     }
+
+    public void getReviewDetail(Long solutionId) {
+        Solution solution = findById(solutionId);
+        reviewRepository.findBySolution(solution);
+    }
 }
