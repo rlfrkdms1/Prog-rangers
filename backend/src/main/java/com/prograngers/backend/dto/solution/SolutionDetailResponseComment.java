@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.solution;
 
 
 import lombok.AllArgsConstructor;

@@ -1,12 +1,13 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.CommentReqeust;
-import com.prograngers.backend.dto.ScarpSolutionRequest;
-import com.prograngers.backend.dto.SolutionDetailResponse;
-import com.prograngers.backend.dto.SolutionPatchRequest;
-import com.prograngers.backend.dto.SolutionUpdateForm;
+import com.prograngers.backend.dto.comment.CommentReqeust;
+import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.SolutionDetailResponse;
+import com.prograngers.backend.dto.solution.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.SolutionUpdateForm;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.CommentRepository;
@@ -108,6 +109,8 @@ public class SolutionService {
 
     public void getReviewDetail(Long solutionId) {
         Solution solution = findById(solutionId);
-        reviewRepository.findBySolution(solution);
+        String[] lines = solution.getCode().split("\n");
+        List<Review> reviews = reviewRepository.findAllBySolution(solution);
+
     }
 }

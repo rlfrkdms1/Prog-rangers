@@ -1,6 +1,6 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.ProblemListResponse;
+import com.prograngers.backend.dto.problem.ProblemListResponse;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;

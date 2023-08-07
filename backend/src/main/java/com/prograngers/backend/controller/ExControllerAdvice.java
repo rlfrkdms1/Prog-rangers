@@ -1,6 +1,6 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.ErrorResponse;
+import com.prograngers.backend.dto.error.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;

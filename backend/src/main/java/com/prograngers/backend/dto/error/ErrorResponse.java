@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.error;
 
 import com.prograngers.backend.exception.ErrorCode;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.comment;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,17 +10,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentReqeust {
-
-    String nickname;
-    Integer orderParent;
+public class CommentPatchRequest {
     @NotBlank(message = "댓글 내용을 입력해주세요")
-    String content;
-
-    String mention;
-
-    Long parentId;
-
-    Integer groupNumber;
-
+    private String content;
+    private String mention;
 }

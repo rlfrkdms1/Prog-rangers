@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.problem;
 
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import lombok.AllArgsConstructor;

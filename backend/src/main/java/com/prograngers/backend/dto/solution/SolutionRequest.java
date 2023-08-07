@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.solution;
 
 import com.prograngers.backend.entity.*;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
