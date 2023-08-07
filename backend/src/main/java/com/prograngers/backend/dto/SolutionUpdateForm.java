@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,15 +21,7 @@ public class SolutionUpdateForm {
     private String code;
     private String description;
 
-
     public static SolutionUpdateForm toDto(Solution target) {
-        return SolutionUpdateForm.builder()
-                .title(target.getTitle())
-                .link(target.getProblem().getLink())
-                .algorithmName(target.getAlgorithm().getName())
-                .dataStructureName(target.getDataStructure().getName())
-                .code(target.getCode())
-                .description(target.getDescription())
-                .build();
+        return SolutionUpdateForm.builder().title(target.getTitle()).link(target.getProblem().getLink()).algorithmName(target.getAlgorithm()).dataStructureName(target.getDataStructure()).code(target.getCode()).description(target.getDescription()).build();
     }
 }

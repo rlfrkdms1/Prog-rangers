@@ -4,10 +4,26 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -20,11 +36,11 @@ public class Solution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -38,20 +54,21 @@ public class Solution {
 
     private Integer scraps;
 
-    @OneToOne
+    @OneToMany(mappedBy = "solution")
+    private List<Likes> likes = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
     @Nullable
     private Solution scrapId;
 
     private LocalDate date;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "algorithm_id")
-    private Algorithm algorithm;
+    @Enumerated(EnumType.STRING)
+    private AlgorithmConstant algorithm;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dataStructure_id")
-    private DataStructure dataStructure;
+    @Enumerated(EnumType.STRING)
+    private DataStructureConstant dataStructure;
 
     @Enumerated(EnumType.STRING)
     private LevelConstant level;
@@ -106,15 +123,11 @@ public class Solution {
     }
 
     public void updateAlgorithm(AlgorithmConstant algorithm) {
-        this.algorithm = Algorithm.builder()
-                .name(algorithm)
-                .build();
+        this.algorithm = algorithm;
     }
 
     public void updateDataStructure(DataStructureConstant dataStructure) {
-        this.dataStructure = DataStructure.builder()
-                .name(dataStructure)
-                .build();
+        this.dataStructure =dataStructure;
     }
 
     public void updateLevel(LevelConstant level) {

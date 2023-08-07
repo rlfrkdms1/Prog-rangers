@@ -13,7 +13,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,13 +25,11 @@ public class SolutionRequest {
     private String solutionTitle;
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
-    // @NotBlank(message = "문제 난이도를 입력해주세요")
+
     private LevelConstant level;
 
-    // @NotBlank(message = "알고리즘을 입력해주세요")
     private AlgorithmConstant algorithm;
 
-    // @NotBlank(message = "자료구조를 입력해주세요")
     private DataStructureConstant dataStructure;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
@@ -61,8 +58,8 @@ public class SolutionRequest {
                 .scraps(0)
                 .date(LocalDate.now())
                 .level(level)
-                .algorithm(new Algorithm(null, algorithm))
-                .dataStructure(new DataStructure(null, dataStructure))
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
                 .description(description)
                 .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
