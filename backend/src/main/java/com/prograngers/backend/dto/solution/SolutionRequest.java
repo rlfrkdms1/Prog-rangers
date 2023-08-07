@@ -49,7 +49,7 @@ public class SolutionRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, judge)) // 파싱해서 ojname 알아내야함
+                .problem(new Problem(null, problemTitle, problemLink, LocalDate.now(),judge)) // 파싱해서 ojname 알아내야함
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .isPublic(true)
