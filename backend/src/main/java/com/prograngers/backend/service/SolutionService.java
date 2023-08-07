@@ -111,7 +111,7 @@ public class SolutionService {
         return solutionDetailResponse;
     }
 
-    public void getReviewDetail(Long solutionId) {
+    public SolutionReviewsResponse getReviewDetail(Long solutionId) {
         // solutionId에 해당하는 풀이 찾기
         Solution solution = findById(solutionId);
         // 줄 나눠서 배열에 저장
@@ -159,6 +159,8 @@ public class SolutionService {
                 }
             }
         }
+
+        return solutionReviewsResponse;
 
 
     }
