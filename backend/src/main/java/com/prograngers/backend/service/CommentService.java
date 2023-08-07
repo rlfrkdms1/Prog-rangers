@@ -25,7 +25,7 @@ public class CommentService {
         return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException());
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest) {
         Comment comment = findById(commentId);
 
@@ -38,7 +38,7 @@ public class CommentService {
         return saved.getSolution().getId();
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = findById(commentId);
         commentRepository.delete(comment);

@@ -28,13 +28,13 @@ public class SolutionService {
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
 
-    @Transactional(readOnly = false)
+    @Transactional
     public Long save(Solution solution) {
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public Long  update(Long solutionId, SolutionPatchRequest request) {
         Solution target = findById(solutionId);
         Solution solution = request.toEntity(target);
@@ -42,7 +42,7 @@ public class SolutionService {
         return updated.getId();
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void delete(Long solutionId) throws SolutionNotFoundException {
         Solution target = findById(solutionId);
         List<Comment> comments = commentRepository.findAllBySolution(target);
@@ -57,7 +57,7 @@ public class SolutionService {
         return solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public Long saveScrap(Long id, ScarpSolutionRequest request) {
         Solution scrap = findById(id);
 
@@ -75,7 +75,7 @@ public class SolutionService {
 
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void  addComment(Long solutionId, CommentReqeust commentReqeust) {
         Solution solution = findById(solutionId);
 
