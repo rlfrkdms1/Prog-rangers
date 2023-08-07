@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Builder
 @Getter
@@ -26,6 +28,8 @@ public class Problem {
     private String title;
 
     private String link;
+
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private JudgeConstant ojName;
