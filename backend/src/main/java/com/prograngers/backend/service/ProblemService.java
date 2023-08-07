@@ -19,7 +19,7 @@ public class ProblemService {
 
     public List<ProblemListResponse> getProblemList() {
         List<ProblemListResponse> problemListResponses = new ArrayList<>();
-        List<Problem> list = problemRepository.findAll();
+        List<Problem> list = problemRepository.findAllOrderByDateDesc();
         for (Problem problem : list) {
             problemListResponses.add(new ProblemListResponse(problem.getTitle(), problem.getOjName()));
         }
