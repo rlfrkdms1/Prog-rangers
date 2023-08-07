@@ -58,8 +58,8 @@ public class SolutionRequest {
                 .scraps(0)
                 .date(LocalDate.now())
                 .level(level)
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
                 .description(description)
                 .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)

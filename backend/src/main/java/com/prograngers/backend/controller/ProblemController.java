@@ -16,8 +16,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/problems")
+@Slf4j
 public class ProblemController {
 
     private final ProblemService problemService;
