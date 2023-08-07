@@ -145,7 +145,7 @@ public class SolutionController {
     }
 
     // 상세보기 한 줄 리뷰
-    @GetMapping("{soultionId}/reviews")
+    @GetMapping("{solutionId}/reviews")
     public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
         SolutionReviewsResponse reviewDetail = solutionService.getReviewDetail(solutionId);
         return ResponseEntity.ok().body(reviewDetail);
