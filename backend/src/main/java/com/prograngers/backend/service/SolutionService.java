@@ -1,6 +1,10 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.comment.CommentReqeust;
+import com.prograngers.backend.dto.review.LineResponse;
+import com.prograngers.backend.dto.review.ReplyResponse;
+import com.prograngers.backend.dto.review.ReviewResponse;
+import com.prograngers.backend.dto.review.SolutionReviewsResponse;
 import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.SolutionPatchRequest;
@@ -108,9 +112,54 @@ public class SolutionService {
     }
 
     public void getReviewDetail(Long solutionId) {
+        // solutionId에 해당하는 풀이 찾기
         Solution solution = findById(solutionId);
+        // 줄 나눠서 배열에 저장
         String[] lines = solution.getCode().split("\n");
-        List<Review> reviews = reviewRepository.findAllBySolution(solution);
+
+        // 최종 응답 dto
+        SolutionReviewsResponse solutionReviewsResponse = new SolutionReviewsResponse();
+        solutionReviewsResponse.setTitle(solution.getTitle());
+        solutionReviewsResponse.setAlgorithm(solution.getAlgorithm());
+        solutionReviewsResponse.setDataStructure(solution.getDataStructure());
+
+        // 먼저 최종 응답 dto에 각 라인을 넣는다
+        for (int i=0; i<lines.length; i++){
+            LineResponse lineResponse = LineResponse.builder()
+                            .codeLineNumber(i+1)
+                                    .code(lines[i])
+                                            .build();
+            solutionReviewsResponse.getLines().add(lineResponse);
+        }
+
+        // 각 라인에 리뷰를 넣는다
+        List<LineResponse> addedLines = solutionReviewsResponse.getLines();
+        for (LineResponse line : addedLines){
+            Integer codeLineNumber = line.getCodeLineNumber();
+            // codeLineNumber에
+            List<Review> reviews = reviewRepository
+                    .findAllByCodeLineNumberOrderByDateAsc(codeLineNumber);
+            for (Review review : reviews){
+                if (review.getParentId() == null){
+                    // 부모가 없는 리뷰인 경우
+                    ReviewResponse reviewResponse = ReviewResponse.builder()
+                            .nickname(review.getMember().getNickname())
+                            .photo(review.getMember().getPhoto())
+                            .content(review.getContent())
+                            .build();
+                    line.getReviews().add(reviewResponse);
+                } else {
+                    // 부모가 있는 리뷰인 경우
+                    ReplyResponse replyResponse = ReplyResponse.builder()
+                            .nickname(review.getMember().getNickname())
+                            .photo(review.getMember().getPhoto())
+                            .content(review.getContent())
+                            .build();
+                    line.getReviews().get(review.getOrderParent()).getReplies().add(replyResponse);
+                }
+            }
+        }
+
 
     }
 }

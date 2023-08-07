@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto.review;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Setter
+@Builder
 public class LineResponse {
     private Integer codeLineNumber;
     private String code;
