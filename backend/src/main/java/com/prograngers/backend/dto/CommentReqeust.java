@@ -12,10 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentReqeust {
 
-    @NotBlank(message = "댓글 작성자의 닉네임이 없습니다")
     String nickname;
     Integer orderParent;
-    @NotBlank(message = "댓글 내용이 없습니다")
+    @NotBlank(message = "댓글 내용을 입력해주세요")
     String content;
 
     String mention;

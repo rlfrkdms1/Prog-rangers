@@ -25,7 +25,7 @@ public class ExControllerAdvice {
         List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
             ErrorResponse errorResponse = ErrorResponse.builder()
-                    .errorCode(ErrorCode.INVALID_SOLUTION_BODY)
+                    .errorCode(ErrorCode.INVALID_REQUEST_BODY)
                     .description(error.getDefaultMessage())
                     .build();
             errorList.add(errorResponse);

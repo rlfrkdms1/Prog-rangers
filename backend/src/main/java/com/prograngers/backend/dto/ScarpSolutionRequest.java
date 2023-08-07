@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 public class ScarpSolutionRequest {
 
-    @NotBlank
+    @NotBlank(message = "풀이 제목을 입력해주세요")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
     private LevelConstant level;
 

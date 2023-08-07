@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentPatchRequest {
-    @NotBlank(message = "댓글 내용이 비었습니다")
+    @NotBlank(message = "댓글 내용을 입력해주세요")
     private String content;
     private String mention;
 }

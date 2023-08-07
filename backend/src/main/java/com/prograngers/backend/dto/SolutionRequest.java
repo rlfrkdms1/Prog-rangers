@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Getter
@@ -24,13 +25,11 @@ public class SolutionRequest {
     private String solutionTitle;
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
-    // @NotBlank(message = "문제 난이도를 입력해주세요")
+
     private LevelConstant level;
 
-    // @NotBlank(message = "알고리즘을 입력해주세요")
     private AlgorithmConstant algorithm;
 
-    // @NotBlank(message = "자료구조를 입력해주세요")
     private DataStructureConstant dataStructure;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
