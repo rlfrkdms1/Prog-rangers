@@ -1,9 +1,9 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.CommentPatchRequest;
-import com.prograngers.backend.dto.CommentReqeust;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.CommentRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -136,5 +136,13 @@ class CommentServiceTest {
         verify(commentRepository).delete(comment);
     }
 
+    @DisplayName("없는 댓글을 조회할 경우 예외 발생")
+    @Test
+    void 없는_댓글_조회(){
+        org.junit.jupiter.api.Assertions.assertThrows(
+                CommentNotFoundException.class,
+                ()->commentService.findById(1L)
+        );
+    }
 
 }
