@@ -23,9 +23,8 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @GetMapping
-    public ResponseEntity<?> problems() {
-        List<ProblemListResponse> problemListResponses = problemService.getProblemList();
+    public ResponseEntity<?> problems(@RequestParam Long page) {
+        List<ProblemListResponse> problemListResponses = problemService.getProblemList(page);
         return ResponseEntity.ok(problemListResponses);
     }
-
 }
