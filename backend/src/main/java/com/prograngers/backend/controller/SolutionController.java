@@ -2,6 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.comment.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.CommentReqeust;
+import com.prograngers.backend.dto.review.SolutionReviewsResponse;
 import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.SolutionPatchRequest;
@@ -146,8 +147,8 @@ public class SolutionController {
     // 상세보기 한 줄 리뷰
     @GetMapping("{soultionId}/reviews")
     public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
-        solutionService.getReviewDetail(solutionId);
-
+        SolutionReviewsResponse reviewDetail = solutionService.getReviewDetail(solutionId);
+        return ResponseEntity.ok().body(reviewDetail);
     }
 
 }
