@@ -12,6 +12,7 @@ import com.prograngers.backend.repository.CommentRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +38,7 @@ class SolutionServiceTest {
     @InjectMocks
     private SolutionService solutionService;
 
+    @DisplayName("풀이를 저장할 수 있다")
     @Test
     void 저장_테스트() {
         // given
@@ -65,6 +67,7 @@ class SolutionServiceTest {
         Assertions.assertThat(saveId).isEqualTo(solution.getId());
     }
 
+    @DisplayName("풀이를 수정할 수 있다")
     @Test
     void 수정_테스트() {
         // given
@@ -98,6 +101,7 @@ class SolutionServiceTest {
         Assertions.assertThat(updateId).isEqualTo(solution.getId());
     }
 
+    @DisplayName("풀이를 삭제할 수 있다")
     @Test
     void 삭제_테스트() {
         // given

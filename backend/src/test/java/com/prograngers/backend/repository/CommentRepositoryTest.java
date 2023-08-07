@@ -4,6 +4,7 @@ import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -22,6 +23,7 @@ class CommentRepositoryTest {
     @Autowired
     private  CommentRepository commentRepository;
 
+    @DisplayName("댓글을 저장할 수 있다")
     @Test
     void 저장_테스트(){
         // given
@@ -36,6 +38,7 @@ class CommentRepositoryTest {
         Assertions.assertThat(saved).isEqualTo(comment);
     }
 
+    @DisplayName("댓글을 수정할 수 있다")
     @Test
     void 수정_테스트(){
         // given
@@ -52,6 +55,7 @@ class CommentRepositoryTest {
         Assertions.assertThat(updated).isEqualTo(comment);
     }
 
+    @DisplayName("댓글을 삭제할 수 있다")
     @Test
     void 삭제_테스트(){
         // given

@@ -23,12 +23,14 @@ import java.util.List;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Slf4j
+@Transactional
 class SolutionRepositoryTest {
     @Autowired
     private SolutionRepository solutionRepository;
 
+
+    @DisplayName("풀이를 저장할 수 있다")
     @Test
-    @DisplayName("저장_테스트")
     void 저장_테스트() {
 
         // given
@@ -50,9 +52,8 @@ class SolutionRepositoryTest {
         Assertions.assertThat(saved).isEqualTo(solution);
     }
 
+    @DisplayName("풀이를 저장할 수 있다")
     @Test
-    @Transactional
-    @DisplayName("수정 테스트")
     void 수정_테스트() {
         // given
         Solution solution = Solution.builder()
@@ -78,9 +79,8 @@ class SolutionRepositoryTest {
         Assertions.assertThat(updated).isEqualTo(saved);
     }
 
+    @DisplayName("풀이를 삭제할 수 있다")
     @Test
-    @Transactional
-    @DisplayName("삭제 테스트")
     void 삭제_테스트() {
         // given
         Solution solution = Solution.builder()
@@ -106,9 +106,8 @@ class SolutionRepositoryTest {
                 });
     }
 
+    @DisplayName("멤버 이름으로 풀이를 전부 찾을 수 있다")
     @Test
-    @Transactional
-    @DisplayName("멤버_이름으로_전부_찾기_테스트")
     void 멤버_이름으로_전부_찾기_테스트(){
 
         Member member1 = Member.builder()

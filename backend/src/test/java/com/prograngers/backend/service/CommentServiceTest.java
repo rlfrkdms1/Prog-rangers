@@ -8,6 +8,7 @@ import com.prograngers.backend.repository.CommentRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +38,7 @@ class CommentServiceTest {
     @InjectMocks
     private SolutionService solutionService;
 
+    @DisplayName("풀이로 댓글을 찾을 수 있다")
     @Test
     void 솔루션으로_댓글_찾기_테스트() {
 
@@ -63,6 +65,7 @@ class CommentServiceTest {
         Assertions.assertThat(bySolution.size()).isEqualTo(2);
     }
 
+    @DisplayName("댓글 아이디로 댓글을 찾을 수 있다")
     @Test
     void 아이디로_댓글_찾기_테스트() {
         // given
@@ -85,6 +88,7 @@ class CommentServiceTest {
         Assertions.assertThat(found).isEqualTo(saved);
     }
 
+    @DisplayName("댓글을 수정할 수 있다")
     @Test
     void 댓글_수정_테스트() {
 
@@ -112,6 +116,7 @@ class CommentServiceTest {
 
     }
 
+    @DisplayName("댓글을 삭제할 수 있다")
     @Test
     void 댓글_삭제_테스트(){
         // given
