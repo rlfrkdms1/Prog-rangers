@@ -10,6 +10,7 @@ import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.CommentRepository;
+import com.prograngers.backend.repository.ReviewRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ public class SolutionService {
 
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
+
+    private final ReviewRepository reviewRepository;
 
     @Transactional
     public Long save(Solution solution) {
