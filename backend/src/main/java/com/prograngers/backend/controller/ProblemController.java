@@ -3,6 +3,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.problem.ProblemListResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @GetMapping
-    public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam(required = false) String algorithm, @RequestParam(required = false) String dataStructure, @RequestParam(defaultValue = "date") String sortBy) {
+    public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam(required = false) AlgorithmConstant algorithm, @RequestParam(required = false) DataStructureConstant dataStructure, @RequestParam(defaultValue = "date") String sortBy) {
         List<ProblemListResponse> problemListResponses = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemListResponses);
     }

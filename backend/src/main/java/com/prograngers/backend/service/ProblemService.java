@@ -2,6 +2,8 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.problem.ProblemListResponse;
 import com.prograngers.backend.entity.Problem;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +21,11 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
 
-    public List<ProblemListResponse> getProblemList(Integer page, String algorithm, String dataStructure, String sortBy) {
+    public List<ProblemListResponse> getProblemList(Integer page, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
        List<Problem> list;
         if (sortBy == "date"){
            if (algorithm==null){
-               list=problemRepository.findByDataStructureSortByDate(algorithm);
+               list=problemRepository.findByDataStructureSortByDate(dataStructure);
            } if (dataStructure == null){
                 list=problemRepository.findByAlgorithmSortByDate(algorithm);
            } if (dataStructure==null && algorithm ==null){
@@ -33,7 +35,7 @@ public class ProblemService {
            }
        } else {
            if (algorithm==null){
-               list=problemRepository.findByDataStructureSortBySolution(algorithm);
+               list=problemRepository.findByDataStructureSortBySolution(dataStructure);
            } if (dataStructure == null){
                 list=problemRepository.findByAlgorithmSortBySolution(algorithm);
            } if (dataStructure==null && algorithm ==null){
