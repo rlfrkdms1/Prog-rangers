@@ -42,7 +42,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
+                .problem(Problem.builder().build())
                 .build();
 
         // when
@@ -64,7 +64,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
+                .problem(Problem.builder().build())
                 .build();
 
         Solution saved = solutionRepository.save(solution);
@@ -91,7 +91,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
+                .problem(Problem.builder().build())
                 .build();
         Solution saved = solutionRepository.save(solution);
         log.info("saved id : {}", saved.getId());
@@ -127,7 +127,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
+                .problem(Problem.builder().build())
                 .build();
         Solution solution2 = Solution.builder()
                 .member(member1)
@@ -138,7 +138,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
+                .problem(Problem.builder().build())
                 .build();
         Solution solution3 = Solution.builder()
                 .member(member2)
@@ -149,7 +149,7 @@ class SolutionRepositoryTest {
                 .code("int a=10")
                 .description("풀이 설명")
                 .date(LocalDate.now())
-                .problem(new Problem(null, "문제", "링크", JudgeConstant.백준))
+                .problem(Problem.builder().build())
                 .build();
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
