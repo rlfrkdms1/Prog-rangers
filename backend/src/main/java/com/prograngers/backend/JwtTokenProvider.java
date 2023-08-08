@@ -18,6 +18,7 @@ public class JwtTokenProvider {
 
     private final Key key;
     private final long validTimeInMillisecond;
+    private static final String MEMBER_ID = "memberId";
 
     @Autowired
     public JwtTokenProvider(@Value("${security-secret-key}") String key,
@@ -30,7 +31,7 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()
-                .claim("memberId", memberId)
+                .claim(MEMBER_ID, memberId)
                 .setExpiration(validTime)
                 .setIssuedAt(now)
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -45,7 +46,7 @@ public class JwtTokenProvider {
     }
 
     public Long getMemberId(String accessToken){
-        return getClaimsJwt(accessToken).getBody().get("memberId", Long.class);
+        return getClaimsJwt(accessToken).getBody().get(MEMBER_ID, Long.class);
     }
 
     public Date getExpiredAt(String accessToken){
