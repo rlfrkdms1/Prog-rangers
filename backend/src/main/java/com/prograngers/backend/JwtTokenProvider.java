@@ -47,4 +47,8 @@ public class JwtTokenProvider {
     public Long getMemberId(String accessToken){
         return getClaimsJwt(accessToken).getBody().get("memberId", Long.class);
     }
+
+    public Date getExpiredAt(String accessToken){
+        return getClaimsJwt(accessToken).getBody().getExpiration();
+    }
 }
