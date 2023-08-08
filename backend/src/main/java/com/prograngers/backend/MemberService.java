@@ -16,6 +16,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
     public void login(LoginRequest loginRequest) {
@@ -24,6 +26,7 @@ public class MemberService {
         member.getPassword().matches(loginRequest.getPassword());
         validPassword(loginRequest.getPassword(), member.getPassword());
         //access token 발급
+        String accessToken = jwtTokenProvider.createAccessToken(member.getId());
         //refresh token 발급, 저장, 쿠키 생성
 
     }
