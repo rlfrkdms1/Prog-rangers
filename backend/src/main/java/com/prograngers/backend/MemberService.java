@@ -21,7 +21,7 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public LoginResult login(LoginRequest loginRequest) {
+    public AuthResult login(LoginRequest loginRequest) {
         //회원 검증
         Member member = findByEmail(loginRequest.getEmail());
         member.getPassword().matches(loginRequest.getPassword());
@@ -34,8 +34,24 @@ public class MemberService {
                 .refreshToken(UUID.randomUUID().toString())
                 .build();
         refreshTokenRepository.save(refreshToken);
-        return new LoginResult(accessToken, refreshToken.getRefreshToken());
+        return new AuthResult(accessToken, refreshToken.getRefreshToken());
 
+    }
+
+    @Transactional
+    public AuthResult signUp(SignUpRequest signUpRequest) {
+        Member member = signUpRequest.toMember();
+        member.encodePassword(passwordEncoder.encode(member.getPassword()));
+        memberRepository.save(member);
+        //access token 발급
+        String accessToken = jwtTokenProvider.createAccessToken(member.getId());
+        //refresh token 발급, 저장, 쿠키 생성
+        RefreshToken refreshToken = RefreshToken.builder()
+                .memberId(member.getId())
+                .refreshToken(UUID.randomUUID().toString())
+                .build();
+        refreshTokenRepository.save(refreshToken);
+        return new AuthResult(accessToken, refreshToken.getRefreshToken());
     }
 
     public Member findByEmail(String email) {
