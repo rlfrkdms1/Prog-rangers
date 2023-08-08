@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class RefreshToken {
     @Indexed
     private String refreshToken;
 
+    @TimeToLive
     private LocalDateTime expiredAt;
 
     public RefreshToken(Long memberId, String refreshToken, LocalDateTime expiredAt) {
