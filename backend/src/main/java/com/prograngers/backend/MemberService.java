@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,7 +21,7 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public void login(LoginRequest loginRequest) {
+    public LoginResult login(LoginRequest loginRequest) {
         //회원 검증
         Member member = findByEmail(loginRequest.getEmail());
         member.getPassword().matches(loginRequest.getPassword());
@@ -28,6 +29,12 @@ public class MemberService {
         //access token 발급
         String accessToken = jwtTokenProvider.createAccessToken(member.getId());
         //refresh token 발급, 저장, 쿠키 생성
+        RefreshToken refreshToken = RefreshToken.builder()
+                .memberId(member.getId())
+                .refreshToken(UUID.randomUUID().toString())
+                .build();
+        refreshTokenRepository.save(refreshToken);
+        return new LoginResult(accessToken, refreshToken.getRefreshToken());
 
     }
 
