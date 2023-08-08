@@ -48,8 +48,8 @@ class SolutionServiceTest {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
+                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
+                .member(Member.builder().name("memberName").build())
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")
@@ -77,8 +77,8 @@ class SolutionServiceTest {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
+                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
+                .member(Member.builder().name("memberName").build())
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")
@@ -114,8 +114,8 @@ class SolutionServiceTest {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
+                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
+                .member(Member.builder().name("memberName").build())
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")
@@ -148,8 +148,8 @@ class SolutionServiceTest {
         // given
         Solution solution = Solution.builder()
                 .id(1L)
-                .problem(new Problem(null, "문제제목", "https://www.acmicpc.net/problem/1000", JudgeConstant.백준))
-                .member(new Member(null, "이름", "닉네임", "email@naver.com", null, null, "password", "01012345678"))
+                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
+                .member(Member.builder().name("memberName").build())
                 .title("풀이제목")
                 .isPublic(true)
                 .code("코드")
