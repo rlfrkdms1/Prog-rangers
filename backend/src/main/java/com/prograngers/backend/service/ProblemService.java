@@ -1,5 +1,8 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.problem.AlgorithmAndCount;
+import com.prograngers.backend.dto.problem.DataStructureAndCount;
+import com.prograngers.backend.dto.problem.ProblemAlgorithmDataStructureResponse;
 import com.prograngers.backend.dto.problem.ProblemListResponse;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
@@ -21,32 +24,98 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
 
-    public List<ProblemListResponse> getProblemList(Integer page, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
+    public List<ProblemAlgorithmDataStructureResponse> getProblemList(Integer page, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
+        // 알고리즘, 자료구조필터에 따른 문제 목록을 가져온다
+        // 정렬 기준에따라 정렬한다
+        log.info("쿼리 스트링 algorithm : {}",algorithm);
+        log.info("쿼리 스트링 dataStructure : {}",dataStructure);
+        log.info("쿼리 스트링 sortBy : {}", sortBy);
        List<Problem> list;
-        if (sortBy == "date"){
-           if (algorithm==null){
-               list=problemRepository.findByDataStructureSortByDate(dataStructure);
-           } if (dataStructure == null){
-                list=problemRepository.findByAlgorithmSortByDate(algorithm);
-           } if (dataStructure==null && algorithm ==null){
+        if (sortBy.equals("date")){
+            if (dataStructure==null && algorithm ==null){
                 list=problemRepository.findSortByDate();
-           } else {
+            }
+           else if (algorithm==null){
+               list=problemRepository.findByDataStructureSortByDate(dataStructure);
+           } else if (dataStructure == null){
+               log.info("findByAlgorithmSortByDate");
+                list=problemRepository.findByAlgorithmSortByDate(algorithm);
+           }
+           else {
+                log.info("findByAlgorithmAndDataStructureSortBydATE");
                 list=problemRepository.findByAlgorithmAndDataStructureSortByDate(algorithm,dataStructure);
            }
        } else {
-           if (algorithm==null){
-               list=problemRepository.findByDataStructureSortBySolution(dataStructure);
-           } if (dataStructure == null){
-                list=problemRepository.findByAlgorithmSortBySolution(algorithm);
-           } if (dataStructure==null && algorithm ==null){
+            if (dataStructure==null && algorithm ==null){
                 list=problemRepository.findSortBySolution();
-           } else {
+            }
+           else if (algorithm==null){
+               list=problemRepository.findByDataStructureSortBySolution(dataStructure);
+           } else if (dataStructure == null){
+                list=problemRepository.findByAlgorithmSortBySolution(algorithm);
+           }  else {
                 list=problemRepository.findByAlgorithmAndDataStructureSortBySolution(algorithm,dataStructure);
            }
        }
 
-        List<ProblemListResponse> problemListResponses = new ArrayList<>();
-        // problemRepository.findAllByOrderByDateDesc();
+        /*
+        필터 조건에 맞게 가져온 Problem list에 대해 상위 3가지 알고리즘, 자료구조를 찾아 응답 dto로 만들어 리스트에 넣는다
+         */
+
+        List<ProblemAlgorithmDataStructureResponse> problemResponses = new ArrayList<>();
+
+        for (Problem problem : list){
+            // 문제 이름, 저지명 세팅
+            ProblemAlgorithmDataStructureResponse problemAlgorithmDataStructureResponse = new ProblemAlgorithmDataStructureResponse();
+            problemAlgorithmDataStructureResponse.setTitle(problem.getTitle());
+            problemAlgorithmDataStructureResponse.setOjName(problem.getOjName());
+
+            Long problemId = problem.getId();
+            List<AlgorithmAndCount> algorithms = problemRepository.getTopAlgorithms(problemId);
+            List<DataStructureAndCount> dataStructures = problemRepository.getTopDataStructures(problemId);
+
+            int algorithmCount = algorithms.size();
+            int dataStructureCount = dataStructures.size();
+
+            int ap = 0;
+            int dp = 0;
+
+            for (int i=0; i<3; i++){
+                if (ap>=algorithmCount){
+                    ap=-1;
+                    break;
+                }
+                if (dp>=dataStructureCount){
+                    dp = -1;
+                    break;
+                }
+                if (algorithms.get(ap).getCount()>dataStructures.get(dp).getCount()){
+                    problemAlgorithmDataStructureResponse.getAlgorithms().add(algorithms.get(ap).getAlgorithm());
+                    ap+=1;
+                } else {
+                    problemAlgorithmDataStructureResponse.getDataStructures().add(dataStructures.get(dp).getDataStructure());
+                    dp+=1;
+                }
+            }
+
+            if (dp==-1){
+                for (int i=ap; i<3; i++){
+                    problemAlgorithmDataStructureResponse.getAlgorithms().add(algorithms.get(ap).getAlgorithm());
+                    ap+=1;
+                }
+            } else {
+                for (int i=dp; i<3; i++){
+                    problemAlgorithmDataStructureResponse.getDataStructures().add(dataStructures.get(dp).getDataStructure());
+                    dp+=1;
+                }
+            }
+
+            problemResponses.add(problemAlgorithmDataStructureResponse);
+
+        }
+
+        // 페이지에 필요한 부분만 응답
+        List<ProblemAlgorithmDataStructureResponse> problemListResponses = new ArrayList<>();
 
         // 한 화면에 보여줄 풀이 개수
         int onePage = 4;
@@ -59,8 +128,8 @@ public class ProblemService {
             if (i >= list.size()) {
                 break;
             }
-            Problem problem = list.get(i);
-            problemListResponses.add(new ProblemListResponse(problem.getTitle(), problem.getOjName()));
+            ProblemAlgorithmDataStructureResponse problemAlgorithmDataStructureResponse = problemResponses.get(i);
+            problemListResponses.add(problemAlgorithmDataStructureResponse);
         }
         return problemListResponses;
     }

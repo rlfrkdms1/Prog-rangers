@@ -1,6 +1,7 @@
 package com.prograngers.backend.controller;
 
 
+import com.prograngers.backend.dto.problem.ProblemAlgorithmDataStructureResponse;
 import com.prograngers.backend.dto.problem.ProblemListResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
@@ -25,7 +26,7 @@ public class ProblemController {
 
     @GetMapping
     public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam(required = false) AlgorithmConstant algorithm, @RequestParam(required = false) DataStructureConstant dataStructure, @RequestParam(defaultValue = "date") String sortBy) {
-        List<ProblemListResponse> problemListResponses = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
+        List<ProblemAlgorithmDataStructureResponse> problemListResponses = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemListResponses);
     }
 }
