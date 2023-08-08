@@ -11,10 +11,12 @@ import com.prograngers.backend.dto.solution.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.SolutionUpdateForm;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.CommentRepository;
+import com.prograngers.backend.repository.ProblemRepository;
 import com.prograngers.backend.repository.ReviewRepository;
 import com.prograngers.backend.repository.SolutionRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 
 @RequiredArgsConstructor
@@ -37,8 +40,15 @@ public class SolutionService {
 
     private final ReviewRepository reviewRepository;
 
+    private final ProblemRepository problemRepository;
+
     @Transactional
     public Long save(Solution solution) {
+        List<Problem> problems = problemRepository.findAllByLink(solution.getProblem().getLink());
+        // 이미 존재하는  문제에 대한 풀이일 경우 풀이의 문제를 해당 문제 객체로 설정한다
+        if (problems.size()!=0){
+            solution.updateProblem(problems.get(0));
+        }
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
     }
