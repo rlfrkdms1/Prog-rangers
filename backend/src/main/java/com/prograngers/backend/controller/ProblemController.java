@@ -23,7 +23,7 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @GetMapping
-    public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam String algorithm, @RequestParam String dataStructure, @RequestParam String sortBy) {
+    public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam String algorithm, @RequestParam String dataStructure, @RequestParam(defaultValue = "date") String sortBy) {
         List<ProblemListResponse> problemListResponses = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemListResponses);
     }

@@ -20,8 +20,31 @@ public class ProblemService {
     private final ProblemRepository problemRepository;
 
     public List<ProblemListResponse> getProblemList(Integer page, String algorithm, String dataStructure, String sortBy) {
+       List<Problem> list;
+        if (sortBy == "date"){
+           if (algorithm==null){
+               list=problemRepository.findByDataStructureSortByDate(algorithm);
+           } if (dataStructure == null){
+                list=problemRepository.findByAlgorithmSortByDate(algorithm);
+           } if (dataStructure==null && algorithm ==null){
+                list=problemRepository.findSortByDate();
+           } else {
+                list=problemRepository.findByAlgorithmAndDataStructureSortByDate(algorithm,dataStructure);
+           }
+       } else {
+           if (algorithm==null){
+               list=problemRepository.findByDataStructureSortBySolution(algorithm);
+           } if (dataStructure == null){
+                list=problemRepository.findByAlgorithmSortBySolution(algorithm);
+           } if (dataStructure==null && algorithm ==null){
+                list=problemRepository.findSortBySolution();
+           } else {
+                list=problemRepository.findByAlgorithmAndDataStructureSortBySolution(algorithm,dataStructure);
+           }
+       }
+
         List<ProblemListResponse> problemListResponses = new ArrayList<>();
-        List<Problem> list = problemRepository.findAllByOrderByDateDesc();
+        // problemRepository.findAllByOrderByDateDesc();
 
         // 한 화면에 보여줄 풀이 개수
         int onePage = 4;

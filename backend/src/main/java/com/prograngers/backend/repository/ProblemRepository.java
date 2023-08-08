@@ -2,13 +2,40 @@ package com.prograngers.backend.repository;
 
 import com.prograngers.backend.entity.Problem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
     List<Problem> findAllByOrderByDateDesc();
+
     List<Problem> findAllByLink(String link);
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id where s.dataStructure =:dataStructure order by s.date desc")
+    List<Problem> findByDataStructureSortByDate(@Param("dataStructure") String dateStructure);
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id where s.algorithm= :algorithm order by s.date desc")
+    List<Problem> findByAlgorithmSortByDate(@Param("algorithm") String algorithm);
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id order by s.date desc")
+    List<Problem> findSortByDate();
+
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id where s.dataStructure =:dataStructure group by p.id order by count(s.id) desc")
+    List<Problem> findByDataStructureSortBySolution(@Param("dataStructure") String dataStructure);
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id where s.algorithm= :algorithm group by p.id order by count(s.id) desc")
+    List<Problem> findByAlgorithmSortBySolution(@Param("algorithm") String algorithm);
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id  group by p.id order by count(s.id) desc")
+    List<Problem> findSortBySolution();
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id where s.algorithm= :algorithm and s.dataStructure =:dataStructure order by s.date desc")
+    List<Problem> findByAlgorithmAndDataStructureSortByDate(@Param("algorithm") String algorithm, @Param("dataStructure") String dataStructure);
+
+    @Query(value = "select  p from Problem p join Solution  s on p.id=s.problem.id where s.algorithm= :algorithm and s.dataStructure =:dataStructure group by p.id order by count(s.id) desc")
+    List<Problem> findByAlgorithmAndDataStructureSortBySolution(@Param("algorithm") String algorithm, @Param("dataStructure") String dataStructure);
 }
