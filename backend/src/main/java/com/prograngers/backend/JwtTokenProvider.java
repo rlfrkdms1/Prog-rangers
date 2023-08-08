@@ -21,7 +21,7 @@ public class JwtTokenProvider {
 
     @Autowired
     public JwtTokenProvider(@Value("${security-secret-key}") String key,
-                            @Value("${security-valid-time}") long validTimeInMillisecond) {
+                            @Value("${security-valid-time-access}") long validTimeInMillisecond) {
         this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         this.validTimeInMillisecond = validTimeInMillisecond;
     }
