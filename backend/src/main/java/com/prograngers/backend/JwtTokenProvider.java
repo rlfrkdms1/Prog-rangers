@@ -26,7 +26,7 @@ public class JwtTokenProvider {
         this.validTimeInMillisecond = validTimeInMillisecond;
     }
 
-    public String createJtwToken(Long memberId){
+    public String createAccessToken(Long memberId){
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()
