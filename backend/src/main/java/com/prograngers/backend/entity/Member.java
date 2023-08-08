@@ -80,5 +80,10 @@ public class Member {
         }
     }
 
+    public void encodePassword(String encodedPassword) {
+        if (encodedPassword != null) {
+            this.password = encodedPassword;
+        }
+    }
 
 }
