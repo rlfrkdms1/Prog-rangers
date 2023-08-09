@@ -1,4 +1,4 @@
-package com.prograngers.backend;
+package com.prograngers.backend.dto;
 
 import com.prograngers.backend.exception.UnAuthorizationException;
 

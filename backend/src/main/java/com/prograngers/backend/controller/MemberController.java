@@ -1,6 +1,12 @@
-package com.prograngers.backend;
+package com.prograngers.backend.controller;
 
+import com.prograngers.backend.AuthResult;
+import com.prograngers.backend.LoggedInMember;
+import com.prograngers.backend.Login;
+import com.prograngers.backend.dto.LoginRequest;
+import com.prograngers.backend.dto.SignUpRequest;
 import com.prograngers.backend.exception.NotExistTokenException;
+import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

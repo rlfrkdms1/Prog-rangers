@@ -1,4 +1,4 @@
-package com.prograngers.backend;
+package com.prograngers.backend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
