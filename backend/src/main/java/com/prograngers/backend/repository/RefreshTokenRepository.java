@@ -1,5 +1,6 @@
-package com.prograngers.backend;
+package com.prograngers.backend.repository;
 
+import com.prograngers.backend.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
