@@ -63,4 +63,16 @@ public class MemberService {
             throw new InvalidPasswordException();
         }
     }
+
+    public AuthResult reissue(String refreshToken) {
+        RefreshToken findRefreshToken = validRefreshToken(refreshToken);
+        Long memberId = findRefreshToken.getMemberId();
+        refreshTokenRepository.delete(findRefreshToken);
+        return issueToken(memberId);
+    }
+
+    public RefreshToken validRefreshToken(String refreshToken) {
+        return refreshTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(RefreshTokenNotFoundException::new);
+    }
 }
