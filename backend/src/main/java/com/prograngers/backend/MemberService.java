@@ -39,7 +39,7 @@ public class MemberService {
                 .refreshToken(UUID.randomUUID().toString())
                 .build();
         refreshTokenRepository.save(refreshToken);
-        return new AuthResult(accessToken, refreshToken.getRefreshToken());
+        return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
     }
 
     @Transactional
