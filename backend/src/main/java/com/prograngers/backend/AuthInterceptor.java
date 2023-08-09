@@ -1,13 +1,25 @@
 package com.prograngers.backend;
 
+import com.prograngers.backend.exception.ExpiredTokenException;
+import com.prograngers.backend.exception.NotExistTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Date;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
+
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(!(handler instanceof HandlerMethod)) return true;
@@ -24,18 +36,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         if(request.getHeader(HttpHeaders.AUTHORIZATION) != null) {
             //token 유효성 검사 (유효 기간)
+            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String[] authorization = header.split(" ");
+            if((new Date()).after(jwtTokenProvider.getExpiredAt(authorization[1]))){
+                throw new ExpiredTokenException();
+            }
+            return true;
         }
 
-        if(!loginAnnotation.required()) return true; // required true면 에러 던져야함
+        if(loginAnnotation.required()) throw new NotExistTokenException(); // required true인데 토큰이 없는 경우
 
         return true;
     }
-
-
-    public AuthInterceptor() {
-        super();
-    }
-
 
 
 }
