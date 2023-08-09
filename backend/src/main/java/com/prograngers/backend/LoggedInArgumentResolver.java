@@ -24,7 +24,8 @@ public class LoggedInArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String headerAuthorization = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        return jwtTokenProvider.getMemberId(headerAuthorization);
+        String accessToken = headerAuthorization.split(" ")[1];
+        return jwtTokenProvider.getMemberId(accessToken);
     }
 
 }
