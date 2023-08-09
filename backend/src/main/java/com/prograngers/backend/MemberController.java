@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prograngers.backend.AuthConstant.VALID_TIME_REFRESH_TOKEN;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,16 +23,16 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<String> singUp(@RequestBody SignUpRequest signUpRequest) {
         AuthResult authResult = memberService.signUp(signUpRequest);
-        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken());
+        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResult.getAccessToken());
     }
 
-    private static ResponseCookie createCookieWithRefreshToken(String refreshToken) {
+    private static ResponseCookie createCookieWithRefreshToken(String refreshToken, Long expiredAt) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
                 .httpOnly(true)
-                .maxAge(VALID_TIME_REFRESH_TOKEN)
+                .maxAge(expiredAt)
                 .secure(true)
                 .path("/")
                 .build();
@@ -44,7 +42,7 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         AuthResult authResult = memberService.login(loginRequest);
-        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken());
+        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -57,10 +55,16 @@ public class MemberController {
             throw new NotExistTokenException();
         }
         AuthResult authResult = memberService.reissue(refreshToken);
-        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken());
+        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResult.getAccessToken());
+    }
+
+    @GetMapping("/test")
+    @Login
+    public String test(@LoggedInMember Long memberId){
+        return String.valueOf(memberId);
     }
 }
