@@ -4,6 +4,9 @@ import com.prograngers.backend.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+
+@Getter
 public class SignUpRequest {
 
     @NotBlank(message = "이름은 필수입니다.")
@@ -25,11 +28,11 @@ public class SignUpRequest {
 
     public Member toMember(){
         return Member.builder()
-                .name(this.username)
-                .email(this.email)
-                .password(this.password)
-                .phoneNumber(this.phoneNumber)
-                .nickname(this.nickName)
+                .name(username)
+                .email(email)
+                .password(password)
+                .phoneNumber(phoneNumber)
+                .nickname(nickName)
                 .build();
     }
 }
