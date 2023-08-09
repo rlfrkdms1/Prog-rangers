@@ -9,12 +9,12 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
-import static com.prograngers.backend.AuthConstant.VALID_TIME_REFRESH_TOKEN;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RedisHash(value = "refresh_token")
 public class RefreshToken {
+
+    public static final Long VALID_TIME_REFRESH_TOKEN = 2L * 7 * 24 * 60;
 
     @Id
     private Long memberId;
