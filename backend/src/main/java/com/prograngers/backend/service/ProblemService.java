@@ -68,18 +68,15 @@ public class ProblemService {
             List<AlgorithmConstant> algorithms = problemRepository.getTopAlgorithms(problemId);
             List<DataStructureConstant> dataStructures = problemRepository.getTopDataStructures(problemId);
 
-            for (AlgorithmConstant ac : algorithms){
+            for (AlgorithmConstant ac : algorithms) {
                 problemAlgorithmDataStructureResponse.getAlgorithms().add(ac);
             }
-            for (DataStructureConstant dc : dataStructures){
+            for (DataStructureConstant dc : dataStructures) {
                 problemAlgorithmDataStructureResponse.getDataStructures().add(dc);
             }
 
             problemResponses.add(problemAlgorithmDataStructureResponse);
         }
-
-
-
         // 페이지에 필요한 부분만 응답
         List<ProblemAlgorithmDataStructureResponse> problemListResponses = new ArrayList<>();
 
