@@ -30,20 +30,20 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository{
 
     public List<ProblemResponse> searchByAlgorithmAndDataStructureOrderByDateDesc(
             int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy){
-        List<Tuple> results = jpaQueryFactory
-                .select(solution, problem)
-                .join(solution.problem, problem)
+        List<Solution> results = jpaQueryFactory
+                .selectFrom(solution)
+                .join(solution.problem, problem).fetchJoin()
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-                .offset(page-1) //페이징
+                .offset(page - 1) //페이징
                 .limit(4)
                 .fetch();
 
         List<ProblemResponse> problemResponses = new ArrayList<>();
 
-        for (Tuple result : results ){
+        for (Solution result : results ){
             ProblemResponse problemResponse = ProblemResponse.builder()
-                    .title(result.get(problem).getTitle())
-                    .ojName(result.get(problem).getOjName())
+                    .title(result.getProblem().getTitle())
+                    .ojName(result.getProblem().getOjName())
                     .build();
             problemResponses.add(problemResponse);
         }
@@ -57,4 +57,5 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository{
     private BooleanExpression algorithmEq(AlgorithmConstant algorithm) {
         return algorithm!=null? solution.algorithm.eq(algorithm):null;
     }
+
 }

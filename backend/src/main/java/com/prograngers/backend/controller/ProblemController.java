@@ -5,6 +5,7 @@ import com.prograngers.backend.dto.problem.ProblemAlgorithmDataStructureResponse
 import com.prograngers.backend.dto.problem.ProblemListResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.problem.dto.ProblemResponse;
 import com.prograngers.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +41,5 @@ public class ProblemController {
         List<ProblemResponse> problemList = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemList);
     }
+
 }
