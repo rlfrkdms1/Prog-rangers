@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.index.Indexed;
 @RedisHash(value = "refresh_token")
 public class RefreshToken {
 
-    public static final Long VALID_TIME_REFRESH_TOKEN = 2L * 7 * 24 * 60;
+    public static final Long VALID_TIME_REFRESH_TOKEN = 2L * 7 * 24 * 60 * 60;
 
     @Id
     private Long memberId;
