@@ -7,12 +7,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -33,6 +36,9 @@ public class Problem {
 
     @Enumerated(EnumType.STRING)
     private JudgeConstant ojName;
+
+    @OneToMany(mappedBy = "problem")
+    List<Solution> solutions = new ArrayList<>();
 
     public void updateTitle(String title) {
         if (title != null) {
