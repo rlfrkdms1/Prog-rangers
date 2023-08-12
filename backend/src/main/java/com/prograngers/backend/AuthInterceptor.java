@@ -34,9 +34,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        if(request.getHeader(HttpHeaders.AUTHORIZATION) != null) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if(header != null) {
             //token 유효성 검사 (유효 기간)
-            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
             String[] authorization = header.split(" ");
             if((new Date()).after(jwtTokenProvider.getExpiredAt(authorization[1]))){
                 throw new ExpiredTokenException();
