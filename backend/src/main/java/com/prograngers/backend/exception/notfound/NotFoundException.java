@@ -1,14 +1,14 @@
 package com.prograngers.backend.exception.notfound;
 
+import com.prograngers.backend.exception.CustomException;
 import com.prograngers.backend.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class NotFoundException extends RuntimeException {
-    final ErrorCode errorCode;
+public class NotFoundException extends CustomException {
 
-    public NotFoundException(String message, ErrorCode errorCode) {
-        super(message);
-        this.errorCode = errorCode;
+    public NotFoundException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
     }
+
 }
