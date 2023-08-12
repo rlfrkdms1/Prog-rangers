@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProblemRepository extends JpaRepository<Problem, Long> {
+public interface ProblemRepository extends JpaRepository<Problem, Long>, QueryDslProblemRepository {
     List<Problem> findAllByOrderByDateDesc();
 
     List<Problem> findAllByLink(String link);
