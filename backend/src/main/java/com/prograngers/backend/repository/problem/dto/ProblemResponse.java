@@ -16,6 +16,6 @@ import java.util.List;
 public class ProblemResponse {
     String title;
     JudgeConstant ojName;
-    List<AlgorithmConstant> algorithms = new ArrayList<>();
-    List<DataStructureConstant> dataStructures = new ArrayList<>();
+
+    List<Object> tags = new ArrayList<>();
 }
