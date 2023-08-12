@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.prograngers.backend.entity.QProblem.*;
@@ -38,8 +39,10 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
                 .fetch();
 
+        // 반환할 dto 리스트
         List<ProblemResponse> problemResponses = new ArrayList<>();
 
+        // 결과를  for문 돌면서 반환 dto를 만든다
         for (Problem result : results) {
             ProblemResponse problemResponse = ProblemResponse.builder()
                     .title(result.getTitle())
@@ -54,11 +57,16 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 hm.put(solution.getAlgorithm(),hm.getOrDefault(solution.getAlgorithm(),1)+1);
                 hm.put(solution.getDataStructure(),hm.getOrDefault(solution.getDataStructure(),1)+1);
             }
-            List<Map.Entry<Object, Integer>> collect = hm.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue())
-                    .collect(Collectors.toList());
-            for (Map.Entry<Object, Integer> entry : collect) {
-                problemResponse.getTags().add(entry.getKey());
+
+            List<Object> keySet = new ArrayList<>(hm.keySet());
+            keySet.sort((num1,num2)->hm.get(num2).compareTo(hm.get(num1)));
+
+            for (int i=0; i<keySet.size(); i++){
+                if (i==3) break;
+                Object tag = keySet.get(i);
+                if (tag!=null){
+                    problemResponse.getTags().add(keySet.get(i));
+                }
             }
 
             problemResponses.add(problemResponse);
