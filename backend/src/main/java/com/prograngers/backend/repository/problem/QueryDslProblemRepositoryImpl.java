@@ -33,12 +33,11 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository{
     public List<ProblemResponse> searchByAlgorithmAndDataStructureOrderByDateDesc(
             int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy){
 
-        QProblem subProblem = new QProblem("subProblem");
+        // 연관관계가 없는 테이블을 조인하기 위한 세타 조인
         List<Problem> results = jpaQueryFactory
                 .select(problem)
                 .from(problem, solution)
-                .join(solution.problem, subProblem) // alias가 겹치기 때문
-                .where(dataStructureEq(dataStructure),algorithmEq(algorithm))
+                .where(problem.id.eq(solution.problem.id),dataStructureEq(dataStructure),algorithmEq(algorithm))
                 .fetch();
 
         List<ProblemResponse> problemResponses = new ArrayList<>();
