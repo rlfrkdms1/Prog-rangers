@@ -14,6 +14,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -24,29 +25,32 @@ import static com.prograngers.backend.entity.QSolution.*;
 
 @RequiredArgsConstructor
 @Repository
+@Slf4j
 public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<ProblemResponse> searchByAlgorithmAndDataStructureOrderByDateDesc(
             int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy){
-        List<Solution> results = jpaQueryFactory
-                .selectFrom(solution)
-                .join(solution.problem, problem).fetchJoin()
-                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-                .offset(page - 1) //페이징
-                .limit(4)
+
+        QProblem subProblem = new QProblem("subProblem");
+        List<Problem> results = jpaQueryFactory
+                .select(problem)
+                .from(problem, solution)
+                .join(solution.problem, subProblem) // alias가 겹치기 때문
+                .where(dataStructureEq(dataStructure),algorithmEq(algorithm))
                 .fetch();
 
         List<ProblemResponse> problemResponses = new ArrayList<>();
 
-        for (Solution result : results ){
+        for (Problem result : results ){
             ProblemResponse problemResponse = ProblemResponse.builder()
-                    .title(result.getProblem().getTitle())
-                    .ojName(result.getProblem().getOjName())
+                    .title(result.getTitle())
+                    .ojName(result.getOjName())
                     .build();
             problemResponses.add(problemResponse);
         }
+
         return problemResponses;
     }
 
