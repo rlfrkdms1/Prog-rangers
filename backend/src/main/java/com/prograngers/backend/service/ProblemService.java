@@ -4,7 +4,7 @@ import com.prograngers.backend.dto.problem.ProblemAlgorithmDataStructureResponse
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.repository.ProblemRepository;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

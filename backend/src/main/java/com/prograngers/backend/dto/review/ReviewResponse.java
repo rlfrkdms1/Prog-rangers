@@ -15,6 +15,5 @@ public class ReviewResponse {
     String nickname;
     String photo;
     String content;
-
     List<ReplyResponse> replies = new ArrayList<>();
 }

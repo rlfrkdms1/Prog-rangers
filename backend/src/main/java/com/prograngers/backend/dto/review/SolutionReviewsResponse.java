@@ -17,7 +17,6 @@ import java.util.List;
 public class SolutionReviewsResponse {
     private String title;
     private AlgorithmConstant algorithm;
-
     private DataStructureConstant dataStructure;
     private String solution;
     private List<LineResponse> lines = new ArrayList<>();

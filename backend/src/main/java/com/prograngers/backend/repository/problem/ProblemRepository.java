@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;

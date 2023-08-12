@@ -2,6 +2,7 @@ package com.prograngers.backend.repository;
 
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
+import com.prograngers.backend.repository.comment.CommentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -10,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
@@ -21,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommentRepositoryTest {
 
     @Autowired
-    private  CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     @DisplayName("댓글을 저장할 수 있다")
     @Test
