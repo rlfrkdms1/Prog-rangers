@@ -35,7 +35,7 @@ public class MemberController {
                 .body(authResult.getAccessToken());
     }
 
-    private static ResponseCookie createCookieWithRefreshToken(String refreshToken, Long expiredAt) {
+    private ResponseCookie createCookieWithRefreshToken(String refreshToken, Long expiredAt) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
                 .httpOnly(true)
                 .maxAge(expiredAt)
