@@ -59,4 +59,8 @@ public class Comment {
             this.fixed = true;
         }
     }
+
+    public void updateSolution(Solution solution) {
+        this.solution = solution;
+    }
 }
