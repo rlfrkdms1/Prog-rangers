@@ -33,25 +33,43 @@ public enum SolutionFixture {
     private final LevelConstant level;
     private final LocalDate date;
 
-    public Solution getSolution(
-            Long id, Problem problem, Member member, Solution scrapSolution, Integer scraps,
-            AlgorithmConstant algorithm, DataStructureConstant dataStructure
-    ) {
-        Solution build = Solution.builder()
-                .id(id)
-                .problem(problem)
-                .member(member)
-                .scrapId(scrapSolution)
+    public Solution.SolutionBuilder 기본_정보_빌더_생성() {
+        return Solution.builder()
                 .title(this.title)
                 .isPublic(this.isPublic)
                 .code(this.code)
                 .description(this.description)
-                .scraps(scraps)
                 .date(this.date)
+                .level(this.level);
+    }
+
+
+    public Solution 스크랩_솔루션_생성(
+            Long id, Problem problem, Member member, Solution scrapSolution, Integer scraps,
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure
+    ) {
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .problem(problem)
+                .member(member)
+                .scrapId(scrapSolution)
+                .scraps(scraps)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
-                .level(this.level)
                 .build();
-        return build;
+    }
+
+    public Solution 일반_솔루션_생성(
+            Long id, Problem problem, Member member, Integer scraps,
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure
+    ) {
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .problem(problem)
+                .member(member)
+                .scraps(scraps)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
+                .build();
     }
 }
