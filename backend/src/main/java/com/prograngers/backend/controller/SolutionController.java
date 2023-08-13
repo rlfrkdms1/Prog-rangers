@@ -151,4 +151,10 @@ public class SolutionController {
         return ResponseEntity.ok().body(reviewDetail);
     }
 
+    // solution 목록보기
+    @GetMapping
+    public ResponseEntity<?> solutionList(){
+        SolutionListResponse solutionListResponse = solutionService.getSolutionList();
+        return ResponseEntity.ok().body(solutionListResponse);
+    }
 }
