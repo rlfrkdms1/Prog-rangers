@@ -193,11 +193,12 @@ public class SolutionService {
     }
 
     public SolutionListResponse getSolutionList(
+            Long problemId,
             LanguageConstant language,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
             String sortBy) {
-        List<Solution> solutions = solutionRepository.getSolutionList(language,algorithm,dataStructure,sortBy);
+        List<Solution> solutions = solutionRepository.getSolutionList(problemId, language,algorithm,dataStructure,sortBy);
 
         return SolutionListResponse.createDto(solutions);
     }
