@@ -69,21 +69,9 @@ class SolutionServiceTest {
     @Test
     void 스크랩_저장_테스트(){
         // given
-        Solution solution = Solution.builder()
-                .id(1L)
-                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
-                .member(Member.builder().name("memberName").build())
-                .title("풀이제목")
-                .isPublic(true)
-                .code("코드")
-                .description("설명")
-                .scraps(0)
-                .scrapId(null)
-                .date(LocalDate.now())
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .level(LevelConstant.THREE)
-                .build();
+        Member member = 길가은1.getMember();
+        Problem problem = 문제1.getProblem();
+        Solution solution = 풀이1.getSolution(1L, problem, member, null, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
         ScarpSolutionRequest request = new ScarpSolutionRequest("스크랩풀이", "스크랩풀이설명", LevelConstant.FIVE);
         Solution made = request.toEntity(solution);
