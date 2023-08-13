@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller;
 
+import com.prograngers.backend.dto.SolutionListResponse;
 import com.prograngers.backend.dto.comment.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.CommentReqeust;
 import com.prograngers.backend.dto.review.SolutionReviewsResponse;
@@ -8,6 +9,9 @@ import com.prograngers.backend.dto.solution.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.SolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionUpdateForm;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
@@ -153,7 +157,12 @@ public class SolutionController {
 
     // solution 목록보기
     @GetMapping
-    public ResponseEntity<?> solutionList(){
+    public ResponseEntity<?> solutionList(
+            @RequestParam(required = false) LanguageConstant language,
+            @RequestParam(required = false) AlgorithmConstant algorithm,
+            @RequestParam(required = false) DataStructureConstant dataStructure,
+            @RequestParam(defaultValue = "newest") String sortBy
+            ){
         SolutionListResponse solutionListResponse = solutionService.getSolutionList();
         return ResponseEntity.ok().body(solutionListResponse);
     }
