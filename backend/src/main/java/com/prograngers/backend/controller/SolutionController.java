@@ -1,6 +1,6 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.SolutionListResponse;
+import com.prograngers.backend.dto.solution.SolutionListResponse;
 import com.prograngers.backend.dto.comment.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.CommentReqeust;
 import com.prograngers.backend.dto.review.SolutionReviewsResponse;

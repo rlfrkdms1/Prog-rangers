@@ -1,7 +1,6 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.SolutionListResponse;
-import com.prograngers.backend.dto.SolutionResponse;
+import com.prograngers.backend.dto.solution.SolutionListResponse;
 import com.prograngers.backend.dto.comment.CommentReqeust;
 import com.prograngers.backend.dto.review.LineResponse;
 import com.prograngers.backend.dto.review.ReplyResponse;
