@@ -19,9 +19,9 @@ import static com.prograngers.backend.entity.constants.JudgeConstant.백준;
 @AllArgsConstructor
 public enum ProblemFixture {
 
-    문제1(1L,"문제제목1","www.problem1.com",LocalDate.now(),백준),
-    문제2(2L,"문제제목2","www.problem2.com",LocalDate.now().plusDays(1),백준),
-    문제3(3L,"문제제목3","www.problem3.com",LocalDate.now().plusDays(2),백준);
+    문제1(1L,"문제제목1","https://www.acmicpc.net/problem/1000",LocalDate.now(),백준),
+    문제2(2L,"문제제목2","https://www.acmicpc.net/problem/1001",LocalDate.now().plusDays(1),백준),
+    문제3(3L,"문제제목3","https://www.acmicpc.net/problem/1002",LocalDate.now().plusDays(2),백준);
     private final Long id;
     private final String title;
 
