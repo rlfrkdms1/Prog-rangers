@@ -117,31 +117,19 @@ class SolutionServiceTest {
     @Test
     void 삭제_테스트() {
         // given
-        Solution solution = Solution.builder()
-                .id(1L)
-                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
-                .member(Member.builder().name("memberName").build())
-                .title("풀이제목")
-                .isPublic(true)
-                .code("코드")
-                .description("설명")
-                .scraps(0)
-                .scrapId(null)
-                .date(LocalDate.now())
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .level(LevelConstant.THREE)
-                .build();
+        Member member = 길가은1.getMember();
+        Problem problem = 문제1.getProblem();
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
-        given(solutionRepository.save(solution)).willReturn(solution);
-        given(solutionRepository.findById(solution.getId())).willReturn(Optional.ofNullable(solution));
+        when(solutionRepository.save(any())).thenReturn(solution);
+        when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(solution));
 
-        Long saveId = solutionService.save(SolutionRequest.toDto(solution));
-        Solution target = solutionService.findById(saveId);
+        solutionRepository.save(solution);
 
-        solutionService.delete(target.getId());
+        // when
+        solutionService.delete(solution.getId());
 
-        verify(solutionRepository).delete(target);
+        verify(solutionRepository).delete(solution);
     }
 
     @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")
