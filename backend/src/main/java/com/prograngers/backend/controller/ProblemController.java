@@ -1,12 +1,8 @@
 package com.prograngers.backend.controller;
 
-
-import com.prograngers.backend.dto.problem.ProblemAlgorithmDataStructureResponse;
-import com.prograngers.backend.dto.problem.ProblemListResponse;
+import com.prograngers.backend.dto.problem.ProblemResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.repository.problem.ProblemRepository;
-import com.prograngers.backend.repository.problem.dto.ProblemResponse;
 import com.prograngers.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +21,6 @@ import java.util.List;
 public class ProblemController {
 
     private final ProblemService problemService;
-
-//    @GetMapping
-//    public ResponseEntity<?> problems(@RequestParam Integer page, @RequestParam(required = false) AlgorithmConstant algorithm, @RequestParam(required = false) DataStructureConstant dataStructure, @RequestParam(defaultValue = "date") String sortBy) {
-//        List<ProblemAlgorithmDataStructureResponse> problemListResponses = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
-//        return ResponseEntity.ok(problemListResponses);
-//    }
 
     @GetMapping
     public ResponseEntity<?> problems(
