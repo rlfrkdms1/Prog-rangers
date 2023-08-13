@@ -1,5 +1,7 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.SolutionListResponse;
+import com.prograngers.backend.dto.SolutionResponse;
 import com.prograngers.backend.dto.comment.CommentReqeust;
 import com.prograngers.backend.dto.review.LineResponse;
 import com.prograngers.backend.dto.review.ReplyResponse;
@@ -14,6 +16,9 @@ import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.constants.AlgorithmConstant;
+import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
@@ -185,5 +190,31 @@ public class SolutionService {
         }
         solutionReviewsResponse.setLines(addedLines);
         return solutionReviewsResponse;
+    }
+
+    public SolutionListResponse getSolutionList(
+            LanguageConstant language,
+            AlgorithmConstant algorithm,
+            DataStructureConstant dataStructure,
+            String sortBy) {
+        List<Solution> solutions = solutionRepository.getSolutionList(language,algorithm,dataStructure,sortBy);
+
+        // 문제이름, 저지명 세팅
+        SolutionListResponse solutionListResponse = SolutionListResponse.builder()
+                .problemName(solutions.get(0).getProblem().getTitle())
+                .ojName(solutions.get(0).getProblem().getOjName())
+                .solutions(new ArrayList<>())
+                .build();
+
+        for (Solution solution : solutions){
+            solutionListResponse.getSolutions().add(
+                    SolutionResponse.builder()
+                            .solutionName(solution.getTitle())
+                            .algorithm(solution.getAlgorithm())
+                            .dataStructure(solution.getDataStructure())
+                            .build()
+            );
+        }
+        return solutionListResponse;
     }
 }
