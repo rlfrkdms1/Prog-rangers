@@ -2,6 +2,7 @@ package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -72,6 +73,9 @@ public class Solution {
 
     @Enumerated(EnumType.STRING)
     private LevelConstant level;
+
+    @Enumerated(EnumType.STRING)
+    private LanguageConstant language;
 
     public void updateProblem(Problem problem) {
         if (problem != null) {
