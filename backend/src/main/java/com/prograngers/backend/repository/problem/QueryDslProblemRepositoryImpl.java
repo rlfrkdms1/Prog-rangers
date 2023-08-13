@@ -89,11 +89,14 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     private OrderSpecifier<?> orderByWhat(String orderBy) {
         if (orderBy.equals("date")){ // date 인 경우
+            log.info("orderByDate");
+           return problem.date.desc();
             // size-1의 solution (제일 마지막 solution)의 날짜  기준으로 정렬
-           // NumberExpression<Integer> size = problem.solutions.size().subtract(1);
-            return problem.date.desc();
+//            NumberExpression<Integer> size = problem.solutions.size().subtract(1);
+//           return problem.solutions.get(size).date.desc();
         } else { // solution 개수인 경우
             // solution 개수에 따라 내림차순으로 정렬
+            log.info("orderBySolutionCount");
             return problem.solutions.size().desc();
         }
     }
