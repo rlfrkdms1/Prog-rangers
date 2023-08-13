@@ -22,6 +22,9 @@ public class SolutionListResponse {
     List<SolutionResponse> solutions;
 
     public static SolutionListResponse createDto(List<Solution> solutions) {
+        if (solutions.size()==0){
+            return null;
+        }
         // 문제이름, 저지명 세팅
         SolutionListResponse solutionListResponse = SolutionListResponse.builder()
                 .problemName(solutions.get(0).getProblem().getTitle())
