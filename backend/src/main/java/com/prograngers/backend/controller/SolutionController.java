@@ -156,7 +156,7 @@ public class SolutionController {
     }
 
     // solution 목록보기
-    @GetMapping("{problemId}")
+    @GetMapping("{problemId}/solutions")
     public ResponseEntity<?> solutionList(
             @PathVariable Long problemId,
             @RequestParam(required = false) LanguageConstant language,
