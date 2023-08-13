@@ -25,4 +25,10 @@ CommentFixture {
                 .member(member)
                 .build();
     }
+
+    public Comment 기본_댓글_생성(Long id){
+        return 기본_빌더_생성()
+                .id(id)
+                .build();
+    }
 }
