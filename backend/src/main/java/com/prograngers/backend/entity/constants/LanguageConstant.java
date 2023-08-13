@@ -2,6 +2,7 @@ package com.prograngers.backend.entity.constants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.prograngers.backend.exception.enumtype.LanguageNotFoundException;
 import com.prograngers.backend.exception.enumtype.LevelNotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -16,7 +17,7 @@ public enum LanguageConstant {
     @JsonCreator
     public static LanguageConstant from(String value) {
         for (LanguageConstant language : LanguageConstant.values()) {
-            if (language.getKrName().equals(value)) {
+            if (language.getValue().equals(value)) {
                 return language;
             }
         }
@@ -24,7 +25,7 @@ public enum LanguageConstant {
     }
 
     @JsonValue
-    public String getKrName() {
+    public String getValue() {
         return value;
     }
 
