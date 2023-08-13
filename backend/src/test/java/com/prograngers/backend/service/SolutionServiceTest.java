@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.SolutionRequest;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -10,6 +11,7 @@ import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -24,6 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static com.prograngers.backend.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -38,6 +43,9 @@ class SolutionServiceTest {
     @Mock
     private CommentRepository commentRepository;
 
+    @Mock
+    private ProblemRepository problemRepository;
+
     @InjectMocks
     private SolutionService solutionService;
 
@@ -45,26 +53,13 @@ class SolutionServiceTest {
     @Test
     void 저장_테스트() {
         // given
-        Solution solution = Solution.builder()
-                .id(1L)
-                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
-                .member(Member.builder().name("memberName").build())
-                .title("풀이제목")
-                .isPublic(true)
-                .code("코드")
-                .description("설명")
-                .scraps(0)
-                .scrapId(null)
-                .date(LocalDate.now())
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .level(LevelConstant.THREE)
-                .build();
-
-        given(solutionRepository.save(solution)).willReturn(solution);
+        Member member = 길가은1.getMember();
+        Problem problem = 문제1.getProblem();
+        Solution solution = 풀이1.getSolution(1L, problem, member, null, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        given(solutionRepository.save(any())).willReturn(solution);
 
         // when
-        Long saveId = solutionService.save(solution);
+        Long saveId = solutionService.save(SolutionRequest.toDto(solution));
 
         // then
         Assertions.assertThat(saveId).isEqualTo(solution.getId());
@@ -98,7 +93,7 @@ class SolutionServiceTest {
                 thenReturn(Optional.ofNullable(solution)).
                 thenReturn(Optional.ofNullable(made));
 
-        solutionService.save(solution);
+        solutionService.save(SolutionRequest.toDto(solution));
 
         // when
         Long scrapedId = solutionService.saveScrap(solution.getId(), request);
@@ -128,7 +123,7 @@ class SolutionServiceTest {
                 .build();
 
         given(solutionRepository.save(solution)).willReturn(solution);
-        solutionService.save(solution);
+        solutionService.save(SolutionRequest.toDto(solution));
         given(solutionRepository.findById(solution.getId())).willReturn(Optional.ofNullable(solution));
 
         // when
@@ -164,7 +159,7 @@ class SolutionServiceTest {
         given(solutionRepository.save(solution)).willReturn(solution);
         given(solutionRepository.findById(solution.getId())).willReturn(Optional.ofNullable(solution));
 
-        Long saveId = solutionService.save(solution);
+        Long saveId = solutionService.save(SolutionRequest.toDto(solution));
         Solution target = solutionService.findById(saveId);
 
         solutionService.delete(target.getId());
