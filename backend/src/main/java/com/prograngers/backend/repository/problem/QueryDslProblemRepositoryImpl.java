@@ -1,29 +1,20 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.QMember;
-import com.prograngers.backend.entity.QProblem;
-import com.prograngers.backend.entity.QSolution;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.repository.problem.dto.ProblemResponse;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.ListPath;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 import static com.prograngers.backend.entity.QProblem.*;
 import static com.prograngers.backend.entity.QSolution.*;
@@ -48,6 +39,8 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .join(problem.solutions, solution).fetchJoin()
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
                 .orderBy(orderByWhat(orderBy))
+                .offset((page-1)*4)
+                .limit(4)
                 .fetch();
 
         // 반환할 dto 리스트
