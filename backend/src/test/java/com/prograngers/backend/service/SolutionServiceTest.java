@@ -29,6 +29,7 @@ import java.util.Optional;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
+import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -55,7 +56,7 @@ class SolutionServiceTest {
         // given
         Member member = 길가은1.getMember();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.getSolution(1L, problem, member, null, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member,  0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
         given(solutionRepository.save(any())).willReturn(solution);
 
         // when
@@ -71,7 +72,7 @@ class SolutionServiceTest {
         // given
         Member member = 길가은1.getMember();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.getSolution(1L, problem, member, null, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
         ScarpSolutionRequest request = new ScarpSolutionRequest("스크랩풀이", "스크랩풀이설명", LevelConstant.FIVE);
         Solution made = request.toEntity(solution);
@@ -94,34 +95,22 @@ class SolutionServiceTest {
     @Test
     void 수정_테스트() {
         // given
-        Solution solution = Solution.builder()
-                .id(1L)
-                .problem(Problem.builder().link("https://www.acmicpc.net/problem/1000").build())
-                .member(Member.builder().name("memberName").build())
-                .title("풀이제목")
-                .isPublic(true)
-                .code("코드")
-                .description("설명")
-                .scraps(0)
-                .scrapId(null)
-                .date(LocalDate.now())
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .level(LevelConstant.THREE)
-                .build();
+        Member member = 길가은1.getMember();
+        Problem problem = 문제1.getProblem();
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution updateExpected = 풀이2.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
-        given(solutionRepository.save(solution)).willReturn(solution);
-        solutionService.save(SolutionRequest.toDto(solution));
-        given(solutionRepository.findById(solution.getId())).willReturn(Optional.ofNullable(solution));
+        when(solutionRepository.save(any())).thenReturn(solution).thenReturn(updateExpected);
+        when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(updateExpected));
+        solutionRepository.save(solution);
 
         // when
-        solution.updateTitle("수정 제목");
-        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest(
-                "수정 제목", AlgorithmConstant.BFS, DataStructureConstant.ARRAY, "코드", "설명");
-        Long updateId = solutionService.update(solution.getId(), solutionPatchRequest);
+        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2",AlgorithmConstant.BFS,DataStructureConstant.STACK,"풀이코드2","풀이설명2");
+        Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest);
 
         // then
-        Assertions.assertThat(updateId).isEqualTo(solution.getId());
+        Assertions.assertThat(solutionRepository.findById(updatedId).orElse(null).getTitle())
+                .isEqualTo("풀이제목2");
     }
 
     @DisplayName("풀이를 삭제할 수 있다")
@@ -153,7 +142,6 @@ class SolutionServiceTest {
         solutionService.delete(target.getId());
 
         verify(solutionRepository).delete(target);
-
     }
 
     @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")
