@@ -42,7 +42,7 @@ public class SolutionController {
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Long saveId = solutionService.save(solutionRequest.toEntity());
+        Long saveId = solutionService.save(solutionRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);

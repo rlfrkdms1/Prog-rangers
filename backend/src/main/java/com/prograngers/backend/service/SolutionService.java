@@ -9,6 +9,7 @@ import com.prograngers.backend.dto.review.SolutionReviewsResponse;
 import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.SolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionUpdateForm;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
@@ -47,7 +48,8 @@ public class SolutionService {
     private final ProblemRepository problemRepository;
 
     @Transactional
-    public Long save(Solution solution) {
+    public Long save(SolutionRequest solutionRequest) {
+        Solution solution = solutionRequest.toEntity();
         List<Problem> problems = problemRepository.findAllByLink(solution.getProblem().getLink());
         // 이미 존재하는  문제에 대한 풀이일 경우 풀이의 문제를 해당 문제 객체로 설정한다
         if (problems.size() != 0) {
