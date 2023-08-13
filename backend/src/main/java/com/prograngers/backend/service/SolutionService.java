@@ -199,22 +199,6 @@ public class SolutionService {
             String sortBy) {
         List<Solution> solutions = solutionRepository.getSolutionList(language,algorithm,dataStructure,sortBy);
 
-        // 문제이름, 저지명 세팅
-        SolutionListResponse solutionListResponse = SolutionListResponse.builder()
-                .problemName(solutions.get(0).getProblem().getTitle())
-                .ojName(solutions.get(0).getProblem().getOjName())
-                .solutions(new ArrayList<>())
-                .build();
-
-        for (Solution solution : solutions){
-            solutionListResponse.getSolutions().add(
-                    SolutionResponse.builder()
-                            .solutionName(solution.getTitle())
-                            .algorithm(solution.getAlgorithm())
-                            .dataStructure(solution.getDataStructure())
-                            .build()
-            );
-        }
-        return solutionListResponse;
+        return SolutionListResponse.createDto(solutions);
     }
 }
