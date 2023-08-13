@@ -4,6 +4,7 @@ import com.prograngers.backend.entity.*;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,8 @@ public class SolutionRequest {
 
     private DataStructureConstant dataStructure;
 
+    private LanguageConstant language;
+
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
 
@@ -49,9 +52,10 @@ public class SolutionRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, LocalDate.now(),judge, null)) // 파싱해서 ojname 알아내야함
+                .problem(new Problem(null, problemTitle, problemLink, LocalDate.now(),judge, null))
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
+                .language(language)
                 .isPublic(true)
                 .code(code)
                 .description(description)
