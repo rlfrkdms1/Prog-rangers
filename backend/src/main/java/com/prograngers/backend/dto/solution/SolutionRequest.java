@@ -8,6 +8,7 @@ import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SolutionRequest {
 
     @NotBlank(message = "문제 제목을 입력해주세요")
@@ -67,6 +69,20 @@ public class SolutionRequest {
                 .description(description)
                 .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
+                .build();
+    }
+
+    public static SolutionRequest toDto(Solution solution){
+        return SolutionRequest.builder()
+                .algorithm(solution.getAlgorithm())
+                .code(solution.getCode())
+                .level(solution.getLevel())
+                .description(solution.getDescription())
+                .dataStructure(solution.getDataStructure())
+                .language(solution.getLanguage())
+                .problemLink(solution.getProblem().getLink())
+                .problemTitle(solution.getProblem().getTitle())
+                .solutionTitle(solution.getTitle())
                 .build();
     }
 
