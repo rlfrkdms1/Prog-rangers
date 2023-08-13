@@ -159,12 +159,13 @@ public class SolutionController {
     @GetMapping("{problemId}/solutions")
     public ResponseEntity<?> solutionList(
             @PathVariable Long problemId,
+            @RequestParam int page,
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "newest") String sortBy
             ){
-        SolutionListResponse solutionListResponse = solutionService.getSolutionList(problemId, language,algorithm,dataStructure,sortBy);
+        SolutionListResponse solutionListResponse = solutionService.getSolutionList(page, problemId, language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);
     }
 }

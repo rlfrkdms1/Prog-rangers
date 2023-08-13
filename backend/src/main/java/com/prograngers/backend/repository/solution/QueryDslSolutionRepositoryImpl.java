@@ -24,11 +24,13 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 
     private final JPAQueryFactory jpaQueryFactory;
     @Override
-    public List<Solution> getSolutionList(Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
+    public List<Solution> getSolutionList(int page, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
         List<Solution> result = jpaQueryFactory
                 .selectFrom(solution)
                 .where(solution.problem.id.eq(problemId),languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .orderBy(sortByWhat(sortBy))
+                .offset((page-1)*4)
+                .limit(4)
                 .fetch();
         return result;
     }

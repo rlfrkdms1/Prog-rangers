@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface QueryDslSolutionRepository {
 
-    List<Solution> getSolutionList(Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy);
+    List<Solution> getSolutionList(int page, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy);
 
 }
