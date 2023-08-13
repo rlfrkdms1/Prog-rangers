@@ -156,14 +156,15 @@ public class SolutionController {
     }
 
     // solution 목록보기
-    @GetMapping
+    @GetMapping("{problemId}")
     public ResponseEntity<?> solutionList(
+            @PathVariable Long problemId,
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "newest") String sortBy
             ){
-        SolutionListResponse solutionListResponse = solutionService.getSolutionList(language,algorithm,dataStructure,sortBy);
+        SolutionListResponse solutionListResponse = solutionService.getSolutionList(problemId, language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);
     }
 }
