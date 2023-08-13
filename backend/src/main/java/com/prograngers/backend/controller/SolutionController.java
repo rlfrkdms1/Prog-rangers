@@ -163,7 +163,7 @@ public class SolutionController {
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "newest") String sortBy
             ){
-        SolutionListResponse solutionListResponse = solutionService.getSolutionList();
+        SolutionListResponse solutionListResponse = solutionService.getSolutionList(language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);
     }
 }
