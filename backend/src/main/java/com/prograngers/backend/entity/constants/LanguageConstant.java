@@ -11,7 +11,7 @@ public enum LanguageConstant {
     PYTHON("python"),
     JAVA("java"),
     CPP("C++"),
-    C("C"),
+    C("C");
     private final String value;
 
     @JsonCreator
