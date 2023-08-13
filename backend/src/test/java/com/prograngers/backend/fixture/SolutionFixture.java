@@ -72,4 +72,11 @@ public enum SolutionFixture {
                 .dataStructure(dataStructure)
                 .build();
     }
+
+    public Solution 기본_솔루션_생성(Long id){
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .build();
+    }
+
 }
