@@ -28,6 +28,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
+import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은2;
@@ -167,5 +169,44 @@ class SolutionRepositoryTest {
         Assertions.assertThat(result1).doesNotContain(solution2);
         Assertions.assertThat(result2).contains(solution2);
         Assertions.assertThat(result2).doesNotContain(solution1);
+    }
+
+    @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
+    @Test
+    void 풀이_목록_조회_필터링_자료구조_알고리즘(){
+        // given
+        // 회원
+        Member member = 길가은1.getMember();
+        memberRepository.save(member);
+
+        // 문제
+        Problem problem1 = 문제1.아이디_값_지정_문제_생성(null);
+        problemRepository.save(problem1);
+
+
+        // 풀이 : 문제 - 풀이를 join해서 가져오기 때문에 problem.s
+        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE);
+        Solution solution2 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, DFS, QUEUE);
+        Solution solution3 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, ARRAY);
+        Solution solution4 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, DFS, ARRAY);
+
+        solutionRepository.save(solution1);
+        solutionRepository.save(solution2);
+        solutionRepository.save(solution3);
+        solutionRepository.save(solution4);
+
+
+        // when
+        List<Solution> result1 = solutionRepository
+                .getSolutionList(1, 1L, null, BFS, null, "newest");
+        List<Solution> result2 = solutionRepository
+                .getSolutionList(1, 1L, null, null, QUEUE, "newest");
+        List<Solution> result3 = solutionRepository
+                .getSolutionList(1, 1L, null, BFS, QUEUE, "newest");
+
+        // then
+        Assertions.assertThat(result1).contains(solution1,solution3).doesNotContain(solution2,solution4);
+        Assertions.assertThat(result2).contains(solution1,solution2).doesNotContain(solution3,solution4);
+        Assertions.assertThat(result3).contains(solution1).doesNotContain(solution2,solution3,solution4);
     }
 }
