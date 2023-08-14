@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Member;

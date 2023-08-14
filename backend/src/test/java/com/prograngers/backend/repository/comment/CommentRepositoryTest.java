@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.comment;
 
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Comment;
