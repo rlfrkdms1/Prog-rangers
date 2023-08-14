@@ -82,6 +82,11 @@ public class Member {
         }
     }
 
+    public void encodePassword(String encodedPassword) {
+        if (encodedPassword != null) {
+            this.password = encodedPassword;
+        }
+    }
     public void updatePhoto(String photo){
         if (photo!=null){
             this.photo = photo;
