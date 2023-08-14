@@ -6,6 +6,7 @@ import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import lombok.AllArgsConstructor;
 
@@ -62,7 +63,7 @@ public enum SolutionFixture {
     public Solution 일반_솔루션_생성(
             Long id, Problem problem, Member member, Integer scraps,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure
-    ) {
+            ) {
         return 기본_정보_빌더_생성()
                 .id(id)
                 .problem(problem)
@@ -76,6 +77,22 @@ public enum SolutionFixture {
     public Solution 기본_솔루션_생성(Long id){
         return 기본_정보_빌더_생성()
                 .id(id)
+                .build();
+    }
+
+    public Solution 언어_포함_솔루션_생성(
+            Long id, Problem problem, Member member, Integer scraps,
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure,
+            LanguageConstant language
+    ){
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .problem(problem)
+                .member(member)
+                .scraps(scraps)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
+                .language(language)
                 .build();
     }
 
