@@ -47,7 +47,7 @@ class ProblemRepositoryTest {
     void 문제_목록_조회_날짜_최신순() {
         // given
         // 회원
-        Member member = 길가은1.getMember();
+        Member member = 길가은1.아이디_값_지정_멤버_생성(null);
         memberRepository.save(member);
 
         // 문제
