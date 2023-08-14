@@ -4,8 +4,6 @@ import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
