@@ -1,5 +1,6 @@
 package com.prograngers.backend.repository;
 
+import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
@@ -10,11 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
+import static com.prograngers.backend.fixture.CommentFixture.댓글1;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Slf4j
+@Import(TestConfig.class)
 class CommentRepositoryTest {
 
     @Autowired
@@ -22,11 +27,9 @@ class CommentRepositoryTest {
 
     @DisplayName("댓글을 저장할 수 있다")
     @Test
-    void 저장_테스트(){
+    void 저장_테스트() {
         // given
-        Comment comment = Comment.builder()
-                .content("댓글 내용")
-                .build();
+        Comment comment = 댓글1.기본_댓글_생성(null);
 
         // when
         Comment saved = commentRepository.save(comment);
@@ -37,15 +40,13 @@ class CommentRepositoryTest {
 
     @DisplayName("댓글을 수정할 수 있다")
     @Test
-    void 수정_테스트(){
+    void 수정_테스트() {
         // given
-        Comment comment = Comment.builder()
-                .content("댓글 내용")
-                .build();
+        Comment comment = 댓글1.기본_댓글_생성(null);
         commentRepository.save(comment);
+        comment.updateContent("수정 내용");
 
         // when
-        comment.updateContent("수정 내용");
         Comment updated = commentRepository.save(comment);
 
         // then
@@ -54,26 +55,18 @@ class CommentRepositoryTest {
 
     @DisplayName("댓글을 삭제할 수 있다")
     @Test
-    void 삭제_테스트(){
+    void 삭제_테스트() {
         // given
-        Comment comment = Comment.builder()
-                .content("댓글 내용")
-                .build();
-        commentRepository.save(comment);
-        Comment saved = commentRepository.findById(1L).orElseThrow(() -> new CommentNotFoundException());
-        Assertions.assertThat(saved.getId()).isEqualTo(1L);
+        Comment comment = 댓글1.기본_댓글_생성(null);
+        Comment saved = commentRepository.save(comment);
 
         // when
         commentRepository.delete(comment);
 
         // then
-        org.junit.jupiter.api.Assertions.assertThrows(
-                CommentNotFoundException.class,
-                ()-> commentRepository.findById(1L).orElseThrow(()->new CommentNotFoundException())
-        );
+        org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentRepository.findById(saved.getId()).orElseThrow(() -> new CommentNotFoundException()));
 
     }
-
 
 
 }
