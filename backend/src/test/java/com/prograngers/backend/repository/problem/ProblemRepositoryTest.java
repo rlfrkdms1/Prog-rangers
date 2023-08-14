@@ -94,7 +94,7 @@ class ProblemRepositoryTest {
 
     @DisplayName("문제 목록 조회 시 풀이의 알고리즘, 자료구조 필터에 따라 조회한다")
     @Test
-    void 문제_목록_필터(){
+    void 문제_목록_필터() {
         // given
         // 회원
         Member member = 길가은1.getMember();
@@ -134,14 +134,11 @@ class ProblemRepositoryTest {
         );
 
         // then
-        Assertions.assertThat(result1).contains(problem1,problem3);
-        Assertions.assertThat(result1).doesNotContain(problem2,problem4);
-        Assertions.assertThat(result2).contains(problem2,problem4);
-        Assertions.assertThat(result2).doesNotContain(problem1,problem3);
+        Assertions.assertThat(result1).contains(problem1, problem3);
+        Assertions.assertThat(result1).doesNotContain(problem2, problem4);
+        Assertions.assertThat(result2).contains(problem2, problem4);
+        Assertions.assertThat(result2).doesNotContain(problem1, problem3);
         Assertions.assertThat(result3).contains(problem1);
-        Assertions.assertThat(result3).doesNotContain(problem2,problem3,problem4);
+        Assertions.assertThat(result3).doesNotContain(problem2, problem3, problem4);
     }
-
-
-
 }
