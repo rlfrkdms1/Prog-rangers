@@ -8,6 +8,7 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.QueryDslReviewRepositoryImpl;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -26,9 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은2;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.fixture.ProblemFixture.문제2;
+import static com.prograngers.backend.fixture.ProblemFixture.문제3;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -40,6 +45,12 @@ class SolutionRepositoryTest {
 
     @Autowired
     private SolutionRepository solutionRepository;
+
+    @Autowired
+    private ProblemRepository problemRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     private EntityManager em;
@@ -123,5 +134,38 @@ class SolutionRepositoryTest {
 
         // then
         Assertions.assertThat(result.size()).isEqualTo(2);
+    }
+
+    @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
+    @Test
+    void 풀이_목록_조회_필터링_문제_id(){
+        // given
+        // 회원
+        Member member = 길가은1.getMember();
+        memberRepository.save(member);
+
+        // 문제
+        Problem problem1 = 문제1.아이디_값_지정_문제_생성(null);
+        Problem problem2 = 문제2.아이디_값_지정_문제_생성(null);
+        problemRepository.save(problem1);
+        problemRepository.save(problem2);
+
+        // 풀이 : 문제 - 풀이를 join해서 가져오기 때문에 problem.s
+        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE);
+        Solution solution2 = 풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE);
+        solutionRepository.save(solution1);
+        solutionRepository.save(solution2);
+
+        // when
+        List<Solution> result1 = solutionRepository
+                .getSolutionList(1, 1L, null, null, null, "newest");
+        List<Solution> result2 = solutionRepository
+                .getSolutionList(1, 2L, null, null, null, "newest");
+
+        // then
+        Assertions.assertThat(result1).contains(solution1);
+        Assertions.assertThat(result1).doesNotContain(solution2);
+        Assertions.assertThat(result2).contains(solution2);
+        Assertions.assertThat(result2).doesNotContain(solution1);
     }
 }
