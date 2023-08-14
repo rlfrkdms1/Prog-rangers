@@ -8,9 +8,11 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.QueryDslReviewRepositoryImpl;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +40,11 @@ class SolutionRepositoryTest {
 
     @Autowired
     private SolutionRepository solutionRepository;
+
+    @Autowired
+    private EntityManager em;
+
+
 
 
     @DisplayName("풀이를 저장할 수 있다")
@@ -98,9 +105,12 @@ class SolutionRepositoryTest {
     void 멤버_이름으로_전부_찾기_테스트(){
 
         // given
-        Member member1 = 길가은1.getMember();
-        Member member2 = 길가은2.getMember();
-        Problem problem = 문제1.getProblem();
+        Member member1 = 길가은1.아이디_값_지정_멤버_생성(null);
+        Member member2 = 길가은2.아이디_값_지정_멤버_생성(null);
+        Problem problem = 문제1.아이디_값_지정_문제_생성(null);
+        // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
+        em.persist(member1);
+        em.persist(member2);
         Solution solution1 = 풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
         Solution solution2 = 풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
         Solution solution3 = 풀이1.일반_솔루션_생성(null, problem, member2, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
@@ -114,5 +124,4 @@ class SolutionRepositoryTest {
         // then
         Assertions.assertThat(result.size()).isEqualTo(2);
     }
-
 }
