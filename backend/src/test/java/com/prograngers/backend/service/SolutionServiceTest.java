@@ -56,7 +56,7 @@ class SolutionServiceTest {
         // given
         Member member = 길가은1.getMember();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member,  0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
         given(solutionRepository.save(any())).willReturn(solution);
 
         // when
@@ -68,7 +68,7 @@ class SolutionServiceTest {
 
     @DisplayName("스크랩 해서 풀이를 저장할 수 있다")
     @Test
-    void 스크랩_저장_테스트(){
+    void 스크랩_저장_테스트() {
         // given
         Member member = 길가은1.getMember();
         Problem problem = 문제1.getProblem();
@@ -105,7 +105,7 @@ class SolutionServiceTest {
         solutionRepository.save(solution);
 
         // when
-        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2",AlgorithmConstant.BFS,DataStructureConstant.STACK,"풀이코드2","풀이설명2");
+        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2", AlgorithmConstant.BFS, DataStructureConstant.STACK, "풀이코드2", "풀이설명2");
         Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest);
 
         // then
@@ -134,10 +134,10 @@ class SolutionServiceTest {
 
     @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")
     @Test
-    void 없는_풀이_조회(){
+    void 없는_풀이_조회() {
         // then
         org.junit.jupiter.api.Assertions.assertThrows(SolutionNotFoundException.class
-        , ()->solutionService.findById(1L)
-                );
+            , () -> solutionService.findById(1L)
+        );
     }
 }
