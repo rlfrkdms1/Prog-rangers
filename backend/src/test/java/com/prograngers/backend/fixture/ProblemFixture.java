@@ -43,4 +43,15 @@ public enum ProblemFixture {
                 .solutions(new ArrayList<>())
                 .build();
     }
+    public Problem 아이디_값_지정_문제_생성(Long id) {
+        return Problem.builder()
+                .id(id)
+                .title(this.title)
+                .link(this.link)
+                .date(this.date)
+                .ojName(this.ojName)
+                .solutions(new ArrayList<>())
+                .build();
+    }
+
 }
