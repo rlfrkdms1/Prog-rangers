@@ -1,5 +1,6 @@
 package com.prograngers.backend.repository;
 
+import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -7,7 +8,9 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.repository.review.QueryDslReviewRepositoryImpl;
 import com.prograngers.backend.repository.solution.SolutionRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,16 +18,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.prograngers.backend.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.fixture.MemberFixture.길가은2;
+import static com.prograngers.backend.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
+
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Slf4j
 @Transactional
+@Import(TestConfig.class)
 class SolutionRepositoryTest {
+
     @Autowired
     private SolutionRepository solutionRepository;
 
@@ -32,45 +43,30 @@ class SolutionRepositoryTest {
     @DisplayName("풀이를 저장할 수 있다")
     @Test
     void 저장_테스트() {
-
         // given
-        Solution solution = Solution.builder()
-                .level(LevelConstant.THREE)
-                .title("풀이 제목")
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(Problem.builder().build())
-                .build();
+        // 비영속 상태
+        // id가 자동생성되기 때문에 id값 null
+        Solution solution = 풀이1.기본_솔루션_생성(null);
+        log.info("solution.getId() : {}",solution.getId());
 
         // when
+        // solution이 영속 상태가 된다. saved랑 solution이랑 같은 트랜잭션 내에서 같은 id값을 가지므로 비교시 같아야 한다
         Solution saved = solutionRepository.save(solution);
+        log.info("solution.getId() : {}",solution.getId());
+        log.info("saved.getId() : {}",saved.getId());
+
 
         //then
         Assertions.assertThat(saved).isEqualTo(solution);
     }
 
-    @DisplayName("풀이를 저장할 수 있다")
+    @DisplayName("풀이를 수정할 수 있다")
     @Test
     void 수정_테스트() {
         // given
-        Solution solution = Solution.builder()
-                .level(LevelConstant.THREE)
-                .title("풀이 제목")
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(Problem.builder().build())
-                .build();
-
+        Solution solution = 풀이1.기본_솔루션_생성(null);
         Solution saved = solutionRepository.save(solution);
-
-        saved.updateDescription("수정한 설명입니다");
-        saved.updateAlgorithm(AlgorithmConstant.DFS);
+        saved.updateDescription("수정설명");
 
         // when
         Solution updated = solutionRepository.save(saved);
@@ -83,16 +79,7 @@ class SolutionRepositoryTest {
     @Test
     void 삭제_테스트() {
         // given
-        Solution solution = Solution.builder()
-                .level(LevelConstant.THREE)
-                .title("풀이 제목")
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(Problem.builder().build())
-                .build();
+        Solution solution = 풀이1.기본_솔루션_생성(null);
         Solution saved = solutionRepository.save(solution);
         log.info("saved id : {}", saved.getId());
 
@@ -110,52 +97,21 @@ class SolutionRepositoryTest {
     @Test
     void 멤버_이름으로_전부_찾기_테스트(){
 
-        Member member1 = Member.builder()
-                .name("장지담")
-                .build();
-
-        Member member2 = Member.builder()
-                .name("길가은")
-                .build();
-
-        Solution solution1 = Solution.builder()
-                .member(member1)
-                .level(LevelConstant.THREE)
-                .title("풀이 제목")
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(Problem.builder().build())
-                .build();
-        Solution solution2 = Solution.builder()
-                .member(member1)
-                .level(LevelConstant.THREE)
-                .title("풀이 제목")
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(Problem.builder().build())
-                .build();
-        Solution solution3 = Solution.builder()
-                .member(member2)
-                .level(LevelConstant.THREE)
-                .title("풀이 제목")
-                .algorithm(AlgorithmConstant.BFS)
-                .dataStructure(DataStructureConstant.ARRAY)
-                .code("int a=10")
-                .description("풀이 설명")
-                .date(LocalDate.now())
-                .problem(Problem.builder().build())
-                .build();
+        // given
+        Member member1 = 길가은1.getMember();
+        Member member2 = 길가은2.getMember();
+        Problem problem = 문제1.getProblem();
+        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution2 = 풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution3 = 풀이1.일반_솔루션_생성(null, problem, member2, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
         solutionRepository.save(solution3);
 
+        // when
         List<Solution> result = solutionRepository.findAllByMember(member1);
+
+        // then
         Assertions.assertThat(result.size()).isEqualTo(2);
     }
 
