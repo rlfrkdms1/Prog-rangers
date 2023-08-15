@@ -34,15 +34,15 @@ public class ProblemResponse {
                     .build();
 
             List<Solution> solutions = result.getSolutions();
-            HashMap<Object,Integer> hm = new HashMap<>();
+            HashMap<Object,Integer> solutionAlgorithmCountMap = new HashMap<>();
 
             for (Solution solution : solutions) {
-                hm.put(solution.getAlgorithm(),hm.getOrDefault(solution.getAlgorithm(),1)+1);
-                hm.put(solution.getDataStructure(),hm.getOrDefault(solution.getDataStructure(),1)+1);
+                solutionAlgorithmCountMap.put(solution.getAlgorithm(),solutionAlgorithmCountMap.getOrDefault(solution.getAlgorithm(),1)+1);
+                solutionAlgorithmCountMap.put(solution.getDataStructure(),solutionAlgorithmCountMap.getOrDefault(solution.getDataStructure(),1)+1);
             }
 
-            List<Object> keySet = new ArrayList<>(hm.keySet());
-            keySet.sort((num1,num2)->hm.get(num2).compareTo(hm.get(num1)));
+            List<Object> keySet = new ArrayList<>(solutionAlgorithmCountMap.keySet());
+            keySet.sort((num1,num2)->solutionAlgorithmCountMap.get(num2).compareTo(solutionAlgorithmCountMap.get(num1)));
 
             for (int i=0; i<keySet.size(); i++){
                 if (i==3) break;
