@@ -31,14 +31,14 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 // solution을 조회해서 자료구조, 알고리즘을 알아내야 해서 성능을 위해 패치조인
                 .join(problem.solutions, solution).fetchJoin()
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-                .orderBy(orderByWhat(orderBy))
+                .orderBy(orderCondition(orderBy))
                 .offset((page - 1) * 4)
                 .limit(4)
                 .fetch();
         return results;
     }
 
-    private OrderSpecifier<?> orderByWhat(String orderBy) {
+    private OrderSpecifier<?> orderCondition(String orderBy) {
         if (orderBy.equals("date")) { // date 인 경우
             log.info("orderByDate");
             return problem.date.desc();
