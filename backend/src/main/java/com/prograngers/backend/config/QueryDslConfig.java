@@ -4,11 +4,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@RequiredArgsConstructor
 public class QueryDslConfig {
 
     /**
@@ -16,6 +16,7 @@ public class QueryDslConfig {
      * query를 생성할 수 있도록 EntityManager 주입
      */
 
+    @PersistenceContext
     private EntityManager entityManager;
 
     @Bean
