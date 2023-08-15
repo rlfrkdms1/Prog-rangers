@@ -23,7 +23,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Problem> searchByAlgorithmAndDataStructureOrderByDateDesc(
+    public List<Problem> findAll(
             int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy) {
         // 양방향 연관관계로 변경
         List<Problem> results = jpaQueryFactory

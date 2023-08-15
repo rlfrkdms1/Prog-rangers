@@ -7,7 +7,7 @@ import com.prograngers.backend.entity.constants.DataStructureConstant;
 import java.util.List;
 
 public interface QueryDslProblemRepository {
-    public List<Problem> searchByAlgorithmAndDataStructureOrderByDateDesc(
+    public List<Problem> findAll(
             int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy);
 
 }

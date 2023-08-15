@@ -25,7 +25,7 @@ public class ProblemService {
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
             String sortBy) {
-        List<Problem> problems = problemRepository.searchByAlgorithmAndDataStructureOrderByDateDesc(page, dataStructure, algorithm, sortBy);
+        List<Problem> problems = problemRepository.findAll(page, dataStructure, algorithm, sortBy);
         List<ProblemResponse> problemResponses = ProblemResponse.toDto(problems);
         return problemResponses;
     }
