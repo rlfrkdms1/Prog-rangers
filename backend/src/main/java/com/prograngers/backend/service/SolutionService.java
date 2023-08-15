@@ -50,10 +50,9 @@ public class SolutionService {
     @Transactional
     public Long save(SolutionRequest solutionRequest) {
         Solution solution = solutionRequest.toEntity();
-        List<Problem> problems = problemRepository.findAllByLink(solution.getProblem().getLink());
-        // 이미 존재하는  문제에 대한 풀이일 경우 풀이의 문제를 해당 문제 객체로 설정한다
-        if (problems.size() != 0) {
-            solution.updateProblem(problems.get(0));
+        Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
+        if (problem!=null){
+            solution.updateProblem(problem);
         }
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
