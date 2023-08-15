@@ -68,6 +68,7 @@ public class MemberService {
         }
     }
 
+    @Transactional
     public AuthResult reissue(String refreshToken) {
         RefreshToken findRefreshToken = validRefreshToken(refreshToken);
         Long memberId = findRefreshToken.getMemberId();
