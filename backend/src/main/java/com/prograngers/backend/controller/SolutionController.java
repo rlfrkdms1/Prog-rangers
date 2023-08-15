@@ -155,17 +155,4 @@ public class SolutionController {
         return ResponseEntity.ok().body(reviewDetail);
     }
 
-    // solution 목록보기
-    @GetMapping("{problemId}/solutions")
-    public ResponseEntity<?> solutionList(
-            @PathVariable Long problemId,
-            @RequestParam int page,
-            @RequestParam(required = false) LanguageConstant language,
-            @RequestParam(required = false) AlgorithmConstant algorithm,
-            @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = "newest") String sortBy
-            ){
-        SolutionListResponse solutionListResponse = solutionService.getSolutionList(page, problemId, language,algorithm,dataStructure,sortBy);
-        return ResponseEntity.ok().body(solutionListResponse);
-    }
 }
