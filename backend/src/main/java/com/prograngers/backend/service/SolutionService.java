@@ -131,8 +131,6 @@ public class SolutionService {
         Solution solution = findById(solutionId);
         // 줄 나눠서 배열에 저장
         String[] lines = solution.getCode().split("\n");
-        for (String line : lines) {
-        }
         // 최종 응답 dto에 풀이 내용을 넣는다
         SolutionReviewsResponse solutionReviewsResponse = new SolutionReviewsResponse();
         solutionReviewsResponse.setTitle(solution.getTitle());
