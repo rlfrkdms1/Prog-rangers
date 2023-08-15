@@ -24,7 +24,7 @@ public class ProblemController {
 
     @GetMapping
     public ResponseEntity<?> problems(
-            @RequestParam Integer page,
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "date") String sortBy) {
