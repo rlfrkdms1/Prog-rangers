@@ -1,7 +1,4 @@
-package com.prograngers.backend.exception;
-
-import com.prograngers.backend.exception.ErrorCode;
-import com.prograngers.backend.exception.UnAuthorizationException;
+package com.prograngers.backend.exception.unauthorization;
 
 import static com.prograngers.backend.exception.ErrorCode.NOT_EXIST_TOKEN;
 

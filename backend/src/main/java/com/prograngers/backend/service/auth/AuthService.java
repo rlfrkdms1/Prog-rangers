@@ -1,15 +1,12 @@
-package com.prograngers.backend.service;
+package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.AuthResult;
-import com.prograngers.backend.Encrypt;
-import com.prograngers.backend.JwtTokenProvider;
-import com.prograngers.backend.dto.LoginRequest;
-import com.prograngers.backend.RefreshToken;
+import com.prograngers.backend.dto.result.AuthResult;
+import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.repository.RefreshTokenRepository;
-import com.prograngers.backend.dto.SignUpRequest;
+import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.Member;
-import com.prograngers.backend.exception.InvalidPasswordException;
-import com.prograngers.backend.exception.RefreshTokenNotFoundException;
+import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
+import com.prograngers.backend.exception.unauthorization.RefreshTokenNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +19,7 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class AuthService {
 
     private final MemberRepository memberRepository;
     private final Encrypt encrypt;
@@ -64,7 +61,7 @@ public class MemberService {
 
     public void validPassword(String savedPassword, String inputPassword) {
         if (!encrypt.decryptAES256(savedPassword).equals(inputPassword)) {
-            throw new InvalidPasswordException();
+            throw new IncorrectPasswordException();
         }
     }
 

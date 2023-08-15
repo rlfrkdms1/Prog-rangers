@@ -1,4 +1,6 @@
-package com.prograngers.backend.exception;
+package com.prograngers.backend.exception.unauthorization;
+
+import com.prograngers.backend.exception.ErrorCode;
 
 import static com.prograngers.backend.exception.ErrorCode.NOT_EXIST_REFRESH_TOKEN;
 

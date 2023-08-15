@@ -1,12 +1,10 @@
-package com.prograngers.backend.controller;
+package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.AuthResult;
-import com.prograngers.backend.LoggedInMember;
-import com.prograngers.backend.Login;
-import com.prograngers.backend.dto.LoginRequest;
-import com.prograngers.backend.dto.SignUpRequest;
-import com.prograngers.backend.exception.NotExistTokenException;
-import com.prograngers.backend.service.MemberService;
+import com.prograngers.backend.dto.result.AuthResult;
+import com.prograngers.backend.dto.request.auth.LoginRequest;
+import com.prograngers.backend.dto.request.auth.SignUpRequest;
+import com.prograngers.backend.exception.unauthorization.NotExistTokenException;
+import com.prograngers.backend.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -21,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MemberController {
+public class AuthController {
 
-    private final MemberService memberService;
+    private final AuthService authService;
     private static final String REFRESH_TOKEN = "refreshToken";
 
     @PostMapping("/sign-up")
     public ResponseEntity<String> singUp(@RequestBody SignUpRequest signUpRequest) {
-        AuthResult authResult = memberService.signUp(signUpRequest);
+        AuthResult authResult = authService.signUp(signUpRequest);
         ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -47,7 +45,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        AuthResult authResult = memberService.login(loginRequest);
+        AuthResult authResult = authService.login(loginRequest);
         ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()
@@ -60,7 +58,7 @@ public class MemberController {
         if (refreshToken == null) {
             throw new NotExistTokenException();
         }
-        AuthResult authResult = memberService.reissue(refreshToken);
+        AuthResult authResult = authService.reissue(refreshToken);
         ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()

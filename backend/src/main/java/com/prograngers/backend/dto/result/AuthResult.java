@@ -1,4 +1,4 @@
-package com.prograngers.backend;
+package com.prograngers.backend.dto.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

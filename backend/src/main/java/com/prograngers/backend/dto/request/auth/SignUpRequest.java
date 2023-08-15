@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.request.auth;
 
 import com.prograngers.backend.entity.Member;
 import jakarta.validation.constraints.Email;
