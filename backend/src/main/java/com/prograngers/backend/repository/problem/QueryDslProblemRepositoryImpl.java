@@ -25,6 +25,8 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     public List<Problem> findAll(
             int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy) {
+        log.info("### problemRepository findAll 호출 ###");
+
         // 양방향 연관관계로 변경
         List<Problem> results = jpaQueryFactory
                 .selectFrom(problem)

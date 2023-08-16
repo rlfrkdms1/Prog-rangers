@@ -11,6 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long>, QueryDslProblemRepository {
-    List<Problem> findAllByLink(String link);
     Problem findByLink(String link);
 }
