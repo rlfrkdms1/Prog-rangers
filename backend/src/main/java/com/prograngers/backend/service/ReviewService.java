@@ -1,9 +1,9 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.review.LineResponse;
-import com.prograngers.backend.dto.review.ReplyResponse;
-import com.prograngers.backend.dto.review.ReviewResponse;
-import com.prograngers.backend.dto.review.SolutionReviewsResponse;
+import com.prograngers.backend.dto.review.response.LineResponse;
+import com.prograngers.backend.dto.review.response.ReplyResponse;
+import com.prograngers.backend.dto.review.response.ReviewResponse;
+import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;

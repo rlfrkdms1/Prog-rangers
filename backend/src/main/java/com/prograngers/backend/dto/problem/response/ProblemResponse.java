@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto.problem;
+package com.prograngers.backend.dto.problem.response;
 
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;

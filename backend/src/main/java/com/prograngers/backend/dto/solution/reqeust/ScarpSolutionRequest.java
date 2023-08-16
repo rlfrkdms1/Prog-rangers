@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto.solution;
+package com.prograngers.backend.dto.solution.reqeust;
 
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.LevelConstant;

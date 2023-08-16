@@ -1,20 +1,15 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.solution.SolutionListResponse;
-import com.prograngers.backend.dto.comment.CommentReqeust;
-import com.prograngers.backend.dto.review.LineResponse;
-import com.prograngers.backend.dto.review.ReplyResponse;
-import com.prograngers.backend.dto.review.ReviewResponse;
-import com.prograngers.backend.dto.review.SolutionReviewsResponse;
-import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.SolutionDetailResponse;
-import com.prograngers.backend.dto.solution.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.SolutionRequest;
-import com.prograngers.backend.dto.solution.SolutionUpdateForm;
+import com.prograngers.backend.dto.solution.response.SolutionListResponse;
+import com.prograngers.backend.dto.comment.request.CommentReqeust;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionRequest;
+import com.prograngers.backend.dto.solution.response.SolutionUpdateForm;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
@@ -30,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 

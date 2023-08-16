@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto.solution;
+package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.JudgeConstant;

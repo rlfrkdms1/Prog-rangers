@@ -1,8 +1,7 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.review.SolutionReviewsResponse;
+import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.service.ReviewService;
-import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

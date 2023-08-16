@@ -1,8 +1,8 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.SolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionRequest;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -23,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;

@@ -1,14 +1,12 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.comment.CommentPatchRequest;
+import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
-import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
-import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;

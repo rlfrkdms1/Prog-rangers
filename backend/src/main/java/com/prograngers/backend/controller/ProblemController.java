@@ -1,7 +1,7 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.problem.ProblemResponse;
-import com.prograngers.backend.dto.solution.SolutionListResponse;
+import com.prograngers.backend.dto.problem.response.ProblemResponse;
+import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;

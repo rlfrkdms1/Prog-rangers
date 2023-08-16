@@ -1,12 +1,12 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.comment.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.CommentReqeust;
-import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.SolutionDetailResponse;
-import com.prograngers.backend.dto.solution.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.SolutionRequest;
-import com.prograngers.backend.dto.solution.SolutionUpdateForm;
+import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
+import com.prograngers.backend.dto.comment.request.CommentReqeust;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionRequest;
+import com.prograngers.backend.dto.solution.response.SolutionUpdateForm;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
