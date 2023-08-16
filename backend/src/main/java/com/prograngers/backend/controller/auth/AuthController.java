@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller.auth;
 
+import com.prograngers.backend.controller.RefreshCookieProvider;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.prograngers.backend.controller.RefreshCookieProvider.REFRESH_TOKEN;
 
 @Slf4j
 @RestController
@@ -32,19 +36,19 @@ public class AuthController {
                 .body(authResult.getAccessToken());
     }
 
-    private ResponseCookie createCookieWithRefreshToken(String refreshToken, Long expiredAt) {
-        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .httpOnly(true)
-                .maxAge(expiredAt)
-                .secure(true)
-                .path("/")
-                .build();
-        return cookie;
-    }
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         AuthResult authResult = authService.login(loginRequest);
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(authResult.getAccessToken());
+    }
+
+    @GetMapping("/login/kakao")
+    public ResponseEntity<String> kakaoLogin(@RequestParam String code) {
+        log.info("code = {} ", code);
+        AuthResult authResult = authService.kakaoLogin(code);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
