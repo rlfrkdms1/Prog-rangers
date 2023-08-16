@@ -1,5 +1,7 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.dto.response.auth.GoogleTokenResponse;
+import com.prograngers.backend.dto.response.auth.GoogleUserInfoResponse;
 import com.prograngers.backend.dto.response.auth.KakaoTokenResponse;
 import com.prograngers.backend.dto.response.auth.KakaoUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
@@ -28,6 +30,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final KakaoOauth kakaoOauth;
+    private final GoogleOauth googleOauth;
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
@@ -84,6 +87,14 @@ public class AuthService {
         KakaoUserInfoResponse kakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(kakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(kakaoUserInfoResponse.getId())
                 .orElseGet(() -> memberRepository.save(kakaoUserInfoResponse.toMember()));
+        return issueToken(member.getId());
+    }
+    @Transactional
+    public AuthResult googleLogin(String code) {
+        GoogleTokenResponse googleTokenResponse = googleOauth.googleGetToken(code);
+        GoogleUserInfoResponse googleUserInfoResponse = googleOauth.googleGetUserInfo(googleTokenResponse.getAccess_token());
+        Member member = memberRepository.findBySocialId(Long.valueOf(googleUserInfoResponse.getId().hashCode()))
+                .orElseGet(() -> memberRepository.save(googleUserInfoResponse.toMember()));
         return issueToken(member.getId());
     }
 }
