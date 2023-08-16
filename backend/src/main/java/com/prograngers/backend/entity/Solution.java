@@ -2,6 +2,7 @@ package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -36,11 +37,11 @@ public class Solution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -72,6 +73,9 @@ public class Solution {
 
     @Enumerated(EnumType.STRING)
     private LevelConstant level;
+
+    @Enumerated(EnumType.STRING)
+    private LanguageConstant language;
 
     public void updateProblem(Problem problem) {
         if (problem != null) {

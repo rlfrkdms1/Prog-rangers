@@ -38,6 +38,8 @@ public class Member {
 
     private String phoneNumber;
 
+    private String photo;
+
     public void updateName(String name) {
         if (name != null) {
             this.name = name;
@@ -83,6 +85,11 @@ public class Member {
     public void encodePassword(String encodedPassword) {
         if (encodedPassword != null) {
             this.password = encodedPassword;
+        }
+    }
+    public void updatePhoto(String photo){
+        if (photo!=null){
+            this.photo = photo;
         }
     }
 

@@ -46,24 +46,21 @@ public class Comment {
 
     private boolean fixed;
 
-    public void updateSolution(Solution solution){
-        this.solution =solution;
-    }
-
     public void updateMention(String mention){
         if (mention!=null){
             this.mention = mention;
+            this.fixed = true;
         }
     }
 
     public void updateContent(String content){
         if (content!=null){
             this.content = content;
+            this.fixed = true;
         }
     }
 
-    public void updateFixed(boolean fixed){
-        this.fixed = fixed;
+    public void updateSolution(Solution solution) {
+        this.solution = solution;
     }
-
 }

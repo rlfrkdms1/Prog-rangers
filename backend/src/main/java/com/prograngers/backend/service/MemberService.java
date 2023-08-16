@@ -11,7 +11,7 @@ import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.exception.InvalidPasswordException;
 import com.prograngers.backend.exception.RefreshTokenNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
-import com.prograngers.backend.repository.MemberRepository;
+import com.prograngers.backend.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

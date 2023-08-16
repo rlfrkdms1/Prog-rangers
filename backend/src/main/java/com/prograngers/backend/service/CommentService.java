@@ -1,10 +1,10 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.CommentPatchRequest;
+import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
-import com.prograngers.backend.repository.CommentRepository;
+import com.prograngers.backend.repository.comment.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

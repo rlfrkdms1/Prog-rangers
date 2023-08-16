@@ -1,11 +1,13 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.CommentPatchRequest;
+import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
-import com.prograngers.backend.repository.CommentRepository;
-import com.prograngers.backend.repository.SolutionRepository;
+import com.prograngers.backend.repository.comment.CommentRepository;
+import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -19,44 +21,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.prograngers.backend.fixture.CommentFixture.댓글1;
+import static com.prograngers.backend.fixture.CommentFixture.댓글2;
+import static com.prograngers.backend.fixture.MemberFixture.*;
+import static com.prograngers.backend.fixture.SolutionFixture.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
 class CommentServiceTest {
-
     @Mock
     private CommentRepository commentRepository;
+    @Mock
+    private SolutionRepository solutionRepository;
 
     @Mock
-    SolutionRepository solutionRepository;
-    @InjectMocks
-    private CommentService commentService;
+    private MemberRepository memberRepository;
 
     @InjectMocks
-    private SolutionService solutionService;
+    private CommentService commentService;
 
     @DisplayName("풀이로 댓글을 찾을 수 있다")
     @Test
     void 솔루션으로_댓글_찾기_테스트() {
 
         // given
-        Solution solution = Solution.builder()
-                .description("설명").build();
-        Comment comment1 = Comment.builder()
-                .content("내용1")
-                .solution(solution).build();
-        Comment comment2 = Comment.builder()
-                .content("내용2")
-                .solution(solution).build();
+        Solution solution = 풀이_저장(풀이1.기본_솔루션_생성(1L));
+        Member member = 멤버_저장(길가은1.getMember());
+        Comment comment1 = 댓글1.댓글_생성(1L, solution, member);
+        Comment comment2 = 댓글1.댓글_생성(2L, solution, member);
 
         List<Comment> comments = new ArrayList<>();
         comments.add(comment1);
         comments.add(comment2);
 
-        given(commentRepository.findAllBySolution(solution)).willReturn(comments);
+        when(commentRepository.findAllBySolution(any())).thenReturn(comments);
 
         // when
         List<Comment> bySolution = commentService.findBySolution(solution);
@@ -69,19 +72,16 @@ class CommentServiceTest {
     @Test
     void 아이디로_댓글_찾기_테스트() {
         // given
-        Comment comment1 = Comment.builder()
-                .content("내용1")
-                .build();
-        Comment comment2 = Comment.builder()
-                .content("내용2")
-                .build();
+        Comment comment1 = 댓글1.기본_댓글_생성(1L);
+        Comment comment2 = 댓글2.기본_댓글_생성(2L);
 
-        given(commentRepository.save(comment1)).willReturn(comment1);
-        given(commentRepository.findById(1L)).willReturn(Optional.ofNullable(comment1));
+        when(commentRepository.save(any())).thenReturn(comment1).thenReturn(comment2);
+        when(commentRepository.findById(1L)).thenReturn(Optional.ofNullable(comment1));
 
-        // when
         Comment saved = commentRepository.save(comment1);
         commentRepository.save(comment2);
+
+        // when
         Comment found = commentService.findById(1L);
 
         // then
@@ -93,22 +93,16 @@ class CommentServiceTest {
     void 댓글_수정_테스트() {
 
         // given
-        Solution solution = Solution.builder()
-                .id(null)
-                .description("풀이설명")
-                .build();
+        Solution solution = 풀이1.기본_솔루션_생성(1L);
+        Member member = 길가은1.getMember();
+        Comment comment = 댓글1.댓글_생성(1L, solution, member);
 
-        Comment comment = Comment.builder()
-                .id(1L)
-                .solution(solution)
-                .content("댓글내용")
-                .build();
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
-        CommentPatchRequest request = new CommentPatchRequest("수정내용",null);
+        CommentPatchRequest request = new CommentPatchRequest("수정내용", null);
 
         // when
-        commentService.updateComment(comment.getId(),request);
+        commentService.updateComment(comment.getId(), request);
         Comment updated = commentRepository.findById(1L).orElse(null);
 
         // then
@@ -118,12 +112,9 @@ class CommentServiceTest {
 
     @DisplayName("댓글을 삭제할 수 있다")
     @Test
-    void 댓글_삭제_테스트(){
+    void 댓글_삭제_테스트() {
         // given
-        Comment comment = Comment.builder()
-                .id(1L)
-                .content("댓글내용")
-                .build();
+        Comment comment = 댓글1.기본_댓글_생성(1L);
 
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
@@ -138,11 +129,15 @@ class CommentServiceTest {
 
     @DisplayName("없는 댓글을 조회할 경우 예외 발생")
     @Test
-    void 없는_댓글_조회(){
-        org.junit.jupiter.api.Assertions.assertThrows(
-                CommentNotFoundException.class,
-                ()->commentService.findById(1L)
-        );
+    void 없는_댓글_조회() {
+        org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
     }
 
+    Member 멤버_저장(Member member) {
+        return memberRepository.save(member);
+    }
+
+    Solution 풀이_저장(Solution solution) {
+        return solutionRepository.save(solution);
+    }
 }
