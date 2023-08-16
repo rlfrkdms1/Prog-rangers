@@ -1,5 +1,7 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.dto.response.auth.KakaoTokenResponse;
+import com.prograngers.backend.dto.response.auth.KakaoUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.repository.RefreshTokenRepository;
@@ -25,6 +27,7 @@ public class AuthService {
     private final Encrypt encrypt;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final KakaoOauth kakaoOauth;
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
@@ -35,14 +38,11 @@ public class AuthService {
         return issueToken(member.getId());
     }
 
+
     private AuthResult issueToken(Long memberId) {
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
         //refresh token 발급, 저장, 쿠키 생성
-        RefreshToken refreshToken = RefreshToken.builder()
-                .memberId(memberId)
-                .refreshToken(UUID.randomUUID().toString())
-                .build();
-        refreshTokenRepository.save(refreshToken);
+        RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder().memberId(memberId).refreshToken(UUID.randomUUID().toString()).build());
         return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
     }
 
@@ -76,5 +76,14 @@ public class AuthService {
     public RefreshToken validRefreshToken(String refreshToken) {
         return refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(RefreshTokenNotFoundException::new);
+    }
+
+    @Transactional
+    public AuthResult kakaoLogin(String code) {
+        KakaoTokenResponse kakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
+        KakaoUserInfoResponse kakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(kakaoTokenResponse.getAccess_token());
+        Member member = memberRepository.findBySocialId(kakaoUserInfoResponse.getId())
+                .orElseGet(() -> memberRepository.save(kakaoUserInfoResponse.toMember()));
+        return issueToken(member.getId());
     }
 }
