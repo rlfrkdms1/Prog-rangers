@@ -1,6 +1,7 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.review.SolutionReviewsResponse;
+import com.prograngers.backend.service.ReviewService;
 import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final SolutionService solutionService;
+    private final ReviewService reviewService;
 
     // 상세보기 한 줄 리뷰
     @GetMapping("/reviews")
     public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
-        SolutionReviewsResponse reviewDetail = solutionService.getReviewDetail(solutionId);
+        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId);
         return ResponseEntity.ok().body(reviewDetail);
     }
 }
