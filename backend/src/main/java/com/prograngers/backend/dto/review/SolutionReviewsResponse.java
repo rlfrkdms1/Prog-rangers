@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto.review;
 
+import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import lombok.AllArgsConstructor;
@@ -20,4 +21,12 @@ public class SolutionReviewsResponse {
     private DataStructureConstant dataStructure;
     private String solution;
     private List<LineResponse> lines = new ArrayList<>();
+
+    public static SolutionReviewsResponse from(Solution solution) {
+        SolutionReviewsResponse solutionReviewsResponse = new SolutionReviewsResponse();
+        solutionReviewsResponse.title = solution.getTitle();
+        solutionReviewsResponse.algorithm = solution.getAlgorithm();
+        solutionReviewsResponse.dataStructure = solution.getDataStructure();
+        return  solutionReviewsResponse;
+    }
 }

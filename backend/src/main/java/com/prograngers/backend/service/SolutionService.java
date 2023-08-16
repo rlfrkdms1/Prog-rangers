@@ -132,10 +132,7 @@ public class SolutionService {
         // 줄 나눠서 배열에 저장
         String[] lines = solution.getCode().split("\n");
         // 최종 응답 dto에 풀이 내용을 넣는다
-        SolutionReviewsResponse solutionReviewsResponse = new SolutionReviewsResponse();
-        solutionReviewsResponse.setTitle(solution.getTitle());
-        solutionReviewsResponse.setAlgorithm(solution.getAlgorithm());
-        solutionReviewsResponse.setDataStructure(solution.getDataStructure());
+        SolutionReviewsResponse solutionReviewsResponse = SolutionReviewsResponse.from(solution);
         // 먼저 최종 응답 dto에 각 라인을 넣는다
         for (int i = 0; i < lines.length; i++) {
             LineResponse lineResponse = LineResponse.builder()
