@@ -26,7 +26,7 @@ public class ProblemService {
             DataStructureConstant dataStructure,
             String sortBy) {
         List<Problem> problems = problemRepository.findAll(page, dataStructure, algorithm, sortBy);
-        List<ProblemResponse> problemResponses = ProblemResponse.toDto(problems);
+        List<ProblemResponse> problemResponses = ProblemResponse.from(problems);
         return problemResponses;
     }
 }

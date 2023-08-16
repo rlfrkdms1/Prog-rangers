@@ -21,7 +21,7 @@ public class ProblemResponse {
     List<Object> tags = new ArrayList<>();
 
 
-    public static List<ProblemResponse> toDto(List<Problem> results) {
+    public static List<ProblemResponse> from(List<Problem> results) {
         // 반환할 dto 리스트
         List<ProblemResponse> problemResponses = new ArrayList<>();
 
