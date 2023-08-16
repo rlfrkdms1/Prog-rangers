@@ -3,9 +3,12 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.dto.comment.CommentPatchRequest;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
+import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -36,7 +39,11 @@ class CommentServiceTest {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
+
     @InjectMocks
     private CommentService commentService;
 
@@ -45,8 +52,8 @@ class CommentServiceTest {
     void 솔루션으로_댓글_찾기_테스트() {
 
         // given
-        Solution solution = 풀이1.기본_솔루션_생성(1L);
-        Member member = 길가은1.getMember();
+        Solution solution = 풀이_저장(풀이1.기본_솔루션_생성(1L));
+        Member member = 멤버_저장(길가은1.getMember());
         Comment comment1 = 댓글1.댓글_생성(1L, solution, member);
         Comment comment2 = 댓글1.댓글_생성(2L, solution, member);
 
@@ -128,4 +135,11 @@ class CommentServiceTest {
         org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
     }
 
+    Member 멤버_저장(Member member) {
+        return memberRepository.save(member);
+    }
+
+    Solution 풀이_저장(Solution solution) {
+        return solutionRepository.save(solution);
+    }
 }
