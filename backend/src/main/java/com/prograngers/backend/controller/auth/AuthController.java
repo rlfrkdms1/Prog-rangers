@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private static final String REFRESH_TOKEN = "refreshToken";
-
+    private final RefreshCookieProvider refreshCookieProvider;
     @PostMapping("/sign-up")
     public ResponseEntity<String> singUp(@RequestBody SignUpRequest signUpRequest) {
         AuthResult authResult = authService.signUp(signUpRequest);
-        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResult.getAccessToken());
@@ -46,8 +45,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         AuthResult authResult = authService.login(loginRequest);
-        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
-
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(authResult.getAccessToken());
@@ -59,7 +57,7 @@ public class AuthController {
             throw new NotExistTokenException();
         }
         AuthResult authResult = authService.reissue(refreshToken);
-        ResponseCookie cookie = createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
