@@ -20,7 +20,7 @@ public class SolutionListResponse {
     JudgeConstant ojName;
     List<SolutionListSolution> solutionListSolutions;
 
-    public static SolutionListResponse createDto(List<com.prograngers.backend.entity.Solution> solutions) {
+    public static SolutionListResponse from(List<com.prograngers.backend.entity.Solution> solutions) {
         if (solutions.size()==0){
             return null;
         }

@@ -129,6 +129,6 @@ public class SolutionService {
             String sortBy) {
         List<Solution> solutions = solutionRepository.getSolutionList(page, problemId, language, algorithm, dataStructure, sortBy);
 
-        return SolutionListResponse.createDto(solutions);
+        return SolutionListResponse.from(solutions);
     }
 }
