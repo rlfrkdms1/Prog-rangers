@@ -6,16 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import static com.prograngers.backend.service.auth.MultiValueMapConverter.convertToMultiValueMap;
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
-import static com.prograngers.backend.service.auth.OauthConstant.CLIENT_ID;
-import static com.prograngers.backend.service.auth.OauthConstant.CLIENT_SECRET;
-import static com.prograngers.backend.service.auth.OauthConstant.CODE;
-import static com.prograngers.backend.service.auth.OauthConstant.GRANT_TYPE;
-import static com.prograngers.backend.service.auth.OauthConstant.REDIRECT_URI;
 
 @Component
 public class KakaoOauth {
@@ -44,7 +38,7 @@ public class KakaoOauth {
         return webClient.post()
                 .uri(TOKEN_URI)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .bodyValue(convertToMultiValueMap(code))
+                .bodyValue(convertToMultiValueMap(grantType, clientId, redirectUri, code, clientSecret))
                 .retrieve()
                 .bodyToMono(KakaoTokenResponse.class)
                 .block();
@@ -59,15 +53,4 @@ public class KakaoOauth {
                 .bodyToMono(KakaoUserInfoResponse.class)
                 .block();
     }
-
-    public MultiValueMap<String, String> convertToMultiValueMap(String code){
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add(GRANT_TYPE, grantType);
-        requestBody.add(CLIENT_ID, clientId);
-        requestBody.add(REDIRECT_URI, redirectUri);
-        requestBody.add(CODE, code);
-        requestBody.add(CLIENT_SECRET, clientSecret);
-        return requestBody;
-    }
-
 }
