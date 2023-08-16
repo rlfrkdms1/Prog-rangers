@@ -1,8 +1,11 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.net.URI;
 
 @Component
 public class NaverOauth {
@@ -25,6 +28,16 @@ public class NaverOauth {
         this.redirectUri = redirectUri;
         this.clientSecret = clientSecret;
         this.webClient = webClient;
+    }
+
+    public NaverTokenResponse getNaverToken(String code) {
+        return webClient.post()
+                .uri(TOKEN_URI + "&client_id=" + clientId + "&grant_type="
+                        + grantType + "&client_secret=" + clientSecret + "&state=test_state"
+                        + "&code=" + code)
+                .retrieve()
+                .bodyToMono(NaverTokenResponse.class)
+                .block();
     }
 
 }
