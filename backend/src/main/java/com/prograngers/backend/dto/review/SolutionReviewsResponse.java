@@ -22,11 +22,20 @@ public class SolutionReviewsResponse {
     private String solution;
     private List<LineResponse> lines = new ArrayList<>();
 
-    public static SolutionReviewsResponse from(Solution solution) {
+    public static SolutionReviewsResponse from(Solution solution, String[] lines) {
         SolutionReviewsResponse solutionReviewsResponse = new SolutionReviewsResponse();
         solutionReviewsResponse.title = solution.getTitle();
         solutionReviewsResponse.algorithm = solution.getAlgorithm();
         solutionReviewsResponse.dataStructure = solution.getDataStructure();
+        // 먼저 최종 응답 dto에 각 라인을 넣는다
+        for (int i = 0; i < lines.length; i++) {
+            LineResponse lineResponse = LineResponse.builder()
+                    .codeLineNumber(i + 1)
+                    .code(lines[i])
+                    .build();
+            solutionReviewsResponse.getLines().add(lineResponse);
+        }
         return  solutionReviewsResponse;
     }
+
 }
