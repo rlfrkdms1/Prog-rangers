@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto.response.auth;
+package com.prograngers.backend.dto.response.auth.google;
 
 import lombok.Data;
 
