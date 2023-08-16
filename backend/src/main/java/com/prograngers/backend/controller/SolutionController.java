@@ -1,17 +1,12 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.solution.SolutionListResponse;
 import com.prograngers.backend.dto.comment.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.CommentReqeust;
-import com.prograngers.backend.dto.review.SolutionReviewsResponse;
 import com.prograngers.backend.dto.solution.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.SolutionRequest;
 import com.prograngers.backend.dto.solution.SolutionUpdateForm;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
@@ -21,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -147,6 +143,4 @@ public class SolutionController {
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
-
-
 }
