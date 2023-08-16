@@ -148,11 +148,5 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
-    // 상세보기 한 줄 리뷰
-    @GetMapping("{solutionId}/reviews")
-    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
-        SolutionReviewsResponse reviewDetail = solutionService.getReviewDetail(solutionId);
-        return ResponseEntity.ok().body(reviewDetail);
-    }
 
 }
