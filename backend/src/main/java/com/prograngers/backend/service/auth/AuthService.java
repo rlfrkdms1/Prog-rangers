@@ -1,9 +1,11 @@
 package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.dto.response.auth.GoogleTokenResponse;
-import com.prograngers.backend.dto.response.auth.GoogleUserInfoResponse;
-import com.prograngers.backend.dto.response.auth.KakaoTokenResponse;
-import com.prograngers.backend.dto.response.auth.KakaoUserInfoResponse;
+import com.prograngers.backend.dto.response.auth.google.GoogleTokenResponse;
+import com.prograngers.backend.dto.response.auth.google.GoogleUserInfoResponse;
+import com.prograngers.backend.dto.response.auth.kakao.KakaoTokenResponse;
+import com.prograngers.backend.dto.response.auth.kakao.KakaoUserInfoResponse;
+import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
+import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.repository.RefreshTokenRepository;
@@ -31,6 +33,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final KakaoOauth kakaoOauth;
     private final GoogleOauth googleOauth;
+    private final NaverOauth naverOauth;
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
@@ -95,6 +98,15 @@ public class AuthService {
         GoogleUserInfoResponse googleUserInfoResponse = googleOauth.googleGetUserInfo(googleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(googleUserInfoResponse.getId().hashCode()))
                 .orElseGet(() -> memberRepository.save(googleUserInfoResponse.toMember()));
+        return issueToken(member.getId());
+    }
+
+    @Transactional
+    public AuthResult naverLogin(String code, String state) {
+        NaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
+        NaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
+        Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
+                .orElseGet(() -> memberRepository.save(userInfo.toMember()));
         return issueToken(member.getId());
     }
 }

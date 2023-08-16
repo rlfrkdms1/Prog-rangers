@@ -64,6 +64,18 @@ public class AuthController {
                 .body(authResult.getAccessToken());
     }
 
+    @GetMapping("/login/naver")
+    public ResponseEntity<String> naverLogin(@RequestParam String code, @RequestParam String state) {
+        if(state.equals("test_state")){
+            log.info("success");
+        }
+        AuthResult authResult = authService.naverLogin(code, state);
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(authResult.getAccessToken());
+    }
+
     @PostMapping("/reissue")
     public ResponseEntity<String> reissue(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
         if (refreshToken == null) {
