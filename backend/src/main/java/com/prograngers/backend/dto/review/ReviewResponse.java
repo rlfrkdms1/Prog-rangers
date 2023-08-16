@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto.review;
 
+import com.prograngers.backend.entity.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,16 @@ public class ReviewResponse {
     String photo;
     String content;
     List<ReplyResponse> replies = new ArrayList<>();
+
+    public static ReviewResponse from(Review review){
+
+        ReviewResponse reviewResponse = ReviewResponse.builder()
+                .id(review.getId())
+                .nickname(review.getMember().getNickname())
+                .photo(review.getMember().getPhoto())
+                .content(review.getContent())
+                .replies(new ArrayList<>())
+                .build();
+        return reviewResponse;
+    }
 }
