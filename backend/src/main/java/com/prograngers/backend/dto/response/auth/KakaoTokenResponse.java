@@ -15,4 +15,6 @@ public class KakaoTokenResponse {
 
     private Integer refresh_token_expires_in;
 
+    private String scope;
+
 }
