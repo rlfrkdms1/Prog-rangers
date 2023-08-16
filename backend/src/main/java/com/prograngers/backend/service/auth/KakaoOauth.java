@@ -1,7 +1,7 @@
 package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.dto.response.auth.KakaoTokenResponse;
-import com.prograngers.backend.dto.response.auth.KakaoUserInfoResponse;
+import com.prograngers.backend.dto.response.auth.kakao.KakaoTokenResponse;
+import com.prograngers.backend.dto.response.auth.kakao.KakaoUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

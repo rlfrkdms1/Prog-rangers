@@ -1,7 +1,7 @@
 package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.dto.response.auth.GoogleTokenResponse;
-import com.prograngers.backend.dto.response.auth.GoogleUserInfoResponse;
+import com.prograngers.backend.dto.response.auth.google.GoogleTokenResponse;
+import com.prograngers.backend.dto.response.auth.google.GoogleUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
