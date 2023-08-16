@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto.solution.response;
 
+import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,10 +25,12 @@ public class SolutionListResponse {
         if (solutions.size()==0){
             return null;
         }
+        Problem problem = solutions.get(0).getProblem();
+
         // 문제이름, 저지명 세팅
         SolutionListResponse solutionListResponse = SolutionListResponse.builder()
-                .problemName(solutions.get(0).getProblem().getTitle())
-                .ojName(solutions.get(0).getProblem().getOjName())
+                .problemName(problem.getTitle())
+                .ojName(problem.getOjName())
                 .solutionListSolutions(new ArrayList<>())
                 .build();
 
