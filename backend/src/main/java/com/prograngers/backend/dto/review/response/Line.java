@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Builder
-public class LineResponse {
+public class Line {
     private Integer codeLineNumber;
     private String code;
-    private List<ReviewResponse> reviews = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 }

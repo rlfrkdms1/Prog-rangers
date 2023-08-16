@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SolutionDetailResponseComment {
+public class SolutionDetailComment {
     String nickname;
     Integer orderParent;
     Integer orderChild;

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class SolutionResponse {
+public class SolutionListSolution {
     private String solutionName;
     private AlgorithmConstant algorithm;
     private DataStructureConstant dataStructure;

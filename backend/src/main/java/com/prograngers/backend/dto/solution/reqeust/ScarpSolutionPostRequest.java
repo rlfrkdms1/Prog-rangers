@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ScarpSolutionRequest {
+public class ScarpSolutionPostRequest {
 
     @NotBlank(message = "풀이 제목을 입력해주세요")
     private String title;

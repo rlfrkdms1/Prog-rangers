@@ -1,32 +1,30 @@
 package com.prograngers.backend.dto.review.response;
 
 import com.prograngers.backend.entity.Review;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Builder
+@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 @Setter
-public class ReviewResponse {
-    Long id;
-    String nickname;
-    String photo;
-    String content;
-    List<ReplyResponse> replies = new ArrayList<>();
+@Builder
+public class Reply {
+    private Long id;
+    private String nickname;
+    private String photo;
+    private String content;
 
-    public static ReviewResponse from(Review review){
-
-        ReviewResponse reviewResponse = ReviewResponse.builder()
+    public static Reply from(Review review) {
+        Reply reply = Reply.builder()
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())
                 .content(review.getContent())
-                .replies(new ArrayList<>())
                 .build();
-        return reviewResponse;
+        return reply;
     }
 }

@@ -2,11 +2,11 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.dto.comment.request.CommentReqeust;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionRequest;
-import com.prograngers.backend.dto.solution.response.SolutionUpdateForm;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
@@ -42,8 +42,8 @@ public class SolutionService {
     private final ProblemRepository problemRepository;
 
     @Transactional
-    public Long save(SolutionRequest solutionRequest) {
-        Solution solution = solutionRequest.toEntity();
+    public Long save(SolutionPostRequest solutionPostRequest) {
+        Solution solution = solutionPostRequest.toEntity();
         Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
         if (problem != null) {
             solution.updateProblem(problem);
@@ -76,7 +76,7 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long saveScrap(Long id, ScarpSolutionRequest request) {
+    public Long saveScrap(Long id, ScarpSolutionPostRequest request) {
         Solution scrap = findById(id);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
@@ -107,10 +107,10 @@ public class SolutionService {
         Comment saved = commentRepository.save(comment);
     }
 
-    public SolutionUpdateForm getUpdateForm(Long solutionId) {
+    public SolutionUpdateFormResponse getUpdateForm(Long solutionId) {
         Solution target = findById(solutionId);
-        SolutionUpdateForm solutionUpdateForm = SolutionUpdateForm.toDto(target);
-        return solutionUpdateForm;
+        SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
+        return solutionUpdateFormResponse;
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId) {

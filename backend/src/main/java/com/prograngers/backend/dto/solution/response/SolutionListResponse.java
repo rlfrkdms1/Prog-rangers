@@ -1,6 +1,5 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +18,9 @@ import java.util.List;
 public class SolutionListResponse {
     String problemName;
     JudgeConstant ojName;
-    List<SolutionResponse> solutions;
+    List<SolutionListSolution> solutionListSolutions;
 
-    public static SolutionListResponse createDto(List<Solution> solutions) {
+    public static SolutionListResponse createDto(List<com.prograngers.backend.entity.Solution> solutions) {
         if (solutions.size()==0){
             return null;
         }
@@ -29,12 +28,12 @@ public class SolutionListResponse {
         SolutionListResponse solutionListResponse = SolutionListResponse.builder()
                 .problemName(solutions.get(0).getProblem().getTitle())
                 .ojName(solutions.get(0).getProblem().getOjName())
-                .solutions(new ArrayList<>())
+                .solutionListSolutions(new ArrayList<>())
                 .build();
 
-        for (Solution solution : solutions){
-            solutionListResponse.getSolutions().add(
-                    SolutionResponse.builder()
+        for (com.prograngers.backend.entity.Solution solution : solutions){
+            solutionListResponse.getSolutionListSolutions().add(
+                    SolutionListSolution.builder()
                             .solutionName(solution.getTitle())
                             .algorithm(solution.getAlgorithm())
                             .dataStructure(solution.getDataStructure())

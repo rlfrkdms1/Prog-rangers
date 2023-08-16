@@ -2,11 +2,11 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentReqeust;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionRequest;
-import com.prograngers.backend.dto.solution.response.SolutionUpdateForm;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
@@ -33,12 +33,12 @@ public class SolutionController {
 
     // solution 쓰기
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionRequest solutionRequest) throws URISyntaxException {
+    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionPostRequest solutionPostRequest) throws URISyntaxException {
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Long saveId = solutionService.save(solutionRequest);
+        Long saveId = solutionService.save(solutionPostRequest);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
@@ -48,7 +48,7 @@ public class SolutionController {
     }
 
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionRequest request)
+    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionPostRequest request)
             throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request);
@@ -63,7 +63,7 @@ public class SolutionController {
     // 수정 폼 반환
     @GetMapping("/{solutionId}/update-form")
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId) {
-        SolutionUpdateForm updateForm = solutionService.getUpdateForm(solutionId);
+        SolutionUpdateFormResponse updateForm = solutionService.getUpdateForm(solutionId);
         return ResponseEntity.ok().body(updateForm);
     }
 

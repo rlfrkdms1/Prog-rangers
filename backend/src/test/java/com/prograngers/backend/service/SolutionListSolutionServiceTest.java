@@ -1,8 +1,8 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-class SolutionServiceTest {
+class SolutionListSolutionServiceTest {
 
     @Mock
     private SolutionRepository solutionRepository;
@@ -59,7 +59,7 @@ class SolutionServiceTest {
         given(solutionRepository.save(any())).willReturn(solution);
 
         // when
-        Long saveId = solutionService.save(SolutionRequest.toDto(solution));
+        Long saveId = solutionService.save(SolutionPostRequest.toDto(solution));
 
         // then
         Assertions.assertThat(saveId).isEqualTo(solution.getId());
@@ -73,7 +73,7 @@ class SolutionServiceTest {
         Problem problem = 문제1.getProblem();
         Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
-        ScarpSolutionRequest request = new ScarpSolutionRequest("스크랩풀이", "스크랩풀이설명", LevelConstant.FIVE);
+        ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", LevelConstant.FIVE);
         Solution made = request.toEntity(solution);
 
         when(solutionRepository.save(any())).thenReturn(solution).thenReturn(made);
@@ -81,7 +81,7 @@ class SolutionServiceTest {
                 thenReturn(Optional.ofNullable(solution)).
                 thenReturn(Optional.ofNullable(made));
 
-        solutionService.save(SolutionRequest.toDto(solution));
+        solutionService.save(SolutionPostRequest.toDto(solution));
 
         // when
         Long scrapedId = solutionService.saveScrap(solution.getId(), request);

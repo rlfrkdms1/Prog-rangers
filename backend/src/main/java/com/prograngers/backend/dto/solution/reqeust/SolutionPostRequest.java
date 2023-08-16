@@ -20,7 +20,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SolutionRequest {
+public class SolutionPostRequest {
 
     @NotBlank(message = "문제 제목을 입력해주세요")
     private String problemTitle;
@@ -72,8 +72,8 @@ public class SolutionRequest {
                 .build();
     }
 
-    public static SolutionRequest toDto(Solution solution){
-        return SolutionRequest.builder()
+    public static SolutionPostRequest toDto(Solution solution){
+        return SolutionPostRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())
                 .level(solution.getLevel())

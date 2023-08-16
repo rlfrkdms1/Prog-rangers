@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SolutionDetailResponseSolution {
+public class SolutionDetailSolution {
     Long id;
     String nickname;
     String title;

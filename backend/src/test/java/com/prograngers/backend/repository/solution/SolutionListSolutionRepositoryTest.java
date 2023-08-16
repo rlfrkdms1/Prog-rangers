@@ -53,7 +53,7 @@ import static com.prograngers.backend.fixture.SolutionFixture.풀이9;
 @Slf4j
 @Transactional
 @Import(TestConfig.class)
-class SolutionRepositoryTest {
+class SolutionListSolutionRepositoryTest {
 
     @Autowired
     private SolutionRepository solutionRepository;

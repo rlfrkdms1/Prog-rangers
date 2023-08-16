@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SolutionDetailResponse {
-    private SolutionDetailResponseSolution solution;
-    private List<SolutionDetailResponseComment> comments;
+    private SolutionDetailSolution solution;
+    private List<SolutionDetailComment> comments;
 
     private static final String SCRAP_PATH = "http://localhost:8080/solutions/";
 
@@ -32,7 +32,7 @@ public class SolutionDetailResponse {
             scrapLink = SCRAP_PATH + solution.getScrapId().getId();
         }
 
-        SolutionDetailResponseSolution responseSolution = new SolutionDetailResponseSolution(
+        SolutionDetailSolution responseSolution = new SolutionDetailSolution(
                 solution.getId(),
                 solution.getMember().getNickname(),
                 solution.getTitle(),
@@ -46,11 +46,11 @@ public class SolutionDetailResponse {
                 scrapLink
         );
 
-        List<SolutionDetailResponseComment> commentResponseList = new ArrayList<>();
+        List<SolutionDetailComment> commentResponseList = new ArrayList<>();
 
         for (Comment comment : comments) {
             commentResponseList.add(
-                    new SolutionDetailResponseComment(
+                    new SolutionDetailComment(
                             comment.getMember().getNickname(),
                             comment.getOrderParent(),
                             comment.getOrderChild(),
