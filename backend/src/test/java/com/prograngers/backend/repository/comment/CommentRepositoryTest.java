@@ -3,7 +3,6 @@ package com.prograngers.backend.repository.comment;
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
-import com.prograngers.backend.repository.comment.CommentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +41,8 @@ class CommentRepositoryTest {
     @Test
     void 수정_테스트() {
         // given
-        Comment comment = 댓글1.기본_댓글_생성(null);
-        commentRepository.save(comment);
+        Comment comment = 댓글_저장(댓글1.기본_댓글_생성(null));
+
         comment.updateContent("수정 내용");
 
         // when
@@ -57,16 +56,18 @@ class CommentRepositoryTest {
     @Test
     void 삭제_테스트() {
         // given
-        Comment comment = 댓글1.기본_댓글_생성(null);
-        Comment saved = commentRepository.save(comment);
+        Comment saved = 댓글_저장(댓글1.기본_댓글_생성(null));
 
         // when
-        commentRepository.delete(comment);
+        commentRepository.delete(saved);
 
         // then
-        org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentRepository.findById(saved.getId()).orElseThrow(() -> new CommentNotFoundException()));
-
+        org.junit.jupiter.api.Assertions.assertThrows(
+                CommentNotFoundException.class, () -> commentRepository.findById(saved.getId()).
+                        orElseThrow(() -> new CommentNotFoundException()));
     }
 
-
+    Comment 댓글_저장(Comment comment) {
+        return commentRepository.save(comment);
+    }
 }
