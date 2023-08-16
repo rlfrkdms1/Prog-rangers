@@ -75,14 +75,10 @@ class SolutionRepositoryTest {
         // 비영속 상태
         // id가 자동생성되기 때문에 id값 null
         Solution solution = 풀이1.기본_솔루션_생성(null);
-        log.info("solution.getId() : {}", solution.getId());
 
         // when
         // solution이 영속 상태가 된다. saved랑 solution이랑 같은 트랜잭션 내에서 같은 id값을 가지므로 비교시 같아야 한다
         Solution saved = solutionRepository.save(solution);
-        log.info("solution.getId() : {}", solution.getId());
-        log.info("saved.getId() : {}", saved.getId());
-
 
         //then
         Assertions.assertThat(saved).isEqualTo(solution);
@@ -92,8 +88,7 @@ class SolutionRepositoryTest {
     @Test
     void 수정_테스트() {
         // given
-        Solution solution = 풀이1.기본_솔루션_생성(null);
-        Solution saved = solutionRepository.save(solution);
+        Solution saved = 풀이_저장(풀이1.기본_솔루션_생성(null));
         saved.updateDescription("수정설명");
 
         // when
@@ -107,9 +102,7 @@ class SolutionRepositoryTest {
     @Test
     void 삭제_테스트() {
         // given
-        Solution solution = 풀이1.기본_솔루션_생성(null);
-        Solution saved = solutionRepository.save(solution);
-        log.info("saved id : {}", saved.getId());
+        Solution solution = 풀이_저장(풀이1.기본_솔루션_생성(null));
 
         // when
         solutionRepository.delete(solution);
@@ -126,15 +119,16 @@ class SolutionRepositoryTest {
     void 멤버_이름으로_전부_찾기_테스트() {
 
         // given
-        Member member1 = 길가은1.아이디_값_지정_멤버_생성(null);
-        Member member2 = 길가은2.아이디_값_지정_멤버_생성(null);
-        Problem problem = 문제1.아이디_값_지정_문제_생성(null);
+        Member member1 = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성(null));
+        Member member2 = 멤버_저장( 길가은2.아이디_값_지정_멤버_생성(null));
+        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
-        em.persist(member1);
-        em.persist(member2);
-        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-        Solution solution2 = 풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-        Solution solution3 = 풀이1.일반_솔루션_생성(null, problem, member2, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+//        em.persist(member1);
+//        em.persist(member2);
+        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY));
+        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY));
+        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member2, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY));
+
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
         solutionRepository.save(solution3);
@@ -144,6 +138,7 @@ class SolutionRepositoryTest {
 
         // then
         Assertions.assertThat(result.size()).isEqualTo(2);
+        Assertions.assertThat(result).contains(solution1,solution2).doesNotContain(solution3);
     }
 
     @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -151,20 +146,15 @@ class SolutionRepositoryTest {
     void 풀이_목록_조회_필터링_문제_id() {
         // given
         // 회원
-        Member member = 길가은1.getMember();
-        memberRepository.save(member);
+        Member member = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성(null));
 
         // 문제
-        Problem problem1 = 문제1.아이디_값_지정_문제_생성(null);
-        Problem problem2 = 문제2.아이디_값_지정_문제_생성(null);
-        problemRepository.save(problem1);
-        problemRepository.save(problem2);
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
         // 풀이
-        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE);
-        Solution solution2 = 풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE);
-        solutionRepository.save(solution1);
-        solutionRepository.save(solution2);
+        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -184,25 +174,16 @@ class SolutionRepositoryTest {
     void 풀이_목록_조회_필터링_자료구조_알고리즘() {
         // given
         // 회원
-        Member member = 길가은1.아이디_값_지정_멤버_생성(null);
-        memberRepository.save(member);
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
 
         // 문제
-        Problem problem1 = 문제1.아이디_값_지정_문제_생성(null);
-        problemRepository.save(problem1);
-
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
         // 풀이
-        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE);
-        Solution solution2 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, DFS, QUEUE);
-        Solution solution3 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, ARRAY);
-        Solution solution4 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, DFS, ARRAY);
-
-        solutionRepository.save(solution1);
-        solutionRepository.save(solution2);
-        solutionRepository.save(solution3);
-        solutionRepository.save(solution4);
-
+        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, DFS, QUEUE));
+        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, ARRAY));
+        Solution solution4 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, DFS, ARRAY));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -223,26 +204,15 @@ class SolutionRepositoryTest {
     void 풀이_목록_조회_필터링_언어() {
         // given
         // 회원
-        Member member = 길가은1.아이디_값_지정_멤버_생성(null);
-        memberRepository.save(member);
-
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
         // 문제
-        Problem problem1 = 문제1.아이디_값_지정_문제_생성(null);
-        problemRepository.save(problem1);
-
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
         // 풀이
-        Solution solution1 = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA);
-        Solution solution2 = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA);
-        Solution solution3 = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, CPP);
-        Solution solution4 = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, PYTHON);
-
-
-        solutionRepository.save(solution1);
-        solutionRepository.save(solution2);
-        solutionRepository.save(solution3);
-        solutionRepository.save(solution4);
-
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, CPP));
+        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, PYTHON));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -263,33 +233,21 @@ class SolutionRepositoryTest {
     void 문제_목록_조회_페이지() {
         // given
         // 회원
-        Member member = 길가은1.아이디_값_지정_멤버_생성(null);
-        memberRepository.save(member);
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
 
         // 문제
-        Problem problem1 = 문제1.아이디_값_지정_문제_생성(null);
-        problemRepository.save(problem1);
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
         // 풀이 : solution9 ~ 1 순서로 최신
-        Solution solution1 = 풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE);
-        Solution solution2 = 풀이2.일반_솔루션_생성(null, problem1, member, 0, DFS, QUEUE);
-        Solution solution3 = 풀이3.일반_솔루션_생성(null, problem1, member, 0, BFS, ARRAY);
-        Solution solution4 = 풀이4.일반_솔루션_생성(null, problem1, member, 0, DFS, ARRAY);
-        Solution solution5 = 풀이5.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE);
-        Solution solution6 = 풀이6.일반_솔루션_생성(null, problem1, member, 0, DFS, QUEUE);
-        Solution solution7 = 풀이7.일반_솔루션_생성(null, problem1, member, 0, BFS, ARRAY);
-        Solution solution8 = 풀이8.일반_솔루션_생성(null, problem1, member, 0, DFS, ARRAY);
-        Solution solution9 = 풀이9.일반_솔루션_생성(null, problem1, member, 0, DFS, ARRAY);
-
-        solutionRepository.save(solution1);
-        solutionRepository.save(solution2);
-        solutionRepository.save(solution3);
-        solutionRepository.save(solution4);
-        solutionRepository.save(solution5);
-        solutionRepository.save(solution6);
-        solutionRepository.save(solution7);
-        solutionRepository.save(solution8);
-        solutionRepository.save(solution9);
+        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution2 = 풀이_저장(풀이2.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution3 = 풀이_저장(풀이3.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution4 = 풀이_저장(풀이4.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution5 = 풀이_저장(풀이5.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution6 = 풀이_저장(풀이6.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution7 = 풀이_저장(풀이7.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution8 = 풀이_저장(풀이8.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
+        Solution solution9 = 풀이_저장(풀이9.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
 
         // when
         List<Solution> result1 = solutionRepository.getSolutionList(1, problem1.getId(), null, null, null, "newest");
@@ -309,4 +267,17 @@ class SolutionRepositoryTest {
                 .doesNotContain(solution2,solution3,solution4,solution5,solution6,solution7,solution8,solution9);
         Assertions.assertThat(result4.size()).isEqualTo(0);
     }
+
+    Member 멤버_저장(Member member) {
+        return memberRepository.save(member);
+    }
+
+    Problem 문제_저장(Problem problem) {
+        return problemRepository.save(problem);
+    }
+
+    Solution 풀이_저장(Solution solution) {
+        return solutionRepository.save(solution);
+    }
+
 }
