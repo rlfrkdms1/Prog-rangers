@@ -1,7 +1,7 @@
 package com.prograngers.backend.service.auth;
 
 import com.prograngers.backend.dto.response.auth.GoogleTokenResponse;
-import com.prograngers.backend.dto.response.auth.KakaoTokenResponse;
+import com.prograngers.backend.dto.response.auth.GoogleUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static com.prograngers.backend.service.auth.MultiValueMapConverter.convertToMultiValueMap;
+import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
 public class GoogleOauth {
 
     private final static String TOKEN_URI = "https://oauth2.googleapis.com/token";
+    private final static String USER_INFO_URI = "https://www.googleapis.com/oauth2/v2/userinfo";
     private final String grantType;
     private final String clientId;
     private final String redirectUri;
@@ -39,6 +41,15 @@ public class GoogleOauth {
                 .bodyValue(convertToMultiValueMap(grantType, clientId, redirectUri, code, clientSecret))
                 .retrieve()
                 .bodyToMono(GoogleTokenResponse.class)
+                .block();
+    }
+
+    public GoogleUserInfoResponse googleGetUserInfo(String accessToken) {
+        return webClient.get()
+                .uri(USER_INFO_URI)
+                .header(HttpHeaders.AUTHORIZATION, String.format(BEARER_FORMAT, accessToken))
+                .retrieve()
+                .bodyToMono(GoogleUserInfoResponse.class)
                 .block();
     }
 }
