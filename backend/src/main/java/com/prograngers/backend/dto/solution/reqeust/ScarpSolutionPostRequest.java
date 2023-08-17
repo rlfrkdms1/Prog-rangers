@@ -31,7 +31,7 @@ public class ScarpSolutionPostRequest {
                 .problem(scrap.getProblem()).date(LocalDate.now()).member(null) //로그인정보로 member를 알도록 수정해야함
                 .code(scrap.getCode()).
                 scraps(0).
-                scrapId(scrap).
+                scrapSolution(scrap).
                 algorithm(scrap.getAlgorithm()).
                 dataStructure(scrap.getDataStructure())
                 .build();

@@ -61,7 +61,7 @@ public class Solution {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
     @Nullable
-    private Solution scrapId;
+    private Solution scrapSolution;
 
     private LocalDate date;
 
@@ -122,7 +122,7 @@ public class Solution {
 
     public void updateScrapId(Solution solution) {
         if (solution != null) {
-            this.scrapId = solution;
+            this.scrapSolution = solution;
         }
     }
 

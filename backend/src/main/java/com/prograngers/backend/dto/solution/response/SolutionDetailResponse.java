@@ -28,8 +28,8 @@ public class SolutionDetailResponse {
 
         // 스크랩 한 풀이면 스크랩 한 풀이의 링크 찾기
         String scrapLink = null;
-        if (solution.getScrapId() != null) {
-            scrapLink = SCRAP_PATH + solution.getScrapId().getId();
+        if (solution.getScrapSolution() != null) {
+            scrapLink = SCRAP_PATH + solution.getScrapSolution().getId();
         }
 
         SolutionDetailSolution responseSolution = new SolutionDetailSolution(
