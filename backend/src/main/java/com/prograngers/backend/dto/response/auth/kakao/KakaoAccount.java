@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto.response.auth;
+package com.prograngers.backend.dto.response.auth.kakao;
 
 import lombok.Data;
 
