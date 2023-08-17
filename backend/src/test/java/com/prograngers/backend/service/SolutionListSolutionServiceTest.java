@@ -84,7 +84,7 @@ class SolutionListSolutionServiceTest {
         solutionService.save(SolutionPostRequest.toDto(solution), member.getId());
 
         // when
-        Long scrapedId = solutionService.saveScrap(solution.getId(), request);
+        Long scrapedId = solutionService.saveScrap(solution.getId(), request,member.getId());
 
         // then
         Assertions.assertThat(solutionService.findById(scrapedId).getTitle()).isEqualTo("스크랩풀이");

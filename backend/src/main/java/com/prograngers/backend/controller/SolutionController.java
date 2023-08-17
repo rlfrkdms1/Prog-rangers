@@ -51,11 +51,12 @@ public class SolutionController {
     }
 
     // scrap해서 생성
+    @Login
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionPostRequest request)
+    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody ScarpSolutionPostRequest request)
             throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
-        Long saveId = solutionService.saveScrap(scrapId, request);
+        Long saveId = solutionService.saveScrap(scrapId, request, memberId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
