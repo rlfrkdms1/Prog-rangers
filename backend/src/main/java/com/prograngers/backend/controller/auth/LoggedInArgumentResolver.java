@@ -1,5 +1,6 @@
-package com.prograngers.backend;
+package com.prograngers.backend.controller.auth;
 
+import com.prograngers.backend.service.auth.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;

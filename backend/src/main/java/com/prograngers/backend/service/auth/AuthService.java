@@ -1,15 +1,14 @@
-package com.prograngers.backend.service;
+package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.AuthResult;
-import com.prograngers.backend.Encrypt;
-import com.prograngers.backend.JwtTokenProvider;
-import com.prograngers.backend.dto.LoginRequest;
-import com.prograngers.backend.RefreshToken;
+import com.prograngers.backend.dto.response.auth.KakaoTokenResponse;
+import com.prograngers.backend.dto.response.auth.KakaoUserInfoResponse;
+import com.prograngers.backend.dto.result.AuthResult;
+import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.repository.RefreshTokenRepository;
-import com.prograngers.backend.dto.SignUpRequest;
+import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.Member;
-import com.prograngers.backend.exception.InvalidPasswordException;
-import com.prograngers.backend.exception.RefreshTokenNotFoundException;
+import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
+import com.prograngers.backend.exception.unauthorization.RefreshTokenNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +21,13 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class AuthService {
 
     private final MemberRepository memberRepository;
     private final Encrypt encrypt;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final KakaoOauth kakaoOauth;
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
@@ -38,14 +38,11 @@ public class MemberService {
         return issueToken(member.getId());
     }
 
+
     private AuthResult issueToken(Long memberId) {
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
         //refresh token 발급, 저장, 쿠키 생성
-        RefreshToken refreshToken = RefreshToken.builder()
-                .memberId(memberId)
-                .refreshToken(UUID.randomUUID().toString())
-                .build();
-        refreshTokenRepository.save(refreshToken);
+        RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder().memberId(memberId).refreshToken(UUID.randomUUID().toString()).build());
         return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
     }
 
@@ -64,10 +61,11 @@ public class MemberService {
 
     public void validPassword(String savedPassword, String inputPassword) {
         if (!encrypt.decryptAES256(savedPassword).equals(inputPassword)) {
-            throw new InvalidPasswordException();
+            throw new IncorrectPasswordException();
         }
     }
 
+    @Transactional
     public AuthResult reissue(String refreshToken) {
         RefreshToken findRefreshToken = validRefreshToken(refreshToken);
         Long memberId = findRefreshToken.getMemberId();
@@ -78,5 +76,14 @@ public class MemberService {
     public RefreshToken validRefreshToken(String refreshToken) {
         return refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(RefreshTokenNotFoundException::new);
+    }
+
+    @Transactional
+    public AuthResult kakaoLogin(String code) {
+        KakaoTokenResponse kakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
+        KakaoUserInfoResponse kakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(kakaoTokenResponse.getAccess_token());
+        Member member = memberRepository.findBySocialId(kakaoUserInfoResponse.getId())
+                .orElseGet(() -> memberRepository.save(kakaoUserInfoResponse.toMember()));
+        return issueToken(member.getId());
     }
 }

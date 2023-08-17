@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
-public class ExControllerAdvice {
+public class GlobalExceptionHandler {
 
     // Valid를 통과하지 못할 경우 ErrorResponse dto로 해당하는 에러 반환
     @ExceptionHandler(MethodArgumentNotValidException.class)

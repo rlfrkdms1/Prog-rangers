@@ -1,7 +1,8 @@
-package com.prograngers.backend;
+package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.exception.ExpiredTokenException;
-import com.prograngers.backend.exception.NotExistTokenException;
+import com.prograngers.backend.service.auth.JwtTokenProvider;
+import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
+import com.prograngers.backend.exception.unauthorization.NotExistTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
