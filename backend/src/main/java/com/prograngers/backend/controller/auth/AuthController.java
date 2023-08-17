@@ -55,6 +55,15 @@ public class AuthController {
                 .body(authResult.getAccessToken());
     }
 
+    @GetMapping("/login/google")
+    public ResponseEntity<String> googleLogin(@RequestParam String code) {
+        AuthResult authResult = authService.googleLogin(code);
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(authResult.getAccessToken());
+    }
+
     @PostMapping("/reissue")
     public ResponseEntity<String> reissue(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
         if (refreshToken == null) {
