@@ -28,8 +28,6 @@ import java.net.URISyntaxException;
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;
-    private final CommentService commentService;
-
     private final String REDIRECT_PATH = "http://localhost:8080/solutions";
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
@@ -76,7 +74,7 @@ public class SolutionController {
     // 수정 요청
     @Login
     @PatchMapping("/{solutionId}")
-    public ResponseEntity<?> update(@PathVariable Long solutionId,  @LoggedInMember Long memberId,
+    public ResponseEntity<?> update(@PathVariable Long solutionId, @LoggedInMember Long memberId,
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
         // solutionService로 update한다
@@ -110,45 +108,5 @@ public class SolutionController {
     public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId) {
         SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId);
         return ResponseEntity.ok().body(solutionDetailResponse);
-    }
-
-    // 댓글 작성
-    @PostMapping("/{solutionId}/comments")
-    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentReqeust commentReqeust)
-            throws URISyntaxException {
-
-        solutionService.addComment(solutionId, commentReqeust);
-
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
-    }
-
-    // 댓글 수정
-    @PatchMapping("comments/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @RequestBody CommentPatchRequest commentPatchRequest) throws URISyntaxException {
-
-        Long solutionId = commentService.updateComment(commentId, commentPatchRequest);
-
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
-    }
-
-    // 댓글 삭제
-    @DeleteMapping("comments/{solutionId}/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId) throws URISyntaxException {
-        commentService.deleteComment(commentId);
-
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 }

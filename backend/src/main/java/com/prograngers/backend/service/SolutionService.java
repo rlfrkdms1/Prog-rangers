@@ -48,6 +48,8 @@ public class SolutionService {
 
     private final MemberRepository memberRepository;
 
+
+
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
@@ -104,25 +106,6 @@ public class SolutionService {
         solution.updateMember(member);
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
-    }
-
-    @Transactional
-    public void addComment(Long solutionId, CommentReqeust commentReqeust) {
-        Solution solution = findById(solutionId);
-
-        //가상 Member 생성
-        Member member = Member.builder().name("멤버이름").nickname("닉네임").build();
-
-        Comment comment = Comment.builder().
-                member(member).
-                solution(solution).
-                mention(commentReqeust.getMention()).
-                content(commentReqeust.getContent()).
-                date(LocalDate.now()).parentId(commentReqeust.getParentId()).
-                groupNumber(commentReqeust.getGroupNumber()).fixed(false).
-                build();
-
-        Comment saved = commentRepository.save(comment);
     }
 
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
