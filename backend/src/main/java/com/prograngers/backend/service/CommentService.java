@@ -41,6 +41,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = findById(commentId);
-        commentRepository.delete(comment);
+        comment.updateContent("삭제된 댓글입니다");
+        commentRepository.save(comment);
     }
 }
