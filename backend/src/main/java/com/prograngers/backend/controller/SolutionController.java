@@ -47,6 +47,7 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+    // scrap해서 생성
     @PostMapping("/new-form/{scrapId}")
     public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionPostRequest request)
             throws URISyntaxException {
@@ -104,7 +105,6 @@ public class SolutionController {
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
 
-
     // 댓글 작성
     @PostMapping("/{solutionId}/comments")
     public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentReqeust commentReqeust)
@@ -133,6 +133,7 @@ public class SolutionController {
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+    // 댓글 삭제
     @DeleteMapping("comments/{solutionId}/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId) throws URISyntaxException {
         commentService.deleteComment(commentId);
