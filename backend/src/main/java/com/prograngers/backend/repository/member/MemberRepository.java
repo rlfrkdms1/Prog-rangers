@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.member;
 
 import com.prograngers.backend.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

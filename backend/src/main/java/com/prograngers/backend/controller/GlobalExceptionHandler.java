@@ -1,6 +1,6 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.ErrorResponse;
+import com.prograngers.backend.dto.error.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
@@ -11,7 +11,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,8 @@ public class GlobalExceptionHandler {
         List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
             ErrorResponse errorResponse = ErrorResponse.builder()
-                    .errocode(ErrorCode.INVALID_SOLUTION_BODY)
-                    .descriptions(error.getDefaultMessage())
+                    .errorCode(ErrorCode.INVALID_REQUEST_BODY)
+                    .description(error.getDefaultMessage())
                     .build();
             errorList.add(errorResponse);
         }

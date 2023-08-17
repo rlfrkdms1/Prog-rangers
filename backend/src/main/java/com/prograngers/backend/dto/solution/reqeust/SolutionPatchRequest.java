@@ -1,4 +1,4 @@
-package com.prograngers.backend.dto;
+package com.prograngers.backend.dto.solution.reqeust;
 
 import com.prograngers.backend.entity.*;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
@@ -14,14 +14,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SolutionPatchRequest {
-    @NotBlank(message = "문제 제목을 입력해주세요")
+    @NotBlank(message = "풀이 제목을 입력해주세요")
     private String title;
     private AlgorithmConstant algorithmName;
     private DataStructureConstant dataStructureName;
-    @NotBlank(message = "문제 소스 코드를 입력해 주세요")
+    @NotBlank(message = "소스 코드를 입력해 주세요")
     private String code;
 
-    @NotBlank(message = "풀이 설명을 입력해 주세요")
+    @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
 
     public Solution toEntity(Solution target) {
