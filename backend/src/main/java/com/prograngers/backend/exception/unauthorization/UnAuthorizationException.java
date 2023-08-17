@@ -6,7 +6,7 @@ import com.prograngers.backend.exception.ErrorCode;
 import static com.prograngers.backend.exception.ErrorCode.AUTHORIZATION_FAILED;
 
 public class UnAuthorizationException extends CustomException {
-    public UnAuthorizationException(ErrorCode errorCode, String message) {
+    public UnAuthorizationException() {
         super(AUTHORIZATION_FAILED, "권한이 없습니다");
     }
 }
