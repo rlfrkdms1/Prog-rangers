@@ -105,7 +105,7 @@ class SolutionListSolutionServiceTest {
 
         // when
         SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2", AlgorithmConstant.BFS, DataStructureConstant.STACK, "풀이코드2", "풀이설명2");
-        Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest);
+        Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest, member.getId());
 
         // then
         Assertions.assertThat(solutionRepository.findById(updatedId).orElse(null).getTitle())
@@ -126,7 +126,7 @@ class SolutionListSolutionServiceTest {
         solutionRepository.save(solution);
 
         // when
-        solutionService.delete(solution.getId());
+        solutionService.delete(solution.getId(), member.getId());
 
         verify(solutionRepository).delete(solution);
     }

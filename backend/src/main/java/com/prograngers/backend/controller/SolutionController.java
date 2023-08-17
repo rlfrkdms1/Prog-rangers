@@ -74,12 +74,13 @@ public class SolutionController {
     }
 
     // 수정 요청
+    @Login
     @PatchMapping("/{solutionId}")
-    public ResponseEntity<?> update(@PathVariable Long solutionId,
+    public ResponseEntity<?> update(@PathVariable Long solutionId,  @LoggedInMember Long memberId,
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
         // solutionService로 update한다
-        Long updateId = solutionService.update(solutionId, solutionPatchRequest);
+        Long updateId = solutionService.update(solutionId, solutionPatchRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + updateId);
@@ -89,11 +90,12 @@ public class SolutionController {
     }
 
     // 삭제 요청
+    @Login
     @DeleteMapping("/{solutionId}")
-    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException {
+    public ResponseEntity<?> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId) throws URISyntaxException {
 
         // solutionService로 delete한다
-        solutionService.delete(solutionId);
+        solutionService.delete(solutionId, memberId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH);

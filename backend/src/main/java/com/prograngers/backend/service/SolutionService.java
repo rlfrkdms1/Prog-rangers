@@ -16,6 +16,7 @@ import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -61,21 +62,31 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long update(Long solutionId, SolutionPatchRequest request) {
+    public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        if (target.getId()!=member.getId()){
+            throw new MemberUnAuthorizedException();
+        }
         Solution solution = request.toEntity(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
     }
 
     @Transactional
-    public void delete(Long solutionId) throws SolutionNotFoundException {
+    public void delete(Long solutionId, Long memberId) throws SolutionNotFoundException {
         Solution target = findById(solutionId);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        if (target.getId()!=member.getId()){
+            throw new MemberUnAuthorizedException();
+        }
+
         List<Comment> comments = commentRepository.findAllBySolution(target);
         for (Comment comment : comments) {
             comment.updateSolution(null);
             commentRepository.delete(comment);
         }
+
         solutionRepository.delete(target);
     }
 
@@ -119,7 +130,7 @@ public class SolutionService {
         // 로그인한 멤버랑 작성자랑 일치하지 않을 경우 UnAuthorizationException을 던진다
         Long targetMemberId = target.getMember().getId();
         if (targetMemberId != memberId) {
-            throw new UnAuthorizationException();
+            throw new MemberUnAuthorizedException();
         }
 
         SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
