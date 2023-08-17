@@ -1,28 +1,12 @@
-CREATE TABLE IF NOT EXISTS `convenience` (
-    `id`            bigint       NOT NULL AUTO_INCREMENT,
-    `is_free`       TINYINT(1)   NOT NULL,
-    `price`         int          NOT NULL,
-    `usage`         varchar(255) NOT NULL,
-    `room_id`       bigint,
-    `studycafe_id`  bigint,
-    `name`          varchar(255) NOT NULL,
-    PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB
-    AUTO_INCREMENT = 1
-    DEFAULT CHARSET = utf8mb4
-    COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `comment` (
     `id`           bigint       NOT NULL AUTO_INCREMENT,
-    `date`         date,
-    `fixed`        TINYINT(1)   NOT NULL, -- is_fixed는 별로 ?
-    `content`      varchar(255),
+    `create_date`  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    `is_fixed`     TINYINT(1)            DEFAULT '0',
+    `content`      varchar(255) NOT NULL,
     `mention`      varchar(255),
-    `group_number` int,
-    `order_child`  int,
-    `order_parent` int,
-    `member_id`    bigint,
     `parent_id`    bigint,
-    `solution_id`  bigint,
+    `member_id`    bigint       NOT NULL,
+    `solution_id`  bigint       NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
