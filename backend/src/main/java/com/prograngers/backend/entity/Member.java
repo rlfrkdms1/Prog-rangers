@@ -2,6 +2,8 @@ package com.prograngers.backend.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,6 +24,10 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long socialId;
+
+    @Enumerated(EnumType.STRING)
+    private MemberType type;
     private String name;
 
     private String nickname;
@@ -37,6 +43,8 @@ public class Member {
     private String password;
 
     private String phoneNumber;
+
+    private String photo;
 
     public void updateName(String name) {
         if (name != null) {
@@ -83,6 +91,11 @@ public class Member {
     public void encodePassword(String encodedPassword) {
         if (encodedPassword != null) {
             this.password = encodedPassword;
+        }
+    }
+    public void updatePhoto(String photo){
+        if (photo!=null){
+            this.photo = photo;
         }
     }
 
