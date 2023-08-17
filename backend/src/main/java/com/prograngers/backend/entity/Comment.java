@@ -41,8 +41,6 @@ public class Comment {
 
     private Long parentId;
 
-    private Integer groupNumber;
-
     private boolean fixed;
 
     public void updateMention(String mention) {
