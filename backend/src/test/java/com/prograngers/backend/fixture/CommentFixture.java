@@ -10,7 +10,8 @@ public enum
 CommentFixture {
     댓글1("댓글내용1"),
     댓글2("댓글내용2"),
-    댓글3("댓글내용3");
+    댓글3("댓글내용3"),
+    삭제된_댓글("삭제된 댓글입니다");
     private final String content;
 
     public Comment.CommentBuilder 기본_빌더_생성() {
