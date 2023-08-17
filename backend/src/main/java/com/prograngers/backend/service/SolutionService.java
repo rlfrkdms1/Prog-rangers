@@ -16,6 +16,7 @@ import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
@@ -48,7 +49,7 @@ public class SolutionService {
 
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(()->new MemberNotFoundException());
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         Solution solution = solutionPostRequest.toEntity();
         solution.updateMember(member);
         Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
@@ -113,8 +114,14 @@ public class SolutionService {
         Comment saved = commentRepository.save(comment);
     }
 
-    public SolutionUpdateFormResponse getUpdateForm(Long solutionId) {
+    public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findById(solutionId);
+        // 로그인한 멤버랑 작성자랑 일치하지 않을 경우 UnAuthorizationException을 던진다
+        Long targetMemberId = target.getMember().getId();
+        if (targetMemberId != memberId) {
+            throw new UnAuthorizationException();
+        }
+
         SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
         return solutionUpdateFormResponse;
     }

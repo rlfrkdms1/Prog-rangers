@@ -66,9 +66,10 @@ public class SolutionController {
     }
 
     // 수정 폼 반환
+    @Login
     @GetMapping("/{solutionId}/update-form")
-    public ResponseEntity<?> updateForm(@PathVariable Long solutionId) {
-        SolutionUpdateFormResponse updateForm = solutionService.getUpdateForm(solutionId);
+    public ResponseEntity<?> updateForm(@PathVariable Long solutionId, @LoggedInMember Long memberId) {
+        SolutionUpdateFormResponse updateForm = solutionService.getUpdateForm(solutionId, memberId);
         return ResponseEntity.ok().body(updateForm);
     }
 
