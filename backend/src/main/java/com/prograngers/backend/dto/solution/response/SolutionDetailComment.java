@@ -12,8 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SolutionDetailComment {
     String nickname;
-    Integer orderParent;
-    Integer orderChild;
     String content;
     String mention;
 }

@@ -97,7 +97,6 @@ public class SolutionService {
         Comment comment = Comment.builder().
                 member(member).
                 solution(solution).
-                orderParent(commentReqeust.getOrderParent()).
                 mention(commentReqeust.getMention()).
                 content(commentReqeust.getContent()).
                 date(LocalDate.now()).parentId(commentReqeust.getParentId()).
