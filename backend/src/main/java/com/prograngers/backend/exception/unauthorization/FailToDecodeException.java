@@ -1,9 +1,6 @@
-package com.prograngers.backend.dto;
-
-import com.prograngers.backend.exception.UnAuthorizationException;
+package com.prograngers.backend.exception.unauthorization;
 
 import static com.prograngers.backend.exception.ErrorCode.FAIL_TO_DECODED;
-import static com.prograngers.backend.exception.ErrorCode.FAIL_TO_ENCODED;
 
 public class FailToDecodeException extends UnAuthorizationException {
     public FailToDecodeException() {

@@ -1,7 +1,7 @@
-package com.prograngers.backend;
+package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.dto.FailToDecodeException;
-import com.prograngers.backend.dto.FailToEncodeException;
+import com.prograngers.backend.exception.unauthorization.FailToDecodeException;
+import com.prograngers.backend.exception.unauthorization.FailToEncodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

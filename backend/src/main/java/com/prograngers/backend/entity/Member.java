@@ -22,6 +22,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long socialId;
+
+    private MemberType type;
     private String name;
 
     private String nickname;

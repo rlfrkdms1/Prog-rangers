@@ -1,4 +1,4 @@
-package com.prograngers.backend;
+package com.prograngers.backend.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
