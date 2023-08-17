@@ -14,8 +14,10 @@ import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
+import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -41,9 +44,13 @@ public class SolutionService {
 
     private final ProblemRepository problemRepository;
 
+    private final MemberRepository memberRepository;
+
     @Transactional
-    public Long save(SolutionPostRequest solutionPostRequest) {
+    public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new MemberNotFoundException());
         Solution solution = solutionPostRequest.toEntity();
+        solution.updateMember(member);
         Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
         if (problem != null) {
             solution.updateProblem(problem);

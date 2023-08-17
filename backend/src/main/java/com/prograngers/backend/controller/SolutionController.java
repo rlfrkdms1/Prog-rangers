@@ -1,5 +1,7 @@
 package com.prograngers.backend.controller;
 
+import com.prograngers.backend.controller.auth.LoggedInMember;
+import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
@@ -32,13 +34,14 @@ public class SolutionController {
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // solution 쓰기
+    @Login
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionPostRequest solutionPostRequest) throws URISyntaxException {
+    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest) throws URISyntaxException {
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Long saveId = solutionService.save(solutionPostRequest);
+        Long saveId = solutionService.save(solutionPostRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);

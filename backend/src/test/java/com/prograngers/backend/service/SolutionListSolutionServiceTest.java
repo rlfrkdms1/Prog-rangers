@@ -59,7 +59,7 @@ class SolutionListSolutionServiceTest {
         given(solutionRepository.save(any())).willReturn(solution);
 
         // when
-        Long saveId = solutionService.save(SolutionPostRequest.toDto(solution));
+        Long saveId = solutionService.save(SolutionPostRequest.toDto(solution), member.getId());
 
         // then
         Assertions.assertThat(saveId).isEqualTo(solution.getId());
@@ -81,7 +81,7 @@ class SolutionListSolutionServiceTest {
                 thenReturn(Optional.ofNullable(solution)).
                 thenReturn(Optional.ofNullable(made));
 
-        solutionService.save(SolutionPostRequest.toDto(solution));
+        solutionService.save(SolutionPostRequest.toDto(solution), member.getId());
 
         // when
         Long scrapedId = solutionService.saveScrap(solution.getId(), request);
