@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity;
 
+import com.prograngers.backend.entity.member.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

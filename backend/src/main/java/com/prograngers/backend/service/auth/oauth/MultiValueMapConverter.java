@@ -1,4 +1,4 @@
-package com.prograngers.backend.service.auth;
+package com.prograngers.backend.service.auth.oauth;
 
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
