@@ -20,7 +20,17 @@ public class SolutionDetailResponse {
 
     private static final String SCRAP_PATH = "http://localhost:8080/solutions/";
 
-    public static SolutionDetailResponse toEntity(Solution solution, List<Comment> comments) {
+    private boolean scraped;
+
+    private boolean pushedLike;
+
+    private int scraps;
+    private int likes;
+
+    public static SolutionDetailResponse toEntity(Solution solution, List<Comment> comments,
+                                                  boolean scraped, int scrapCount,
+                                                  boolean pushedLike, int likeCount
+                                                  ) {
 
 
         SolutionDetailResponse response = new SolutionDetailResponse();
@@ -41,9 +51,11 @@ public class SolutionDetailResponse {
                 solution.getDataStructure(),
                 solution.getCode(),
                 solution.getDescription(),
-                solution.getLikes().size(),
-                solution.getScraps(),
-                scrapLink
+                likeCount,
+                scrapCount,
+                scrapLink,
+                pushedLike,
+                scraped
         );
 
         List<SolutionDetailComment> commentResponseList = new ArrayList<>();
