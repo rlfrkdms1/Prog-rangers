@@ -38,6 +38,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         Long count = jpaQueryFactory
                 .select(solution.count())
                 .from(solution)
+                .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .fetchOne();
 
         PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
