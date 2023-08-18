@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
 CREATE TABLE IF NOT EXISTS `likes` (
     `id`          bigint NOT NULL AUTO_INCREMENT,
-    `member_id`   bigint,
-    `solution_id` bigint,
+    `member_id`   bigint NOT NULL,
+    `solution_id` bigint NOT NULL,
      PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -25,13 +25,12 @@ CREATE TABLE IF NOT EXISTS `likes` (
 
 CREATE TABLE IF NOT EXISTS `member` (
     `id`           bigint       NOT NULL AUTO_INCREMENT,
+    `social_id`    bigint,
     `email`        varchar(255),
     `github`       varchar(255),
     `introduction` varchar(255),
-    `name`         varchar(255),
-    `nickname`     varchar(255),
+    `nickname`     varchar(255) NOT NULL, --unique
     `password`     varchar(255),
-    `phone_number` varchar(255),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -39,10 +38,10 @@ CREATE TABLE IF NOT EXISTS `member` (
   COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS `problem` (
-    `id`           bigint       NOT NULL AUTO_INCREMENT,
-    `link`    varchar(255),
-    `oj_name` varchar(255),
-    `title`   varchar(255),
+    `id`      bigint       NOT NULL AUTO_INCREMENT,
+    `link`    varchar(255) NOT NULL, --unique
+    `oj_name` varchar(255) NOT NULL,
+    `title`   varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -51,15 +50,13 @@ CREATE TABLE IF NOT EXISTS `problem` (
 
 CREATE TABLE IF NOT EXISTS `review` (
     `id`               bigint       NOT NULL AUTO_INCREMENT,
-    `code_line_number` int,
-    `date`             date,
-    `order_child`      int,
-    `order_parent`     int,
-    `content`          varchar(255),
+    `code_line_number` int          NOT NULL,
+    `create_date`      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    `content`          varchar(255) NOT NULL,
     `mention`          varchar(255),
-    `member_id`        bigint,
     `parent_id`        bigint,
-    `solution_id`      bigint,
+    `member_id`        bigint       NOT NULL,
+    `solution_id`      bigint       NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -68,18 +65,18 @@ CREATE TABLE IF NOT EXISTS `review` (
 
 CREATE TABLE IF NOT EXISTS `solution` (
     `id`                bigint       NOT NULL AUTO_INCREMENT,
-    `date`              date,
+    `create_date`       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     `is_public`         TINYINT(1)   NOT NULL,
-    `scraps`            int,
-    `algorithm_id`      bigint,
-    `data_structure_id` bigint,
-    `member_id`         bigint,
-    `problem_id`        bigint,
+    `scraps`            int          DEFAULT '0',
+    `code`              varchar(255) NOT NULL,
+    `description`       varchar(255) NOT NULL,
+    `level`             int          NOT NULL,
+    `title`             varchar(255) NOT NULL,
+    `algorithm`         varchar(255),
+    `data_structure`    varchar(255),
+    `member_id`         bigint       NOT NULL,
+    `problem_id`        bigint       NOT NULL,
     `scrap_id`          bigint,
-    `code`              varchar(255),
-    `description`       varchar(255),
-    `level`             varchar(255),
-    `title`             varchar(255),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
