@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
@@ -25,18 +26,14 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="solution_id")
+    @JoinColumn(name = "solution_id")
     private Solution solution;
 
     private Integer codeLineNumber;
-
-    private Integer orderParent;
-
-    private Integer orderChild;
 
     private Long parentId;
 
@@ -52,9 +49,9 @@ public class Review {
         }
     }
 
-        public void updateContent(String content){
-            if (content!=null){
-                this.content = content;
+    public void updateContent(String content) {
+        if (content != null) {
+            this.content = content;
         }
     }
 

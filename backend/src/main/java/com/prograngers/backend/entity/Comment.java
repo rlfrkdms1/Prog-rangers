@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
@@ -26,14 +27,12 @@ public class Comment {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="solution_id")
+    @JoinColumn(name = "solution_id")
     private Solution solution;
-    private Integer orderParent;
-    private Integer orderChild;
     private String mention;
 
     private String content;
@@ -46,15 +45,15 @@ public class Comment {
 
     private boolean fixed;
 
-    public void updateMention(String mention){
-        if (mention!=null){
+    public void updateMention(String mention) {
+        if (mention != null) {
             this.mention = mention;
             this.fixed = true;
         }
     }
 
-    public void updateContent(String content){
-        if (content!=null){
+    public void updateContent(String content) {
+        if (content != null) {
             this.content = content;
             this.fixed = true;
         }

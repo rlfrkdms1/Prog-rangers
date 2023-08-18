@@ -52,8 +52,6 @@ public class SolutionDetailResponse {
             commentResponseList.add(
                     new SolutionDetailComment(
                             comment.getMember().getNickname(),
-                            comment.getOrderParent(),
-                            comment.getOrderChild(),
                             comment.getContent(),
                             comment.getMention()
                     )
