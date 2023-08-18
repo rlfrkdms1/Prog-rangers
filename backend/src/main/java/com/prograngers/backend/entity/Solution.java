@@ -107,14 +107,6 @@ public class Solution {
         }
     }
 
-    public void upScraps() {
-        this.scraps += 1;
-    }
-
-    public void downScraps() {
-        this.scraps -= 1;
-    }
-
     public void updateScrapId(Solution solution) {
         if (solution != null) {
             this.scrapSolution = solution;
