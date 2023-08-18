@@ -25,6 +25,7 @@ import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,13 +129,13 @@ public class SolutionService {
     }
 
     public SolutionListResponse getSolutionList(
-            int page,
+            Pageable pageable,
             Long problemId,
             LanguageConstant language,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
             String sortBy) {
-        List<Solution> solutions = solutionRepository.getSolutionList(page, problemId, language, algorithm, dataStructure, sortBy);
+        List<Solution> solutions = solutionRepository.getSolutionList(pageable, problemId, language, algorithm, dataStructure, sortBy);
 
         return SolutionListResponse.from(solutions);
     }
