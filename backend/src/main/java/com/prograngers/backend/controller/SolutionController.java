@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/solutions")
+@RequestMapping("prog-rangers/solutions")
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;

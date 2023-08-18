@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/problems")
+@RequestMapping("prog-rangers/problems")
 @Slf4j
 public class ProblemController {
 
