@@ -15,6 +15,7 @@ import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,13 +132,14 @@ public class SolutionService {
     }
 
     public SolutionListResponse getSolutionList(
-            Pageable pageable,
+            @PageableDefault(size = 4) Pageable pageable,
             Long problemId,
             LanguageConstant language,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
             String sortBy) {
-        PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problemId, language, algorithm, dataStructure, sortBy);
+        Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+        PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
 
         return SolutionListResponse.from(solutions);
     }
