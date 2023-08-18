@@ -1,13 +1,13 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
@@ -18,7 +18,6 @@ import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
-import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
@@ -28,13 +27,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+
 
 
 @RequiredArgsConstructor
@@ -51,6 +48,9 @@ public class SolutionService {
     private final ProblemRepository problemRepository;
 
     private final MemberRepository memberRepository;
+
+    private final LikesRepository likesRepository;
+
 
 
 
@@ -124,10 +124,29 @@ public class SolutionService {
         return solutionUpdateFormResponse;
     }
 
-    public SolutionDetailResponse getSolutionDetail(Long solutionId) {
+    public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
         List<Comment> comments = commentRepository.findAllBySolution(solution);
-        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments);
+        List<Likes> likes = likesRepository.findAllBySolution(solution);
+        boolean pushedLike = false;
+        int likeCount = 0;
+        for (Likes like : likes){
+            if (like.getMember().getId().equals(memberId)){
+                pushedLike = true;
+            }
+            likeCount += 1;
+        }
+        boolean scraped = false;
+        int scrapCount = 0;
+        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolutiuon(solution);
+        for (Solution scrapSolution : scrapSolutions){
+            if (scrapSolution.getMember().getId().equals(memberId)){
+                scraped = true;
+            }
+            scrapCount+=1;
+        }
+
+        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments,scraped,scrapCount,pushedLike,likeCount);
         return solutionDetailResponse;
     }
 
