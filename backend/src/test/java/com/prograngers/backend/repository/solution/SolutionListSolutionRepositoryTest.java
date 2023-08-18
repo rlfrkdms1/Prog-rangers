@@ -1,19 +1,14 @@
 package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.TestConfig;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.LanguageConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
-import com.prograngers.backend.repository.review.QueryDslReviewRepositoryImpl;
-import com.prograngers.backend.repository.solution.SolutionRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -25,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
@@ -36,8 +30,6 @@ import static com.prograngers.backend.entity.constants.LanguageConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은2;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
-import static com.prograngers.backend.fixture.ProblemFixture.문제2;
-import static com.prograngers.backend.fixture.ProblemFixture.문제3;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이3;

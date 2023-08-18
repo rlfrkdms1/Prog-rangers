@@ -8,7 +8,7 @@ import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
@@ -92,7 +92,7 @@ public class SolutionService {
         Solution solution = findById(solutionId);
 
         //가상 Member 생성
-        Member member = Member.builder().name("멤버이름").nickname("닉네임").build();
+        Member member = Member.builder().nickname("닉네임").build();
 
         Comment comment = Comment.builder().
                 member(member).

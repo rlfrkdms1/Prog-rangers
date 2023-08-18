@@ -1,7 +1,7 @@
 package com.prograngers.backend.fixture;
 
 import com.prograngers.backend.entity.Likes;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;

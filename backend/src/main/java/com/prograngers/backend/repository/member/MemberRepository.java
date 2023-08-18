@@ -1,6 +1,6 @@
 package com.prograngers.backend.repository.member;
 
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

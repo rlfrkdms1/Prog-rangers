@@ -6,6 +6,7 @@ import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.LevelConstant;
+import com.prograngers.backend.entity.member.Member;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

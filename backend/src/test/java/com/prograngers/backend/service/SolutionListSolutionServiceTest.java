@@ -3,7 +3,7 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;

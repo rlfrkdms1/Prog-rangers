@@ -1,7 +1,7 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.TestConfig;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
