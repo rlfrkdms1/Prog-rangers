@@ -1,11 +1,13 @@
 package com.prograngers.backend.controller.auth;
 
 import com.prograngers.backend.controller.RefreshCookieProvider;
+import com.prograngers.backend.dto.response.auth.LoginResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.exception.unauthorization.NotExistTokenException;
 import com.prograngers.backend.service.auth.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,31 +26,31 @@ import static com.prograngers.backend.controller.RefreshCookieProvider.REFRESH_T
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/prog-rangers")
 public class AuthController {
 
     private final AuthService authService;
     private final RefreshCookieProvider refreshCookieProvider;
     @PostMapping("/sign-up")
-    public ResponseEntity<String> singUp(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<LoginResponse> singUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         AuthResult authResult = authService.signUp(signUpRequest);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authResult.getAccessToken());
+                .body(LoginResponse.from(authResult));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         AuthResult authResult = authService.login(loginRequest);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authResult.getAccessToken());
+                .body(LoginResponse.from(authResult));
     }
 
     @GetMapping("/login/kakao")
     public ResponseEntity<String> kakaoLogin(@RequestParam String code) {
-        log.info("code = {} ", code);
         AuthResult authResult = authService.kakaoLogin(code);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
