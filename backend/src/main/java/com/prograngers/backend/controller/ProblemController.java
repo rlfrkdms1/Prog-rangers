@@ -9,6 +9,7 @@ import com.prograngers.backend.service.ProblemService;
 import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class ProblemController {
 
     private final SolutionService solutionService;
 
+    // problem 목록보기
     @GetMapping
     public ResponseEntity<?> problems(
             @RequestParam(defaultValue = "1") Integer page,
@@ -42,14 +44,14 @@ public class ProblemController {
     // solution 목록보기
     @GetMapping("{problemId}/solutions")
     public ResponseEntity<?> solutionList(
+            Pageable pageable,
             @PathVariable Long problemId,
-            @RequestParam int page,
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "newest") String sortBy
     ){
-        SolutionListResponse solutionListResponse = solutionService.getSolutionList(page, problemId, language,algorithm,dataStructure,sortBy);
+        SolutionListResponse solutionListResponse = solutionService.getSolutionList(pageable, problemId, language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);
     }
 

@@ -3,7 +3,7 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
