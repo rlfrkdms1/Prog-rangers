@@ -19,6 +19,7 @@ import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
+import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
@@ -138,7 +139,7 @@ public class SolutionService {
         }
         boolean scraped = false;
         int scrapCount = 0;
-        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolutiuon(solution);
+        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolution(solution);
         for (Solution scrapSolution : scrapSolutions){
             if (scrapSolution.getMember().getId().equals(memberId)){
                 scraped = true;
