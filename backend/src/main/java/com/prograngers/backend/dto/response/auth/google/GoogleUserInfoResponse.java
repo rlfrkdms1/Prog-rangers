@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto.response.auth.google;
 
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.member.MemberType;
 import lombok.Data;
 
 @Data
@@ -13,8 +14,7 @@ public class GoogleUserInfoResponse {
     public Member toMember() {
         return Member.builder()
                 .socialId(Long.valueOf(id.hashCode()))
-                .name(name)
-                .email(email)
+                .type(MemberType.GOOGLE)
                 .build();
     }
 }
