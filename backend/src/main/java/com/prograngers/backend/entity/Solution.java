@@ -54,8 +54,6 @@ public class Solution {
 
     private String description;
 
-    private Integer scraps;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
     @Nullable
