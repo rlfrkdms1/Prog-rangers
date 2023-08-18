@@ -53,7 +53,7 @@ public enum SolutionFixture {
                 .id(id)
                 .problem(problem)
                 .member(member)
-                .scrapId(scrapSolution)
+                .scrapSolution(scrapSolution)
                 .scraps(scraps)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)

@@ -9,6 +9,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,15 +26,22 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Solution> getSolutionList(int page, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
+    public PageImpl<Solution> getSolutionList(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
         List<Solution> result = jpaQueryFactory
                 .selectFrom(solution)
                 .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .orderBy(sortByWhat(sortBy))
-                .offset((page - 1) * 4)
-                .limit(4)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
-        return result;
+
+        Long count = jpaQueryFactory
+                .select(solution.count())
+                .from(solution)
+                .fetchOne();
+
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
     }
 
     private OrderSpecifier<?> sortByWhat(String sortBy) {
