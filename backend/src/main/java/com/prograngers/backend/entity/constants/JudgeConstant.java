@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @Getter
 public enum JudgeConstant {
+
     백준("acmicpc"),
     프로그래머스("programmers");
 

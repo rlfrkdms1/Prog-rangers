@@ -8,13 +8,17 @@ import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
 import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
 import com.prograngers.backend.exception.unauthorization.RefreshTokenNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.service.auth.oauth.GoogleOauth;
+import com.prograngers.backend.service.auth.oauth.KakaoOauth;
+import com.prograngers.backend.service.auth.oauth.NaverOauth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,11 +58,18 @@ public class AuthService {
 
     @Transactional
     public AuthResult signUp(SignUpRequest signUpRequest) {
+        validExistMember(signUpRequest);
         Member member = signUpRequest.toMember();
         member.encodePassword(encrypt.encryptAES256(member.getPassword()));
         memberRepository.save(member);
         //access token 발급
         return issueToken(member.getId());
+    }
+
+    private void validExistMember(SignUpRequest signUpRequest) {
+        if(memberRepository.findByEmail(signUpRequest.getEmail()).isPresent()){
+            throw new AlreadyExistMemberException();
+        }
     }
 
     public Member findByEmail(String email) {

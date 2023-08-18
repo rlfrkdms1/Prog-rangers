@@ -1,4 +1,4 @@
-package com.prograngers.backend.service.auth;
+package com.prograngers.backend.service.auth.oauth;
 
 import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
 import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;

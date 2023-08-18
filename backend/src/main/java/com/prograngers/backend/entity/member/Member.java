@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.member;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
@@ -28,7 +28,6 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private MemberType type;
-    private String name;
 
     private String nickname;
 
@@ -42,15 +41,7 @@ public class Member {
 
     private String password;
 
-    private String phoneNumber;
-
     private String photo;
-
-    public void updateName(String name) {
-        if (name != null) {
-            this.name = name;
-        }
-    }
 
     public void updateNickName(String nickname) {
         if (nickname != null) {
@@ -79,12 +70,6 @@ public class Member {
     public void updatePassword(String password) {
         if (password != null) {
             this.password = password;
-        }
-    }
-
-    public void updatePhoneNumber(String phoneNumber) {
-        if (phoneNumber != null) {
-            this.phoneNumber = phoneNumber;
         }
     }
 

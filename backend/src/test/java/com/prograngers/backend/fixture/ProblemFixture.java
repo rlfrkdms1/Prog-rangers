@@ -1,18 +1,11 @@
 package com.prograngers.backend.fixture;
 
-import com.prograngers.backend.entity.Likes;
-import com.prograngers.backend.entity.Member;
 import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.prograngers.backend.entity.constants.JudgeConstant.백준;
 

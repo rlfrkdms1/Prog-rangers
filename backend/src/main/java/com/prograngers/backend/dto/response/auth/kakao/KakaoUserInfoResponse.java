@@ -1,9 +1,9 @@
 package com.prograngers.backend.dto.response.auth.kakao;
 
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import lombok.Data;
 
-import static com.prograngers.backend.entity.MemberType.KAKAO;
+import static com.prograngers.backend.entity.member.MemberType.KAKAO;
 
 @Data
 public class KakaoUserInfoResponse {
@@ -15,8 +15,6 @@ public class KakaoUserInfoResponse {
         return Member.builder()
                 .socialId(this.id)
                 .type(KAKAO)
-                .name(this.kakao_account.getProfile().getNickname())
-                .email(this.kakao_account.getEmail())
                 .build();
     }
 }
