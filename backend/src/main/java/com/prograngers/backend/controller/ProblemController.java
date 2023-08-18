@@ -10,6 +10,7 @@ import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,7 @@ public class ProblemController {
     // solution 목록보기
     @GetMapping("{problemId}/solutions")
     public ResponseEntity<?> solutionList(
-            Pageable pageable,
+            @PageableDefault(size = 4)Pageable pageable,
             @PathVariable Long problemId,
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,

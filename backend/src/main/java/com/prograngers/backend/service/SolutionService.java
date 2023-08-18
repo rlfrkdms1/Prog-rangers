@@ -132,7 +132,7 @@ public class SolutionService {
     }
 
     public SolutionListResponse getSolutionList(
-            @PageableDefault(size = 4) Pageable pageable,
+            Pageable pageable,
             Long problemId,
             LanguageConstant language,
             AlgorithmConstant algorithm,
