@@ -56,9 +56,6 @@ public class Solution {
 
     private Integer scraps;
 
-    @OneToMany(mappedBy = "solution")
-    private List<Likes> likes = new ArrayList<>();
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
     @Nullable
@@ -112,7 +109,6 @@ public class Solution {
         }
     }
 
-
     public void upScraps() {
         this.scraps += 1;
     }
@@ -132,7 +128,7 @@ public class Solution {
     }
 
     public void updateDataStructure(DataStructureConstant dataStructure) {
-        this.dataStructure =dataStructure;
+        this.dataStructure = dataStructure;
     }
 
     public void updateLevel(LevelConstant level) {
