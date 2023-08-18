@@ -29,6 +29,8 @@ public class CommentService {
 
     private final MemberRepository memberRepository;
 
+    private final String DELETED_COMMENT = "삭제된 댓글입니다";
+
     public List<Comment> findBySolution(Solution solution) {
         return commentRepository.findAllBySolution(solution);
     }
@@ -81,7 +83,7 @@ public class CommentService {
         if (targetCommentMemberId!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
-        comment.updateContent("삭제된 댓글입니다");
+        comment.updateContent(DELETED_COMMENT);
         commentRepository.save(comment);
     }
 }
