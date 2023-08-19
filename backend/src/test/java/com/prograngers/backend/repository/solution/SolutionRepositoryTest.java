@@ -112,9 +112,9 @@ class SolutionRepositoryTest {
     void 멤버_이름으로_전부_찾기_테스트() {
 
         // given
-        Member member1 = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성(null));
-        Member member2 = 멤버_저장( 길가은2.아이디_값_지정_멤버_생성(null));
-        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Member member1 = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성());
+        Member member2 = 멤버_저장( 길가은2.아이디_값_지정_멤버_생성());
+        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성());
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
 //        em.persist(member1);
 //        em.persist(member2);
@@ -139,11 +139,11 @@ class SolutionRepositoryTest {
     void 풀이_목록_조회_필터링_문제_id() {
         // given
         // 회원
-        Member member = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성());
 
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
-        Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
+        Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
@@ -167,10 +167,10 @@ class SolutionRepositoryTest {
     void 풀이_목록_조회_필터링_자료구조_알고리즘() {
         // given
         // 회원
-        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
 
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
@@ -197,9 +197,9 @@ class SolutionRepositoryTest {
     void 풀이_목록_조회_필터링_언어() {
         // given
         // 회원
-        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
@@ -226,10 +226,10 @@ class SolutionRepositoryTest {
     void 문제_목록_조회_페이지() {
         // given
         // 회원
-        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
 
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이 : solution9 ~ 1 순서로 최신
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
