@@ -78,6 +78,12 @@ public enum SolutionFixture {
                 .build();
     }
 
+    public Solution 기본_솔루션_생성(){
+        return 기본_정보_빌더_생성()
+                .id(null)
+                .build();
+    }
+
     public Solution 언어_포함_솔루션_생성(
             Long id, Problem problem, Member member, Integer scraps,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure,
