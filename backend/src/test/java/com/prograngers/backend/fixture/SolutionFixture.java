@@ -41,7 +41,7 @@ public enum SolutionFixture {
                 .code(this.code)
                 .description(this.description)
                 .date(this.date)
-                .level(this.level);
+                .level(this.level.getLevel());
     }
 
 
@@ -54,7 +54,6 @@ public enum SolutionFixture {
                 .problem(problem)
                 .member(member)
                 .scrapSolution(scrapSolution)
-                .scraps(scraps)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .build();
@@ -68,7 +67,6 @@ public enum SolutionFixture {
                 .id(id)
                 .problem(problem)
                 .member(member)
-                .scraps(scraps)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .build();
@@ -89,7 +87,6 @@ public enum SolutionFixture {
                 .id(id)
                 .problem(problem)
                 .member(member)
-                .scraps(scraps)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .language(language)
