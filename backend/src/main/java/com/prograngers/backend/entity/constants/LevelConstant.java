@@ -26,6 +26,15 @@ public enum LevelConstant {
         throw new LevelNotFoundException();
     }
 
+    @JsonCreator
+    public static LevelConstant fromLevel(int level){
+        for (LevelConstant constant : LevelConstant.values()) {
+            if (constant.getLevel().equals(level)){
+                return constant;
+            }
+            }
+    }
+
     @JsonValue
     public String getKrName() {
         return krName;
