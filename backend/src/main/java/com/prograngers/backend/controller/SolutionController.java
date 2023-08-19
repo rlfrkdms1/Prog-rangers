@@ -51,7 +51,7 @@ public class SolutionController {
     // scrap해서 생성
     @Login
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody ScarpSolutionPostRequest request)
+    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request)
             throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
