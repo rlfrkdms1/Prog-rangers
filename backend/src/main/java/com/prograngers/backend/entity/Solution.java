@@ -67,8 +67,7 @@ public class Solution {
     @Enumerated(EnumType.STRING)
     private DataStructureConstant dataStructure;
 
-    @Enumerated(EnumType.STRING)
-    private LevelConstant level;
+    private Integer level;
 
     @Enumerated(EnumType.STRING)
     private LanguageConstant language;
@@ -121,7 +120,4 @@ public class Solution {
         this.dataStructure = dataStructure;
     }
 
-    public void updateLevel(LevelConstant level) {
-        this.level = level;
-    }
 }
