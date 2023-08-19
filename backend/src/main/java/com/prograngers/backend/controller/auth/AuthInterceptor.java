@@ -1,8 +1,8 @@
 package com.prograngers.backend.controller.auth;
 
+import com.prograngers.backend.exception.unauthorization.NotExistAccessTokenException;
 import com.prograngers.backend.service.auth.JwtTokenProvider;
 import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
-import com.prograngers.backend.exception.unauthorization.NotExistTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        if(loginAnnotation.required()) throw new NotExistTokenException(); // required true인데 토큰이 없는 경우
+        if(loginAnnotation.required()) throw new NotExistAccessTokenException(); // required true인데 토큰이 없는 경우
 
         return true;
     }

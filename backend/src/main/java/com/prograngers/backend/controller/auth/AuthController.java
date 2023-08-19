@@ -5,7 +5,7 @@ import com.prograngers.backend.dto.response.auth.LoginResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
-import com.prograngers.backend.exception.unauthorization.NotExistTokenException;
+import com.prograngers.backend.exception.unauthorization.NotExistRefreshTokenException;
 import com.prograngers.backend.service.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +82,7 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<String> reissue(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
         if (refreshToken == null) {
-            throw new NotExistTokenException();
+            throw new NotExistRefreshTokenException();
         }
         AuthResult authResult = authService.reissue(refreshToken);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());

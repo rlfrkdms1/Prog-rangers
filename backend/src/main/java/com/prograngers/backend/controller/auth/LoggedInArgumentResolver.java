@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller.auth;
 
+import com.prograngers.backend.exception.unauthorization.NotExistAccessTokenException;
 import com.prograngers.backend.service.auth.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -25,8 +26,17 @@ public class LoggedInArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String headerAuthorization = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        LoggedInMember loggedInMember = parameter.getParameterAnnotation(LoggedInMember.class);
+        if (!loggedInMember.required() && headerAuthorization == null) {
+            return null;
+        }
+        validExistAccessTokenInHeader(headerAuthorization);
         String accessToken = headerAuthorization.split(" ")[1];
         return jwtTokenProvider.getMemberId(accessToken);
+    }
+
+    private void validExistAccessTokenInHeader(String headerAuthorization) {
+        if(headerAuthorization == null) throw new NotExistAccessTokenException();
     }
 
 }
