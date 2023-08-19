@@ -105,7 +105,7 @@ public class SolutionController {
 
     // Solution 상세보기 요청
     @GetMapping("/{solutionId}")
-    public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId, @LoggedInMember Long memberId) {
+    public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId) {
         SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
