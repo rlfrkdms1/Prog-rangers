@@ -30,7 +30,7 @@ public class SolutionPostRequest {
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
 
-    private Integer level;
+    private LevelConstant level;
 
     private AlgorithmConstant algorithm;
 
@@ -63,7 +63,7 @@ public class SolutionPostRequest {
                 .code(code)
                 .description(description)
                 .date(LocalDate.now())
-                .level(level)
+                .level(level.getLevel())
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .description(description)
@@ -76,7 +76,7 @@ public class SolutionPostRequest {
         return SolutionPostRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())
-                .level(solution.getLevel())
+                .level(LevelConstant.fromLevel(solution.getLevel()))
                 .description(solution.getDescription())
                 .dataStructure(solution.getDataStructure())
                 .language(solution.getLanguage())
