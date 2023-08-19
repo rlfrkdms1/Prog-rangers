@@ -1,11 +1,13 @@
 package com.prograngers.backend.repository.solution;
 
+import com.prograngers.backend.entity.QLikes;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.prograngers.backend.entity.QLikes.*;
 import static com.prograngers.backend.entity.QSolution.*;
 
 @RequiredArgsConstructor
@@ -50,10 +53,19 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
             return solution.date.desc();
         }
         if (sortBy.equals("likes")) {
-            return solution.likes.size().desc();
+            // 서브쿼리
+            // solution을 like의 수가 많은 대로 정렬하고 싶다
+            JPAExpressions
+                    .select(likes.count())
+                    .from(likes)
+                    .where(likes.solution.id.eq(solution.id))
+                    .fetchOne();
+            return null;
         }
         if (sortBy.equals("scraps")) {
-            return solution.scraps.desc();
+            // 서브쿼리
+            // solution을 scrap의 수가 많은 대로 정렬하고 싶다
+            return null;
         } else return null;
     }
 

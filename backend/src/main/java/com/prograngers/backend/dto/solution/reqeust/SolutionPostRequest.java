@@ -30,7 +30,7 @@ public class SolutionPostRequest {
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
 
-    private LevelConstant level;
+    private Integer level;
 
     private AlgorithmConstant algorithm;
 
