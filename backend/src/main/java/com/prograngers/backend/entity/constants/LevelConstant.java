@@ -27,12 +27,13 @@ public enum LevelConstant {
     }
 
     @JsonCreator
-    public static LevelConstant fromLevel(int level){
+    public static LevelConstant fromLevel(int level) {
         for (LevelConstant constant : LevelConstant.values()) {
-            if (constant.getLevel().equals(level)){
+            if (constant.getLevel().equals(level)) {
                 return constant;
             }
-            }
+        }
+        throw new LevelNotFoundException();
     }
 
     @JsonValue
