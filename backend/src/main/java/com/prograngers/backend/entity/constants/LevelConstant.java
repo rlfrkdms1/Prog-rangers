@@ -31,4 +31,6 @@ public enum LevelConstant {
         return krName;
     }
 
+    public Integer getLevel(){return level;}
+
 }
