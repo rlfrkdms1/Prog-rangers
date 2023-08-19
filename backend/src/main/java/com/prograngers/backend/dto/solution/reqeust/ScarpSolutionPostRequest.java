@@ -25,7 +25,8 @@ public class ScarpSolutionPostRequest {
 
     public Solution toEntity(Solution scrap){
         Solution solution = Solution.builder().
-                level(level.getLevel()).
+                id(null)
+                .level(level.getLevel()).
                 description(description).
                 title(title)
                 // 위 내용까지 스크랩 한 사용자가 수정할 수 있는 내용
