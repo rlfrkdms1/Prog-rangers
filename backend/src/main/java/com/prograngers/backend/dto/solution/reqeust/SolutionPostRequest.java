@@ -62,7 +62,6 @@ public class SolutionPostRequest {
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .scraps(0)
                 .date(LocalDate.now())
                 .level(level)
                 .algorithm(algorithm)

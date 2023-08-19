@@ -11,4 +11,6 @@ import java.util.List;
 public interface SolutionRepository extends JpaRepository<Solution, Long>, QueryDslSolutionRepository{
 
     List<Solution> findAllByMember(Member member);
+
+    List<Solution> findAllByScrapSolution(Solution solution);
 }
