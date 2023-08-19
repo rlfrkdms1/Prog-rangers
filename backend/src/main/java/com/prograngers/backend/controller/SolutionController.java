@@ -28,7 +28,7 @@ import java.net.URISyntaxException;
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;
-    private final String REDIRECT_PATH = "http://localhost:8080/solutions";
+    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // solution 쓰기
