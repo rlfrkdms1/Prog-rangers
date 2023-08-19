@@ -5,6 +5,7 @@ import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ScarpSolutionPostRequest {
 
     @NotBlank(message = "풀이 제목을 입력해주세요")
