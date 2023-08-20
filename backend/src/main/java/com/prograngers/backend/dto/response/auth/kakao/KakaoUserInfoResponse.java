@@ -9,11 +9,10 @@ import static com.prograngers.backend.entity.member.MemberType.KAKAO;
 public class KakaoUserInfoResponse {
 
     private Long id;
-    private KakaoAccount kakao_account;
 
     public Member toMember(){
         return Member.builder()
-                .socialId(this.id)
+                .socialId(id)
                 .type(KAKAO)
                 .build();
     }
