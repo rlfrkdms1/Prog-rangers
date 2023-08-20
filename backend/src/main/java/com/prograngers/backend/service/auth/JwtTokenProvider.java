@@ -19,6 +19,7 @@ public class JwtTokenProvider {
     private final Key key;
     private final long validTimeInMillisecond;
     private static final String MEMBER_ID = "memberId";
+    private static final String ISSUER = "Prograngers";
 
     @Autowired
     public JwtTokenProvider(@Value("${security-secret-key}") String key,
@@ -34,6 +35,7 @@ public class JwtTokenProvider {
                 .claim(MEMBER_ID, memberId)
                 .setExpiration(validTime)
                 .setIssuedAt(now)
+                .setIssuer(ISSUER)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
