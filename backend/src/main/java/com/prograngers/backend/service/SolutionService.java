@@ -59,7 +59,7 @@ public class SolutionService {
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
-        Solution solution = solutionPostRequest.toEntity();
+        Solution solution = solutionPostRequest.toSolution();
         solution.updateMember(member);
         Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
         if (problem != null) {
@@ -76,7 +76,7 @@ public class SolutionService {
         if (target.getId()!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
-        Solution solution = request.toEntity(target);
+        Solution solution = request.toSolution(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
     }
@@ -108,7 +108,7 @@ public class SolutionService {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
-        Solution solution = request.toEntity(scrap);
+        Solution solution = request.toSolution(scrap);
         solution.updateMember(member);
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
