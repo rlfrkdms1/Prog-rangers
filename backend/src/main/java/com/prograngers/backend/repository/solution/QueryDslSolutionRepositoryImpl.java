@@ -35,6 +35,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     public PageImpl<Solution> getSolutionList(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         List<Solution> result = null;
         if (sortBy.equals(NEWEST)){
+            log.info("sortBy is NEWEST");
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
@@ -43,6 +44,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         } else if (sortBy.equals(LIKES)){
+            log.info("sortBy is LIKES");
             result = jpaQueryFactory
                     .select(solution)
                     .from(likes)
@@ -54,6 +56,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         } else if (sortBy.equals(SCRAPS)){
+            log.info("sortBy is SCRAPS");
 //            result = jpaQueryFactory
 //                    .selectFrom(solution)
 //                    .groupBy(solution.scrapSolution)

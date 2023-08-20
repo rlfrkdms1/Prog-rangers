@@ -8,6 +8,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,8 +25,8 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Problem> findAll(
-            int page, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy) {
+    public PageImpl<Problem> findAll(
+            Pageable pageable, DataStructureConstant dataStructure, AlgorithmConstant algorithm, String orderBy) {
         log.info("### problemRepository findAll 호출 ###");
 
         // 양방향 연관관계로 변경
@@ -34,10 +36,19 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .join(problem.solutions, solution).fetchJoin()
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
                 .orderBy(orderCondition(orderBy))
-                .offset((page - 1) * 4)
-                .limit(4)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
-        return results;
+
+        Long size = jpaQueryFactory
+                .select(problem.count())
+                .from(problem)
+                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
+                .fetchOne();
+
+        log.info("problem size : {}",size);
+
+        return new PageImpl<>(results,pageable,size);
     }
 
     private OrderSpecifier<?> orderCondition(String orderBy) {

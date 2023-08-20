@@ -1,6 +1,7 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.problem.response.ProblemResponse;
+import com.prograngers.backend.dto.problem.response.ProblemListProblem;
+import com.prograngers.backend.dto.problem.response.ProblemListResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
@@ -36,11 +37,11 @@ public class ProblemController {
     // problem 목록보기
     @GetMapping
     public ResponseEntity<?> problems(
-            @RequestParam(defaultValue = "1") Integer page,
+            @PageableDefault(size = 4)Pageable pageable,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "date") String sortBy) {
-        List<ProblemResponse> problemList = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
+        ProblemListResponse problemList  = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemList);
     }
 
@@ -53,7 +54,7 @@ public class ProblemController {
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = "newest") SortConstant sortBy
+            @RequestParam(defaultValue =  "NEWEST") SortConstant sortBy
     ){
         SolutionListResponse solutionListResponse = solutionService.getSolutionList(pageable, problemId, language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);

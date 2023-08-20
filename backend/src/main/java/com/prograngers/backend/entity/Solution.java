@@ -72,6 +72,7 @@ public class Solution {
 
     private Integer level;
 
+
     @Enumerated(EnumType.STRING)
     private LanguageConstant language;
 
