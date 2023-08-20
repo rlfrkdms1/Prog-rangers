@@ -10,6 +10,7 @@ import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
+import com.prograngers.backend.exception.unauthorization.IncorrectCodeInNaverLoginException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
@@ -122,10 +123,15 @@ public class AuthService {
 
     @Transactional
     public AuthResult naverLogin(String code, String state) {
+        validCode(code);
         NaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
         NaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
                 .orElseGet(() -> memberRepository.save(userInfo.toMember()));
         return issueToken(member.getId());
+    }
+
+    private void validCode(String code) {
+        if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
     }
 }

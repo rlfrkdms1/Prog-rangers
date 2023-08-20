@@ -1,6 +1,5 @@
 package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.controller.RefreshCookieProvider;
 import com.prograngers.backend.dto.response.auth.LoginResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prograngers.backend.controller.RefreshCookieProvider.REFRESH_TOKEN;
+import static com.prograngers.backend.controller.auth.RefreshCookieProvider.REFRESH_TOKEN;
 
 @Slf4j
 @RestController
@@ -69,9 +68,6 @@ public class AuthController {
 
     @GetMapping("/login/naver")
     public ResponseEntity<String> naverLogin(@RequestParam String code, @RequestParam String state) {
-        if(state.equals("test_state")){
-            log.info("success");
-        }
         AuthResult authResult = authService.naverLogin(code, state);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
