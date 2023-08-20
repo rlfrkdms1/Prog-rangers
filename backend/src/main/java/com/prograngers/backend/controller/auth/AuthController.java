@@ -49,48 +49,51 @@ public class AuthController {
     }
 
     @GetMapping("/login/kakao")
-    public ResponseEntity<String> kakaoLogin(@RequestParam String code) {
+    public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String code) {
         AuthResult authResult = authService.kakaoLogin(code);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authResult.getAccessToken());
+                .body(LoginResponse.from(authResult));
     }
 
     @GetMapping("/login/google")
-    public ResponseEntity<String> googleLogin(@RequestParam String code) {
+    public ResponseEntity<LoginResponse> googleLogin(@RequestParam String code) {
         AuthResult authResult = authService.googleLogin(code);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authResult.getAccessToken());
+                .body(LoginResponse.from(authResult));
     }
 
     @GetMapping("/login/naver")
-    public ResponseEntity<String> naverLogin(@RequestParam String code, @RequestParam String state) {
+    public ResponseEntity<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state) {
         AuthResult authResult = authService.naverLogin(code, state);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authResult.getAccessToken());
+                .body(LoginResponse.from(authResult));
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<String> reissue(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
-        if (refreshToken == null) {
-            throw new NotExistRefreshTokenException();
-        }
+    public ResponseEntity<LoginResponse> reissue(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
+        validRefreshToken(refreshToken);
         AuthResult authResult = authService.reissue(refreshToken);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authResult.getAccessToken());
+                .body(LoginResponse.from(authResult));
     }
 
-    @GetMapping("/test")
-    @Login
-    public String test(@LoggedInMember Long memberId){
-        return String.valueOf(memberId);
+    private void validRefreshToken(String refreshToken) {
+        if (refreshToken == null) {
+            throw new NotExistRefreshTokenException();
+        }
+    }
+
+    @PostMapping("/logout")
+    public void logout(@CookieValue(name = REFRESH_TOKEN) String refreshToken){
+        validRefreshToken(refreshToken);
     }
 }
