@@ -1,10 +1,22 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
+import com.prograngers.backend.exception.unauthorization.FailedSignatureTokenException;
+import com.prograngers.backend.exception.unauthorization.IncorrectIssuerTokenException;
+import com.prograngers.backend.exception.unauthorization.IncorrectlyConstructedTokenException;
+import com.prograngers.backend.exception.unauthorization.MissingIssuerTokenException;
+import com.prograngers.backend.exception.unauthorization.UnsupportedTokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,6 +50,24 @@ public class JwtTokenProvider {
                 .setIssuer(ISSUER)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public void validToken(String token) {
+        try {
+            getClaimsJwt(token);
+        } catch (MissingClaimException e) {
+            throw new MissingIssuerTokenException();
+        } catch (IncorrectClaimException e) {
+            throw new IncorrectIssuerTokenException();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredTokenException();
+        } catch (UnsupportedJwtException e) {
+            throw new UnsupportedTokenException();
+        } catch (SignatureException e) {
+            throw new FailedSignatureTokenException();
+        } catch (MalformedJwtException e){
+            throw new IncorrectlyConstructedTokenException();
+        }
     }
 
     public Jws<Claims> getClaimsJwt(String token){
