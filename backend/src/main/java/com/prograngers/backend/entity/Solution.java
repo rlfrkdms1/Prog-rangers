@@ -115,6 +115,10 @@ public class Solution {
         }
     }
 
+    public void updateLevel(LevelConstant level){
+        this.level = level.getLevel();
+    }
+
     public void updateAlgorithm(AlgorithmConstant algorithm) {
         this.algorithm = algorithm;
     }

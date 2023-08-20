@@ -73,7 +73,7 @@ public class SolutionService {
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        if (target.getId()!=member.getId()){
+        if (target.getMember().getId()!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
         Solution solution = request.toSolution(target);
@@ -85,7 +85,7 @@ public class SolutionService {
     public void delete(Long solutionId, Long memberId) throws SolutionNotFoundException {
         Solution target = findById(solutionId);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        if (target.getId()!=member.getId()){
+        if (target.getMember().getId()!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
 

@@ -5,6 +5,7 @@ import com.prograngers.backend.entity.constants.JudgeConstant;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static com.prograngers.backend.entity.constants.JudgeConstant.백준;
@@ -12,15 +13,15 @@ import static com.prograngers.backend.entity.constants.JudgeConstant.백준;
 @AllArgsConstructor
 public enum ProblemFixture {
 
-    문제1(1L,"문제제목1","https://www.acmicpc.net/problem/1000",LocalDate.now(),백준),
-    문제2(2L,"문제제목2","https://www.acmicpc.net/problem/1001",LocalDate.now().plusDays(1),백준),
-    문제3(3L,"문제제목3","https://www.acmicpc.net/problem/1002",LocalDate.now().plusDays(2),백준);
+    문제1(1L,"문제제목1","https://www.acmicpc.net/problem/1000",LocalDateTime.now(),백준),
+    문제2(2L,"문제제목2","https://www.acmicpc.net/problem/1001",LocalDateTime.now().plusDays(1),백준),
+    문제3(3L,"문제제목3","https://www.acmicpc.net/problem/1002",LocalDateTime.now().plusDays(2),백준);
     private final Long id;
     private final String title;
 
     private final String link;
 
-    private final LocalDate date;
+    private final LocalDateTime date;
 
     private final JudgeConstant ojName;
 
