@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -32,7 +33,7 @@ public class ScarpSolutionPostRequest {
                 // 위 내용까지 스크랩 한 사용자가 수정할 수 있는 내용
                 .isPublic(true) //스크랩한 풀이이기 때문에 무조건 공개한다
                 .problem(scrap.getProblem())
-                .date(LocalDate.now())
+                .date(LocalDateTime.now())
                 .code(scrap.getCode()).
                 scrapSolution(scrap).
                 algorithm(scrap.getAlgorithm()).

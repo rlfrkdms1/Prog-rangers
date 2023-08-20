@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -55,14 +56,14 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, LocalDate.now(),judge, null))
+                .problem(new Problem(null, problemTitle, problemLink, LocalDateTime.now(),judge, null))
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .date(LocalDate.now())
+                .date(LocalDateTime.now())
                 .level(level.getLevel())
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
