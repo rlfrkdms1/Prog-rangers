@@ -1,4 +1,4 @@
-package com.prograngers.backend.controller;
+package com.prograngers.backend.controller.auth;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
