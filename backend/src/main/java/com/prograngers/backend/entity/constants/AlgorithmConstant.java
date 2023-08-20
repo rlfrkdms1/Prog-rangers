@@ -21,7 +21,6 @@ public enum AlgorithmConstant {
 
     private final String krName;
 
-
     @JsonCreator
     public static AlgorithmConstant from(String krName) {
         for (AlgorithmConstant algorithm : AlgorithmConstant.values()) {

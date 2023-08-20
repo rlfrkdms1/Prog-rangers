@@ -58,13 +58,14 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         } else if (sortBy.equals(SCRAPS)){
             log.info("sortBy is SCRAPS");
 //            result = jpaQueryFactory
-//                    .selectFrom(solution)
+//                    .select(solution)
+//                    .from(solution)
+//                    .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
 //                    .groupBy(solution.scrapSolution)
-//                    .orderBy(solution.scrapSolution.count().desc())
-//                    .offset(pageable.getOffset())
-//                    .limit(pageable.getPageSize())
-//                    .fetch();
+//                    .orderBy()
+//                    . fetch();
         }
+
         Long count = jpaQueryFactory
                 .select(solution.count())
                 .from(solution)
