@@ -43,6 +43,7 @@ public class JwtTokenProvider {
     public Jws<Claims> getClaimsJwt(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(key)
+                .requireIssuer(ISSUER)
                 .build()
                 .parseClaimsJws(token);
     }
