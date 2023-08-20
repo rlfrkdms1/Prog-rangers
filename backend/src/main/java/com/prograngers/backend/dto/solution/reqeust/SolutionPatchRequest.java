@@ -24,7 +24,7 @@ public class SolutionPatchRequest {
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
 
-    public Solution toEntity(Solution target) {
+    public Solution toSolution(Solution target) {
         target.updateTitle(title);
         target.updateAlgorithm(algorithmName);
         target.updateDataStructure(dataStructureName);

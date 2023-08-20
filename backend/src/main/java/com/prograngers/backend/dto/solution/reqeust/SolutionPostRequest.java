@@ -44,7 +44,7 @@ public class SolutionPostRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Solution toEntity() {
+    public Solution toSolution() {
         /*
         파싱해서 ojname 알아내서 문제에 넣기
         로그인정보로 멤버 알아내서 넣기
@@ -72,7 +72,7 @@ public class SolutionPostRequest {
                 .build();
     }
 
-    public static SolutionPostRequest toDto(Solution solution){
+    public static SolutionPostRequest from(Solution solution){
         return SolutionPostRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())

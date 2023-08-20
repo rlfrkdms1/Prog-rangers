@@ -23,7 +23,7 @@ public class ScarpSolutionPostRequest {
     private String description;
     private LevelConstant level;
 
-    public Solution toEntity(Solution scrap){
+    public Solution toSolution(Solution scrap){
         Solution solution = Solution.builder().
                 id(null)
                 .level(level.getLevel()).
