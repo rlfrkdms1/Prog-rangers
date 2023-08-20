@@ -1,6 +1,7 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.TestConfig;
+import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
+import static com.prograngers.backend.entity.constants.SortConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제2;
@@ -69,7 +71,7 @@ class ProblemListProblemRepositoryTest {
 
         // when
         List<Problem> result = problemRepository.findAll(
-                PageRequest.of(0,4), null, null, "date"
+                PageRequest.of(0,4), null, null, NEWEST
         ).getContent();
 
         // then
@@ -99,13 +101,13 @@ class ProblemListProblemRepositoryTest {
 
         // when
         List<Problem> result1 = problemRepository.findAll(
-                PageRequest.of(0,4), null, BFS, "date"
+                PageRequest.of(0,4), null, BFS, NEWEST
         ).getContent();
         List<Problem> result2 = problemRepository.findAll(
-                PageRequest.of(0,4),null, DFS, "date"
+                PageRequest.of(0,4),null, DFS, NEWEST
         ).getContent();
         List<Problem> result3 = problemRepository.findAll(
-                PageRequest.of(0,4),QUEUE, BFS, "date"
+                PageRequest.of(0,4),QUEUE, BFS, NEWEST
         ).getContent();
 
         // then
@@ -144,9 +146,9 @@ class ProblemListProblemRepositoryTest {
         Solution solution9 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem9, null, 0, null, null));
 
         // when
-        List<Problem> result1 = problemRepository.findAll(PageRequest.of(0,4),null, null, "date").getContent();
-        List<Problem> result2 = problemRepository.findAll(PageRequest.of(1,4), null, null, "date").getContent();
-        List<Problem> result3 = problemRepository.findAll(PageRequest.of(2,4), null, null, "date").getContent();
+        List<Problem> result1 = problemRepository.findAll(PageRequest.of(0,4),null, null, NEWEST).getContent();
+        List<Problem> result2 = problemRepository.findAll(PageRequest.of(1,4), null, null, NEWEST).getContent();
+        List<Problem> result3 = problemRepository.findAll(PageRequest.of(2,4), null, null, NEWEST).getContent();
 
         // then
         Assertions.assertThat(result1).contains(problem9, problem8, problem7, problem6).doesNotContain(problem1, problem2, problem3, problem4, problem5);

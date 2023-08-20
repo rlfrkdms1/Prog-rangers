@@ -9,7 +9,8 @@ import lombok.AllArgsConstructor;
 public enum SortConstant {
     NEWEST("newest"),
     SCRAPS("scraps"),
-    LIKES("likes");
+    LIKES("likes"),
+    SOLUTIONS("solutions");
     String value;
 
     @JsonCreator

@@ -5,6 +5,7 @@ import com.prograngers.backend.dto.problem.response.ProblemListResponse;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class ProblemService {
             Pageable pageable,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
-            String sortBy) {
+            SortConstant sortBy) {
         PageImpl<com.prograngers.backend.entity.Problem> pageImpl = problemRepository.findAll(pageable, dataStructure, algorithm, sortBy);
         List<com.prograngers.backend.entity.Problem> problems = pageImpl.getContent();
         // 반환할 dto 리스트

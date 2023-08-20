@@ -40,7 +40,7 @@ public class ProblemController {
             @PageableDefault(size = 4)Pageable pageable,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = "date") String sortBy) {
+            @RequestParam(defaultValue = "NEWEST") SortConstant sortBy) {
         ProblemListResponse problemList  = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemList);
     }
