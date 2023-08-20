@@ -1,10 +1,12 @@
 package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.entity.QLikes;
+import com.prograngers.backend.entity.QSolution;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.constants.SortConstant;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import static com.prograngers.backend.entity.QLikes.*;
 import static com.prograngers.backend.entity.QSolution.*;
+import static com.prograngers.backend.entity.constants.SortConstant.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -30,14 +33,35 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 
     @Override
     public PageImpl<Solution> getSolutionList(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
-        List<Solution> result = jpaQueryFactory
-                .selectFrom(solution)
-                .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                .orderBy(sortByWhat(sortBy))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
+        List<Solution> result = null;
+        if (sortBy.equals(NEWEST.getValue())){
+            result = jpaQueryFactory
+                    .selectFrom(solution)
+                    .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                    .orderBy(solution.date.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+        } else if (sortBy.equals(LIKES.getValue())){
+            result = jpaQueryFactory
+                    .select(solution)
+                    .from(likes)
+                    .rightJoin(likes.solution, solution)
+                    .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                    .groupBy(solution.id)
+                    .orderBy(likes.id.count().desc(),solution.date.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+        } else if (sortBy.equals(SCRAPS.getValue())){
+//            result = jpaQueryFactory
+//                    .selectFrom(solution)
+//                    .groupBy(solution.scrapSolution)
+//                    .orderBy(solution.scrapSolution.count().desc())
+//                    .offset(pageable.getOffset())
+//                    .limit(pageable.getPageSize())
+//                    .fetch();
+        }
         Long count = jpaQueryFactory
                 .select(solution.count())
                 .from(solution)
