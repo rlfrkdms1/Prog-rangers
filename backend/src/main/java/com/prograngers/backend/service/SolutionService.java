@@ -129,25 +129,13 @@ public class SolutionService {
         Solution solution = findById(solutionId);
         List<Comment> comments = commentRepository.findAllBySolution(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
-        boolean pushedLike = false;
-        int likeCount = 0;
-        for (Likes like : likes){
-            if (like.getMember().getId().equals(memberId)){
-                pushedLike = true;
-            }
-            likeCount += 1;
-        }
-        boolean scraped = false;
-        int scrapCount = 0;
-        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolution(solution);
-        for (Solution scrapSolution : scrapSolutions){
-            if (scrapSolution.getMember().getId().equals(memberId)){
-                scraped = true;
-            }
-            scrapCount+=1;
-        }
+        boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
 
-        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments,scraped,scrapCount,pushedLike,likeCount);
+        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolution(solution);
+        boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
+
+        SolutionDetailResponse solutionDetailResponse =
+                SolutionDetailResponse.toEntity(solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size());
         return solutionDetailResponse;
     }
 
