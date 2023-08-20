@@ -17,11 +17,14 @@ import java.util.List;
 public class SolutionDetailResponse {
     private SolutionDetailSolution solution;
     private List<SolutionDetailComment> comments;
+
+    private boolean isMine;
     private static final String SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
     public static SolutionDetailResponse toEntity(Solution solution, List<Comment> comments,
                                                   boolean scraped, int scrapCount,
-                                                  boolean pushedLike, int likeCount
+                                                  boolean pushedLike, int likeCount,
+                                                  boolean isMine
     ) {
 
 
@@ -64,6 +67,7 @@ public class SolutionDetailResponse {
 
         response.comments = commentResponseList;
         response.solution = responseSolution;
+        response.isMine = isMine;
 
         return response;
     }

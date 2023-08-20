@@ -128,6 +128,15 @@ public class SolutionService {
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
+        boolean isMine = false;
+        if (memberId!=null){
+            Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+            if (solution.getMember().getId().equals(member.getId())){
+                isMine = true;
+            }
+        }
+
+
         List<Comment> comments = commentRepository.findAllBySolution(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
@@ -136,7 +145,7 @@ public class SolutionService {
         boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
 
         SolutionDetailResponse solutionDetailResponse =
-                SolutionDetailResponse.toEntity(solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size());
+                SolutionDetailResponse.toEntity(solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
         return solutionDetailResponse;
     }
 
