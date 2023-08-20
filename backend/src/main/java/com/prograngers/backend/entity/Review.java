@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -43,7 +44,7 @@ public class Review {
 
     private String content;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     public void updateMention(String mention) {
         if (mention != null) {

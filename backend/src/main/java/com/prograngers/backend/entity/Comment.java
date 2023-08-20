@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -38,7 +39,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     private Long parentId;
 
