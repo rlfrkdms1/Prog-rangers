@@ -40,6 +40,7 @@ public class AuthService {
     private final KakaoOauth kakaoOauth;
     private final GoogleOauth googleOauth;
     private final NaverOauth naverOauth;
+    private final NicknameGenerator nicknameGenerator;
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
@@ -109,7 +110,7 @@ public class AuthService {
         KakaoTokenResponse kakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
         KakaoUserInfoResponse kakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(kakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(kakaoUserInfoResponse.getId())
-                .orElseGet(() -> memberRepository.save(kakaoUserInfoResponse.toMember()));
+                .orElseGet(() -> socialRegister(kakaoUserInfoResponse.toMember()));
         return issueToken(member.getId());
     }
     @Transactional
@@ -117,7 +118,7 @@ public class AuthService {
         GoogleTokenResponse googleTokenResponse = googleOauth.googleGetToken(code);
         GoogleUserInfoResponse googleUserInfoResponse = googleOauth.googleGetUserInfo(googleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(googleUserInfoResponse.getId().hashCode()))
-                .orElseGet(() -> memberRepository.save(googleUserInfoResponse.toMember()));
+                .orElseGet(() -> socialRegister(googleUserInfoResponse.toMember()));
         return issueToken(member.getId());
     }
 
@@ -127,11 +128,20 @@ public class AuthService {
         NaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
         NaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
-                .orElseGet(() -> memberRepository.save(userInfo.toMember()));
+                .orElseGet(() -> socialRegister(userInfo.toMember()));
         return issueToken(member.getId());
     }
 
     private void validCode(String code) {
         if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
+    }
+
+    private Member socialRegister(Member member) {
+        String nickname = "";
+        do {
+            nickname = nicknameGenerator.getRandomNickname().getNickname();
+        } while (memberRepository.findByNickname(nickname).isEmpty());
+        member.createRandomNickname(nickname);
+        return memberRepository.save(member);
     }
 }
