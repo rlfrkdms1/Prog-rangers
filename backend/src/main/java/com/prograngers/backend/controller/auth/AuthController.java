@@ -93,7 +93,11 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public void logout(@CookieValue(name = REFRESH_TOKEN) String refreshToken){
+    public ResponseEntity<Void> logout(@CookieValue(name = REFRESH_TOKEN) String refreshToken){
         validRefreshToken(refreshToken);
+        ResponseCookie logoutCookie = refreshCookieProvider.createLogoutCookie();
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, logoutCookie.toString())
+                .build();
     }
 }
