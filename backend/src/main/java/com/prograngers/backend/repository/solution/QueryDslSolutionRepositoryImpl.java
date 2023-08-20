@@ -32,9 +32,9 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public PageImpl<Solution> getSolutionList(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, String sortBy) {
+    public PageImpl<Solution> getSolutionList(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         List<Solution> result = null;
-        if (sortBy.equals(NEWEST.getValue())){
+        if (sortBy.equals(NEWEST)){
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
@@ -42,7 +42,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-        } else if (sortBy.equals(LIKES.getValue())){
+        } else if (sortBy.equals(LIKES)){
             result = jpaQueryFactory
                     .select(solution)
                     .from(likes)
@@ -53,7 +53,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-        } else if (sortBy.equals(SCRAPS.getValue())){
+        } else if (sortBy.equals(SCRAPS)){
 //            result = jpaQueryFactory
 //                    .selectFrom(solution)
 //                    .groupBy(solution.scrapSolution)

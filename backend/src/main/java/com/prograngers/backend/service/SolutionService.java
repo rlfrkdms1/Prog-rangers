@@ -13,6 +13,7 @@ import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
@@ -145,7 +146,7 @@ public class SolutionService {
             LanguageConstant language,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
-            String sortBy) {
+            SortConstant sortBy) {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
 

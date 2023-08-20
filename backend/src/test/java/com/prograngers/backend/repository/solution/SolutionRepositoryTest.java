@@ -28,6 +28,7 @@ import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.constants.LanguageConstant.*;
+import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은2;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
@@ -59,7 +60,6 @@ class SolutionRepositoryTest {
 
     @Autowired
     private EntityManager em;
-
 
     @DisplayName("풀이를 저장할 수 있다")
     @Test
@@ -144,6 +144,9 @@ class SolutionRepositoryTest {
         // 문제
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
         Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성());
+        log.info("problem1 id : {}",problem1.getId());
+        log.info("problem2 id : {}",problem2.getId());
+
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
@@ -151,9 +154,9 @@ class SolutionRepositoryTest {
 
         // when
         List<Solution> result1 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4), 1L, null, null, null, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
         List<Solution> result2 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4), 2L, null, null, null, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4), problem2.getId(), null, null, null, NEWEST).getContent();
 
         // then
         Assertions.assertThat(result1).contains(solution1);
@@ -180,11 +183,11 @@ class SolutionRepositoryTest {
 
         // when
         List<Solution> result1 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), null, BFS, null, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), null, BFS, null, NEWEST).getContent();
         List<Solution> result2 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4),   problem1.getId(), null, null, QUEUE, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4),   problem1.getId(), null, null, QUEUE, NEWEST).getContent();
         List<Solution> result3 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, NEWEST).getContent();
 
         // then
         Assertions.assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
@@ -209,11 +212,11 @@ class SolutionRepositoryTest {
 
         // when
         List<Solution> result1 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), JAVA, null, null, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), JAVA, null, null, NEWEST).getContent();
         List<Solution> result2 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), CPP, null, null, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), CPP, null, null, NEWEST).getContent();
         List<Solution> result3 = solutionRepository
-                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), PYTHON, null, null, "newest").getContent();
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), PYTHON, null, null, NEWEST).getContent();
 
         // then
         Assertions.assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4);
@@ -243,10 +246,10 @@ class SolutionRepositoryTest {
         Solution solution9 = 풀이_저장(풀이9.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
 
         // when
-        List<Solution> result1 = solutionRepository.getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, "newest").getContent();
-        List<Solution> result2 = solutionRepository.getSolutionList(PageRequest.of(1, 4), problem1.getId(), null, null, null, "newest").getContent();
-        List<Solution> result3 = solutionRepository.getSolutionList(PageRequest.of(2, 4), problem1.getId(), null, null, null, "newest").getContent();
-        List<Solution> result4 = solutionRepository.getSolutionList(PageRequest.of(3, 4), problem1.getId(), null, null, null, "newest").getContent();
+        List<Solution> result1 = solutionRepository.getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result2 = solutionRepository.getSolutionList(PageRequest.of(1, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result3 = solutionRepository.getSolutionList(PageRequest.of(2, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result4 = solutionRepository.getSolutionList(PageRequest.of(3, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
         Assertions.assertThat(result1)

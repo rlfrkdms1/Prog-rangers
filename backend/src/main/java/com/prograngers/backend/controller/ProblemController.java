@@ -5,6 +5,7 @@ import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.service.ProblemService;
 import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,7 +53,7 @@ public class ProblemController {
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = "newest") String sortBy
+            @RequestParam(defaultValue = "newest") SortConstant sortBy
     ){
         SolutionListResponse solutionListResponse = solutionService.getSolutionList(pageable, problemId, language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);
