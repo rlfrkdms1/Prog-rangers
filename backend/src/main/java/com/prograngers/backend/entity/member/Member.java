@@ -55,6 +55,12 @@ public class Member {
         }
     }
 
+    public void createRandomNickname(String nickname) {
+        if (nickname != null) {
+            this.nickname = nickname;
+        }
+    }
+
     public void updateGitHub(String github) {
         if (github != null) {
             this.github = github;
