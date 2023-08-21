@@ -7,8 +7,10 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +18,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.prograngers.backend.entity.QLikes.*;
 import static com.prograngers.backend.entity.QSolution.*;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @RequiredArgsConstructor
 @Repository
@@ -32,8 +38,20 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public PageImpl<Solution> getSolutionList(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
+    public PageImpl<Solution> getSolutionList(
+            Pageable pageable, Long problemId, LanguageConstant language,
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         List<Solution> result = null;
+
+//        // pageable 사용 동적쿼리
+//        result = jpaQueryFactory
+//                .selectFrom(solution)
+//                .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+//                .orderBy(getOrderSpecifier(pageable.getSort()).stream().toArray(OrderSpecifier[]::new))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+
         if (sortBy.equals(NEWEST)){
             log.info("sortBy is NEWEST");
             result = jpaQueryFactory
@@ -43,6 +61,8 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
+
+
         } else if (sortBy.equals(LIKES)){
             log.info("sortBy is LIKES");
             result = jpaQueryFactory
@@ -108,4 +128,17 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private BooleanExpression languageEq(LanguageConstant language) {
         return language != null ? solution.language.eq(language) : null;
     }
+
+    private List<OrderSpecifier> getOrderSpecifier(Sort sort){
+        List<OrderSpecifier> orders = new ArrayList<>();
+        sort.stream().forEach(order->{
+            Order direction = order.isAscending()? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+            PathBuilder orderByExpression = new PathBuilder(Solution.class,"solution");
+            orders.add(new OrderSpecifier(direction,orderByExpression.get(property)));
+        });
+        return orders;
+    }
+
+
 }
