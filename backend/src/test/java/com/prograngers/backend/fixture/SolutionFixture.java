@@ -30,7 +30,7 @@ public enum SolutionFixture {
     private final String code;
     private final String description;
     private final List<Likes> likes;
-    private final LevelConstant level;
+    private final Integer level
     private final LocalDateTime date;
 
     public Solution.SolutionBuilder 기본_정보_빌더_생성() {
@@ -40,7 +40,7 @@ public enum SolutionFixture {
                 .code(this.code)
                 .description(this.description)
                 .date(this.date)
-                .level(this.level.getLevel());
+                .level(this.level);
     }
 
 
