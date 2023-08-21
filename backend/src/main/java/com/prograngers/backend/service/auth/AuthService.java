@@ -9,6 +9,8 @@ import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
+import com.prograngers.backend.exception.unauthorization.IncorrectCodeInNaverLoginException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
@@ -38,6 +40,7 @@ public class AuthService {
     private final KakaoOauth kakaoOauth;
     private final GoogleOauth googleOauth;
     private final NaverOauth naverOauth;
+    private final NicknameGenerator nicknameGenerator;
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
@@ -59,11 +62,18 @@ public class AuthService {
     @Transactional
     public AuthResult signUp(SignUpRequest signUpRequest) {
         validExistMember(signUpRequest);
+        validExistNickname(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
         member.encodePassword(encrypt.encryptAES256(member.getPassword()));
         memberRepository.save(member);
         //access token 발급
         return issueToken(member.getId());
+    }
+
+    private void validExistNickname(String nickname) {
+        if(memberRepository.findByNickname(nickname).isPresent()){
+            throw new AlreadyExistNicknameException();
+        }
     }
 
     private void validExistMember(SignUpRequest signUpRequest) {
@@ -100,7 +110,7 @@ public class AuthService {
         KakaoTokenResponse kakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
         KakaoUserInfoResponse kakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(kakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(kakaoUserInfoResponse.getId())
-                .orElseGet(() -> memberRepository.save(kakaoUserInfoResponse.toMember()));
+                .orElseGet(() -> socialRegister(kakaoUserInfoResponse.toMember()));
         return issueToken(member.getId());
     }
     @Transactional
@@ -108,16 +118,40 @@ public class AuthService {
         GoogleTokenResponse googleTokenResponse = googleOauth.googleGetToken(code);
         GoogleUserInfoResponse googleUserInfoResponse = googleOauth.googleGetUserInfo(googleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(googleUserInfoResponse.getId().hashCode()))
-                .orElseGet(() -> memberRepository.save(googleUserInfoResponse.toMember()));
+                .orElseGet(() -> socialRegister(googleUserInfoResponse.toMember()));
         return issueToken(member.getId());
     }
 
     @Transactional
     public AuthResult naverLogin(String code, String state) {
+        validCode(code);
         NaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
         NaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
-                .orElseGet(() -> memberRepository.save(userInfo.toMember()));
+                .orElseGet(() -> socialRegister(userInfo.toMember()));
         return issueToken(member.getId());
+    }
+
+    private void validCode(String code) {
+        if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
+    }
+
+    private Member socialRegister(Member member) {
+        String nickname = "";
+        do {
+            nickname = nicknameGenerator.getRandomNickname().getNickname();
+        } while (isDuplicateNickname(nickname));
+        member.createRandomNickname(nickname);
+        return memberRepository.save(member);
+    }
+
+    private boolean isDuplicateNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).isPresent();
+    }
+
+    public void checkNicknameDuplication(String nickname) {
+        if (isDuplicateNickname(nickname)) {
+            throw new AlreadyExistNicknameException();
+        }
     }
 }
