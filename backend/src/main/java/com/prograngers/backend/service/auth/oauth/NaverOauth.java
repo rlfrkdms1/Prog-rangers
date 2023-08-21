@@ -16,6 +16,7 @@ public class NaverOauth {
 
     private final static String TOKEN_URI = "https://nid.naver.com/oauth2.0/token";
     private final static String USER_INFO_URI = "https://openapi.naver.com/v1/nid/me";
+    private final static String code = "test_code";
     private final String grantType;
     private final String clientId;
     private final String redirectUri;
@@ -51,6 +52,10 @@ public class NaverOauth {
                 .retrieve()
                 .bodyToMono(NaverUserInfoResponse.class)
                 .block();
+    }
+
+    public String getCode() {
+        return code;
     }
 
 }

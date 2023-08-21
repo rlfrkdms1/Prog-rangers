@@ -29,8 +29,10 @@ CREATE TABLE IF NOT EXISTS `member` (
     `email`        varchar(255),
     `github`       varchar(255),
     `introduction` varchar(255),
-    `nickname`     varchar(255) NOT NULL, --unique
+    `nickname`     varchar(255) NOT NULL, -- unique
     `password`     varchar(255),
+    `photo`        varchar(255),
+    `type`         varchar(255),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -39,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `member` (
 
 CREATE TABLE IF NOT EXISTS `problem` (
     `id`      bigint       NOT NULL AUTO_INCREMENT,
-    `link`    varchar(255) NOT NULL, --unique
+    `link`    varchar(255) NOT NULL, -- unique
     `oj_name` varchar(255) NOT NULL,
     `title`   varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
@@ -65,9 +67,8 @@ CREATE TABLE IF NOT EXISTS `review` (
 
 CREATE TABLE IF NOT EXISTS `solution` (
     `id`                bigint       NOT NULL AUTO_INCREMENT,
-    `create_date`       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    `create_date`       TIMESTAMP    DEFAULT  CURRENT_TIMESTAMP,
     `is_public`         TINYINT(1)   NOT NULL,
-    `scraps`            int          DEFAULT '0',
     `code`              varchar(255) NOT NULL,
     `description`       varchar(255) NOT NULL,
     `level`             int          NOT NULL,
