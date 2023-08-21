@@ -140,8 +140,18 @@ public class AuthService {
         String nickname = "";
         do {
             nickname = nicknameGenerator.getRandomNickname().getNickname();
-        } while (memberRepository.findByNickname(nickname).isEmpty());
+        } while (isDuplicateNickname(nickname));
         member.createRandomNickname(nickname);
         return memberRepository.save(member);
+    }
+
+    private boolean isDuplicateNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).isPresent();
+    }
+
+    public void checkNicknameDuplication(String nickname) {
+        if (isDuplicateNickname(nickname)) {
+            throw new AlreadyExistNicknameException();
+        }
     }
 }

@@ -30,6 +30,13 @@ public class AuthController {
 
     private final AuthService authService;
     private final RefreshCookieProvider refreshCookieProvider;
+
+    @GetMapping("/check-nickname-duplication")
+    public ResponseEntity<Void> checkNicknameDuplication(@RequestParam String nickname) {
+        authService.checkNicknameDuplication(nickname);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/sign-up")
     public ResponseEntity<LoginResponse> singUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         AuthResult authResult = authService.signUp(signUpRequest);
@@ -86,12 +93,6 @@ public class AuthController {
                 .body(LoginResponse.from(authResult));
     }
 
-    private void validRefreshToken(String refreshToken) {
-        if (refreshToken == null) {
-            throw new NotExistRefreshTokenException();
-        }
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@CookieValue(name = REFRESH_TOKEN) String refreshToken){
         validRefreshToken(refreshToken);
@@ -99,5 +100,11 @@ public class AuthController {
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, logoutCookie.toString())
                 .build();
+    }
+
+    private void validRefreshToken(String refreshToken) {
+        if (refreshToken == null) {
+            throw new NotExistRefreshTokenException();
+        }
     }
 }
