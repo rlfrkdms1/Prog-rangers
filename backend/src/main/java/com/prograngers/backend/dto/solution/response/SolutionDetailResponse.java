@@ -24,7 +24,7 @@ public class SolutionDetailResponse {
     private boolean isMine;
     private static final String SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
-    public static SolutionDetailResponse toEntity(Problem problem, Solution solution, List<Comment> comments,
+    public static SolutionDetailResponse from(Problem problem, Solution solution, List<Comment> comments,
                                                   boolean scraped, int scrapCount,
                                                   boolean pushedLike, int likeCount,
                                                   boolean isMine
