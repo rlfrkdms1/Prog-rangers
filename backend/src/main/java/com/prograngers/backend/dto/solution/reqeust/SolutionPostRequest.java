@@ -5,8 +5,9 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.entity.member.Member;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -30,8 +30,9 @@ public class SolutionPostRequest {
     private String solutionTitle;
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
-
-    private LevelConstant level;
+    @Min(value = 1, message = "레벨 값은 1 미만일 수 없습니다")
+    @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
+    private Integer level;
 
     private AlgorithmConstant algorithm;
 
@@ -64,7 +65,7 @@ public class SolutionPostRequest {
                 .code(code)
                 .description(description)
                 .date(LocalDateTime.now())
-                .level(level.getLevel())
+                .level(level)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .description(description)
@@ -77,7 +78,7 @@ public class SolutionPostRequest {
         return SolutionPostRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())
-                .level(LevelConstant.fromLevel(solution.getLevel()))
+                .level(solution.getLevel())
                 .description(solution.getDescription())
                 .dataStructure(solution.getDataStructure())
                 .language(solution.getLanguage())

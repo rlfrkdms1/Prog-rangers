@@ -7,24 +7,24 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum AlgorithmConstant {
-    BUBBLE_SORT("버블정렬"),
-    SELECTION_SORT("선택정렬"),
-    INSERTION_SORT("삽입정렬"),
-    HEAP_SORT("힙정렬"),
-    MERGE_SORT("병합정렬"),
-    QUICK_SORT("퀵정렬"),
-    LINEAR_SEARCH("선형탐색"),
-    BINARY_SEARCH("이진탐색"),
+    BUBBLE_SORT("BUBBLE_SORT"),
+    SELECTION_SORT("SELECTION_SORT"),
+    INSERTION_SORT("INSERTION_SORT"),
+    HEAP_SORT("HEAP_SORT"),
+    MERGE_SORT("MERGE_SORT"),
+    QUICK_SORT("QUICK_SORT"),
+    LINEAR_SEARCH("LINEAR_SORT"),
+    BINARY_SEARCH("BINARY_SEARCH"),
     BFS("BFS"),
     DFS("DFS"),
-    DIJKSTRA("다익스트라");
+    DIJKSTRA("DIJKSTRA");
 
-    private final String krName;
+    private final String stringValue;
 
     @JsonCreator
     public static AlgorithmConstant from(String krName) {
         for (AlgorithmConstant algorithm : AlgorithmConstant.values()) {
-            if (algorithm.getKrName().equals(krName)) {
+            if (algorithm.getStringValue().equals(krName)) {
                 return algorithm;
             }
         }
@@ -32,7 +32,7 @@ public enum AlgorithmConstant {
     }
 
     @JsonValue
-    public String getKrName() {
-        return krName;
+    public String getStringValue() {
+        return stringValue;
     }
 }

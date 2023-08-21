@@ -7,18 +7,18 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum DataStructureConstant {
-    LIST("리스트"),
-    ARRAY("배열"),
-    STACK("스택"),
-    QUEUE("큐"),
-    MAP("맵"),
-    HEAP("힙");
-    private final String krName;
+    LIST("LIST"),
+    ARRAY("ARRAY"),
+    STACK("STACK"),
+    QUEUE("QUEUE"),
+    MAP("MAP"),
+    HEAP("HEAP");
+    private final String stringValue;
 
     @JsonCreator
     public static DataStructureConstant from(String krName) {
         for (DataStructureConstant dataStructure : DataStructureConstant.values()) {
-            if (dataStructure.getKrName().equals(krName)) {
+            if (dataStructure.getStringValue().equals(krName)) {
                 return dataStructure;
             }
         }
@@ -26,7 +26,7 @@ public enum DataStructureConstant {
     }
 
     @JsonValue
-    public String getKrName() {
-        return krName;
+    public String getStringValue() {
+        return stringValue;
     }
 }
