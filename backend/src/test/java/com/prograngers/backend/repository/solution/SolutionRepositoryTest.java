@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.constants.LanguageConstant.*;
+import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은2;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
@@ -39,13 +41,14 @@ import static com.prograngers.backend.fixture.SolutionFixture.풀이6;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이7;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이8;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이9;
+import static org.assertj.core.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Slf4j
 @Transactional
 @Import(TestConfig.class)
-class SolutionListSolutionRepositoryTest {
+class SolutionRepositoryTest {
 
     @Autowired
     private SolutionRepository solutionRepository;
@@ -58,7 +61,6 @@ class SolutionListSolutionRepositoryTest {
 
     @Autowired
     private EntityManager em;
-
 
     @DisplayName("풀이를 저장할 수 있다")
     @Test
@@ -73,7 +75,7 @@ class SolutionListSolutionRepositoryTest {
         Solution saved = solutionRepository.save(solution);
 
         //then
-        Assertions.assertThat(saved).isEqualTo(solution);
+        assertThat(saved).isEqualTo(solution);
     }
 
     @DisplayName("풀이를 수정할 수 있다")
@@ -87,7 +89,7 @@ class SolutionListSolutionRepositoryTest {
         Solution updated = solutionRepository.save(saved);
 
         // then
-        Assertions.assertThat(updated).isEqualTo(saved);
+        assertThat(updated).isEqualTo(saved);
     }
 
     @DisplayName("풀이를 삭제할 수 있다")
@@ -111,9 +113,9 @@ class SolutionListSolutionRepositoryTest {
     void 멤버_이름으로_전부_찾기_테스트() {
 
         // given
-        Member member1 = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성(null));
-        Member member2 = 멤버_저장( 길가은2.아이디_값_지정_멤버_생성(null));
-        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Member member1 = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성());
+        Member member2 = 멤버_저장( 길가은2.아이디_값_지정_멤버_생성());
+        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성());
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
 //        em.persist(member1);
 //        em.persist(member2);
@@ -129,8 +131,8 @@ class SolutionListSolutionRepositoryTest {
         List<Solution> result = solutionRepository.findAllByMember(member1);
 
         // then
-        Assertions.assertThat(result.size()).isEqualTo(2);
-        Assertions.assertThat(result).contains(solution1,solution2).doesNotContain(solution3);
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).contains(solution1,solution2).doesNotContain(solution3);
     }
 
     @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -138,11 +140,14 @@ class SolutionListSolutionRepositoryTest {
     void 풀이_목록_조회_필터링_문제_id() {
         // given
         // 회원
-        Member member = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성());
 
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
-        Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
+        Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성());
+        log.info("problem1 id : {}",problem1.getId());
+        log.info("problem2 id : {}",problem2.getId());
+
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
@@ -150,15 +155,15 @@ class SolutionListSolutionRepositoryTest {
 
         // when
         List<Solution> result1 = solutionRepository
-                .getSolutionList(1, 1L, null, null, null, "newest");
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
         List<Solution> result2 = solutionRepository
-                .getSolutionList(1, 2L, null, null, null, "newest");
+                .getSolutionList(PageRequest.of(0, 4), problem2.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result1).contains(solution1);
-        Assertions.assertThat(result1).doesNotContain(solution2);
-        Assertions.assertThat(result2).contains(solution2);
-        Assertions.assertThat(result2).doesNotContain(solution1);
+        assertThat(result1).contains(solution1);
+        assertThat(result1).doesNotContain(solution2);
+        assertThat(result2).contains(solution2);
+        assertThat(result2).doesNotContain(solution1);
     }
 
     @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -166,10 +171,10 @@ class SolutionListSolutionRepositoryTest {
     void 풀이_목록_조회_필터링_자료구조_알고리즘() {
         // given
         // 회원
-        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
 
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
@@ -179,16 +184,16 @@ class SolutionListSolutionRepositoryTest {
 
         // when
         List<Solution> result1 = solutionRepository
-                .getSolutionList(1, problem1.getId(), null, BFS, null, "newest");
+                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), null, BFS, null, NEWEST).getContent();
         List<Solution> result2 = solutionRepository
-                .getSolutionList(1,  problem1.getId(), null, null, QUEUE, "newest");
+                .getSolutionList(PageRequest.of(0, 4),   problem1.getId(), null, null, QUEUE, NEWEST).getContent();
         List<Solution> result3 = solutionRepository
-                .getSolutionList(1,  problem1.getId(), null, BFS, QUEUE, "newest");
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
-        Assertions.assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4);
-        Assertions.assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4);
+        assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
+        assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4);
+        assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4);
     }
 
     @DisplayName("언어로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -196,9 +201,9 @@ class SolutionListSolutionRepositoryTest {
     void 풀이_목록_조회_필터링_언어() {
         // given
         // 회원
-        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
         Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
@@ -208,16 +213,16 @@ class SolutionListSolutionRepositoryTest {
 
         // when
         List<Solution> result1 = solutionRepository
-                .getSolutionList(1, problem1.getId(), JAVA, null, null, "newest");
+                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), JAVA, null, null, NEWEST).getContent();
         List<Solution> result2 = solutionRepository
-                .getSolutionList(1, problem1.getId(), CPP, null, null, "newest");
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), CPP, null, null, NEWEST).getContent();
         List<Solution> result3 = solutionRepository
-                .getSolutionList(1, problem1.getId(), PYTHON, null, null, "newest");
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), PYTHON, null, null, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4);
-        Assertions.assertThat(result2).contains(solution3).doesNotContain(solution1, solution2, solution4);
-        Assertions.assertThat(result3).contains(solution4).doesNotContain(solution1, solution2, solution3);
+        assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4);
+        assertThat(result2).contains(solution3).doesNotContain(solution1, solution2, solution4);
+        assertThat(result3).contains(solution4).doesNotContain(solution1, solution2, solution3);
     }
 
     @DisplayName("페이지에 맞게 문제 목록을 조회할 수 있다")
@@ -225,10 +230,10 @@ class SolutionListSolutionRepositoryTest {
     void 문제_목록_조회_페이지() {
         // given
         // 회원
-        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
 
         // 문제
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이 : solution9 ~ 1 순서로 최신
         Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
@@ -242,22 +247,25 @@ class SolutionListSolutionRepositoryTest {
         Solution solution9 = 풀이_저장(풀이9.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
 
         // when
-        List<Solution> result1 = solutionRepository.getSolutionList(1, problem1.getId(), null, null, null, "newest");
-        List<Solution> result2 = solutionRepository.getSolutionList(2, problem1.getId(), null, null, null, "newest");
-        List<Solution> result3 = solutionRepository.getSolutionList(3, problem1.getId(), null, null, null, "newest");
-        List<Solution> result4 = solutionRepository.getSolutionList(4, problem1.getId(), null, null, null, "newest");
+        List<Solution> result1 = solutionRepository.getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result2 = solutionRepository.getSolutionList(PageRequest.of(1, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result3 = solutionRepository.getSolutionList(PageRequest.of(2, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result4 = solutionRepository.getSolutionList(PageRequest.of(3, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result1)
-                .contains(solution9,solution8,solution7,solution6)
-                .doesNotContain(solution1,solution2,solution3,solution4,solution5);
-        Assertions.assertThat(result2)
-                .contains(solution5,solution4,solution3,solution2)
-                .doesNotContain(solution1,solution6,solution7,solution8,solution9);
-        Assertions.assertThat(result3)
-                .contains(solution1)
-                .doesNotContain(solution2,solution3,solution4,solution5,solution6,solution7,solution8,solution9);
-        Assertions.assertThat(result4.size()).isEqualTo(0);
+        org.junit.jupiter.api.Assertions
+                        .assertAll(
+                                ()-> assertThat(result1)
+                                        .containsExactly(solution9,solution8,solution7,solution6)
+                                        .doesNotContain(solution1,solution2,solution3,solution4,solution5),
+                                ()->assertThat(result2)
+                                        .containsExactly(solution5,solution4,solution3,solution2)
+                                        .doesNotContain(solution1,solution6,solution7,solution8,solution9),
+                                ()->assertThat(result3)
+                                        .containsExactly(solution1)
+                                        .doesNotContain(solution2,solution3,solution4,solution5,solution6,solution7,solution8,solution9),
+                                ()->assertThat(result4.size()).isEqualTo(0)
+                        );
     }
 
     Member 멤버_저장(Member member) {

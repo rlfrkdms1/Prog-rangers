@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -44,7 +45,7 @@ public class SolutionPostRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Solution toEntity() {
+    public Solution toSolution() {
         /*
         파싱해서 ojname 알아내서 문제에 넣기
         로그인정보로 멤버 알아내서 넣기
@@ -55,29 +56,28 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, LocalDate.now(),judge, null))
+                .problem(new Problem(null, problemTitle, problemLink, LocalDateTime.now(),judge, null))
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .scraps(0)
-                .date(LocalDate.now())
-                .level(level)
+                .date(LocalDateTime.now())
+                .level(level.getLevel())
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .description(description)
-                .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
+                .scrapSolution(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
                 .build();
     }
 
-    public static SolutionPostRequest toDto(Solution solution){
+    public static SolutionPostRequest from(Solution solution){
         return SolutionPostRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())
-                .level(solution.getLevel())
+                .level(LevelConstant.fromLevel(solution.getLevel()))
                 .description(solution.getDescription())
                 .dataStructure(solution.getDataStructure())
                 .language(solution.getLanguage())

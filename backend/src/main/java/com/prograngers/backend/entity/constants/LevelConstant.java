@@ -7,13 +7,14 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum LevelConstant {
-    ONE("레벨1"),
-    TWO("레벨2"),
-    THREE("레벨3"),
-    FOUR("레벨4"),
-    FIVE("레벨5");
+    ONE("레벨1",1),
+    TWO("레벨2",2),
+    THREE("레벨3",3),
+    FOUR("레벨4",4),
+    FIVE("레벨5",5);
 
     private final String krName;
+    private final Integer level;
 
     @JsonCreator
     public static LevelConstant from(String krName) {
@@ -25,9 +26,20 @@ public enum LevelConstant {
         throw new LevelNotFoundException();
     }
 
+    public static LevelConstant fromLevel(int level) {
+        for (LevelConstant constant : LevelConstant.values()) {
+            if (constant.getLevel().equals(level)) {
+                return constant;
+            }
+        }
+        throw new LevelNotFoundException();
+    }
+
     @JsonValue
     public String getKrName() {
         return krName;
     }
+
+    public Integer getLevel(){return level;}
 
 }

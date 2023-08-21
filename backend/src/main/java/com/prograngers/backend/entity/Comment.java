@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,18 +32,16 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "solution_id")
     private Solution solution;
     private String mention;
 
     private String content;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     private Long parentId;
-
-    private Integer groupNumber;
 
     private boolean fixed;
 

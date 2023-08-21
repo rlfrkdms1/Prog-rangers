@@ -3,6 +3,7 @@ package com.prograngers.backend.dto.solution.reqeust;
 import com.prograngers.backend.entity.*;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.constants.LevelConstant;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,10 +25,13 @@ public class SolutionPatchRequest {
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
 
-    public Solution toEntity(Solution target) {
+    private LevelConstant level;
+
+    public Solution toSolution(Solution target) {
         target.updateTitle(title);
         target.updateAlgorithm(algorithmName);
         target.updateDataStructure(dataStructureName);
+        target.updateLevel(level);
         target.updateCode(code);
         target.updateDescription(description);
         return target;

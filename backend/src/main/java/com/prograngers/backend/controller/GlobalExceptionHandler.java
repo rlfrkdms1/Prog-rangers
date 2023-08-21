@@ -12,8 +12,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.prograngers.backend.exception.ErrorCode.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -26,7 +30,7 @@ public class GlobalExceptionHandler {
         List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         for (ObjectError error : errors) {
             ErrorResponse errorResponse = ErrorResponse.builder()
-                    .errorCode(ErrorCode.INVALID_REQUEST_BODY)
+                    .errorCode(INVALID_REQUEST_BODY)
                     .description(error.getDefaultMessage())
                     .build();
             errorList.add(errorResponse);
@@ -55,4 +59,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> typeMismatchException(MethodArgumentTypeMismatchException exception){
+        String message = "쿼리 스트링 타입을 확인해주세요";
+        ErrorResponse errorResponse = new ErrorResponse(TYPE_MISMATCH, message);
+        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }

@@ -105,7 +105,7 @@ class CommentServiceTest {
         CommentPatchRequest request = new CommentPatchRequest("수정내용", null);
 
         // when
-        commentService.updateComment(comment.getId(), request);
+        commentService.updateComment(comment.getId(), request, member.getId());
         Comment updated = commentRepository.findById(1L).orElse(null);
 
         // then
@@ -117,6 +117,7 @@ class CommentServiceTest {
     @Test
     void 댓글_삭제_테스트() {
         // given
+        Member member = 길가은1.getMember();
         Comment comment = 댓글1.기본_댓글_생성(1L);
         Comment deleted = 삭제된_댓글.기본_댓글_생성(1L);
 
@@ -130,7 +131,7 @@ class CommentServiceTest {
         commentRepository.save(comment);
 
         // when
-        commentService.deleteComment(1L);
+        commentService.deleteComment(1L,member.getId());
 
         // then
         verify(commentRepository,times(2)).save(comment);

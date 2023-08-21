@@ -1,31 +1,39 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.constants.SortConstant;
+import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
+import com.prograngers.backend.repository.likes.LikesRepository;
+import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
+
 
 
 @RequiredArgsConstructor
@@ -41,9 +49,18 @@ public class SolutionService {
 
     private final ProblemRepository problemRepository;
 
+    private final MemberRepository memberRepository;
+
+    private final LikesRepository likesRepository;
+
+
+
+
     @Transactional
-    public Long save(SolutionPostRequest solutionPostRequest) {
-        Solution solution = solutionPostRequest.toEntity();
+    public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
+        Solution solution = solutionPostRequest.toSolution();
+        solution.updateMember(member);
         Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
         if (problem != null) {
             solution.updateProblem(problem);
@@ -53,21 +70,31 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long update(Long solutionId, SolutionPatchRequest request) {
+    public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
-        Solution solution = request.toEntity(target);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        if (target.getMember().getId()!=member.getId()){
+            throw new MemberUnAuthorizedException();
+        }
+        Solution solution = request.toSolution(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
     }
 
     @Transactional
-    public void delete(Long solutionId) throws SolutionNotFoundException {
+    public void delete(Long solutionId, Long memberId) throws SolutionNotFoundException {
         Solution target = findById(solutionId);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        if (target.getMember().getId()!=member.getId()){
+            throw new MemberUnAuthorizedException();
+        }
+
         List<Comment> comments = commentRepository.findAllBySolution(target);
         for (Comment comment : comments) {
             comment.updateSolution(null);
             commentRepository.delete(comment);
         }
+
         solutionRepository.delete(target);
     }
 
@@ -76,57 +103,61 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long saveScrap(Long id, ScarpSolutionPostRequest request) {
+    public Long saveScrap(Long id, ScarpSolutionPostRequest request, Long memberId) {
         Solution scrap = findById(id);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
-        Solution solution = request.toEntity(scrap);
-
+        Solution solution = request.toSolution(scrap);
+        solution.updateMember(member);
         Solution saved = solutionRepository.save(solution);
-
         return saved.getId();
     }
 
-    @Transactional
-    public void addComment(Long solutionId, CommentReqeust commentReqeust) {
-        Solution solution = findById(solutionId);
-
-        //가상 Member 생성
-        Member member = Member.builder().nickname("닉네임").build();
-
-        Comment comment = Comment.builder().
-                member(member).
-                solution(solution).
-                mention(commentReqeust.getMention()).
-                content(commentReqeust.getContent()).
-                date(LocalDate.now()).parentId(commentReqeust.getParentId()).
-                groupNumber(commentReqeust.getGroupNumber()).fixed(false).
-                build();
-
-        Comment saved = commentRepository.save(comment);
-    }
-
-    public SolutionUpdateFormResponse getUpdateForm(Long solutionId) {
+    public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findById(solutionId);
+        // 로그인한 멤버랑 작성자랑 일치하지 않을 경우 UnAuthorizationException을 던진다
+        Long targetMemberId = target.getMember().getId();
+        if (targetMemberId != memberId) {
+            throw new MemberUnAuthorizedException();
+        }
+
         SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
         return solutionUpdateFormResponse;
     }
 
-    public SolutionDetailResponse getSolutionDetail(Long solutionId) {
+    public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
+        boolean isMine = false;
+        if (memberId!=null){
+            Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+            if (solution.getMember().getId().equals(member.getId())){
+                isMine = true;
+            }
+        }
+
+
         List<Comment> comments = commentRepository.findAllBySolution(solution);
-        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.toEntity(solution, comments);
+        List<Likes> likes = likesRepository.findAllBySolution(solution);
+        boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
+
+        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolution(solution);
+        boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
+
+        SolutionDetailResponse solutionDetailResponse =
+                SolutionDetailResponse.toEntity(solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
         return solutionDetailResponse;
     }
 
     public SolutionListResponse getSolutionList(
-            int page,
+            Pageable pageable,
             Long problemId,
             LanguageConstant language,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
-            String sortBy) {
-        List<Solution> solutions = solutionRepository.getSolutionList(page, problemId, language, algorithm, dataStructure, sortBy);
+            SortConstant sortBy) {
+        Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+        PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
 
         return SolutionListResponse.from(solutions);
     }
