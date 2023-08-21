@@ -60,20 +60,15 @@ public class SolutionDetailResponse {
         List<SolutionDetailComment> commentResponseList = new ArrayList<>();
 
         // 먼저 부모가 없는 댓글들을 전부 더한다
-        for (Comment comment : comments) {
-            if (comment.getParentId()==null){
-                commentResponseList.add(
-                        new SolutionDetailComment(
-                                comment.getMember().getPhoto(),
-                                comment.getId(),
-                                comment.getMember().getNickname(),
-                                comment.getContent(),
-                                comment.getMention(),
-                                new ArrayList<>()
-                        )
-                );
-            }
-        }
+        comments.stream().filter(comment -> comment.getParentId()==null)
+                .forEach(comment->commentResponseList.add( new SolutionDetailComment(
+                        comment.getMember().getPhoto(),
+                        comment.getId(),
+                        comment.getMember().getNickname(),
+                        comment.getContent(),
+                        comment.getMention(),
+                        new ArrayList<>()
+                )));
 
         // 부모가 있는 댓글들을 더한다
         for (Comment comment : comments){
