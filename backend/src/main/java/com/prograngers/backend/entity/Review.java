@@ -1,6 +1,7 @@
 package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.member.Member;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,18 +29,14 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="solution_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "solution_id")
     private Solution solution;
 
     private Integer codeLineNumber;
-
-    private Integer orderParent;
-
-    private Integer orderChild;
 
     private Long parentId;
 
@@ -45,7 +44,7 @@ public class Review {
 
     private String content;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     public void updateMention(String mention) {
         if (mention != null) {
@@ -53,9 +52,9 @@ public class Review {
         }
     }
 
-        public void updateContent(String content){
-            if (content!=null){
-                this.content = content;
+    public void updateContent(String content) {
+        if (content != null) {
+            this.content = content;
         }
     }
 

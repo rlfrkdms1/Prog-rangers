@@ -33,4 +33,14 @@ public enum MemberFixture {
                 .password(this.password)
                 .build();
     }
+
+    public Member 아이디_값_지정_멤버_생성(){
+        return Member.builder()
+                .id(null)
+                .nickname(this.nickname)
+                .email(this.email)
+                .password(this.password)
+                .build();
+    }
+
 }

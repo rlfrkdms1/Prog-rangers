@@ -23,4 +23,8 @@ public class SolutionDetailSolution {
     Integer likes;
     Integer scraps;
     String scrapLink;
+
+    boolean pushedLike;
+
+    boolean scraped;
 }

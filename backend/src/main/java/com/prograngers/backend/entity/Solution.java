@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.entity.member.Member;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,12 +19,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,17 +57,12 @@ public class Solution {
 
     private String description;
 
-    private Integer scraps;
-
-    @OneToMany(mappedBy = "solution")
-    private List<Likes> likes = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
     @Nullable
-    private Solution scrapId;
+    private Solution scrapSolution;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
     private AlgorithmConstant algorithm;
@@ -72,8 +70,7 @@ public class Solution {
     @Enumerated(EnumType.STRING)
     private DataStructureConstant dataStructure;
 
-    @Enumerated(EnumType.STRING)
-    private LevelConstant level;
+    private Integer level;
 
     @Enumerated(EnumType.STRING)
     private LanguageConstant language;
@@ -112,19 +109,14 @@ public class Solution {
         }
     }
 
-
-    public void upScraps() {
-        this.scraps += 1;
-    }
-
-    public void downScraps() {
-        this.scraps -= 1;
-    }
-
     public void updateScrapId(Solution solution) {
         if (solution != null) {
-            this.scrapId = solution;
+            this.scrapSolution = solution;
         }
+    }
+
+    public void updateLevel(LevelConstant level){
+        this.level = level.getLevel();
     }
 
     public void updateAlgorithm(AlgorithmConstant algorithm) {
@@ -132,10 +124,7 @@ public class Solution {
     }
 
     public void updateDataStructure(DataStructureConstant dataStructure) {
-        this.dataStructure =dataStructure;
+        this.dataStructure = dataStructure;
     }
 
-    public void updateLevel(LevelConstant level) {
-        this.level = level;
-    }
 }
