@@ -39,7 +39,7 @@ public class ProblemController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = "date") String sortBy) {
+            @RequestParam(defaultValue = "DATE") String sortBy) {
         List<ProblemResponse> problemList = problemService.getProblemList(page, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemList);
     }
@@ -53,7 +53,7 @@ public class ProblemController {
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = "newest") SortConstant sortBy
+            @RequestParam(defaultValue = "NEWEST") SortConstant sortBy
     ){
         SolutionListResponse solutionListResponse = solutionService.getSolutionList(pageable, problemId, language,algorithm,dataStructure,sortBy);
         return ResponseEntity.ok().body(solutionListResponse);
