@@ -5,6 +5,7 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -43,11 +44,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long size = jpaQueryFactory
-                .select(problem.count())
-                .from(problem)
-                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-                .fetchOne();
+        int size = results.size();
 
         log.info("problem size : {}",size);
 
