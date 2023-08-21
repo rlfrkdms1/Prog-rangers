@@ -159,6 +159,6 @@ public class SolutionService {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
 
-        return SolutionListResponse.from(solutions);
+        return SolutionListResponse.from(solutions,pageable.getPageNumber());
     }
 }
