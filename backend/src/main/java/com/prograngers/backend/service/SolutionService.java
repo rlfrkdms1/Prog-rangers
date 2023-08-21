@@ -145,7 +145,7 @@ public class SolutionService {
         boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
 
         SolutionDetailResponse solutionDetailResponse =
-                SolutionDetailResponse.toEntity(solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
+                SolutionDetailResponse.toEntity(solution.getProblem(), solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
         return solutionDetailResponse;
     }
 
