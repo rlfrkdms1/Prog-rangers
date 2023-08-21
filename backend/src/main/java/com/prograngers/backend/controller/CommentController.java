@@ -29,7 +29,6 @@ import java.net.URISyntaxException;
 public class CommentController {
 
     private final CommentService commentService;
-    private final SolutionService solutionService;
 
     private final String REDIRECT_PATH = "http://localhost:8080/solutions";
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
