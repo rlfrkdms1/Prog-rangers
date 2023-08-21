@@ -13,8 +13,10 @@ public class ProblemListResponse {
     private List<ProblemListProblem> problems;
     private int totalCount;
 
-    public static ProblemListResponse from(List<ProblemListProblem> listProblems, int totalCount){
-        return new ProblemListResponse(listProblems,totalCount);
+    private int page;
+
+    public static ProblemListResponse from(List<ProblemListProblem> listProblems, int totalCount, int page){
+        return new ProblemListResponse(listProblems,totalCount,page);
     }
 
 }

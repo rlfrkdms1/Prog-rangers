@@ -96,7 +96,6 @@ public class SolutionDetailResponse {
             }
         }
 
-
         response.comments = commentResponseList;
         response.solution = responseSolution;
         response.isMine = isMine;

@@ -56,7 +56,7 @@ public class ProblemService {
             }
             problemListProblemResponse.add(problemListProblem);
         }
-        ProblemListResponse response = ProblemListResponse.from(problemListProblemResponse, pageImpl.getTotalPages());
+        ProblemListResponse response = ProblemListResponse.from(problemListProblemResponse, pageImpl.getTotalPages(),pageable.getPageNumber());
         return response;
     }
 }
