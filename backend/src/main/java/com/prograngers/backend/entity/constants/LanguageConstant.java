@@ -28,5 +28,4 @@ public enum LanguageConstant {
     public String getStringValue() {
         return stringValue;
     }
-
 }

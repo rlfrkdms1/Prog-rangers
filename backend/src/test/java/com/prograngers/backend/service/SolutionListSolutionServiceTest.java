@@ -77,7 +77,7 @@ class SolutionListSolutionServiceTest {
         Problem problem = 문제1.getProblem();
         Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
-        ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", LevelConstant.FIVE);
+        ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", 5);
         Solution made = request.toSolution(solution);
 
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
@@ -110,7 +110,7 @@ class SolutionListSolutionServiceTest {
         solutionRepository.save(solution);
 
         // when
-        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2", AlgorithmConstant.BFS, DataStructureConstant.STACK, "풀이코드2", "풀이설명2",LevelConstant.FIVE);
+        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2", AlgorithmConstant.BFS, DataStructureConstant.STACK, "풀이코드2", "풀이설명2",5);
         Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest, member.getId());
 
         // then

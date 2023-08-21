@@ -25,5 +25,4 @@ public enum JudgeConstant {
         }
         throw new ProblemLinkNotFoundException();
     }
-
 }

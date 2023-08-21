@@ -27,5 +27,4 @@ public enum SortConstant {
     public String getStringValue(){
         return this.stringValue;
     }
-
 }
