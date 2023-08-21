@@ -1,10 +1,15 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.ScarpSolutionRequest;
-import com.prograngers.backend.dto.SolutionPatchRequest;
-import com.prograngers.backend.dto.SolutionRequest;
-import com.prograngers.backend.dto.SolutionUpdateForm;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.controller.auth.LoggedInMember;
+import com.prograngers.backend.controller.auth.Login;
+import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
+import com.prograngers.backend.dto.comment.request.CommentReqeust;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
+import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,70 +24,76 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/solutions")
+@RequestMapping("prog-rangers/solutions")
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;
-
-    private final String REDIRECT_PATH = "http://localhost:8080/solutions/";
+    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
+    private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // solution 쓰기
+    @Login
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@RequestBody @Valid SolutionRequest solutionRequest) throws URISyntaxException {
+    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest) throws URISyntaxException {
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Solution saved = solutionService.save(solutionRequest.toEntity());
+        Long saveId = solutionService.save(solutionPostRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
+    // scrap해서 생성
+    @Login
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@PathVariable Long scrapId, @RequestBody ScarpSolutionRequest request)
+    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request)
             throws URISyntaxException {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
-        Solution saved = solutionService.saveScrap(scrapId, request);
+        Long saveId = solutionService.saveScrap(scrapId, request, memberId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + saved.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     // 수정 폼 반환
+    @Login
     @GetMapping("/{solutionId}/update-form")
-    public ResponseEntity<?> updateForm(@PathVariable Long solutionId) {
-        Solution target = solutionService.findById(solutionId);
-        return ResponseEntity.ok().body(SolutionUpdateForm.toDto(target));
+    public ResponseEntity<?> updateForm(@PathVariable Long solutionId, @LoggedInMember Long memberId) {
+        SolutionUpdateFormResponse updateForm = solutionService.getUpdateForm(solutionId, memberId);
+        return ResponseEntity.ok().body(updateForm);
     }
 
     // 수정 요청
+    @Login
     @PatchMapping("/{solutionId}")
-    public ResponseEntity<?> update(@PathVariable Long solutionId,
+    public ResponseEntity<?> update(@PathVariable Long solutionId, @LoggedInMember Long memberId,
                                     @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
 
         // solutionService로 update한다
-        Solution updated = solutionService.update(solutionId, solutionPatchRequest);
+        Long updateId = solutionService.update(solutionId, solutionPatchRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + updated.getId());
+        URI redirectUri = new URI(REDIRECT_PATH + "/" + updateId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(redirectUri);
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     // 삭제 요청
-    @DeleteMapping("{solutionId}")
-    public ResponseEntity<?> delete(@PathVariable Long solutionId) throws URISyntaxException {
+    @Login
+    @DeleteMapping("/{solutionId}")
+    public ResponseEntity<?> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId) throws URISyntaxException {
 
         // solutionService로 delete한다
-        solutionService.delete(solutionId);
+        solutionService.delete(solutionId, memberId);
 
         // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH);
@@ -92,4 +103,10 @@ public class SolutionController {
 
     }
 
+    // Solution 상세보기 요청
+    @GetMapping("/{solutionId}")
+    public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId) {
+        SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
+        return ResponseEntity.ok().body(solutionDetailResponse);
+    }
 }

@@ -2,12 +2,25 @@ package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
+import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.member.Member;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -20,11 +33,11 @@ public class Solution {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -36,25 +49,24 @@ public class Solution {
 
     private String description;
 
-    private Integer scraps;
-
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
     @Nullable
-    private Solution scrapId;
+    private Solution scrapSolution;
 
-    private LocalDate date;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "algorithm_id")
-    private Algorithm algorithm;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dataStructure_id")
-    private DataStructure dataStructure;
+    private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
-    private LevelConstant level;
+    private AlgorithmConstant algorithm;
+
+    @Enumerated(EnumType.STRING)
+    private DataStructureConstant dataStructure;
+
+    private Integer level;
+
+
+    @Enumerated(EnumType.STRING)
+    private LanguageConstant language;
 
     public void updateProblem(Problem problem) {
         if (problem != null) {
@@ -90,34 +102,22 @@ public class Solution {
         }
     }
 
-
-    public void upScraps() {
-        this.scraps += 1;
-    }
-
-    public void downScraps() {
-        this.scraps -= 1;
-    }
-
     public void updateScrapId(Solution solution) {
         if (solution != null) {
-            this.scrapId = solution;
+            this.scrapSolution = solution;
         }
     }
 
+    public void updateLevel(Integer level){
+        this.level = level;
+    }
+
     public void updateAlgorithm(AlgorithmConstant algorithm) {
-        this.algorithm = Algorithm.builder()
-                .name(algorithm)
-                .build();
+        this.algorithm = algorithm;
     }
 
     public void updateDataStructure(DataStructureConstant dataStructure) {
-        this.dataStructure = DataStructure.builder()
-                .name(dataStructure)
-                .build();
+        this.dataStructure = dataStructure;
     }
 
-    public void updateLevel(LevelConstant level) {
-        this.level = level;
-    }
 }
