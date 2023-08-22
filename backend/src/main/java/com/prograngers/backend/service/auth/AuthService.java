@@ -141,7 +141,7 @@ public class AuthService {
         do {
             nickname = nicknameGenerator.getRandomNickname().getNickname();
         } while (isDuplicateNickname(nickname));
-        member.createRandomNickname(nickname);
+        member.updateRandomNickname(nickname);
         return memberRepository.save(member);
     }
 

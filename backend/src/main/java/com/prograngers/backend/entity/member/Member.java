@@ -50,7 +50,7 @@ public class Member {
         }
     }
 
-    public void createRandomNickname(String nickname) {
+    public void updateRandomNickname(String nickname) {
         if (nickname != null) {
             this.nickname = nickname;
         }
