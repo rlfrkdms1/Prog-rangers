@@ -64,7 +64,7 @@ public class AuthService {
         validExistMember(signUpRequest);
         validExistNickname(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
-        member.encodePassword(encrypt.encryptAES256(member.getPassword()));
+        member.encodePassword(member.getPassword());
         memberRepository.save(member);
         //access token 발급
         return issueToken(member.getId());
