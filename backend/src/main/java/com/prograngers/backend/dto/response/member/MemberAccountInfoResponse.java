@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MemberAccountResponse {
+public class MemberAccountInfoResponse {
 
     private MemberType type;
 
@@ -23,8 +23,8 @@ public class MemberAccountResponse {
 
     private String photo;
 
-    public static MemberAccountResponse from(Member member) {
-        return MemberAccountResponse.builder()
+    public static MemberAccountInfoResponse from(Member member) {
+        return MemberAccountInfoResponse.builder()
                 .type(member.getType())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
