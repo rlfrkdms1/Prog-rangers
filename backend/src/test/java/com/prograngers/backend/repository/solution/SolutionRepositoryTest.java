@@ -27,6 +27,7 @@ import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
+import static com.prograngers.backend.entity.constants.DataStructureConstant.STACK;
 import static com.prograngers.backend.entity.constants.LanguageConstant.*;
 import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
@@ -66,9 +67,15 @@ class SolutionRepositoryTest {
     @Test
     void 저장_테스트() {
         // given
+        // 회원
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+
+        // 문제
+        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+
         // 비영속 상태
         // id가 자동생성되기 때문에 id값 null
-        Solution solution = 풀이1.기본_솔루션_생성(null);
+        Solution solution = 풀이1.일반_솔루션_생성(null,problem,member,0,DFS,STACK);
 
         // when
         // solution이 영속 상태가 된다. saved랑 solution이랑 같은 트랜잭션 내에서 같은 id값을 가지므로 비교시 같아야 한다

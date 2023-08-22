@@ -2,7 +2,11 @@ package com.prograngers.backend.repository.comment;
 
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
+import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import static com.prograngers.backend.fixture.CommentFixture.댓글1;
+import static com.prograngers.backend.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -27,8 +33,12 @@ class CommentRepositoryTest {
     @DisplayName("댓글을 저장할 수 있다")
     @Test
     void 저장_테스트() {
+
         // given
-        Comment comment = 댓글1.기본_댓글_생성(null);
+        Member member = 길가은1.아이디_값_지정_멤버_생성();
+        Solution solution = 풀이1.기본_솔루션_생성();
+
+        Comment comment = 댓글1.댓글_생성(null,solution,member);
 
         // when
         Comment saved = commentRepository.save(comment);
@@ -41,7 +51,10 @@ class CommentRepositoryTest {
     @Test
     void 수정_테스트() {
         // given
-        Comment comment = 댓글_저장(댓글1.기본_댓글_생성(null));
+        Member member = 길가은1.아이디_값_지정_멤버_생성();
+        Solution solution = 풀이1.기본_솔루션_생성();
+
+        Comment comment = 댓글1.댓글_생성(null,solution,member);
 
         comment.updateContent("수정 내용");
 
@@ -56,7 +69,11 @@ class CommentRepositoryTest {
     @Test
     void 삭제_테스트() {
         // given
-        Comment saved = 댓글_저장(댓글1.기본_댓글_생성(null));
+        Member member = 길가은1.아이디_값_지정_멤버_생성();
+        Solution solution = 풀이1.기본_솔루션_생성();
+
+        Comment comment = 댓글1.댓글_생성(null,solution,member);
+        Comment saved = commentRepository.save(comment);
 
         // when
         commentRepository.delete(saved);
