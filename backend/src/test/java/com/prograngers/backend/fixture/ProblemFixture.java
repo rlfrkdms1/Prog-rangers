@@ -32,7 +32,6 @@ public enum ProblemFixture {
                 .id(this.id)
                 .title(this.title)
                 .link(this.link)
-                .date(this.date)
                 .ojName(this.ojName)
                 .solutions(new ArrayList<>())
                 .build();
@@ -42,7 +41,6 @@ public enum ProblemFixture {
                 .id(id)
                 .title(this.title)
                 .link(this.link)
-                .date(this.date)
                 .ojName(this.ojName)
                 .solutions(new ArrayList<>())
                 .build();
@@ -53,7 +51,6 @@ public enum ProblemFixture {
                 .id(null)
                 .title(this.title)
                 .link(this.link)
-                .date(this.date)
                 .ojName(this.ojName)
                 .solutions(new ArrayList<>())
                 .build();

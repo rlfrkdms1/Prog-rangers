@@ -102,6 +102,7 @@ class CommentServiceTest {
 
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
+        given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
         CommentPatchRequest request = new CommentPatchRequest("수정내용", null);
 
         // when
@@ -118,8 +119,9 @@ class CommentServiceTest {
     void 댓글_삭제_테스트() {
         // given
         Member member = 길가은1.getMember();
-        Comment comment = 댓글1.기본_댓글_생성(1L);
-        Comment deleted = 삭제된_댓글.기본_댓글_생성(1L);
+        Comment comment = 댓글1.댓글_생성(1L,null,member);
+        Comment deleted = 삭제된_댓글.댓글_생성(1L,null,member);
+
 
         given(commentRepository.save(comment))
                 .willReturn(comment)
@@ -127,8 +129,11 @@ class CommentServiceTest {
         given(commentRepository.findById(comment.getId())).
                 willReturn(Optional.ofNullable(comment))
                         .willReturn(Optional.ofNullable(deleted));
+        given(memberRepository.findById(member.getId()))
+                .willReturn(Optional.ofNullable(member));
 
         commentRepository.save(comment);
+
 
         // when
         commentService.deleteComment(1L,member.getId());

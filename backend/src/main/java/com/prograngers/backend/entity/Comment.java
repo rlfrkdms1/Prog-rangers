@@ -2,6 +2,7 @@ package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.member.Member;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDateTime date;
+    private LocalDateTime createdDate;
 
     private Long parentId;
 

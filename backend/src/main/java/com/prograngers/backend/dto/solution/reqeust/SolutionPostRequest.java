@@ -57,14 +57,14 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, LocalDateTime.now(),judge, null))
+                .problem(new Problem(null, problemTitle, problemLink, judge, null))
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .date(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .level(level)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)

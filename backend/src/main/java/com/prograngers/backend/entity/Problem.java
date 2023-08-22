@@ -34,8 +34,6 @@ public class Problem {
 
     private String link;
 
-    private LocalDateTime date;
-
     @Enumerated(EnumType.STRING)
     private JudgeConstant ojName;
 

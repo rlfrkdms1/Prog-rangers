@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
+import static com.prograngers.backend.entity.constants.LanguageConstant.JAVA;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
@@ -58,23 +59,22 @@ class ProblemListProblemRepositoryTest {
         Problem problem3 = 문제_저장(문제3.아이디_값_지정_문제_생성(null));
 
         // 풀이 
-        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
-        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
-        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
-        Solution solution4 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
-        Solution solution5 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE));
-        Solution solution6 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE));
-        Solution solution7 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE));
-        Solution solution8 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, member, 0, BFS, QUEUE));
-        Solution solution9 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem3, member, 0, BFS, QUEUE));
-
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
+        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, 0, BFS, QUEUE, JAVA));
+        Solution solution5 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, 0, BFS, QUEUE, JAVA));
+        Solution solution6 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, 0, BFS, QUEUE, JAVA));
+        Solution solution7 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem3, member, 0, BFS, QUEUE, JAVA));
+        Solution solution8 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem3, member, 0, BFS, QUEUE, JAVA));
+        Solution solution9 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem3, member, 0, BFS, QUEUE, JAVA));
 
         // when
         List<Problem> result = problemRepository.findAll(
                 PageRequest.of(0,4), null, null, NEWEST
         ).getContent();
 
-        // then
+        // then // 현재 id에 의해 정렬함
         Assertions.assertThat(result.get(0).getTitle()).isEqualTo("문제제목3");
         Assertions.assertThat(result.get(1).getTitle()).isEqualTo("문제제목2");
         Assertions.assertThat(result.get(2).getTitle()).isEqualTo("문제제목1");
@@ -94,10 +94,10 @@ class ProblemListProblemRepositoryTest {
         Problem problem4 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
         // 풀이
-        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, member, 0, BFS, QUEUE));
-        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, member, 0, DFS, QUEUE));
-        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem3, member, 0, BFS, ARRAY));
-        Solution solution4 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem4, member, 0, DFS, ARRAY));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, 0, DFS, QUEUE,JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem3, member, 0, BFS, ARRAY,JAVA));
+        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem4, member, 0, DFS, ARRAY,JAVA));
 
         // when
         List<Problem> result1 = problemRepository.findAll(
@@ -123,6 +123,9 @@ class ProblemListProblemRepositoryTest {
     @Test
     void 문제_목록_조회_페이징() {
         // given
+        // 회원
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+
         // 문제 : 문제3 ~ 문제1 순서로 최신
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
         Problem problem2 = 문제_저장(문제2.아이디_값_지정_문제_생성(null));
@@ -135,15 +138,16 @@ class ProblemListProblemRepositoryTest {
         Problem problem9 = 문제_저장(문제3.아이디_값_지정_문제_생성(null));
 
         //  풀이 : 문제를 풀이랑 조인해서 가져오기 때문에 풀이도 필요하다
-        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem1, null, 0, null, null));
-        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem2, null, 0, null, null));
-        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem3, null, 0, null, null));
-        Solution solution4 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem4, null, 0, null, null));
-        Solution solution5 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem5, null, 0, null, null));
-        Solution solution6 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem6, null, 0, null, null));
-        Solution solution7 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem7, null, 0, null, null));
-        Solution solution8 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem8, null, 0, null, null));
-        Solution solution9 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem9, null, 0, null, null));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, 0, BFS, QUEUE, JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem3, member, 0, BFS, QUEUE, JAVA));
+        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem4, member, 0, BFS, QUEUE, JAVA));
+        Solution solution5 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem5, member, 0, BFS, QUEUE, JAVA));
+        Solution solution6 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem6, member, 0, BFS, QUEUE, JAVA));
+        Solution solution7 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem7, member, 0, BFS, QUEUE, JAVA));
+        Solution solution8 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem8, member, 0, BFS, QUEUE, JAVA));
+        Solution solution9 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem9, member, 0, BFS, QUEUE, JAVA));
+
 
         // when
         List<Problem> result1 = problemRepository.findAll(PageRequest.of(0,4),null, null, NEWEST).getContent();

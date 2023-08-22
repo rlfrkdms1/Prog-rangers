@@ -11,5 +11,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, QueryDslR
 
     List<Review> findAllByCodeLineNumber(Integer codeLineNumber);
 
-    List<Review> findAllByCodeLineNumberOrderByDateAsc(Integer codeLineNumber);
+    List<Review> findAllByCodeLineNumberOrderByCreatedDateAsc(Integer codeLineNumber);
 }

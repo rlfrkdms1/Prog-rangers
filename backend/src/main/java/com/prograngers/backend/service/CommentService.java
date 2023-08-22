@@ -52,7 +52,7 @@ public class CommentService {
                 solution(solution).
                 mention(commentReqeust.getMention()).
                 content(commentReqeust.getContent()).
-                date(LocalDateTime.now()).parentId(commentReqeust.getParentId())
+                createdDate(LocalDateTime.now()).parentId(commentReqeust.getParentId())
                 .build();
 
         Comment saved = commentRepository.save(comment);
