@@ -1,10 +1,15 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.response.member.MemberAccountInfoResponse;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.BlankNicknameException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
+import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,5 +24,10 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private void validNicknameDuplication(String nickname) {
+        if(memberRepository.findByNickname(nickname).isPresent())
+            throw new AlreadyExistNicknameException();
     }
 }
