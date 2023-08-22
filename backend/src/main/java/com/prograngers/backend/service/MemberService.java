@@ -26,6 +26,13 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
+
+    public void updateMemberAccountInfo(Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
+        Member member = findById(memberId);
+        validMemberAccountInfo(updateMemberAccountInfoRequest, member);
+        member.update(updateMemberAccountInfoRequest.toMember());
+    }
+
     private void validMemberAccountInfo(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
         String nickname = updateMemberAccountInfoRequest.getNickname();
         if(nickname !=null){
