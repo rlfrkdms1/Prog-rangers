@@ -23,8 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
+import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.STACK;
@@ -89,7 +91,13 @@ class SolutionRepositoryTest {
     @Test
     void 수정_테스트() {
         // given
-        Solution saved = 풀이_저장(풀이1.기본_솔루션_생성(null));
+        // 회원
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+
+        // 문제
+        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+
+        Solution saved = 풀이_저장(풀이1.일반_솔루션_생성(null,problem,member,0,DFS,STACK));
         saved.updateDescription("수정설명");
 
         // when
@@ -103,15 +111,21 @@ class SolutionRepositoryTest {
     @Test
     void 삭제_테스트() {
         // given
-        Solution solution = 풀이_저장(풀이1.기본_솔루션_생성(null));
+        // 회원
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성(null));
+
+        // 문제
+        Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
+
+        Solution saved = 풀이_저장(풀이1.일반_솔루션_생성(null,problem,member,0,DFS,STACK));
 
         // when
-        solutionRepository.delete(solution);
+        solutionRepository.delete(saved);
 
         // then
         org.junit.jupiter.api.Assertions.assertThrows(SolutionNotFoundException.class,
                 () -> {
-                    solutionRepository.findById(solution.getId()).orElseThrow(() -> new SolutionNotFoundException());
+                    solutionRepository.findById(saved.getId()).orElseThrow(() -> new SolutionNotFoundException());
                 });
     }
 
@@ -126,9 +140,9 @@ class SolutionRepositoryTest {
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
 //        em.persist(member1);
 //        em.persist(member2);
-        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY));
-        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member1, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY));
-        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member2, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY));
+        Solution solution1 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member1, 0, BFS, ARRAY));
+        Solution solution2 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member1, 0, BFS, ARRAY));
+        Solution solution3 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem, member2, 0, BFS, ARRAY));
 
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
