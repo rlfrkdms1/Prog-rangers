@@ -54,7 +54,7 @@ public class Solution {
     @Nullable
     private Solution scrapSolution;
 
-    private LocalDateTime date;
+    private LocalDateTime createdDate;
 
     @Enumerated(EnumType.STRING)
     private AlgorithmConstant algorithm;

@@ -57,7 +57,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                    .orderBy(solution.date.desc())
+                    .orderBy(solution.createdDate.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -71,7 +71,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .rightJoin(likes.solution, solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                     .groupBy(solution.id)
-                    .orderBy(likes.id.count().desc(),solution.date.desc())
+                    .orderBy(likes.id.count().desc(),solution.createdDate.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -98,7 +98,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 
     private OrderSpecifier<?> sortByWhat(String sortBy) {
         if (sortBy.equals("newest")) {
-            return solution.date.desc();
+            return solution.createdDate.desc();
         }
         if (sortBy.equals("likes")) {
             // 서브쿼리

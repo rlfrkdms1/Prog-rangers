@@ -39,7 +39,7 @@ public enum SolutionFixture {
                 .isPublic(this.isPublic)
                 .code(this.code)
                 .description(this.description)
-                .date(this.date)
+                .createdDate(this.date)
                 .level(this.level);
     }
 

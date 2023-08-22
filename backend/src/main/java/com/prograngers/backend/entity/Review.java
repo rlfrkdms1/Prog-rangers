@@ -44,7 +44,7 @@ public class Review {
 
     private String content;
 
-    private LocalDateTime date;
+    private LocalDateTime createdDate;
 
     public void updateMention(String mention) {
         if (mention != null) {

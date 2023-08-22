@@ -58,7 +58,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
         if (orderBy.equals(NEWEST)) { // date 인 경우
             log.info("orderByDate");
-            return problem.date.desc();
+            return problem.id.desc();
             // size-1의 solution (제일 마지막 solution)의 날짜  기준으로 정렬
 //            NumberExpression<Integer> size = problem.solutions.size().subtract(1);
 //           return problem.solutions.get(size).date.desc();
