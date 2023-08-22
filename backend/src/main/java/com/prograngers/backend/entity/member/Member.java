@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.member;
 
+import com.prograngers.backend.support.Encrypt;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -69,13 +70,13 @@ public class Member {
 
     public void updatePassword(String password) {
         if (password != null) {
-            this.password = password;
+            this.password = Encrypt.encoding(password);
         }
     }
 
-    public void encodePassword(String encodedPassword) {
-        if (encodedPassword != null) {
-            this.password = encodedPassword;
+    public void encodePassword(String password) {
+        if (password != null) {
+            this.password = Encrypt.encoding(password);
         }
     }
     public void updatePhoto(String photo){
