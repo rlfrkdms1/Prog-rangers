@@ -9,7 +9,6 @@ import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameExc
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,7 +41,6 @@ public class MemberService {
         if(updateMemberAccountInfoRequest.getOldPassword()!=null){
             validCorrectPassword(updateMemberAccountInfoRequest, member);
         }
-
     }
 
     private void validCorrectPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
