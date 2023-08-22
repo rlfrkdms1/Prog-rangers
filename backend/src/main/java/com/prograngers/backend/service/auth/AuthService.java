@@ -8,6 +8,7 @@ import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
 import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
+import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.IncorrectCodeInNaverLoginException;
@@ -34,7 +35,6 @@ import java.util.UUID;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final Encrypt encrypt;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final KakaoOauth kakaoOauth;
@@ -87,7 +87,7 @@ public class AuthService {
     }
 
     public void validPassword(String savedPassword, String inputPassword) {
-        if (!encrypt.decryptAES256(savedPassword).equals(inputPassword)) {
+        if (!Encrypt.decoding(savedPassword).equals(inputPassword)) {
             throw new IncorrectPasswordException();
         }
     }
