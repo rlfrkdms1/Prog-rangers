@@ -26,6 +26,10 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
+    private void validNicknameBlank(String nickname) {
+        if(nickname.isBlank()) throw new BlankNicknameException();
+    }
+
     private void validNicknameDuplication(String nickname) {
         if(memberRepository.findByNickname(nickname).isPresent())
             throw new AlreadyExistNicknameException();
