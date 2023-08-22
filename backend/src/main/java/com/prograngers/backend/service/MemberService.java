@@ -26,6 +26,11 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
+
+    private void validCorrectPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
+        if(member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword()))
+            throw new IncorrectPasswordException();
+    }
     private void validNicknameBlank(String nickname) {
         if(nickname.isBlank()) throw new BlankNicknameException();
     }
