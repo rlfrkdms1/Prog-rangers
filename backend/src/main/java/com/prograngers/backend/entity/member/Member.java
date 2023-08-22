@@ -49,12 +49,6 @@ public class Member {
         }
     }
 
-    public void updateEmail(String email) {
-        if (email != null) {
-            this.email = email;
-        }
-    }
-
     public void createRandomNickname(String nickname) {
         if (nickname != null) {
             this.nickname = nickname;
