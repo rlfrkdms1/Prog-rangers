@@ -1,71 +1,43 @@
 import { css } from '@emotion/react';
 import { theme } from './theme';
 
-export const pageStyle = css`
+export const secLayout = css`
+  width: 1200px;
+  margin: 0 auto;
+`;
+
+export const sec = css`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  height: calc(100vh - 120px);
+  background-color: ${theme.colors.light4};
 `;
 
-export const innerPageStyle = css`
-  width: 100%;
-  max-width: 1800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+//fonts
 
-export const HeadingStyle = css`
-  color: #000;
-  font-size: 24px;
-  font-style: normal;
+export const fontSize50 = css`
+  font-size: 50px;
   font-weight: 700;
-  line-height: normal;
-  width: 996px;
+  color: ${theme.colors.dark1};
 `;
 
-export const ButtonStyle = css`
-  width: 996px;
-  height: 100px;
-  border-radius: 50px;
-  background: ${theme.colors.main};
-  font-size: 24px;
-  font-style: normal;
+export const fontSize60 = css`
+  font-size: 60px;
   font-weight: 700;
-  line-height: normal;
-  color: #fff;
-  margin: 50px 0;
+  color: ${theme.colors.dark1};
 `;
 
-export const galleryContainerStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 185px;
+export const fontSize70 = css`
+  font-size: 70px;
+  font-weight: 700;
+  color: ${theme.colors.dark1};
 `;
 
-export const galleryStyle = css`
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  width: 996px;
+export const fontSize30 = css`
+  font-size: 30px;
+  font-weight: 500;
+  color: ${theme.colors.dark2};
 `;
 
-export const textStyle = css`
-  color: var(--dark-2, #545454);
-  font-family: Noto Sans KR;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-top: 50px;
-  margin-bottom: 10px;
-  padding-left: 5px;
-  border-left: 5px solid #3486a0;
-`;
-
-export const codeBlockStyle = css`
-  width: 310px;
-  height: 220px;
-  background: #2a3746;
+export const alignCenter = css`
+  text-align: center;
 `;
