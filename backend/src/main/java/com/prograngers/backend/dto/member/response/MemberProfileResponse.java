@@ -9,11 +9,13 @@ import java.util.List;
 @Builder
 public class MemberProfileResponse {
     /**
-     * 프로필 사진, 닉네임, 팔로우, 팔로잉, 깃허브
+     * 프로필 사진, 닉네임, 자기소개, 팔로우, 팔로잉, 깃허브
      */
     private String photo;
 
     private String nickname;
+
+    private String introduction;
 
     private Integer follow;
     private Integer following;
