@@ -49,7 +49,7 @@ class CommentRepositoryTest {
         // given
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
         Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA);
+        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, JAVA);
 
         Comment comment = 댓글1.댓글_생성(null,solution,member);
 
@@ -66,7 +66,7 @@ class CommentRepositoryTest {
         // given
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
         Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA);
+        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member, BFS, QUEUE, JAVA);
 
         Comment comment = 댓글1.댓글_생성(null,solution,member);
 
@@ -85,7 +85,7 @@ class CommentRepositoryTest {
         // given
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
         Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA);
+        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, JAVA);
 
         Comment comment = 댓글1.댓글_생성(null,solution,member);
         Comment saved = commentRepository.save(comment);

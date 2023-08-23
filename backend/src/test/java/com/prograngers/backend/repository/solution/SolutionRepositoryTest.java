@@ -77,7 +77,7 @@ class SolutionRepositoryTest {
 
         // 비영속 상태
         // id가 자동생성되기 때문에 id값 null
-        Solution solution = 풀이1.언어_포함_솔루션_생성(null,problem,member,0,DFS,STACK,JAVA);
+        Solution solution = 풀이1.언어_포함_솔루션_생성(null,problem,member,DFS,STACK,JAVA);
 
         // when
         // solution이 영속 상태가 된다. saved랑 solution이랑 같은 트랜잭션 내에서 같은 id값을 가지므로 비교시 같아야 한다
@@ -97,7 +97,7 @@ class SolutionRepositoryTest {
         // 문제
         Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
-        Solution saved = 풀이_저장(풀이1.언어_포함_솔루션_생성(null,problem,member,0,DFS,QUEUE,JAVA));
+        Solution saved = 풀이_저장(풀이1.언어_포함_솔루션_생성(null,problem,member,DFS,QUEUE,JAVA));
         saved.updateDescription("수정설명");
 
         // when
@@ -117,7 +117,7 @@ class SolutionRepositoryTest {
         // 문제
         Problem problem = 문제_저장(문제1.아이디_값_지정_문제_생성(null));
 
-        Solution saved = 풀이_저장(풀이1.언어_포함_솔루션_생성(null,problem,member,0,DFS,STACK,JAVA));
+        Solution saved = 풀이_저장(풀이1.언어_포함_솔루션_생성(null,problem,member,DFS,STACK,JAVA));
 
         // when
         solutionRepository.delete(saved);
@@ -140,9 +140,9 @@ class SolutionRepositoryTest {
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
 //        em.persist(member1);
 //        em.persist(member2);
-        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem, member1, 0, BFS, ARRAY,JAVA));
-        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem, member1, 0, BFS, ARRAY,JAVA));
-        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem, member2, 0, BFS, ARRAY,JAVA));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem, member1,  BFS, ARRAY,JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem, member1,  BFS, ARRAY,JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem, member2,  BFS, ARRAY,JAVA));
 
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
@@ -171,8 +171,8 @@ class SolutionRepositoryTest {
 
 
         // 풀이
-        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, 0, BFS, QUEUE,JAVA));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, BFS, QUEUE,JAVA));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -198,10 +198,10 @@ class SolutionRepositoryTest {
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
-        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, DFS, QUEUE,JAVA));
-        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, ARRAY,JAVA));
-        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, DFS, ARRAY,JAVA));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, DFS, QUEUE,JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, BFS, ARRAY,JAVA));
+        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, DFS, ARRAY,JAVA));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -227,10 +227,10 @@ class SolutionRepositoryTest {
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이
-        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
-        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, JAVA));
-        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, CPP));
-        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE, PYTHON));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, JAVA));
+        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, JAVA));
+        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, CPP));
+        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, PYTHON));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -257,15 +257,15 @@ class SolutionRepositoryTest {
         Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
 
         // 풀이 : solution9 ~ 1 순서로 최신
-        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution2 = 풀이_저장(풀이2.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution3 = 풀이_저장(풀이3.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution4 = 풀이_저장(풀이4.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution5 = 풀이_저장(풀이5.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution6 = 풀이_저장(풀이6.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution7 = 풀이_저장(풀이7.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution8 = 풀이_저장(풀이8.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
-        Solution solution9 = 풀이_저장(풀이9.언어_포함_솔루션_생성(null, problem1, member, 0, BFS, QUEUE,JAVA));
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, BFS, QUEUE,JAVA));
+        Solution solution2 = 풀이_저장(풀이2.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution3 = 풀이_저장(풀이3.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution4 = 풀이_저장(풀이4.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution5 = 풀이_저장(풀이5.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution6 = 풀이_저장(풀이6.언어_포함_솔루션_생성(null, problem1, member, BFS, QUEUE,JAVA));
+        Solution solution7 = 풀이_저장(풀이7.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution8 = 풀이_저장(풀이8.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution9 = 풀이_저장(풀이9.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
 
         // when
         List<Solution> result1 = solutionRepository.getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
