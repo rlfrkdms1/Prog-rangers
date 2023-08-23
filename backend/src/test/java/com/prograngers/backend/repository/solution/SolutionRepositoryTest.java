@@ -4,8 +4,6 @@ import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
@@ -23,15 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.STACK;
 import static com.prograngers.backend.entity.constants.LanguageConstant.*;
 import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
+import static com.prograngers.backend.entity.constants.SortConstant.SCRAPS;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은2;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
@@ -287,6 +284,48 @@ class SolutionRepositoryTest {
                                         .doesNotContain(solution2,solution3,solution4,solution5,solution6,solution7,solution8,solution9),
                                 ()->assertThat(result4.size()).isEqualTo(0)
                         );
+    }
+
+    @DisplayName("스크랩 수에 따라 문제 목록을 정렬해서 조회할 수 있다")
+    @Test
+    void 스크랩_문제_정렬(){
+        // given
+        // 회원
+        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
+        // 문제
+        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
+        // 풀이
+        /**
+         *  solution 3 : 스크랩 한 풀이 3개
+         *  solution 2 : 스크랩 한 풀이 2개
+         *  solution 1 : 스크랩 한 풀이 1개
+         *  스크랩 수가 같으면 날짜수느로 정렬 (solution 9~4 순서)
+         */
+        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, BFS, QUEUE,JAVA));
+        Solution solution2 = 풀이_저장(풀이2.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution3 = 풀이_저장(풀이3.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
+        Solution solution4 = 풀이_저장(풀이4.스크랩_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA,solution1));
+        Solution solution5 = 풀이_저장(풀이5.스크랩_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA,solution2));
+        Solution solution6 = 풀이_저장(풀이6.스크랩_포함_솔루션_생성(null, problem1, member, BFS, QUEUE,JAVA,solution2));
+        Solution solution7 = 풀이_저장(풀이7.스크랩_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA,solution3));
+        Solution solution8 = 풀이_저장(풀이8.스크랩_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA,solution3));
+        Solution solution9 = 풀이_저장(풀이9.스크랩_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA,solution3));
+
+        // when
+        List<Solution> result1 = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, SCRAPS)
+                .getContent();
+        List<Solution> result2 = solutionRepository
+                .getSolutionList(PageRequest.of(1, 4), problem1.getId(), null, null, null, SCRAPS)
+                .getContent();
+        List<Solution> result3 = solutionRepository
+                .getSolutionList(PageRequest.of(2, 4), problem1.getId(), null, null, null, SCRAPS)
+                .getContent();
+
+        // then
+        Assertions.assertThat(result1).containsExactly(solution3,solution2,solution1,solution9);
+        Assertions.assertThat(result2).containsExactly(solution8,solution7,solution6,solution5);
+        Assertions.assertThat(result3).containsExactly(solution4);
     }
 
     Member 멤버_저장(Member member) {

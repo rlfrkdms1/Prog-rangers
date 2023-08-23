@@ -42,21 +42,6 @@ public enum SolutionFixture {
                 .level(this.level);
     }
 
-
-    public Solution 스크랩_솔루션_생성(
-            Long id, Problem problem, Member member, Solution scrapSolution,
-            AlgorithmConstant algorithm, DataStructureConstant dataStructure
-    ) {
-        return 기본_정보_빌더_생성()
-                .id(id)
-                .problem(problem)
-                .member(member)
-                .scrapSolution(scrapSolution)
-                .algorithm(algorithm)
-                .dataStructure(dataStructure)
-                .build();
-    }
-
     public Solution 일반_솔루션_생성(
             Long id, Problem problem, Member member,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure
@@ -96,5 +81,22 @@ public enum SolutionFixture {
                 .language(language)
                 .build();
     }
+
+    public Solution 스크랩_포함_솔루션_생성(
+            Long id, Problem problem, Member member,
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure,
+            LanguageConstant language, Solution scrapSolution
+    ){
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .problem(problem)
+                .member(member)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
+                .language(language)
+                .scrapSolution(scrapSolution)
+                .build();
+    }
+
 
 }
