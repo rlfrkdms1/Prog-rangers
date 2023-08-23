@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,13 +16,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SolutionDetailResponse {
+
+    private SolutionDetailProblem problem;
     private SolutionDetailSolution solution;
     private List<SolutionDetailComment> comments;
 
     private boolean isMine;
     private static final String SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
-    public static SolutionDetailResponse toEntity(Solution solution, List<Comment> comments,
+    public static SolutionDetailResponse from(Problem problem, Solution solution, List<Comment> comments,
                                                   boolean scraped, int scrapCount,
                                                   boolean pushedLike, int likeCount,
                                                   boolean isMine
@@ -29,6 +32,7 @@ public class SolutionDetailResponse {
 
 
         SolutionDetailResponse response = new SolutionDetailResponse();
+
 
 
         // 스크랩 한 풀이면 스크랩 한 풀이의 링크 찾기
@@ -55,19 +59,42 @@ public class SolutionDetailResponse {
 
         List<SolutionDetailComment> commentResponseList = new ArrayList<>();
 
-        for (Comment comment : comments) {
-            commentResponseList.add(
-                    new SolutionDetailComment(
-                            comment.getMember().getNickname(),
-                            comment.getContent(),
-                            comment.getMention()
-                    )
-            );
+        // 먼저 부모가 없는 댓글들을 전부 더한다
+        comments.stream().filter(comment -> comment.getParentId()==null)
+                .forEach(comment->commentResponseList.add( new SolutionDetailComment(
+                        comment.getMember().getPhoto(),
+                        comment.getId(),
+                        comment.getMember().getNickname(),
+                        comment.getContent(),
+                        comment.getMention(),
+                        new ArrayList<>()
+                )));
+
+        // 부모가 있는 댓글들을 더한다
+        for (Comment comment : comments){
+            Long parentId = comment.getParentId();
+            if (parentId!=null){
+                for (SolutionDetailComment parentComment : commentResponseList){
+                    if (parentComment.getId().equals(parentId)){
+                        parentComment.getReplies().add(
+                                new SolutionDetailComment(
+                                        comment.getMember().getPhoto(),
+                                        comment.getId(),
+                                        comment.getMember().getNickname(),
+                                        comment.getContent(),
+                                        comment.getMention(),
+                                        null
+                                )
+                        );
+                    }
+                }
+            }
         }
 
         response.comments = commentResponseList;
         response.solution = responseSolution;
         response.isMine = isMine;
+        response.problem= SolutionDetailProblem.from(problem);
 
         return response;
     }

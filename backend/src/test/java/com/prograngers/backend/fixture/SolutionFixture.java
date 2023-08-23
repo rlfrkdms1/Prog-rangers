@@ -7,31 +7,30 @@ import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
 public enum SolutionFixture {
-    풀이1("풀이제목1", true, "풀이코드1", "풀이설명1", LevelConstant.ONE, LocalDateTime.now()),
-    풀이2("풀이제목2", true, "풀이코드2", "풀이설명2",  LevelConstant.ONE, LocalDateTime.now().plusDays(1)),
-    풀이3("풀이제목3", true, "풀이코드3", "풀이설명3", LevelConstant.ONE, LocalDateTime.now().plusDays(2)),
+    풀이1("풀이제목1", true, "풀이코드1", "풀이설명1", null, 1, LocalDateTime.now()),
+    풀이2("풀이제목2", true, "풀이코드2", "풀이설명2", null, 1, LocalDateTime.now().plusDays(1)),
+    풀이3("풀이제목3", true, "풀이코드3", "풀이설명3", null,1, LocalDateTime.now().plusDays(2)),
 
-    풀이4("풀이제목4", true, "풀이코드4", "풀이설명4",  LevelConstant.ONE, LocalDateTime.now().plusDays(3)),
-    풀이5("풀이제목5", true, "풀이코드5", "풀이설명5",  LevelConstant.ONE, LocalDateTime.now().plusDays(4)),
-    풀이6("풀이제목6", true, "풀이코드6", "풀이설명6",  LevelConstant.ONE, LocalDateTime.now().plusDays(5)),
+    풀이4("풀이제목4", true, "풀이코드4", "풀이설명4", null, 1, LocalDateTime.now().plusDays(3)),
+    풀이5("풀이제목5", true, "풀이코드5", "풀이설명5", null, 1, LocalDateTime.now().plusDays(4)),
+    풀이6("풀이제목6", true, "풀이코드6", "풀이설명6", null, 1, LocalDateTime.now().plusDays(5)),
 
-    풀이7("풀이제목7", true, "풀이코드7", "풀이설명7", LevelConstant.ONE, LocalDateTime.now().plusDays(6)),
-    풀이8("풀이제목8", true, "풀이코드8", "풀이설명8",  LevelConstant.ONE, LocalDateTime.now().plusDays(7)),
-    풀이9("풀이제목9", true, "풀이코드9", "풀이설명9",  LevelConstant.ONE, LocalDateTime.now().plusDays(8));
+    풀이7("풀이제목7", true, "풀이코드7", "풀이설명7", null, 1, LocalDateTime.now().plusDays(6)),
+    풀이8("풀이제목8", true, "풀이코드8", "풀이설명8", null,1, LocalDateTime.now().plusDays(7)),
+    풀이9("풀이제목9", true, "풀이코드9", "풀이설명9", null, 1, LocalDateTime.now().plusDays(8));
     private final String title;
     private final boolean isPublic;
     private final String code;
     private final String description;
-    private final LevelConstant level;
+    private final List<Likes> likes;
+    private final Integer level;
     private final LocalDateTime date;
 
     public Solution.SolutionBuilder 기본_정보_빌더_생성() {
@@ -41,7 +40,7 @@ public enum SolutionFixture {
                 .code(this.code)
                 .description(this.description)
                 .date(this.date)
-                .level(this.level.getLevel());
+                .level(this.level);
     }
 
 

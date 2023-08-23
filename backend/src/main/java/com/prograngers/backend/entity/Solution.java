@@ -3,11 +3,9 @@ package com.prograngers.backend.entity;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
 import com.prograngers.backend.entity.member.Member;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,18 +15,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Builder
@@ -71,6 +63,7 @@ public class Solution {
     private DataStructureConstant dataStructure;
 
     private Integer level;
+
 
     @Enumerated(EnumType.STRING)
     private LanguageConstant language;
@@ -115,8 +108,8 @@ public class Solution {
         }
     }
 
-    public void updateLevel(LevelConstant level){
-        this.level = level.getLevel();
+    public void updateLevel(Integer level){
+        this.level = level;
     }
 
     public void updateAlgorithm(AlgorithmConstant algorithm) {

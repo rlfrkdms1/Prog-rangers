@@ -53,6 +53,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 //                .fetch();
 
         if (sortBy.equals(NEWEST)){
+            log.info("sortBy is NEWEST");
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
@@ -63,6 +64,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 
 
         } else if (sortBy.equals(LIKES)){
+            log.info("sortBy is LIKES");
             result = jpaQueryFactory
                     .select(solution)
                     .from(likes)
@@ -74,13 +76,14 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         } else if (sortBy.equals(SCRAPS)){
+            log.info("sortBy is SCRAPS");
 //            result = jpaQueryFactory
-//                    .selectFrom(solution)
+//                    .select(solution)
+//                    .from(solution)
+//                    .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
 //                    .groupBy(solution.scrapSolution)
-//                    .orderBy(solution.scrapSolution.count().desc())
-//                    .offset(pageable.getOffset())
-//                    .limit(pageable.getPageSize())
-//                    .fetch();
+//                    .orderBy()
+//                    . fetch();
         }
 
         Long count = jpaQueryFactory

@@ -145,7 +145,7 @@ public class SolutionService {
         boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
 
         SolutionDetailResponse solutionDetailResponse =
-                SolutionDetailResponse.toEntity(solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
+                SolutionDetailResponse.from(solution.getProblem(), solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
         return solutionDetailResponse;
     }
 
@@ -159,6 +159,6 @@ public class SolutionService {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
 
-        return SolutionListResponse.from(solutions);
+        return SolutionListResponse.from(solutions,pageable.getPageNumber());
     }
 }

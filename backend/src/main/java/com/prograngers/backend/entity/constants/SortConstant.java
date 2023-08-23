@@ -7,15 +7,16 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum SortConstant {
-    NEWEST("newest"),
-    SCRAPS("scraps"),
-    LIKES("likes");
-    String value;
+    NEWEST("NEWEST"),
+    SCRAPS("SCRAPS"),
+    LIKES("LIKES"),
+    SOLUTIONS("SOLUTIONS");
+    String stringValue;
 
     @JsonCreator
     public static SortConstant from(String value){
         for (SortConstant constant : SortConstant.values()){
-            if (constant.getValue().equals(constant)){
+            if (constant.getStringValue().equals(constant)){
                 return  constant;
             }
         }
@@ -23,8 +24,7 @@ public enum SortConstant {
     }
 
     @JsonValue
-    public String getValue(){
-        return this.value;
+    public String getStringValue(){
+        return this.stringValue;
     }
-
 }

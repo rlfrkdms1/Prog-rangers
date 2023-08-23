@@ -1,6 +1,7 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.TestConfig;
+import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -14,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
+import static com.prograngers.backend.entity.constants.SortConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제2;
@@ -32,7 +35,7 @@ import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 @Slf4j
 @Transactional
 @Import(TestConfig.class)
-class ProblemRepositoryTest {
+class ProblemListProblemRepositoryTest {
     @Autowired
     ProblemRepository problemRepository;
 
@@ -68,8 +71,8 @@ class ProblemRepositoryTest {
 
         // when
         List<Problem> result = problemRepository.findAll(
-                1, null, null, "date"
-        );
+                PageRequest.of(0,4), null, null, NEWEST
+        ).getContent();
 
         // then
         Assertions.assertThat(result.get(0).getTitle()).isEqualTo("문제제목3");
@@ -98,14 +101,14 @@ class ProblemRepositoryTest {
 
         // when
         List<Problem> result1 = problemRepository.findAll(
-                1, null, BFS, "date"
-        );
+                PageRequest.of(0,4), null, BFS, NEWEST
+        ).getContent();
         List<Problem> result2 = problemRepository.findAll(
-                1, null, DFS, "date"
-        );
+                PageRequest.of(0,4),null, DFS, NEWEST
+        ).getContent();
         List<Problem> result3 = problemRepository.findAll(
-                1, QUEUE, BFS, "date"
-        );
+                PageRequest.of(0,4),QUEUE, BFS, NEWEST
+        ).getContent();
 
         // then
         Assertions.assertThat(result1).contains(problem1, problem3);
@@ -143,9 +146,9 @@ class ProblemRepositoryTest {
         Solution solution9 = 풀이_저장(풀이1.일반_솔루션_생성(null, problem9, null, 0, null, null));
 
         // when
-        List<Problem> result1 = problemRepository.findAll(1, null, null, "date");
-        List<Problem> result2 = problemRepository.findAll(2, null, null, "date");
-        List<Problem> result3 = problemRepository.findAll(3, null, null, "date");
+        List<Problem> result1 = problemRepository.findAll(PageRequest.of(0,4),null, null, NEWEST).getContent();
+        List<Problem> result2 = problemRepository.findAll(PageRequest.of(1,4), null, null, NEWEST).getContent();
+        List<Problem> result3 = problemRepository.findAll(PageRequest.of(2,4), null, null, NEWEST).getContent();
 
         // then
         Assertions.assertThat(result1).contains(problem9, problem8, problem7, problem6).doesNotContain(problem1, problem2, problem3, problem4, problem5);

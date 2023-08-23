@@ -1,8 +1,8 @@
 package com.prograngers.backend.controller.auth;
 
+import com.prograngers.backend.exception.unauthorization.InvalidAccessTokenException;
 import com.prograngers.backend.exception.unauthorization.NotExistAccessTokenException;
 import com.prograngers.backend.service.auth.JwtTokenProvider;
-import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,34 +20,42 @@ import java.util.Date;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(!(handler instanceof HandlerMethod)) return true;
-        /* HandlerMethod
-        Encapsulates information about a handler method consisting of a method and a bean.
-        Provides convenient access to method parameters, the method return value, method annotations, etc.
-        The class may be created with a bean instance or with a bean name (e.g. lazy-init bean, prototype bean).
-        Use createWithResolvedBean() to obtain a HandlerMethod instance with a bean instance resolved through the associated BeanFactory.*/
+
         HandlerMethod handlerMethod = (HandlerMethod) handler;
+
         Login loginAnnotation = handlerMethod.getMethodAnnotation(Login.class);
-        if (loginAnnotation == null) { // login 어노테이션 없으면 통과
-            return true;
-        }
+        if (loginAnnotation == null) return true;
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(header != null) {
-            //token 유효성 검사 (유효 기간)
-            String[] authorization = header.split(" ");
-            if((new Date()).after(jwtTokenProvider.getExpiredAt(authorization[1]))){
-                throw new ExpiredTokenException();
-            }
+            validHeader(header);
+            validAccessToken(header);
             return true;
         }
 
-        if(loginAnnotation.required()) throw new NotExistAccessTokenException(); // required true인데 토큰이 없는 경우
+        validLoginRequired(loginAnnotation);
 
         return true;
+    }
+
+    private void validHeader(String header) {
+        if(!header.startsWith(AUTHORIZATION_HEADER_PREFIX)){
+            throw new InvalidAccessTokenException();
+        }
+    }
+
+    private void validAccessToken(String header) {
+        String accessToken = header.replaceFirst(AUTHORIZATION_HEADER_PREFIX, "");
+        jwtTokenProvider.validToken(accessToken);
+    }
+
+    private void validLoginRequired(Login loginAnnotation) {
+        if(loginAnnotation.required()) throw new NotExistAccessTokenException(); // required true인데 토큰이 없는 경우
     }
 
 

@@ -24,7 +24,9 @@ public class SolutionListResponse {
     List<SolutionListSolution> solutionListSolutions;
     int totalPages;
 
-    public static SolutionListResponse from(PageImpl<Solution> pages) {
+    int page;
+
+    public static SolutionListResponse from(PageImpl<Solution> pages, int page) {
         List<Solution> solutions = pages.getContent();
         if (solutions.size()==0){
             return null;
@@ -48,6 +50,7 @@ public class SolutionListResponse {
                             .build()
             );
         }
+        solutionListResponse.setPage(page);
         return solutionListResponse;
     }
 }
