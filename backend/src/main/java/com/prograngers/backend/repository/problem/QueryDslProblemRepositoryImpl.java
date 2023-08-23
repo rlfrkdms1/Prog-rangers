@@ -44,13 +44,15 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .limit(pageable.getPageSize())
                 .fetch();
 
-         int size = results.size();
-//        Long size = jpaQueryFactory
-//                .select(problem.count())
-//                .from(problem)
-//                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-//                .fetchOne();
-        log.info("problem size : {}",size);
+         // int size = results.size();
+        long size = jpaQueryFactory
+                .selectFrom(problem)
+                .join(problem.solutions, solution)
+                .groupBy(problem)
+                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
+                .fetchCount();
+
+        log.info("size : {}",size);
 
         return new PageImpl<>(results,pageable,size);
     }
