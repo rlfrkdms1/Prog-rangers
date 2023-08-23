@@ -2,14 +2,11 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
-import com.prograngers.backend.service.CommentService;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
