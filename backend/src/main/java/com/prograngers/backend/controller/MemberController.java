@@ -19,7 +19,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("prog-rangers/members")
 public class MemberController {
 
     private final MemberService memberService;
