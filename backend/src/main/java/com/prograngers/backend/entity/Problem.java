@@ -38,6 +38,7 @@ public class Problem {
     private JudgeConstant ojName;
 
     @OneToMany(mappedBy = "problem")
+    @Builder.Default
     List<Solution> solutions = new ArrayList<>();
 
     public void updateTitle(String title) {

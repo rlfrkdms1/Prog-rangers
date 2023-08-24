@@ -43,6 +43,6 @@ public class MemberProfileResponse {
                 .photo(member.getPhoto())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
-                .
+                .build();
     }
 }
