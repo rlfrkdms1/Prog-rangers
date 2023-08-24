@@ -96,6 +96,17 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         return solutions;
     }
 
+    @Override
+    public List<Solution> findProfileSolutions(Long memberId) {
+        return jpaQueryFactory
+                .select(solution)
+                .from(solution)
+                .where(solution.member.id.eq(memberId))
+                .orderBy(solution.createdDate.desc())
+                .limit(2)
+                .fetch();
+    }
+
     private OrderSpecifier<?> sortByWhat(String sortBy) {
         if (sortBy.equals("newest")) {
             return solution.createdDate.desc();
