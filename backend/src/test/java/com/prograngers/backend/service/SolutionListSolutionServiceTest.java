@@ -58,7 +58,7 @@ class SolutionListSolutionServiceTest {
         // given
         Member member = 길가은1.getMember();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member,  AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
         given(solutionRepository.save(any())).willReturn(solution);
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
 
@@ -75,7 +75,7 @@ class SolutionListSolutionServiceTest {
         // given
         Member member = 길가은1.아이디_값_지정_멤버_생성();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member,  AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
         ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", 5);
         Solution made = request.toSolution(solution);
@@ -101,8 +101,8 @@ class SolutionListSolutionServiceTest {
         // given
         Member member = 길가은1.아이디_값_지정_멤버_생성();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-        Solution updateExpected = 풀이2.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member,  AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution updateExpected = 풀이2.일반_솔루션_생성(1L, problem, member, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
         when(solutionRepository.save(any())).thenReturn(solution).thenReturn(updateExpected);
         when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(updateExpected));
@@ -124,7 +124,7 @@ class SolutionListSolutionServiceTest {
         // given
         Member member = 길가은1.아이디_값_지정_멤버_생성();
         Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
 
         when(solutionRepository.save(any())).thenReturn(solution);
         when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(solution));

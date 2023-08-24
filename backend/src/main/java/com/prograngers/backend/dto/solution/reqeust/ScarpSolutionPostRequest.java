@@ -41,6 +41,7 @@ public class ScarpSolutionPostRequest {
                 scrapSolution(scrap).
                 algorithm(scrap.getAlgorithm()).
                 dataStructure(scrap.getDataStructure())
+                .language(scrap.getLanguage())
                 .build();
         return solution;
     }

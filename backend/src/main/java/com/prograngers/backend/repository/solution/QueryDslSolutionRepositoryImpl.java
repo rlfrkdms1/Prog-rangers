@@ -53,7 +53,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 //                .fetch();
 
         if (sortBy.equals(NEWEST)){
-            log.info("sortBy is NEWEST");
+
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
@@ -64,7 +64,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 
 
         } else if (sortBy.equals(LIKES)){
-            log.info("sortBy is LIKES");
+
             result = jpaQueryFactory
                     .select(solution)
                     .from(likes)
@@ -76,14 +76,19 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         } else if (sortBy.equals(SCRAPS)){
-            log.info("sortBy is SCRAPS");
-//            result = jpaQueryFactory
-//                    .select(solution)
-//                    .from(solution)
-//                    .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-//                    .groupBy(solution.scrapSolution)
-//                    .orderBy()
-//                    . fetch();
+
+            QSolution subSolution = new QSolution("subSolution");
+
+            result = jpaQueryFactory
+                    .select(solution)
+                    .from(subSolution)
+                    .rightJoin(subSolution.scrapSolution,solution)
+                    .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                    .groupBy(solution.id)
+                    .orderBy(subSolution.count().desc(),solution.createdDate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
         }
 
         Long count = jpaQueryFactory
@@ -139,17 +144,5 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private BooleanExpression languageEq(LanguageConstant language) {
         return language != null ? solution.language.eq(language) : null;
     }
-
-    private List<OrderSpecifier> getOrderSpecifier(Sort sort){
-        List<OrderSpecifier> orders = new ArrayList<>();
-        sort.stream().forEach(order->{
-            Order direction = order.isAscending()? Order.ASC : Order.DESC;
-            String property = order.getProperty();
-            PathBuilder orderByExpression = new PathBuilder(Solution.class,"solution");
-            orders.add(new OrderSpecifier(direction,orderByExpression.get(property)));
-        });
-        return orders;
-    }
-
 
 }
