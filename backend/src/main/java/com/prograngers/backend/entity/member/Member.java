@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.member;
 
+import com.prograngers.backend.support.Encrypt;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,51 +44,53 @@ public class Member {
 
     private String photo;
 
-    public void updateNickName(String nickname) {
+    private void updateNickName(String nickname) {
         if (nickname != null) {
             this.nickname = nickname;
         }
     }
 
-    public void updateEmail(String email) {
-        if (email != null) {
-            this.email = email;
-        }
-    }
-
-    public void createRandomNickname(String nickname) {
+    public void updateRandomNickname(String nickname) {
         if (nickname != null) {
             this.nickname = nickname;
         }
     }
 
-    public void updateGitHub(String github) {
+    private void updateGitHub(String github) {
         if (github != null) {
             this.github = github;
         }
     }
 
-    public void updateIntroduction(String introduction) {
+    private void updateIntroduction(String introduction) {
         if (introduction != null) {
             this.introduction = introduction;
         }
     }
 
-    public void updatePassword(String password) {
+    private void updatePassword(String password) {
         if (password != null) {
-            this.password = password;
+            this.password = Encrypt.encoding(password);
         }
     }
 
-    public void encodePassword(String encodedPassword) {
-        if (encodedPassword != null) {
-            this.password = encodedPassword;
+    public void encodePassword(String password) {
+        if (password != null) {
+            this.password = Encrypt.encoding(password);
         }
     }
-    public void updatePhoto(String photo){
+
+    private void updatePhoto(String photo){
         if (photo!=null){
             this.photo = photo;
         }
     }
 
+    public void update(Member member) {
+        updateNickName(member.getNickname());
+        updateGitHub(member.getGithub());
+        updateIntroduction(member.getIntroduction());
+        updatePassword(member.getPassword());
+        updatePhoto(member.getPhoto());
+    }
 }

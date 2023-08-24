@@ -8,6 +8,7 @@ import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
 import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
 import com.prograngers.backend.dto.result.AuthResult;
 import com.prograngers.backend.dto.request.auth.LoginRequest;
+import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.IncorrectCodeInNaverLoginException;
@@ -34,7 +35,6 @@ import java.util.UUID;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final Encrypt encrypt;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final KakaoOauth kakaoOauth;
@@ -64,7 +64,7 @@ public class AuthService {
         validExistMember(signUpRequest);
         validExistNickname(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
-        member.encodePassword(encrypt.encryptAES256(member.getPassword()));
+        member.encodePassword(member.getPassword());
         memberRepository.save(member);
         //access token 발급
         return issueToken(member.getId());
@@ -87,7 +87,7 @@ public class AuthService {
     }
 
     public void validPassword(String savedPassword, String inputPassword) {
-        if (!encrypt.decryptAES256(savedPassword).equals(inputPassword)) {
+        if (!Encrypt.decoding(savedPassword).equals(inputPassword)) {
             throw new IncorrectPasswordException();
         }
     }
@@ -141,7 +141,7 @@ public class AuthService {
         do {
             nickname = nicknameGenerator.getRandomNickname().getNickname();
         } while (isDuplicateNickname(nickname));
-        member.createRandomNickname(nickname);
+        member.updateRandomNickname(nickname);
         return memberRepository.save(member);
     }
 
