@@ -76,7 +76,7 @@ public class MemberService {
         Long follow = followRepository.getFollow(member);
         Long following = followRepository.getFollowing(member);
 
-        MemberProfileResponse.from(member,badges,solutions);
+        MemberProfileResponse.from(member,badges,solutions,follow,following);
         return null;
     }
 }

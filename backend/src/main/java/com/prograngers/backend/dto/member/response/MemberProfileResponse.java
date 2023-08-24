@@ -2,10 +2,12 @@ package com.prograngers.backend.dto.member.response;
 
 import com.prograngers.backend.entity.Badge;
 import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.constants.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,8 +22,8 @@ public class MemberProfileResponse {
 
     private String introduction;
 
-    private Integer follow;
-    private Integer following;
+    private Long follow;
+    private Long following;
 
     private String github;
 
@@ -29,7 +31,7 @@ public class MemberProfileResponse {
      * 뱃지
      */
 
-    private String badge;
+    private List<BadgeConstant> badge;
 
     /**
      *  문제제목, 풀이알고리즘, 풀이 자료구조, 저지명
@@ -38,11 +40,33 @@ public class MemberProfileResponse {
 
     List<MemberProfileProblemSolution> list;
 
-    public static MemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions) {
+    public static MemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions, Long follow, Long following) {
+        List<BadgeConstant> badgeList = new ArrayList<>();
+        badges.stream().map(badge->badge.getBadgeType())
+                .forEach(badge->badgeList.add(badge));
+        List<MemberProfileProblemSolution> problemSolutionList = new ArrayList<>();
+        solutions.stream()
+                .forEach(solution->{
+                    problemSolutionList.add(
+                            MemberProfileProblemSolution.builder()
+                                    .problemName(solution.getProblem().getTitle())
+                                    .dataStructure(solution.getDataStructure())
+                                    .algorithm(solution.getAlgorithm())
+                                    .ojName(solution.getProblem().getOjName())
+                                    .description(solution.getDescription())
+                                    .code(solution.getCode())
+                                    .build()
+                    );
+                });
+
         return MemberProfileResponse.builder()
                 .photo(member.getPhoto())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
+                .follow(follow)
+                .following(following)
+                .badge(badgeList)
+                .list(problemSolutionList)
                 .build();
     }
 }
