@@ -97,13 +97,13 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     }
 
     @Override
-    public List<Solution> findProfileSolutions(Long memberId) {
+    public List<Solution> findProfileSolutions(Long memberId,Long page) {
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
-                .where(solution.member.id.eq(memberId))
+                .where(solution.member.id.eq(memberId), solution.id.loe(page))
                 .orderBy(solution.createdDate.desc())
-                .limit(2)
+                .limit(3)
                 .fetch();
     }
 

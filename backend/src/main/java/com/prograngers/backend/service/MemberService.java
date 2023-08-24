@@ -69,13 +69,14 @@ public class MemberService {
             throw new AlreadyExistNicknameException();
     }
 
-    public MemberProfileResponse getMemberProfile(Long memberId) {
+    public MemberProfileResponse getMemberProfile(Long memberId,Long page) {
         Member member = findById(memberId);
         List<Badge> badges = badgeRepository.findAllByMember(member);
-        List<Solution> solutions = solutionRepository.findProfileSolutions(memberId);
+        List<Solution> solutions = solutionRepository.findProfileSolutions(memberId, page);
         Long follow = followRepository.getFollow(member);
         Long following = followRepository.getFollowing(member);
 
         return MemberProfileResponse.from(member,badges,solutions,follow,following);
     }
+
 }

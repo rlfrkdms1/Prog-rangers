@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -38,10 +39,15 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI)).build();
     }
 
-    // 타인 프로필 보기
+    /**
+     *  타인 페이지 보기
+     * @param memberId : 멤버 아이디
+     * @param page 최초값 : 9223372036854775807
+     * @return
+     */
     @GetMapping("/members/profile/{memberId}")
-    public ResponseEntity<?> memberProfile(@PathVariable Long memberId){
-        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberId);
+    public ResponseEntity<?> memberProfile(@PathVariable Long memberId, @RequestParam(defaultValue = "9223372036854775807") Long page){
+        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberId,page);
         return ResponseEntity.ok().body(memberProfileResponse);
     }
 

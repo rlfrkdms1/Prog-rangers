@@ -27,6 +27,7 @@ public class MemberProfileResponse {
 
     private String github;
 
+
     /**
      * 뱃지
      */
@@ -40,7 +41,28 @@ public class MemberProfileResponse {
 
     List<MemberProfileProblemSolution> list;
 
+    /**
+     *  무한스크롤 위한 값들
+     */
+    // 다음에 pathvariable을 뭘로 요청해야 하는지 알려주기 위한 값
+    private Long cursor;
+
+    // 마지막 페이지인지 알려주기 위한 값
+    private Boolean isLast;
+
     public static MemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions, Long follow, Long following) {
+
+        // 무한스크롤 isLast, 커서
+        boolean isLast = false;
+        Long cursor = -1L;
+        if (solutions.size()<3){
+            isLast = true;
+        } else {
+            cursor = solutions.get(2).getId();
+            solutions.remove(2);
+        }
+
+
         List<BadgeConstant> badgeList = new ArrayList<>();
         badges.stream().map(badge->badge.getBadgeType())
                 .forEach(badge->badgeList.add(badge));
@@ -59,6 +81,7 @@ public class MemberProfileResponse {
                     );
                 });
 
+
         return MemberProfileResponse.builder()
                 .photo(member.getPhoto())
                 .nickname(member.getNickname())
@@ -67,6 +90,8 @@ public class MemberProfileResponse {
                 .following(following)
                 .badge(badgeList)
                 .list(problemSolutionList)
+                .cursor(cursor)
+                .isLast(isLast)
                 .build();
     }
 }
