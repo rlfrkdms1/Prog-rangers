@@ -1,14 +1,27 @@
 import { css } from '@emotion/react';
 import { theme } from '../styles/theme';
+import { Link } from 'react-router-dom';
 import {
-  sec,
+  secLight,
+  secMain,
   secLayout,
   fontSize30,
   fontSize50,
   fontSize60,
   fontSize70,
   alignCenter,
+  flexRowLayout,
+  flexColLayout,
+  buttonSytle,
 } from '../styles/MainPage';
+import ScrollDownArrow from '../components/Home/ScrollDownArrow';
+import Sec2Mockup from '../assets/main-sec2.png';
+import Sec3Mock1 from '../assets/main-sec3-1.png';
+import Sec3Mock2 from '../assets/main-sec3-2.png';
+
+const displayBlock = css`
+  display: block;
+`;
 
 const MainPage = () => {
   return (
@@ -16,7 +29,8 @@ const MainPage = () => {
       <div
         className="secWrap"
         css={css`
-          ${sec}
+          ${secLight}
+          height: calc(100vh - 120px);
         `}>
         <div
           className="sec sec1"
@@ -35,15 +49,11 @@ const MainPage = () => {
               left: 50%;
               transform: translate(-50%, -50%);
             `}>
-            <div
-              className="title"
-              css={css`
-                ${fontSize70}
-              `}>
+            <div className="title" css={fontSize70}>
               코딩테스트 리뷰 서비스
             </div>
             <div
-              className="title"
+              className="subtitle"
               css={css`
                 ${fontSize60}
                 color: ${theme.colors.main}
@@ -51,11 +61,166 @@ const MainPage = () => {
               Prog-rangers
             </div>
           </div>
+          <ScrollDownArrow />
         </div>
       </div>
-      <div className="sec sec2"></div>
-      <div className="sec sec3"></div>
-      <div className="sec sec4"></div>
+      <div
+        className="secWrap"
+        css={css`
+          ${secMain}
+        `}>
+        <div
+          className="sec sec2"
+          css={css`
+            ${flexRowLayout}
+            ${secLayout}
+          `}>
+          <div
+            className="sec2Left"
+            css={css`
+              padding-top: 55vh;
+              padding-left: 30px;
+            `}>
+            <div
+              className="title"
+              css={css`
+                padding-bottom: 50px;
+                ${fontSize60}
+              `}>
+              코딩테스트 문제를
+              <span css={displayBlock}>풀이해봐요</span>
+            </div>
+            <div className="description" css={fontSize30}>
+              <span>나만의 방법으로 푼 문제를 올려보세요.</span>
+              <span css={displayBlock}>차곡차곡 모으면</span>
+              <span>나만의 노트가 될 거예요.</span>
+            </div>
+          </div>
+          <div className="sec2Right">
+            <img
+              src={Sec2Mockup}
+              alt="사이트 문제 목록 페이지"
+              css={css`
+                width: 700px;
+
+                padding-top: 150px;
+              `}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="secWrap" css={secLight}>
+        <div
+          className="sec sec3"
+          css={css`
+            height: 100%;
+            ${secLayout};
+            ${flexRowLayout};
+          `}>
+          <div
+            className="sec3Left"
+            css={css`
+              width: 50%;
+              ${flexColLayout}
+            `}>
+            <div className="imgArea">
+              <img
+                src={Sec3Mock1}
+                alt="다른 사람의 프로필 보기 페이지"
+                css={css`
+                  width: 550px;
+                `}
+              />
+            </div>
+            <div
+              className="description"
+              css={css`
+                margin-bottom: 120px;
+                margin-left: -20px;
+                ${fontSize30}
+              `}>
+              <span>다른 사람의 풀이에 댓글을 달아보세요.</span>
+              <span css={displayBlock}>서로 이야기하면서</span>
+              <span>코드에 대한 이해를 높일 수 있어요.</span>
+            </div>
+          </div>
+          <div
+            className="sec3Right"
+            css={css`
+              width: 50%;
+              ${flexColLayout};
+            `}>
+            <div
+              className="title"
+              css={css`
+                padding-top: 150px;
+                ${fontSize60};
+              `}>
+              <span>다른 사람들에게</span>
+              <span css={displayBlock}>
+                내 풀이를{' '}
+                <i
+                  css={css`
+                    color: ${theme.colors.main};
+                  `}>
+                  공유
+                </i>
+                하고
+              </span>
+              <span>
+                함께{' '}
+                <i
+                  css={css`
+                    color: ${theme.colors.main};
+                  `}>
+                  소통
+                </i>
+                해요
+              </span>
+            </div>
+            <div className="imgArea">
+              <img
+                src={Sec3Mock2}
+                alt="풀이 상세보기 페이지"
+                css={css`
+                  width: 550px;
+                  margin-bottom: 100px;
+                `}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="secWrap"
+        css={css`
+          ${secMain};
+          height: 510px;
+        `}>
+        <div
+          className="sec sec4"
+          css={css`
+            height: 100%;
+            ${secLayout};
+            ${flexColLayout};
+            justify-content: space-evenly;
+          `}>
+          <div
+            className="ctaDesc"
+            css={css`
+              text-align: center;
+              ${fontSize50}
+            `}>
+            <span>다른 사람들과 함께 소통하며</span>
+            <span css={displayBlock}>즐겁게 공부해요</span>
+          </div>
+          <div className="ctaBtnArea">
+            <Link to="problems">
+              <button css={buttonSytle}>Prog-rangers 서비스 시작하기</button>
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
