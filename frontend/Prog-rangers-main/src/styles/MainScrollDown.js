@@ -36,6 +36,7 @@ export const scrollDownArea = css`
   color: ${theme.colors.dark2};
   font-weight: 700;
 `;
+
 export const scrollDownArrow = css`
   position: absolute;
   top: 0;
@@ -57,6 +58,7 @@ export const arrow1 = css`
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
 `;
+
 export const arrow2 = css`
   top: 16px;
   -webkit-animation-delay: 0.15s;

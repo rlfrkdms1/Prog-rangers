@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../styles/theme';
 import { Link } from 'react-router-dom';
@@ -38,6 +39,11 @@ const displayBlock = css`
 `;
 
 const MainPage = () => {
+  const element = useRef();
+  const moveToElement = () => {
+    element.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="wrap">
       <div
@@ -79,7 +85,9 @@ const MainPage = () => {
               Prog-rangers
             </div>
           </div>
-          <ScrollDownArrow />
+          <button onClick={moveToElement}>
+            <ScrollDownArrow />
+          </button>
         </div>
       </div>
       <div
@@ -89,6 +97,7 @@ const MainPage = () => {
         `}>
         <div
           className="sec sec2"
+          ref={element}
           css={css`
             ${flexRowLayout}
             ${secLayout}
