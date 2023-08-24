@@ -42,18 +42,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
             Pageable pageable, Long problemId, LanguageConstant language,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         List<Solution> result = null;
-
-//        // pageable 사용 동적쿼리
-//        result = jpaQueryFactory
-//                .selectFrom(solution)
-//                .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-//                .orderBy(getOrderSpecifier(pageable.getSort()).stream().toArray(OrderSpecifier[]::new))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-
         if (sortBy.equals(NEWEST)){
-
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
@@ -61,10 +50,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-
-
         } else if (sortBy.equals(LIKES)){
-
             result = jpaQueryFactory
                     .select(solution)
                     .from(likes)
@@ -76,9 +62,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         } else if (sortBy.equals(SCRAPS)){
-
             QSolution subSolution = new QSolution("subSolution");
-
             result = jpaQueryFactory
                     .select(solution)
                     .from(subSolution)
@@ -90,13 +74,11 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         }
-
         Long count = jpaQueryFactory
                 .select(solution.count())
                 .from(solution)
                 .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .fetchOne();
-
         PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
         return solutions;
     }
@@ -111,28 +93,6 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .limit(3)
                 .fetch();
     }
-
-    private OrderSpecifier<?> sortByWhat(String sortBy) {
-        if (sortBy.equals("newest")) {
-            return solution.createdDate.desc();
-        }
-        if (sortBy.equals("likes")) {
-            // 서브쿼리
-            // solution을 like의 수가 많은 대로 정렬하고 싶다
-            JPAExpressions
-                    .select(likes.count())
-                    .from(likes)
-                    .where(likes.solution.id.eq(solution.id))
-                    .fetchOne();
-            return null;
-        }
-        if (sortBy.equals("scraps")) {
-            // 서브쿼리
-            // solution을 scrap의 수가 많은 대로 정렬하고 싶다
-            return null;
-        } else return null;
-    }
-
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
         return dataStructure != null ? solution.dataStructure.eq(dataStructure) : null;
     }
@@ -144,5 +104,4 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private BooleanExpression languageEq(LanguageConstant language) {
         return language != null ? solution.language.eq(language) : null;
     }
-
 }
