@@ -1,5 +1,8 @@
 package com.prograngers.backend.dto.member.response;
 
+import com.prograngers.backend.entity.Badge;
+import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -35,4 +38,11 @@ public class MemberProfileResponse {
 
     List<MemberProfileProblemSolution> list;
 
+    public static MemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions) {
+        return MemberProfileResponse.builder()
+                .photo(member.getPhoto())
+                .nickname(member.getNickname())
+                .introduction(member.getIntroduction())
+                .
+    }
 }
