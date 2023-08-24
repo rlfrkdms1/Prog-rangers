@@ -1,6 +1,7 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.entity.Problem;
+import com.prograngers.backend.entity.QSolution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
@@ -44,26 +45,25 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .limit(pageable.getPageSize())
                 .fetch();
 
-         int size = results.size();
-//        Long size = jpaQueryFactory
-//                .select(problem.count())
-//                .from(problem)
-//                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-//                .fetchOne();
-        log.info("problem size : {}",size);
+         // int size = results.size();
+        long size = jpaQueryFactory
+                .selectFrom(problem)
+                .join(problem.solutions, solution)
+                .groupBy(problem)
+                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
+                .fetchCount();
+
+
+        log.info("size : {}",size);
 
         return new PageImpl<>(results,pageable,size);
     }
 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
-        if (orderBy.equals(NEWEST)) { // date 인 경우
-            log.info("orderByDate");
-            return problem.id.desc();
-            // size-1의 solution (제일 마지막 solution)의 날짜  기준으로 정렬
-//            NumberExpression<Integer> size = problem.solutions.size().subtract(1);
-//           return problem.solutions.get(size).date.desc();
-        } else if (orderBy.equals(SOLUTIONS)){ // solution 개수인 경우
-            // solution 개수에 따라 내림차순으로 정렬
+        if (orderBy.equals(NEWEST)) {
+            return
+                    solution.createdDate.desc();
+        } else if (orderBy.equals(SOLUTIONS)){
             log.info("orderBySolutionCount");
             return problem.solutions.size().desc();
         }
