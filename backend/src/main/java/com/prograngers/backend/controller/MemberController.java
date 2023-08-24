@@ -19,19 +19,19 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("prog-rangers/members")
+@RequestMapping("/prog-rangers")
 public class MemberController {
 
     private final MemberService memberService;
     private static final String MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI = "/prog-rangers/members/mypage/account-settings";
 
-    @GetMapping("/mypage/account-settings")
+    @GetMapping("/members/mypage/account-settings")
     @Login
     public MemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 
-    @PostMapping("/mypage/account-settings")
+    @PostMapping("/members/mypage/account-settings")
     @Login
     public ResponseEntity<Void> updateMemberAccountInfo(@LoggedInMember Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         memberService.updateMemberAccountInfo(memberId, updateMemberAccountInfoRequest);
@@ -39,7 +39,7 @@ public class MemberController {
     }
 
     // 타인 프로필 보기
-    @GetMapping("profile/{memberId}")
+    @GetMapping("/members/profile/{memberId}")
     public ResponseEntity<?> memberProfile(@PathVariable Long memberId){
         MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberId);
         return ResponseEntity.ok().body(memberProfileResponse);
