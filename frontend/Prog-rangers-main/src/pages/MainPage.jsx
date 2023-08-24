@@ -18,6 +18,20 @@ import ScrollDownArrow from '../components/Home/ScrollDownArrow';
 import Sec2Mockup from '../assets/main-sec2.png';
 import Sec3Mock1 from '../assets/main-sec3-1.png';
 import Sec3Mock2 from '../assets/main-sec3-2.png';
+import {
+  bookPosition,
+  chatPosition,
+  commentsPosition,
+  folderPosition,
+  notePosition,
+  penPosition,
+} from '../styles/MainPageIcons';
+import IconPen from '../assets/icons/main-pen.svg';
+import IconFolder from '../assets/icons/main-folder.svg';
+import IconNote from '../assets/icons/main-note-n-pen.svg';
+import IconCommets from '../assets/icons/main-comments.svg';
+import IconChat from '../assets/icons/main-chat.svg';
+import IconBook from '../assets/icons/main-openbook.svg';
 
 const displayBlock = css`
   display: block;
@@ -39,6 +53,10 @@ const MainPage = () => {
             height: 100%;
             position: relative;
           `}>
+          <div className="icon">
+            <img src={IconPen} alt="pen icon" css={penPosition} />
+            <img src={IconFolder} alt="folder icon" css={folderPosition} />
+          </div>
           <div
             className="secTitle"
             css={css`
@@ -74,7 +92,11 @@ const MainPage = () => {
           css={css`
             ${flexRowLayout}
             ${secLayout}
+            position: relative;
           `}>
+          <div className="icon">
+            <img src={IconNote} alt="note icon" css={notePosition} />
+          </div>
           <div
             className="sec2Left"
             css={css`
@@ -99,7 +121,7 @@ const MainPage = () => {
           <div className="sec2Right">
             <img
               src={Sec2Mockup}
-              alt="사이트 문제 목록 페이지"
+              alt="사이트 문제 목록 페이지 목업"
               css={css`
                 width: 700px;
 
@@ -114,9 +136,13 @@ const MainPage = () => {
           className="sec sec3"
           css={css`
             height: 100%;
+            position: relative;
             ${secLayout};
             ${flexRowLayout};
           `}>
+          <div className="icon">
+            <img src={IconCommets} alt="comments icon" css={commentsPosition} />
+          </div>
           <div
             className="sec3Left"
             css={css`
@@ -126,7 +152,7 @@ const MainPage = () => {
             <div className="imgArea">
               <img
                 src={Sec3Mock1}
-                alt="다른 사람의 프로필 보기 페이지"
+                alt="다른 사람의 프로필 보기 페이지 목업"
                 css={css`
                   width: 550px;
                 `}
@@ -181,7 +207,7 @@ const MainPage = () => {
             <div className="imgArea">
               <img
                 src={Sec3Mock2}
-                alt="풀이 상세보기 페이지"
+                alt="풀이 상세보기 페이지 목업"
                 css={css`
                   width: 550px;
                   margin-bottom: 100px;
@@ -201,10 +227,15 @@ const MainPage = () => {
           className="sec sec4"
           css={css`
             height: 100%;
+            position: relative;
             ${secLayout};
             ${flexColLayout};
             justify-content: space-evenly;
           `}>
+          <div className="icon">
+            <img src={IconChat} alt="chat icon" css={chatPosition} />
+            <img src={IconBook} alt="book icon" css={bookPosition} />
+          </div>
           <div
             className="ctaDesc"
             css={css`
