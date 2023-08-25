@@ -62,10 +62,7 @@ public class MemberProfileResponse {
             solutions.remove(2);
         }
 
-
-        List<BadgeConstant> badgeList = new ArrayList<>();
-        badges.stream().map(badge->badge.getBadgeType())
-                .forEach(badge->badgeList.add(badge));
+        List<BadgeConstant> badgeList = badges.stream().map(badge -> badge.getBadgeType()).toList();
         List<MemberProfileProblemSolution> problemSolutionList = new ArrayList<>();
         solutions.stream()
                 .forEach(solution->{
