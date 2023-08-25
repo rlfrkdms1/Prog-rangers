@@ -24,15 +24,15 @@ import java.net.URI;
 public class MemberController {
 
     private final MemberService memberService;
-    private static final String MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI = "/prog-rangers/members/mypage/account-settings";
+    private static final String MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI = "/prog-rangers/mypage/account-settings";
 
-    @GetMapping("/members/mypage/account-settings")
+    @GetMapping("/mypage/account-settings")
     @Login
     public MemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 
-    @PostMapping("/members/mypage/account-settings")
+    @PostMapping("/mypage/account-settings")
     @Login
     public ResponseEntity<Void> updateMemberAccountInfo(@LoggedInMember Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         memberService.updateMemberAccountInfo(memberId, updateMemberAccountInfoRequest);
