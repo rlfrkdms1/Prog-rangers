@@ -23,14 +23,14 @@ public class FakeJwtTokenProvider {
         this.validTimeInMillisecond = validTimeInMillisecond;
     }
 
-    public String createAccessToken(Long memberId) {
+    public String createAccessTokenWithIssuer(Long memberId, String issuer) {
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()
                 .claim(MEMBER_ID, memberId)
                 .setExpiration(validTime)
                 .setIssuedAt(now)
-                .setIssuer(ISSUER)
+                .setIssuer(issuer)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
