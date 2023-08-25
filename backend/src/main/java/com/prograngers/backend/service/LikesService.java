@@ -3,6 +3,8 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.LikesAlreadyExistsException;
+import com.prograngers.backend.exception.notfound.LikesNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.likes.LikesRepository;
@@ -23,6 +25,10 @@ public class LikesService {
     public void pushLike(Long memberId, Long solutionId) {
         Solution targetSolution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
         Member targetMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Likes targetLikes = likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElse(null);
+        if (targetLikes!=null){
+            throw new LikesAlreadyExistsException();
+        }
         Likes likes = Likes.builder()
                 .solution(targetSolution)
                 .member(targetMember)
@@ -33,7 +39,7 @@ public class LikesService {
     public void cancelLike(Long memberId, Long solutionId) {
         Solution targetSolution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
         Member targetMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        Likes targetLikes = likesRepository.findByMemberAndSolution(targetMember, targetSolution);
+        Likes targetLikes = likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElseThrow(LikesNotFoundException::new);
         likesRepository.delete(targetLikes);
     }
 }
