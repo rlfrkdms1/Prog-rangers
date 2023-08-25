@@ -4,6 +4,7 @@ import com.prograngers.backend.exception.unauthorization.FailToDecodeException;
 import com.prograngers.backend.exception.unauthorization.FailToEncodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -11,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 @Slf4j
+@Component
 public class Encrypt {
 
     private static String algorithm;
