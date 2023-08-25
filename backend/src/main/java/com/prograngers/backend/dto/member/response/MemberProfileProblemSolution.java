@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto.member.response;
 
+import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
@@ -21,5 +22,16 @@ public class MemberProfileProblemSolution {
     private String description;
 
     private String code;
+
+    public static MemberProfileProblemSolution from(Solution solution){
+        return MemberProfileProblemSolution.builder()
+                .problemName(solution.getProblem().getTitle())
+                .dataStructure(solution.getDataStructure())
+                .algorithm(solution.getAlgorithm())
+                .ojName(solution.getProblem().getOjName())
+                .description(solution.getDescription())
+                .code(solution.getCode())
+                .build();
+    }
 
 }
