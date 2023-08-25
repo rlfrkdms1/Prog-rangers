@@ -5,7 +5,9 @@ import com.prograngers.backend.entity.constants.AlgorithmConstant;
 import com.prograngers.backend.entity.constants.DataStructureConstant;
 import com.prograngers.backend.entity.constants.JudgeConstant;
 import com.prograngers.backend.entity.constants.LanguageConstant;
-import com.prograngers.backend.entity.constants.LevelConstant;
+import com.prograngers.backend.entity.member.Member;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,8 +30,9 @@ public class SolutionPostRequest {
     private String solutionTitle;
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
-
-    private LevelConstant level;
+    @Min(value = 1, message = "레벨 값은 1 미만일 수 없습니다")
+    @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
+    private Integer level;
 
     private AlgorithmConstant algorithm;
 
@@ -43,7 +46,7 @@ public class SolutionPostRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Solution toEntity() {
+    public Solution toSolution() {
         /*
         파싱해서 ojname 알아내서 문제에 넣기
         로그인정보로 멤버 알아내서 넣기
@@ -54,25 +57,24 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, LocalDate.now(),judge, null))
+                .problem(new Problem(null, problemTitle, problemLink, judge, null))
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .scraps(0)
-                .date(LocalDate.now())
+                .createdDate(LocalDateTime.now())
                 .level(level)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .description(description)
-                .scrapId(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
+                .scrapSolution(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
                 .build();
     }
 
-    public static SolutionPostRequest toDto(Solution solution){
+    public static SolutionPostRequest from(Solution solution){
         return SolutionPostRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())

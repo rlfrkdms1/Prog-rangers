@@ -2,7 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Member;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
@@ -23,10 +23,13 @@ import java.util.Optional;
 
 import static com.prograngers.backend.fixture.CommentFixture.댓글1;
 import static com.prograngers.backend.fixture.CommentFixture.댓글2;
+import static com.prograngers.backend.fixture.CommentFixture.삭제된_댓글;
 import static com.prograngers.backend.fixture.MemberFixture.*;
 import static com.prograngers.backend.fixture.SolutionFixture.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -99,10 +102,11 @@ class CommentServiceTest {
 
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
+        given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
         CommentPatchRequest request = new CommentPatchRequest("수정내용", null);
 
         // when
-        commentService.updateComment(comment.getId(), request);
+        commentService.updateComment(comment.getId(), request, member.getId());
         Comment updated = commentRepository.findById(1L).orElse(null);
 
         // then
@@ -114,17 +118,31 @@ class CommentServiceTest {
     @Test
     void 댓글_삭제_테스트() {
         // given
-        Comment comment = 댓글1.기본_댓글_생성(1L);
+        Member member = 길가은1.getMember();
+        Comment comment = 댓글1.댓글_생성(1L,null,member);
+        Comment deleted = 삭제된_댓글.댓글_생성(1L,null,member);
 
-        given(commentRepository.save(comment)).willReturn(comment);
-        given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
+
+        given(commentRepository.save(comment))
+                .willReturn(comment)
+                        .willReturn(deleted);
+        given(commentRepository.findById(comment.getId())).
+                willReturn(Optional.ofNullable(comment))
+                        .willReturn(Optional.ofNullable(deleted));
+        given(memberRepository.findById(member.getId()))
+                .willReturn(Optional.ofNullable(member));
+
         commentRepository.save(comment);
 
+
         // when
-        commentService.deleteComment(1L);
+        commentService.deleteComment(1L,member.getId());
 
         // then
-        verify(commentRepository).delete(comment);
+        verify(commentRepository,times(2)).save(comment);
+        Comment found = commentRepository.findById(1L).orElse(null);
+        Assertions.assertThat(found.getContent()).isEqualTo("삭제된 댓글입니다");
+
     }
 
     @DisplayName("없는 댓글을 조회할 경우 예외 발생")

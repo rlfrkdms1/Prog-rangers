@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,6 @@ public class Problem {
     private String title;
 
     private String link;
-
-    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private JudgeConstant ojName;

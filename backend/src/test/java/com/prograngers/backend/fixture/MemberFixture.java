@@ -1,14 +1,7 @@
 package com.prograngers.backend.fixture;
 
-import com.prograngers.backend.entity.Member;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.member.Member;
 import lombok.AllArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import static com.prograngers.backend.entity.constants.JudgeConstant.백준;
 
 @AllArgsConstructor
 public enum MemberFixture {
@@ -26,7 +19,6 @@ public enum MemberFixture {
     public Member getMember() {
         return Member.builder()
                 .id(this.id)
-                .name(this.name)
                 .nickname(this.nickname)
                 .email(this.email)
                 .password(this.password)
@@ -36,10 +28,19 @@ public enum MemberFixture {
     public Member 아이디_값_지정_멤버_생성(Long id){
         return Member.builder()
                 .id(id)
-                .name(this.name)
                 .nickname(this.nickname)
                 .email(this.email)
                 .password(this.password)
                 .build();
     }
+
+    public Member 아이디_값_지정_멤버_생성(){
+        return Member.builder()
+                .id(null)
+                .nickname(this.nickname)
+                .email(this.email)
+                .password(this.password)
+                .build();
+    }
+
 }

@@ -8,16 +8,16 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum LanguageConstant {
-    PYTHON("python"),
-    JAVA("java"),
-    CPP("C++"),
+    PYTHON("PYTHON"),
+    JAVA("JAVA"),
+    CPP("CPP"),
     C("C");
-    private final String value;
+    private final String stringValue;
 
     @JsonCreator
     public static LanguageConstant from(String value) {
         for (LanguageConstant language : LanguageConstant.values()) {
-            if (language.getValue().equals(value)) {
+            if (language.getStringValue().equals(value)) {
                 return language;
             }
         }
@@ -25,8 +25,7 @@ public enum LanguageConstant {
     }
 
     @JsonValue
-    public String getValue() {
-        return value;
+    public String getStringValue() {
+        return stringValue;
     }
-
 }

@@ -1,6 +1,8 @@
 package com.prograngers.backend.entity;
 
+import com.prograngers.backend.entity.member.Member;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,35 +30,31 @@ public class Comment {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="solution_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "solution_id")
     private Solution solution;
-    private Integer orderParent;
-    private Integer orderChild;
     private String mention;
 
     private String content;
 
-    private LocalDate date;
+    private LocalDateTime createdDate;
 
     private Long parentId;
 
-    private Integer groupNumber;
-
     private boolean fixed;
 
-    public void updateMention(String mention){
-        if (mention!=null){
+    public void updateMention(String mention) {
+        if (mention != null) {
             this.mention = mention;
             this.fixed = true;
         }
     }
 
-    public void updateContent(String content){
-        if (content!=null){
+    public void updateContent(String content) {
+        if (content != null) {
             this.content = content;
             this.fixed = true;
         }
