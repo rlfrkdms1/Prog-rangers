@@ -63,20 +63,8 @@ public class MemberProfileResponse {
         }
 
         List<BadgeConstant> badgeList = badges.stream().map(badge -> badge.getBadgeType()).toList();
-        List<MemberProfileProblemSolution> problemSolutionList = new ArrayList<>();
-        solutions.stream()
-                .forEach(solution->{
-                    problemSolutionList.add(
-                            MemberProfileProblemSolution.builder()
-                                    .problemName(solution.getProblem().getTitle())
-                                    .dataStructure(solution.getDataStructure())
-                                    .algorithm(solution.getAlgorithm())
-                                    .ojName(solution.getProblem().getOjName())
-                                    .description(solution.getDescription())
-                                    .code(solution.getCode())
-                                    .build()
-                    );
-                });
+        List<MemberProfileProblemSolution> problemSolutionList = solutions.stream()
+                .map(solution -> MemberProfileProblemSolution.from(solution)).toList();
 
 
         return MemberProfileResponse.builder()
