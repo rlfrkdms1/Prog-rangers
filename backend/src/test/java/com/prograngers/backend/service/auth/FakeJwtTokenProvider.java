@@ -35,4 +35,15 @@ public class FakeJwtTokenProvider {
                 .compact();
     }
 
+    public String createAccessTokenWithoutIssuer(Long memberId){
+        Date now = new Date();
+        Date validTime = new Date(now.getTime() + validTimeInMillisecond);
+        return Jwts.builder()
+                .claim(MEMBER_ID, memberId)
+                .setExpiration(validTime)
+                .setIssuedAt(now)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
 }
