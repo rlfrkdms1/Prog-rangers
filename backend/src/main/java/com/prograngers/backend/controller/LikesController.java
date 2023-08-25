@@ -22,21 +22,18 @@ public class LikesController {
 
     private final LikesService likesService;
 
-    private final String SOLUTION_DETAIL_REDIRECT_URI = "/prog-rangers/solutuions/";
+    private final String SOLUTION_DETAIL_REDIRECT_URI = "/prog-rangers/solutions/";
 
     @Login
-    @GetMapping("/{soiutionId}/likes/push")
+    @GetMapping("/{solutionId}/likes/push")
     public ResponseEntity<?> pushLike(@LoggedInMember Long memberId, @PathVariable Long solutionId){
         likesService.pushLike(memberId,solutionId);
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(SOLUTION_DETAIL_REDIRECT_URI+solutionId)).build();
     }
     @Login
-    @GetMapping("/{soiutionId}/likes/cancel")
+    @GetMapping("/{solutionId}/likes/cancel")
     public ResponseEntity<?> cancelLike(@LoggedInMember Long memberId, @PathVariable Long solutionId){
         likesService.cancelLike(memberId,solutionId);
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(SOLUTION_DETAIL_REDIRECT_URI+solutionId)).build();
     }
-
-
-
 }
