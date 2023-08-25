@@ -17,7 +17,7 @@ import java.net.URI;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("prog-rangers")
+@RequestMapping("/prog-rangers")
 public class LikesController {
 
     private final LikesService likesService;
@@ -31,7 +31,7 @@ public class LikesController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(SOLUTION_DETAIL_REDIRECT_URI+solutionId)).build();
     }
     @Login
-    @GetMapping("/{soiutionId}/likes/push")
+    @GetMapping("/{soiutionId}/likes/cancel")
     public ResponseEntity<?> cancelLike(@LoggedInMember Long memberId, @PathVariable Long solutionId){
         likesService.cancelLike(memberId,solutionId);
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(SOLUTION_DETAIL_REDIRECT_URI+solutionId)).build();
