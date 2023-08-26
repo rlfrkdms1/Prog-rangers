@@ -25,10 +25,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.prograngers.backend.fixture.MemberFixture.길가은1;
-import static com.prograngers.backend.fixture.ProblemFixture.문제1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.support.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이1;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이2;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;

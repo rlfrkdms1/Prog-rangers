@@ -1,7 +1,6 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.TestConfig;
-import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.Problem;
 import com.prograngers.backend.entity.Solution;
@@ -24,19 +23,18 @@ import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
 import static com.prograngers.backend.entity.constants.LanguageConstant.JAVA;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
-import static com.prograngers.backend.fixture.MemberFixture.길가은1;
-import static com.prograngers.backend.fixture.ProblemFixture.문제1;
-import static com.prograngers.backend.fixture.ProblemFixture.문제2;
-import static com.prograngers.backend.fixture.ProblemFixture.문제3;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이3;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이4;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이5;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이6;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이7;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이8;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이9;
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.support.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.support.fixture.ProblemFixture.문제2;
+import static com.prograngers.backend.support.fixture.ProblemFixture.문제3;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이1;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이2;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이4;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이5;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이6;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이7;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이8;
+import static com.prograngers.backend.support.fixture.SolutionFixture.풀이9;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
