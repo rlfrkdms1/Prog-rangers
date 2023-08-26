@@ -1,8 +1,6 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.solution;
 
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.member.Member;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;

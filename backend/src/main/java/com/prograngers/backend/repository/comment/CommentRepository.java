@@ -1,7 +1,7 @@
 package com.prograngers.backend.repository.comment;
 
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.solution.Solution;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.prograngers.backend.dto.member.response;
 
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.problem.JudgeConstant;
 import lombok.Builder;
 import lombok.Getter;
 

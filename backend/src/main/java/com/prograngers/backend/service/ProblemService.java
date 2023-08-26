@@ -2,9 +2,10 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.problem.response.ProblemListProblem;
 import com.prograngers.backend.dto.problem.response.ProblemListResponse;
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +32,12 @@ public class ProblemService {
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
             SortConstant sortBy) {
-        PageImpl<com.prograngers.backend.entity.Problem> pageImpl = problemRepository.findAll(pageable, dataStructure, algorithm, sortBy);
-        List<com.prograngers.backend.entity.Problem> problems = pageImpl.getContent();
+        PageImpl<Problem> pageImpl = problemRepository.findAll(pageable, dataStructure, algorithm, sortBy);
+        List<Problem> problems = pageImpl.getContent();
         // 반환할 dto 리스트
         List<ProblemListProblem> problemListProblemResponse = new ArrayList<>();
         // 결과를  for문 돌면서 반환 dto를 만든다
-        for (com.prograngers.backend.entity.Problem problem : problems) {
+        for (Problem problem : problems) {
             ProblemListProblem problemListProblem = ProblemListProblem.from(problem);
             List<Solution> solutions = problem.getSolutions();
             HashMap<Object, Integer> solutionAlgorithmCountMap = new HashMap<>();

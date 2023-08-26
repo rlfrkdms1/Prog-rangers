@@ -1,6 +1,5 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.badge;
 
-import com.prograngers.backend.entity.constants.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto.problem.response;
 
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.problem.JudgeConstant;
+import com.prograngers.backend.entity.problem.Problem;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class ProblemListProblem {
     List<Object> tags;
 
 
-    public static ProblemListProblem from(com.prograngers.backend.entity.Problem problem) {
+    public static ProblemListProblem from(Problem problem) {
         ProblemListProblem problemListProblemResponse = ProblemListProblem.builder()
                 .title(problem.getTitle())
                 .ojName(problem.getOjName())

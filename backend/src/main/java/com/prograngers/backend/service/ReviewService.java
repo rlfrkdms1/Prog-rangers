@@ -4,7 +4,7 @@ import com.prograngers.backend.dto.review.response.Line;
 import com.prograngers.backend.dto.review.response.Reply;
 import com.prograngers.backend.dto.review.response.Review;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;

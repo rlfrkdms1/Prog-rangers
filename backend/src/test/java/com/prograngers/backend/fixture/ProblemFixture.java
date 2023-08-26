@@ -1,14 +1,13 @@
 package com.prograngers.backend.fixture;
 
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.problem.JudgeConstant;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static com.prograngers.backend.entity.constants.JudgeConstant.백준;
+import static com.prograngers.backend.entity.problem.JudgeConstant.백준;
 
 @AllArgsConstructor
 public enum ProblemFixture {

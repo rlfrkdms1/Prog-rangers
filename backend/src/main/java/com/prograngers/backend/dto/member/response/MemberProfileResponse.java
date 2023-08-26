@@ -1,13 +1,12 @@
 package com.prograngers.backend.dto.member.response;
 
-import com.prograngers.backend.entity.Badge;
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.BadgeConstant;
+import com.prograngers.backend.entity.badge.Badge;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter

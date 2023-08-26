@@ -4,7 +4,7 @@ import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

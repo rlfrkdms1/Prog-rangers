@@ -2,13 +2,12 @@ package com.prograngers.backend.repository.comment;
 
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
-import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +17,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
-import static com.prograngers.backend.entity.constants.LanguageConstant.JAVA;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
+import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.fixture.CommentFixture.댓글1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;

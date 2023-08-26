@@ -2,8 +2,8 @@ package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
@@ -21,12 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
-import static com.prograngers.backend.entity.constants.AlgorithmConstant.DFS;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.ARRAY;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.STACK;
-import static com.prograngers.backend.entity.constants.LanguageConstant.*;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.STACK;
+import static com.prograngers.backend.entity.solution.LanguageConstant.*;
 import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 import static com.prograngers.backend.entity.constants.SortConstant.SCRAPS;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;

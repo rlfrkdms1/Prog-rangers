@@ -1,12 +1,11 @@
 package com.prograngers.backend.repository.problem;
 
-import com.prograngers.backend.entity.Problem;
+import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.QSolution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

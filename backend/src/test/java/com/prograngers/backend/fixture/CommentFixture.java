@@ -2,7 +2,7 @@ package com.prograngers.backend.fixture;
 
 import com.prograngers.backend.entity.Comment;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
