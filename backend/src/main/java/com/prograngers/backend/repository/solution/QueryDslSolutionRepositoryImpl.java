@@ -1,6 +1,6 @@
 package com.prograngers.backend.repository.solution;
 
-import com.prograngers.backend.entity.QSolution;
+import com.prograngers.backend.entity.solution.QSolution;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -17,9 +17,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.prograngers.backend.entity.QLikes.*;
-import static com.prograngers.backend.entity.QSolution.*;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
-import static org.springframework.util.ObjectUtils.isEmpty;
+import static com.prograngers.backend.entity.solution.QSolution.*;
 
 @RequiredArgsConstructor
 @Repository
