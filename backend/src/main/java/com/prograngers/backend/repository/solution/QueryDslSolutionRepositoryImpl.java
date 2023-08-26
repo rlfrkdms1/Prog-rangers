@@ -42,9 +42,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
             Pageable pageable, Long problemId, LanguageConstant language,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         List<Solution> result = null;
-
         if (sortBy.equals(NEWEST)){
-
             result = jpaQueryFactory
                     .selectFrom(solution)
                     .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
@@ -52,10 +50,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-
-
         } else if (sortBy.equals(LIKES)){
-
             result = jpaQueryFactory
                     .select(solution)
                     .from(likes)
@@ -67,9 +62,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         } else if (sortBy.equals(SCRAPS)){
-
             QSolution subSolution = new QSolution("subSolution");
-
             result = jpaQueryFactory
                     .select(solution)
                     .from(subSolution)
@@ -81,17 +74,25 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .limit(pageable.getPageSize())
                     .fetch();
         }
-
         Long count = jpaQueryFactory
-                .select(solution)
+                .select(solution.count())
                 .from(solution)
                 .where(solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                .fetchCount();
-
+                .fetchOne();
         PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
         return solutions;
     }
 
+    @Override
+    public List<Solution> findProfileSolutions(Long memberId,Long page) {
+        return jpaQueryFactory
+                .select(solution)
+                .from(solution)
+                .where(solution.member.id.eq(memberId), solution.id.loe(page))
+                .orderBy(solution.createdDate.desc())
+                .limit(3)
+                .fetch();
+    }
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
         return dataStructure != null ? solution.dataStructure.eq(dataStructure) : null;
     }
@@ -103,5 +104,4 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private BooleanExpression languageEq(LanguageConstant language) {
         return language != null ? solution.language.eq(language) : null;
     }
-
 }

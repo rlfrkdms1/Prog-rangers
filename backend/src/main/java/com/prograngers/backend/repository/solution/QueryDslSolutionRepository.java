@@ -16,5 +16,5 @@ public interface QueryDslSolutionRepository {
     PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm,
             DataStructureConstant dataStructure, SortConstant sortBy);
-
+    List<Solution> findProfileSolutions(Long memberId,Long page);
 }

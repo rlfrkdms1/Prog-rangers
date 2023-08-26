@@ -15,7 +15,7 @@ public class ProblemListProblem {
     String title;
     JudgeConstant ojName;
 
-    List<Object> tags = new ArrayList<>();
+    List<Object> tags;
 
 
     public static ProblemListProblem from(com.prograngers.backend.entity.Problem problem) {
