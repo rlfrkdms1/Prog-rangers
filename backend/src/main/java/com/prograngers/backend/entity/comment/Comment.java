@@ -4,6 +4,8 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,6 +47,7 @@ public class Comment {
 
     private Long parentId;
 
+    @Enumerated(value = EnumType.STRING)
     private CommentStatusContant status;
 
     public void updateMention(String mention) {
