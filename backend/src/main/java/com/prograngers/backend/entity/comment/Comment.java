@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.prograngers.backend.entity.comment.CommentStatusContant.*;
+
 @Entity
 @Getter
 @AllArgsConstructor
@@ -43,23 +45,20 @@ public class Comment {
 
     private Long parentId;
 
-    private boolean fixed;
+    private CommentStatusContant status;
 
     public void updateMention(String mention) {
         if (mention != null) {
             this.mention = mention;
-            this.fixed = true;
+            this.status = FIXED;
         }
     }
 
     public void updateContent(String content) {
         if (content != null) {
             this.content = content;
-            this.fixed = true;
+            this.status = FIXED;
         }
     }
 
-    public void updateSolution(Solution solution) {
-        this.solution = solution;
-    }
 }
