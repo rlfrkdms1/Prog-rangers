@@ -89,10 +89,13 @@ public class SolutionService {
             throw new MemberUnAuthorizedException();
         }
 
-        List<Comment> comments = commentRepository.findAllBySolution(target);
-        for (Comment comment : comments) {
-            commentRepository.delete(comment);
-        }
+        commentRepository.findAllBySolution(target)
+                        .stream()
+                                .forEach(comment->commentRepository.delete(comment));
+
+        reviewRepository.findAllBySolution(target)
+                        .stream()
+                                .forEach(review->reviewRepository.delete(review));
 
         solutionRepository.delete(target);
     }
