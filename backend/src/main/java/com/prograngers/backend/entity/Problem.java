@@ -58,6 +58,4 @@ public class Problem {
             this.ojName = ojName;
         }
     }
-
-
 }
