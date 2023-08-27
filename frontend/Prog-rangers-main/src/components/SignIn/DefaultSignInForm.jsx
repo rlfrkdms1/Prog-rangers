@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-
 import { inputStyle } from '../../styles/signUpPage';
+import { useForm } from 'react-hook-form';
+import ErrorText from '../common/ErrorText';
 
 const StyledButton = styled.button`
   width: 600px;
@@ -22,11 +23,39 @@ const formStyle = css`
 `;
 
 export default function DefaultSignInForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+  };
+
   return (
-    <form css={formStyle}>
-      <input placeholder="아이디" css={inputStyle} />
-      <input placeholder="비밀번호" css={inputStyle} />
-      <StyledButton>로그인</StyledButton>
+    <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
+      <input
+        type="email"
+        {...register('email', {
+          required: { value: true, message: '이메일을 입력해주세요' },
+        })}
+        placeholder="이메일"
+        css={inputStyle}
+      />
+      {errors['email']?.message && <ErrorText text={errors['email'].message} />}
+      <input
+        type="password"
+        placeholder="비밀번호"
+        css={inputStyle}
+        {...register('password', {
+          required: { value: true, message: '비밀번호를 입력해주세요' },
+        })}
+      />
+      {errors['password']?.message && (
+        <ErrorText text={errors['password'].message} />
+      )}
+      <StyledButton disabled={isSubmitting}>로그인</StyledButton>
     </form>
   );
 }
