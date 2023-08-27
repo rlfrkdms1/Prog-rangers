@@ -5,6 +5,7 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentRequest;
 import com.prograngers.backend.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +36,7 @@ public class CommentController {
     // 댓글 작성
     @PostMapping("/{solutionId}/comments")
     @Login
-    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentRequest commentRequest,
+    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
                                         @LoggedInMember Long memberId)
             throws URISyntaxException {
 
@@ -52,7 +53,7 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     @Login
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @RequestBody CommentPatchRequest commentPatchRequest,
+                                           @RequestBody @Valid  CommentPatchRequest commentPatchRequest,
                                            @LoggedInMember Long memberId
                                            ) throws URISyntaxException {
 
