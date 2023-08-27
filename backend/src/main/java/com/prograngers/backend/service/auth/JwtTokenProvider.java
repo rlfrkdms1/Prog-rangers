@@ -4,6 +4,7 @@ import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
 import com.prograngers.backend.exception.unauthorization.FailedSignatureTokenException;
 import com.prograngers.backend.exception.unauthorization.IncorrectIssuerTokenException;
 import com.prograngers.backend.exception.unauthorization.IncorrectlyConstructedTokenException;
+import com.prograngers.backend.exception.unauthorization.InvalidClaimTypeException;
 import com.prograngers.backend.exception.unauthorization.MissingIssuerTokenException;
 import com.prograngers.backend.exception.unauthorization.UnsupportedTokenException;
 import io.jsonwebtoken.Claims;
@@ -13,6 +14,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.MissingClaimException;
+import io.jsonwebtoken.RequiredTypeException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
@@ -79,7 +81,12 @@ public class JwtTokenProvider {
     }
 
     public Long getMemberId(String accessToken){
-        return getClaimsJwt(accessToken).getBody().get(MEMBER_ID, Long.class);
+        try{
+            return getClaimsJwt(accessToken).getBody().get(MEMBER_ID, Long.class);
+        }catch (RequiredTypeException e){
+            throw new InvalidClaimTypeException();
+        }
+
     }
 
     public Date getExpiredAt(String accessToken){
