@@ -1,7 +1,7 @@
 package com.prograngers.backend.repository.comment;
 
 import com.prograngers.backend.TestConfig;
-import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;

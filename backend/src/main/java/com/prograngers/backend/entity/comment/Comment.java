@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.comment;
 
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;

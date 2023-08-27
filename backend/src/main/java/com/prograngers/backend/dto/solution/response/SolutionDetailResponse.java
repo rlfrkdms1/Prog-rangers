@@ -1,6 +1,6 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
