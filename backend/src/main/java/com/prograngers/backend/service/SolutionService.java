@@ -91,7 +91,6 @@ public class SolutionService {
 
         List<Comment> comments = commentRepository.findAllBySolution(target);
         for (Comment comment : comments) {
-            comment.updateSolution(null);
             commentRepository.delete(comment);
         }
 
