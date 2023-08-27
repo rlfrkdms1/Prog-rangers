@@ -3,9 +3,8 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentReqeust;
+import com.prograngers.backend.dto.comment.request.CommentRequest;
 import com.prograngers.backend.service.CommentService;
-import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -36,11 +35,11 @@ public class CommentController {
     // 댓글 작성
     @PostMapping("/{solutionId}")
     @Login
-    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentReqeust commentReqeust,
+    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentRequest commentRequest,
                                         @LoggedInMember Long memberId)
             throws URISyntaxException {
 
-        commentService.addComment(solutionId, commentReqeust, memberId);
+        commentService.addComment(solutionId, commentRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);

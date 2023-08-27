@@ -1,9 +1,8 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentReqeust;
+import com.prograngers.backend.dto.comment.request.CommentRequest;
 import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.comment.CommentStatusContant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
@@ -43,7 +42,7 @@ public class CommentService {
 
     // 댓글 작성
     @Transactional
-    public void addComment(Long solutionId, CommentReqeust commentReqeust, Long memberId) {
+    public void addComment(Long solutionId, CommentRequest commentRequest, Long memberId) {
 
         Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -51,9 +50,9 @@ public class CommentService {
         Comment comment = Comment.builder().
                 member(member).
                 solution(solution).
-                mention(commentReqeust.getMention()).
-                content(commentReqeust.getContent()).
-                createdDate(LocalDateTime.now()).parentId(commentReqeust.getParentId())
+                mention(commentRequest.getMention()).
+                content(commentRequest.getContent()).
+                createdDate(LocalDateTime.now()).parentId(commentRequest.getParentId())
                 .status(CREATED)
                 .build();
 
