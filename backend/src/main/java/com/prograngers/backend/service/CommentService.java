@@ -3,8 +3,10 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentReqeust;
 import com.prograngers.backend.entity.comment.Comment;
+import com.prograngers.backend.entity.comment.CommentStatusContant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -19,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.prograngers.backend.entity.comment.CommentStatusContant.*;
+
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -28,8 +32,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     private final MemberRepository memberRepository;
-
-    private final String DELETED_COMMENT = "삭제된 댓글입니다";
 
     public List<Comment> findBySolution(Solution solution) {
         return commentRepository.findAllBySolution(solution);
@@ -52,6 +54,7 @@ public class CommentService {
                 mention(commentReqeust.getMention()).
                 content(commentReqeust.getContent()).
                 createdDate(LocalDateTime.now()).parentId(commentReqeust.getParentId())
+                .status(CREATED)
                 .build();
 
         Comment saved = commentRepository.save(comment);
@@ -83,7 +86,10 @@ public class CommentService {
         if (targetCommentMemberId!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
-        comment.updateContent(DELETED_COMMENT);
+        if (comment.getStatus().equals(DELETED)){
+            throw new CommentAlreadyDeletedException();
+        }
+        comment.deleteComment();
         commentRepository.save(comment);
     }
 }
