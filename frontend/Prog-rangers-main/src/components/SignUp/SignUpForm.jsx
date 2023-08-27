@@ -6,7 +6,9 @@ import {
   inputStyle,
   submitButtonStyle,
   inputContainerStyle,
+  confirmButtonStyle,
 } from '../../styles/signUpPage';
+import ErrorText from '../common/ErrorText';
 
 export default function SignUpForm() {
   const {
@@ -23,37 +25,24 @@ export default function SignUpForm() {
 
   return (
     <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor="name" css={labelStyle}>
-        이름
-      </label>
-      <input
-        placeholder="이름을 입력해주세요"
-        {...register('name', {
-          required: { value: true, message: '이름을 입력해주세요.' },
-        })}
-        css={inputStyle}
-      />
-      <span>{errors['name']?.message}</span>
       <label
         htmlFor="email"
         placeholder="이메일을 입력해주세요"
         css={labelStyle}>
         이메일
       </label>
-      <div css={inputContainerStyle}>
-        <input
-          type="email"
-          {...register('email', {
-            required: { value: true, message: '이메일을 입력해주세요.' },
-          })}
-          css={inputStyle}
-        />
-        <span>{errors['email']?.message}</span>
-      </div>
+      <input
+        type="email"
+        {...register('email', {
+          required: { value: true, message: '이메일을 입력해주세요' },
+        })}
+        css={inputStyle}
+        placeholder="이메일을 입력해주세요"
+      />
+      {errors['email']?.message && <ErrorText text={errors['email'].message} />}
       <label htmlFor="password" css={labelStyle}>
         비밀번호
       </label>
-      {/* TODO 정규식을 이용해 패턴 체크 */}
       <input
         type="password"
         placeholder="영문+숫자+특수문자 조합 최소 10자"
@@ -68,7 +57,9 @@ export default function SignUpForm() {
         })}
         css={inputStyle}
       />
-      <span>{errors['password']?.message}</span>
+      {errors['password']?.message && (
+        <ErrorText text={errors['password'].message} />
+      )}
       <input
         type="password"
         placeholder="비밀번호를 다시 입력해주세요"
@@ -82,7 +73,9 @@ export default function SignUpForm() {
         })}
         css={inputStyle}
       />
-      <span>{errors['passwordCheck']?.message}</span>
+      {errors['passwordCheck']?.message && (
+        <ErrorText text={errors['passwordCheck'].message} />
+      )}
       <label htmlFor="nickName" css={labelStyle}>
         닉네임
       </label>
@@ -94,9 +87,15 @@ export default function SignUpForm() {
           })}
           css={inputStyle}
         />
-        <span>{errors['nickName']?.message}</span>
+        {errors['nickName']?.message && (
+          <ErrorText text={errors['nickName'].message} />
+        )}
+        {/* {TODO 중복확인 체크 안하면 회원가입 못하도록 서버와 통신해야함} */}
+        <button type="button" css={confirmButtonStyle}>
+          중복 확인
+        </button>
       </div>
-      <button css={submitButtonStyle} disabled={isSubmitting}>
+      <button css={submitButtonStyle} disabled={isSubmitting} type="submit">
         회원가입
       </button>
     </form>
