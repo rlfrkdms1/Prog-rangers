@@ -14,6 +14,7 @@ import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class CommentService {
     private final SolutionRepository solutionRepository;
 
@@ -63,8 +65,10 @@ public class CommentService {
         Comment comment = findById(commentId);
         Long targetMemberId = comment.getMember().getId();
 
+
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        if (targetMemberId!=member.getId()){
+        log.info("targetMemberId = {} , member.getId = {}",targetMemberId,member.getId());
+        if (!targetMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }
 
@@ -82,7 +86,7 @@ public class CommentService {
         Comment comment = findById(commentId);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         Long targetCommentMemberId = comment.getMember().getId();
-        if (targetCommentMemberId!=member.getId()){
+        if (!targetCommentMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }
         if (comment.getStatus().equals(DELETED)){
