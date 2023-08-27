@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class SolutionDetailResponse {
 
     private SolutionDetailProblem problem;
@@ -71,6 +73,7 @@ public class SolutionDetailResponse {
                         new ArrayList<>()
                 )));
 
+        log.info("부모가 있는 댓글 더하기 전");
         // 부모가 있는 댓글들을 더한다
         for (Comment comment : comments){
             Long parentId = comment.getParentId();
@@ -92,6 +95,7 @@ public class SolutionDetailResponse {
                 }
             }
         }
+        log.info("부모가 있는 댓글 더하기 후");
 
         response.comments = commentResponseList;
         response.solution = responseSolution;

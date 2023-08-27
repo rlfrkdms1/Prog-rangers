@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.prograngers.backend.entity.comment.CommentStatusContant.*;
+import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
 
 @RequiredArgsConstructor
 @Service

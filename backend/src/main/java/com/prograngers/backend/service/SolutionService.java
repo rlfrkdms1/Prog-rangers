@@ -138,8 +138,10 @@ public class SolutionService {
             }
         }
 
+        log.info("target solution id : {}",solution.getId());
 
         List<Comment> comments = commentRepository.findAllBySolution(solution);
+
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
 

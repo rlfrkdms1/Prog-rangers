@@ -1,7 +1,7 @@
 package com.prograngers.backend.dto.solution.response;
 
 
-import com.prograngers.backend.entity.comment.CommentStatusContant;
+import com.prograngers.backend.entity.comment.CommentStatusConStant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class SolutionDetailComment {
     String content;
     String mention;
 
-    CommentStatusContant status;
+    CommentStatusConStant status;
 
     List<SolutionDetailComment> replies;
 }

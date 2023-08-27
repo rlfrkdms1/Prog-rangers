@@ -33,7 +33,7 @@ public class CommentController {
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // 댓글 작성
-    @PostMapping("/{solutionId}")
+    @PostMapping("/{solutionId}/comments")
     @Login
     public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentRequest commentRequest,
                                         @LoggedInMember Long memberId)
