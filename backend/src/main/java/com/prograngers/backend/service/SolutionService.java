@@ -6,13 +6,13 @@ import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
-import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -89,11 +89,13 @@ public class SolutionService {
             throw new MemberUnAuthorizedException();
         }
 
-        List<Comment> comments = commentRepository.findAllBySolution(target);
-        for (Comment comment : comments) {
-            comment.updateSolution(null);
-            commentRepository.delete(comment);
-        }
+        commentRepository.findAllBySolution(target)
+                        .stream()
+                                .forEach(comment->commentRepository.delete(comment));
+
+        reviewRepository.findAllBySolution(target)
+                        .stream()
+                                .forEach(review->reviewRepository.delete(review));
 
         solutionRepository.delete(target);
     }
@@ -136,8 +138,10 @@ public class SolutionService {
             }
         }
 
+        log.info("target solution id : {}",solution.getId());
 
         List<Comment> comments = commentRepository.findAllBySolution(solution);
+
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
 

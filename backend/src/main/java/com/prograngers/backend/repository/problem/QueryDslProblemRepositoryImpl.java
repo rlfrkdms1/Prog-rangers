@@ -1,12 +1,12 @@
 package com.prograngers.backend.repository.problem;
 
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.QSolution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.problem.QProblem;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
+import com.prograngers.backend.entity.solution.QSolution;
 import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,10 +18,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
-import static com.prograngers.backend.entity.QProblem.*;
-import static com.prograngers.backend.entity.QSolution.*;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
+import static com.prograngers.backend.entity.problem.QProblem.*;
+import static com.prograngers.backend.entity.solution.QSolution.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -45,7 +44,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .limit(pageable.getPageSize())
                 .fetch();
 
-         // int size = results.size();
+        // int size = results.size();
         long size = jpaQueryFactory
                 .selectFrom(problem)
                 .join(problem.solutions, solution)
@@ -54,20 +53,19 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .fetchCount();
 
 
-        log.info("size : {}",size);
+        log.info("size : {}", size);
 
-        return new PageImpl<>(results,pageable,size);
+        return new PageImpl<>(results, pageable, size);
     }
 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
         if (orderBy.equals(NEWEST)) {
             return
                     solution.createdDate.desc();
-        } else if (orderBy.equals(SOLUTIONS)){
+        } else if (orderBy.equals(SOLUTIONS)) {
             log.info("orderBySolutionCount");
             return problem.solutions.size().desc();
-        }
-        else throw new SortTypeNotFoundException();
+        } else throw new SortTypeNotFoundException();
     }
 
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {

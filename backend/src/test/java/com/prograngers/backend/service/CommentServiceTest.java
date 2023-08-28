@@ -1,9 +1,9 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.entity.Comment;
+import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -28,7 +28,6 @@ import static com.prograngers.backend.fixture.MemberFixture.*;
 import static com.prograngers.backend.fixture.SolutionFixture.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

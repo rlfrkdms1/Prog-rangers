@@ -1,9 +1,8 @@
-package com.prograngers.backend.entity.constants;
+package com.prograngers.backend.entity.solution;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.prograngers.backend.exception.enumtype.LanguageNotFoundException;
-import com.prograngers.backend.exception.enumtype.LevelNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

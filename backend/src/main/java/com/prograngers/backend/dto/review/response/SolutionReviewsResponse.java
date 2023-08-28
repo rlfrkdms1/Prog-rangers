@@ -1,8 +1,8 @@
 package com.prograngers.backend.dto.review.response;
 
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

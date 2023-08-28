@@ -1,6 +1,6 @@
 package com.prograngers.backend.repository.badge;
 
-import com.prograngers.backend.entity.Badge;
+import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

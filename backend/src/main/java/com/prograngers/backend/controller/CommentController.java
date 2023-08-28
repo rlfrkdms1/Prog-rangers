@@ -3,9 +3,9 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentReqeust;
+import com.prograngers.backend.dto.comment.request.CommentRequest;
 import com.prograngers.backend.service.CommentService;
-import com.prograngers.backend.service.SolutionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -30,17 +30,17 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    private final String REDIRECT_PATH = "http://localhost:8080/solutions";
+    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // 댓글 작성
-    @PostMapping("/{solutionId}")
+    @PostMapping("/{solutionId}/comments")
     @Login
-    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody CommentReqeust commentReqeust,
+    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
                                         @LoggedInMember Long memberId)
             throws URISyntaxException {
 
-        commentService.addComment(solutionId, commentReqeust, memberId);
+        commentService.addComment(solutionId, commentRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
@@ -53,7 +53,7 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     @Login
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @RequestBody CommentPatchRequest commentPatchRequest,
+                                           @RequestBody @Valid  CommentPatchRequest commentPatchRequest,
                                            @LoggedInMember Long memberId
                                            ) throws URISyntaxException {
 

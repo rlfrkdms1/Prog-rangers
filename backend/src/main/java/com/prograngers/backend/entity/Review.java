@@ -1,6 +1,7 @@
 package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
