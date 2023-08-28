@@ -52,12 +52,10 @@ class SolutionRepositoryTest {
     void 멤버_이름으로_전부_찾기_테스트() {
 
         // given
-        Member member1 = 장지담.기본_정보_생성();
-        Member member2 = 장지담.기본_정보_생성();
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
         Problem problem = 백준_문제.기본_정보_생성();
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
-        em.persist(member1);
-        em.persist(member2);
         Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
         Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
         Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member2,LocalDateTime.now(),BFS, LIST,JAVA,1));
