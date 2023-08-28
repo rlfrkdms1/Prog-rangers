@@ -1,9 +1,10 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.comment;
 
 import com.prograngers.backend.entity.member.Member;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
+import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +16,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
 
 @Entity
 @Getter
@@ -29,11 +31,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id")
     private Solution solution;
     private String mention;
@@ -44,23 +46,25 @@ public class Comment {
 
     private Long parentId;
 
-    private boolean fixed;
+    @Enumerated(value = EnumType.STRING)
+    private CommentStatusConStant status;
 
     public void updateMention(String mention) {
         if (mention != null) {
             this.mention = mention;
-            this.fixed = true;
+            this.status = FIXED;
         }
     }
 
     public void updateContent(String content) {
         if (content != null) {
             this.content = content;
-            this.fixed = true;
+            this.status = FIXED;
         }
     }
 
-    public void updateSolution(Solution solution) {
-        this.solution = solution;
+    public void deleteComment(){
+        this.status = DELETED;
     }
+
 }

@@ -1,10 +1,9 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.TestConfig;
-import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.prograngers.backend.entity.constants.AlgorithmConstant.*;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.*;
-import static com.prograngers.backend.entity.constants.LanguageConstant.JAVA;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.*;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
+import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
@@ -30,7 +29,6 @@ import static com.prograngers.backend.fixture.ProblemFixture.문제2;
 import static com.prograngers.backend.fixture.ProblemFixture.문제3;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이3;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이4;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이5;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이6;

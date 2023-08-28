@@ -2,6 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.error.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
+import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
@@ -63,6 +64,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> typeMismatchException(MethodArgumentTypeMismatchException exception){
         String message = "쿼리 스트링 타입을 확인해주세요";
         ErrorResponse errorResponse = new ErrorResponse(TYPE_MISMATCH, message);
+        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> alreadyExistsException(AlreadyExistsException exception) {
+        String message = exception.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

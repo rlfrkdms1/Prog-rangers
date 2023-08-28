@@ -1,14 +1,13 @@
 package com.prograngers.backend.repository.comment;
 
 import com.prograngers.backend.TestConfig;
-import com.prograngers.backend.entity.Comment;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
+import com.prograngers.backend.entity.comment.Comment;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
-import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,12 +17,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import static com.prograngers.backend.entity.constants.AlgorithmConstant.BFS;
-import static com.prograngers.backend.entity.constants.DataStructureConstant.QUEUE;
-import static com.prograngers.backend.entity.constants.LanguageConstant.JAVA;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
+import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.fixture.CommentFixture.댓글1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 
 
@@ -47,9 +48,9 @@ class CommentRepositoryTest {
     void 저장_테스트() {
 
         // given
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
-        Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, JAVA);
+        Problem problem1 = 문제_저장(백준_문제.기본_정보_문제_생성());
+        Member member = 멤버_저장(장지담.기본_정보_멤버_생성());
+        Solution solution =
 
         Comment comment = 댓글1.댓글_생성(null,solution,member);
 

@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity.constants;
+package com.prograngers.backend.entity.badge;
 
 public enum BadgeConstant {
     씨앗,

@@ -1,7 +1,7 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.problem.JudgeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
