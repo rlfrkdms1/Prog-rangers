@@ -3,6 +3,7 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
@@ -17,10 +18,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.prograngers.backend.entity.comment.CommentStatusConStant.DELETED;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
+import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
+import static com.prograngers.backend.fixture.CommentFixture.삭제된_댓글;
+import static com.prograngers.backend.fixture.CommentFixture.생성된_댓글;
+import static com.prograngers.backend.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -47,10 +58,13 @@ class CommentServiceTest {
     void 솔루션으로_댓글_찾기_테스트() {
 
         // given
-        Solution solution = 풀이_저장(풀이1.기본_솔루션_생성(1L));
-        Member member = 멤버_저장(길가은1.getMember());
-        Comment comment1 = 댓글1.댓글_생성(1L, solution, member);
-        Comment comment2 = 댓글1.댓글_생성(2L, solution, member);
+        Member member = 저장(장지담.기본_정보_생성());
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 저장(퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
+
+
+        Comment comment1 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
+        Comment comment2 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 
         List<Comment> comments = new ArrayList<>();
         comments.add(comment1);
@@ -69,8 +83,13 @@ class CommentServiceTest {
     @Test
     void 아이디로_댓글_찾기_테스트() {
         // given
-        Comment comment1 = 댓글1.기본_댓글_생성(1L);
-        Comment comment2 = 댓글2.기본_댓글_생성(2L);
+        Member member = 저장(장지담.기본_정보_생성());
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 저장(퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
+
+
+        Comment comment1 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
+        Comment comment2 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 
         when(commentRepository.save(any())).thenReturn(comment1).thenReturn(comment2);
         when(commentRepository.findById(1L)).thenReturn(Optional.ofNullable(comment1));
@@ -85,14 +104,17 @@ class CommentServiceTest {
         Assertions.assertThat(found).isEqualTo(saved);
     }
 
+
     @DisplayName("댓글을 수정할 수 있다")
     @Test
     void 댓글_수정_테스트() {
 
         // given
-        Solution solution = 풀이1.기본_솔루션_생성(1L);
-        Member member = 길가은1.getMember();
-        Comment comment = 댓글1.댓글_생성(1L, solution, member);
+        Member member = 장지담.아이디_지정_생성(1L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Comment comment = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
+
 
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
@@ -101,7 +123,7 @@ class CommentServiceTest {
 
         // when
         commentService.updateComment(comment.getId(), request, member.getId());
-        Comment updated = commentRepository.findById(1L).orElse(null);
+        Comment updated = commentRepository.findById(comment.getId()).orElse(null);
 
         // then
         Assertions.assertThat(updated.getContent()).isEqualTo("수정내용");
@@ -112,9 +134,11 @@ class CommentServiceTest {
     @Test
     void 댓글_삭제_테스트() {
         // given
-        Member member = 길가은1.getMember();
-        Comment comment = 댓글1.댓글_생성(1L,null,member);
-        Comment deleted = 삭제된_댓글.댓글_생성(1L,null,member);
+        Member member = 장지담.아이디_지정_생성(1L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Comment comment = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
+        Comment deleted = 삭제된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 
 
         given(commentRepository.save(comment))
@@ -130,12 +154,12 @@ class CommentServiceTest {
 
 
         // when
-        commentService.deleteComment(1L,member.getId());
+        commentService.deleteComment(comment.getId(),member.getId());
 
         // then
         verify(commentRepository,times(2)).save(comment);
-        Comment found = commentRepository.findById(1L).orElse(null);
-        Assertions.assertThat(found.getContent()).isEqualTo("삭제된 댓글입니다");
+        Comment found = commentRepository.findById(deleted.getId()).orElse(null);
+        Assertions.assertThat(found.getStatus()).isEqualTo(DELETED);
 
     }
 
@@ -145,11 +169,11 @@ class CommentServiceTest {
         org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
     }
 
-    Member 멤버_저장(Member member) {
+    Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Solution 풀이_저장(Solution solution) {
+    Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
 }
