@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.11.0",
-    "@emotion/babel-preset-css-prop": "^11.11.0"
+    "@emotion/babel-preset-css-prop": "^11.11.0",
+    "prettier": "3.0.2"
   }
 }

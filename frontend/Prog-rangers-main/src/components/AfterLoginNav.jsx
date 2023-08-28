@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
-import { navStyle, linkDefault } from '../styles/headerStyle';
+import {
+  navStyle,
+  linkDefault,
+} from '../styles/headerStyle';
 
 const AfterLoginNav = () => {
   return (

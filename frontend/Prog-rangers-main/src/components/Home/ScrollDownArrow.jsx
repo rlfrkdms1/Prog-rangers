@@ -14,22 +14,26 @@ const ScrollDownArrow = () => {
         className="scrollDownArea"
         css={css`
           ${scrollDownArea}
-        `}>
+        `}
+      >
         <span
           css={css`
             ${scrollDownArrow}
             ${arrow1}
-          `}></span>
+          `}
+        ></span>
         <span
           css={css`
             ${scrollDownArrow}
             ${arrow2}
-          `}></span>
+          `}
+        ></span>
         <span
           css={css`
             ${scrollDownArrow}
             ${arrow3}
-          `}></span>
+          `}
+        ></span>
         SCROLL DOWN
       </div>
     </>

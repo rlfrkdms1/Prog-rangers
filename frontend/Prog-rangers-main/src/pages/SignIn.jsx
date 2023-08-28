@@ -1,5 +1,9 @@
 import React from 'react';
-import { pageStyle, innerPageStyle, headingStyle } from '../styles/signUpPage';
+import {
+  pageStyle,
+  innerPageStyle,
+  headingStyle,
+} from '../styles/signUpPage';
 import DefaultSignInForm from '../components/SignIn/DefaultSignInForm';
 import SocialSignInForm from '../components/SignUp/SocialLoginButtons';
 import styled from '@emotion/styled';
@@ -44,7 +48,10 @@ export default function SignIn() {
             </div>
             <div>
               <input type="checkbox" id="savePassword" />
-              <Label htmlFor="savePassword" css={grayTextStyle}>
+              <Label
+                htmlFor="savePassword"
+                css={grayTextStyle}
+              >
                 자동 로그인
               </Label>
             </div>

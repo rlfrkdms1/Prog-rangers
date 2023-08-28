@@ -14,12 +14,18 @@ export default function SignUpForm() {
       <label htmlFor="email" css={labelStyle}>
         이름
       </label>
-      <input placeholder="이름을 입력해주세요" css={inputStyle} />
+      <input
+        placeholder="이름을 입력해주세요"
+        css={inputStyle}
+      />
       <label htmlFor="email" css={labelStyle}>
         아이디
       </label>
       <div css={inputContainerStyle}>
-        <input placeholder="아이디를 입력해주세요" css={inputStyle} />
+        <input
+          placeholder="아이디를 입력해주세요"
+          css={inputStyle}
+        />
       </div>
       <label htmlFor="email" css={labelStyle}>
         비밀번호
@@ -38,7 +44,10 @@ export default function SignUpForm() {
         닉네임
       </label>
       <div css={inputContainerStyle}>
-        <input placeholder="이름을 입력해주세요" css={inputStyle} />
+        <input
+          placeholder="이름을 입력해주세요"
+          css={inputStyle}
+        />
       </div>
       <label htmlFor="email" css={labelStyle}>
         휴대전화

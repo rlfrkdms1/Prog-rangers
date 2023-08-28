@@ -23,7 +23,8 @@ const Header = () => {
         height: 120px;
 
         border-bottom: 1px solid ${theme.colors.light2};
-      `}>
+      `}
+    >
       <div
         className="Navbar"
         css={css`
@@ -32,7 +33,8 @@ const Header = () => {
           padding: 20px;
 
           ${flexAlign};
-        `}>
+        `}
+      >
         <Link to="/">
           <img src={Logo} alt="Prog-rangers" />
         </Link>
@@ -42,7 +44,8 @@ const Header = () => {
             ${flexAlign}
 
             margin-left: 50px;
-          `}>
+          `}
+        >
           <div
             className="search"
             css={css`
@@ -53,7 +56,8 @@ const Header = () => {
               border-radius: 25px;
 
               padding-left: 20px;
-            `}>
+            `}
+          >
             <input
               type="text"
               placeholder="문제 제목을 검색해보세요!"
@@ -68,7 +72,8 @@ const Header = () => {
               type="submit"
               css={css`
                 line-height: 50px;
-              `}>
+              `}
+            >
               <IoSearchOutline
                 size="25"
                 color="#303030"
@@ -92,7 +97,8 @@ const Header = () => {
                 color: ${theme.colors.main};
 
                 margin-left: 10px;
-              `}>
+              `}
+            >
               상세검색
             </button>
           </Link>
@@ -100,7 +106,8 @@ const Header = () => {
         <div
           css={css`
             flex-grow: 1;
-          `}>
+          `}
+        >
           <AfterLoginNav />
         </div>
       </div>
