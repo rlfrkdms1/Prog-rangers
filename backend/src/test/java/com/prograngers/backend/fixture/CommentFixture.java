@@ -27,7 +27,7 @@ public enum CommentFixture {
                 .status(status);
     }
 
-    public Comment 기본_정보_댓글_생성(Member member, Solution solution, LocalDateTime createdDate){
+    public Comment 기본_정보_생성(Member member, Solution solution, LocalDateTime createdDate){
         return 기본_빌더_생성()
                 .member(member)
                 .solution(solution)

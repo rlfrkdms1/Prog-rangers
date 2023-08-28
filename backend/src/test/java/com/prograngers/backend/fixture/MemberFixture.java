@@ -15,7 +15,7 @@ public enum MemberFixture {
         return Member.builder()
                 .nickname(nickname);
     }
-    public Member 기본_정보_멤버_생성(){
+    public Member 기본_정보_생성(){
         return 기본_정보_빌더_생성().build();
     }
 }

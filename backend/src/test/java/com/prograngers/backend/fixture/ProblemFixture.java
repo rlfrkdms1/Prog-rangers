@@ -25,7 +25,7 @@ public enum ProblemFixture {
                 .ojName(ojName);
     }
 
-    public Problem 기본_정보_문제_생성(){
+    public Problem 기본_정보_생성(){
         return 기본_정보_빌더_생성()
                 .build();
     }

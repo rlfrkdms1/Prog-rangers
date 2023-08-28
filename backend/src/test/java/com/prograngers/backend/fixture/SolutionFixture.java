@@ -31,7 +31,7 @@ public enum SolutionFixture {
                 .description(description);
     }
 
-    public Solution 기본_정보_풀이_생성(
+    public Solution 기본_정보_생성(
             Problem problem, Member member, LocalDateTime createdDate,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, LanguageConstant language, Integer level){
         return 기본_정보_빌더_생성()
@@ -45,7 +45,7 @@ public enum SolutionFixture {
                 .build();
     }
 
-    public Solution 스크랩_풀이_생성(Problem problem, Member member, LocalDateTime createdDate,
+    public Solution 스크랩_생성(Problem problem, Member member, LocalDateTime createdDate,
                               AlgorithmConstant algorithm, DataStructureConstant dataStructure,
                               LanguageConstant language, Integer level, Solution scrapSolution){
         return 기본_정보_빌더_생성()
