@@ -14,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
@@ -72,36 +74,33 @@ class SolutionRepositoryTest {
         assertThat(result).contains(solution1,solution2).doesNotContain(solution3);
     }
 
-//    @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
-//    @Test
-//    void 풀이_목록_조회_필터링_문제_id() {
-//        // given
-//        // 회원
-//        Member member = 멤버_저장( 길가은1.아이디_값_지정_멤버_생성());
-//
-//        // 문제
-//        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
-//        Problem problem2 = 문제_저장(문제1.아이디_값_지정_문제_생성());
-//        log.info("problem1 id : {}",problem1.getId());
-//        log.info("problem2 id : {}",problem2.getId());
-//
-//
-//        // 풀이
-//        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
-//        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem2, member, BFS, QUEUE,JAVA));
-//
-//        // when
-//        List<Solution> result1 = solutionRepository
-//                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
-//        List<Solution> result2 = solutionRepository
-//                .getSolutionList(PageRequest.of(0, 4), problem2.getId(), null, null, null, NEWEST).getContent();
-//
-//        // then
-//        assertThat(result1).contains(solution1);
-//        assertThat(result1).doesNotContain(solution2);
-//        assertThat(result2).contains(solution2);
-//        assertThat(result2).doesNotContain(solution1);
-//    }
+    @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
+    @Test
+    void 풀이_목록_조회_필터링_문제_id() {
+        // given
+        Member member1 = 저장(장지담.기본_정보_생성());
+
+        // 문제
+        Problem problem1 = 백준_문제.기본_정보_생성();
+        Problem problem2 = 백준_문제.기본_정보_생성();
+
+
+        // 풀이
+        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem2,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+
+        // when
+        List<Solution> result1 = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+        List<Solution> result2 = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4), problem2.getId(), null, null, null, NEWEST).getContent();
+
+        // then
+        assertThat(result1).contains(solution1);
+        assertThat(result1).doesNotContain(solution2);
+        assertThat(result2).contains(solution2);
+        assertThat(result2).doesNotContain(solution1);
+    }
 //
 //    @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
 //    @Test
