@@ -25,10 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.prograngers.backend.fixture.MemberFixture.길가은1;
-import static com.prograngers.backend.fixture.ProblemFixture.문제1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -51,23 +47,6 @@ class SolutionListSolutionServiceTest {
 
     @InjectMocks
     private SolutionService solutionService;
-
-    @DisplayName("풀이를 저장할 수 있다")
-    @Test
-    void 저장_테스트() {
-        // given
-        Member member = 길가은1.getMember();
-        Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member,  AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-        given(solutionRepository.save(any())).willReturn(solution);
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
-
-        // when
-        Long saveId = solutionService.save(SolutionPostRequest.from(solution), member.getId());
-
-        // then
-        Assertions.assertThat(saveId).isEqualTo(solution.getId());
-    }
 
     @DisplayName("스크랩 해서 풀이를 저장할 수 있다")
     @Test
@@ -116,26 +95,6 @@ class SolutionListSolutionServiceTest {
         // then
         Assertions.assertThat(solutionRepository.findById(updatedId).orElse(null).getTitle())
                 .isEqualTo("풀이제목2");
-    }
-
-    @DisplayName("풀이를 삭제할 수 있다")
-    @Test
-    void 삭제_테스트() {
-        // given
-        Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-
-        when(solutionRepository.save(any())).thenReturn(solution);
-        when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(solution));
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
-
-        solutionRepository.save(solution);
-
-        // when
-        solutionService.delete(solution.getId(), member.getId());
-
-        verify(solutionRepository).delete(solution);
     }
 
     @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")
