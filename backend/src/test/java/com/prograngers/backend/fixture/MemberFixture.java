@@ -18,4 +18,10 @@ public enum MemberFixture {
     public Member 기본_정보_생성(){
         return 기본_정보_빌더_생성().build();
     }
+
+    public Member 아이디_지정_생성(Long id){
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .build();
+    }
 }
