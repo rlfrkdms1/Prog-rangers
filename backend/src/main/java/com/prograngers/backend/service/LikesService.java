@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,8 +29,7 @@ public class LikesService {
     public void pushLike(Long memberId, Long solutionId) {
         Solution targetSolution = getTargetSolution(solutionId);
         Member targetMember = getTargetMember(memberId);
-        Likes targetLikes = getTargetLikes(targetSolution, targetMember);
-        if (targetLikes!=null){
+        if (getTargetLikes(targetSolution, targetMember).isPresent()){
             throw new LikesAlreadyExistsException();
         }
         Likes likes = Likes.builder()
@@ -57,8 +58,8 @@ public class LikesService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
-    private Likes getTargetLikes(Solution targetSolution, Member targetMember) {
-        return likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElse(null);
+    private Optional<Likes> getTargetLikes(Solution targetSolution, Member targetMember) {
+        return likesRepository.findByMemberAndSolution(targetMember, targetSolution);
     }
 
 
