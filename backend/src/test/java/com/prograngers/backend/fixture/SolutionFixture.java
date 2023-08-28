@@ -10,7 +10,8 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.Solution.*;
+import static com.prograngers.backend.entity.solution.Solution.*;
+
 
 @AllArgsConstructor
 public enum SolutionFixture {
