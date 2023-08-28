@@ -33,7 +33,7 @@ public enum SolutionFixture {
 
     public Solution 기본_정보_생성(
             Problem problem, Member member, LocalDateTime createdDate,
-            AlgorithmConstant algorithm, DataStructureConstant dataStructure, LanguageConstant language, Integer level){
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure,LanguageConstant language, Integer level){
         return 기본_정보_빌더_생성()
                 .problem(problem)
                 .member(member)
