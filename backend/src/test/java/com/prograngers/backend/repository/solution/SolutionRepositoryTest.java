@@ -4,47 +4,28 @@ import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
-import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
-import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
-import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
-import static com.prograngers.backend.entity.solution.DataStructureConstant.STACK;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
-import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
-import static com.prograngers.backend.entity.constants.SortConstant.SCRAPS;
-import static com.prograngers.backend.fixture.MemberFixture.길가은1;
-import static com.prograngers.backend.fixture.MemberFixture.길가은2;
 import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.문제1;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이3;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이4;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이5;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이6;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이7;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이8;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이9;
+
 import static org.assertj.core.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -71,15 +52,15 @@ class SolutionRepositoryTest {
     void 멤버_이름으로_전부_찾기_테스트() {
 
         // given
-        Member member1 = 멤버_저장(장지담.기본_정보_멤버_생성());
-        Member member2 = 멤버_저장( 장지담.기본_정보_멤버_생성());
-        Problem problem = 문제_저장(백준_문제.기본_정보_문제_생성());
+        Member member1 = 장지담.기본_정보_생성();
+        Member member2 = 장지담.기본_정보_생성();
+        Problem problem = 백준_문제.기본_정보_생성();
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
-//        em.persist(member1);
-//        em.persist(member2);
-        Solution solution1 = 풀이_저장(퍼블릭_풀이.기본_정보_풀이_생성(problem,member1, LocalDateTime.now(),BFS,STACK,JAVA,1));
-        Solution solution2 = 풀이_저장(퍼블릭_풀이.기본_정보_풀이_생성(problem,member1, LocalDateTime.now(),BFS,STACK,JAVA,1));
-        Solution solution3 = 풀이_저장(퍼블릭_풀이.기본_정보_풀이_생성(problem,member2, LocalDateTime.now(),BFS,STACK,JAVA,1));
+        em.persist(member1);
+        em.persist(member2);
+        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member2,LocalDateTime.now(),BFS, LIST,JAVA,1));
 
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
