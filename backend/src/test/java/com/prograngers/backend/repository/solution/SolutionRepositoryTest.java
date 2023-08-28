@@ -3,6 +3,7 @@ package com.prograngers.backend.repository.solution;
 import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
@@ -22,7 +23,11 @@ import java.util.List;
 
 import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
@@ -101,36 +106,37 @@ class SolutionRepositoryTest {
         assertThat(result2).contains(solution2);
         assertThat(result2).doesNotContain(solution1);
     }
-//
-//    @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
-//    @Test
-//    void 풀이_목록_조회_필터링_자료구조_알고리즘() {
-//        // given
-//        // 회원
-//        Member member = 멤버_저장(길가은1.아이디_값_지정_멤버_생성());
-//
-//        // 문제
-//        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
-//
-//        // 풀이
-//        Solution solution1 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE,JAVA));
-//        Solution solution2 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, DFS, QUEUE,JAVA));
-//        Solution solution3 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, BFS, ARRAY,JAVA));
-//        Solution solution4 = 풀이_저장(풀이1.언어_포함_솔루션_생성(null, problem1, member, DFS, ARRAY,JAVA));
-//
-//        // when
-//        List<Solution> result1 = solutionRepository
-//                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), null, BFS, null, NEWEST).getContent();
-//        List<Solution> result2 = solutionRepository
-//                .getSolutionList(PageRequest.of(0, 4),   problem1.getId(), null, null, QUEUE, NEWEST).getContent();
-//        List<Solution> result3 = solutionRepository
-//                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, NEWEST).getContent();
-//
-//        // then
-//        assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
-//        assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4);
-//        assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4);
-//    }
+
+    @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
+    @Test
+    void 풀이_목록_조회_필터링_자료구조_알고리즘() {
+        // given
+        // 회원
+        Member member1 = 저장(장지담.기본_정보_생성());
+
+        // 문제
+        Problem problem1 = 백준_문제.기본_정보_생성();
+
+        // 풀이
+        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
+        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,JAVA,1));
+        Solution solution4 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,JAVA,1));
+
+
+        // when
+        List<Solution> result1 = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4),  problem1.getId(), null, BFS, null, NEWEST).getContent();
+        List<Solution> result2 = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4),   problem1.getId(), null, null, QUEUE, NEWEST).getContent();
+        List<Solution> result3 = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, NEWEST).getContent();
+
+        // then
+        assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
+        assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4);
+        assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4);
+    }
 //
 //    @DisplayName("언어로 풀이 목록을 필터링해서 가져올 수 있다")
 //    @Test
