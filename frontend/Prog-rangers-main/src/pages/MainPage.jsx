@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../styles/theme';
 import { Link } from 'react-router-dom';
@@ -15,10 +15,14 @@ import {
   flexColLayout,
   buttonSytle,
 } from '../styles/MainPage';
+
+// mockup
 import ScrollDownArrow from '../components/Home/ScrollDownArrow';
 import Sec2Mockup from '../assets/main-sec2.png';
 import Sec3Mock1 from '../assets/main-sec3-1.png';
 import Sec3Mock2 from '../assets/main-sec3-2.png';
+
+// icons
 import {
   bookPosition,
   chatPosition,
@@ -34,6 +38,10 @@ import IconCommets from '../assets/icons/main-comments.svg';
 import IconChat from '../assets/icons/main-chat.svg';
 import IconBook from '../assets/icons/main-openbook.svg';
 
+// aos
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const displayBlock = css`
   display: block;
 `;
@@ -43,6 +51,10 @@ const MainPage = () => {
   const moveToElement = () => {
     element.current.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    AOS.init();
+  });
 
   return (
     <div className="wrap">
@@ -136,6 +148,9 @@ const MainPage = () => {
 
                 padding-top: 150px;
               `}
+              data-aos="fade-up"
+              data-aos-anchor-placement="center-center"
+              data-aos-duration="1800"
             />
           </div>
         </div>
@@ -165,6 +180,9 @@ const MainPage = () => {
                 css={css`
                   width: 550px;
                 `}
+                data-aos="fade-up"
+                data-aos-anchor-placement="center-center"
+                data-aos-duration="1800"
               />
             </div>
             <div
@@ -221,6 +239,9 @@ const MainPage = () => {
                   width: 550px;
                   margin-bottom: 100px;
                 `}
+                data-aos="fade-up"
+                data-aos-anchor-placement="top-center"
+                data-aos-duration="1800"
               />
             </div>
           </div>
