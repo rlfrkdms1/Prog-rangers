@@ -15,7 +15,7 @@ public class Review {
     String nickname;
     String photo;
     String content;
-    List<Reply> replies = new ArrayList<>();
+    List<Reply> replies;
 
     public static Review from(com.prograngers.backend.entity.Review review){
 

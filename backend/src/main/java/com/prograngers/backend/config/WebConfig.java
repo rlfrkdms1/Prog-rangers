@@ -21,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final LoggedInArgumentResolver loggedInArgumentResolver;
     private static final String FRONTEND_DOMAIN = "http://localhost:8080";
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor);

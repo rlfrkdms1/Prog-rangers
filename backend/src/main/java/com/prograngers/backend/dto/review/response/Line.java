@@ -17,5 +17,5 @@ import java.util.List;
 public class Line {
     private Integer codeLineNumber;
     private String code;
-    private List<Review> reviews = new ArrayList<>();
+    private List<Review> reviews;
 }
