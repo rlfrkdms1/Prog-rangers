@@ -13,19 +13,21 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class LikesService {
     private final LikesRepository likesRepository;
     private final SolutionRepository solutionRepository;
     private final MemberRepository memberRepository;
 
     public void pushLike(Long memberId, Long solutionId) {
-        Solution targetSolution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
-        Member targetMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        Likes targetLikes = likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElse(null);
+        Solution targetSolution = getTargetSolution(solutionId);
+        Member targetMember = getTargetMember(memberId);
+        Likes targetLikes = getTargetLikes(targetSolution, targetMember);
         if (targetLikes!=null){
             throw new LikesAlreadyExistsException();
         }
@@ -37,9 +39,27 @@ public class LikesService {
     }
 
     public void cancelLike(Long memberId, Long solutionId) {
-        Solution targetSolution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
-        Member targetMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        Likes targetLikes = likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElseThrow(LikesNotFoundException::new);
+        Solution targetSolution = getTargetSolution(solutionId);
+        Member targetMember = getTargetMember(memberId);
+        Likes targetLikes = getLikesBySolutionAndMember(targetSolution, targetMember);
         likesRepository.delete(targetLikes);
     }
+
+    private Likes getLikesBySolutionAndMember(Solution targetSolution, Member targetMember) {
+        return likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElseThrow(LikesNotFoundException::new);
+    }
+
+    private Solution getTargetSolution(Long solutionId) {
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
+    }
+
+    private Member getTargetMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Likes getTargetLikes(Solution targetSolution, Member targetMember) {
+        return likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElse(null);
+    }
+
+
 }

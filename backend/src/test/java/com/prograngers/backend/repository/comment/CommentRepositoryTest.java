@@ -23,7 +23,9 @@ import static com.prograngers.backend.entity.constants.DataStructureConstant.QUE
 import static com.prograngers.backend.entity.constants.LanguageConstant.JAVA;
 import static com.prograngers.backend.fixture.CommentFixture.댓글1;
 import static com.prograngers.backend.fixture.MemberFixture.길가은1;
+import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.문제1;
+import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
 
 
@@ -47,9 +49,9 @@ class CommentRepositoryTest {
     void 저장_테스트() {
 
         // given
-        Problem problem1 = 문제_저장(문제1.아이디_값_지정_문제_생성());
-        Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Solution solution = 풀이1.언어_포함_솔루션_생성(null, problem1, member,  BFS, QUEUE, JAVA);
+        Problem problem1 = 문제_저장(백준_문제.기본_정보_문제_생성());
+        Member member = 멤버_저장(장지담.기본_정보_멤버_생성());
+        Solution solution =
 
         Comment comment = 댓글1.댓글_생성(null,solution,member);
 
