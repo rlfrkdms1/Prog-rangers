@@ -268,15 +268,15 @@ class SolutionRepositoryTest {
 //        Assertions.assertThat(result3).containsExactly(solution4);
 //    }
 
-    Member 멤버_저장(Member member) {
+    Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Problem 문제_저장(Problem problem) {
+    Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    Solution 풀이_저장(Solution solution) {
+    Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
 

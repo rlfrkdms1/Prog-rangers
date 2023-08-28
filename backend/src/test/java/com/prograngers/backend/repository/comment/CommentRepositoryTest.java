@@ -100,15 +100,15 @@ class CommentRepositoryTest {
                         orElseThrow(() -> new CommentNotFoundException()));
     }
 
-    Comment 댓글_저장(Comment comment) {
+    Comment 저장(Comment comment) {
         return commentRepository.save(comment);
     }
 
-    Problem 문제_저장(Problem problem) {
+    Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    Member 멤버_저장(Member member) {
+    Member 저장(Member member) {
         return memberRepository.save(member);
     }
 }
