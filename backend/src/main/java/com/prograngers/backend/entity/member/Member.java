@@ -29,7 +29,6 @@ public class Member {
     private Long socialId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private MemberType type;
 
     @Column(nullable = false)
