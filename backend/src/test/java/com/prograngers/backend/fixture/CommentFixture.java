@@ -1,35 +1,37 @@
 package com.prograngers.backend.fixture;
 
 import com.prograngers.backend.entity.comment.Comment;
+import com.prograngers.backend.entity.comment.CommentStatusConStant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDateTime;
+
+import static com.prograngers.backend.entity.comment.Comment.*;
+import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
+
 @AllArgsConstructor
-public enum
-CommentFixture {
-    댓글1("댓글내용1"),
-    댓글2("댓글내용2"),
-    댓글3("댓글내용3"),
-    삭제된_댓글("삭제된 댓글입니다");
+public enum CommentFixture {
+
+    생성된_댓글("댓글내용", CREATED),
+    수정된_댓글("댓글내용", FIXED),
+    삭제된_댓글("댓글내용", DELETED);
+
     private final String content;
+    private final CommentStatusConStant status;
 
-    public Comment.CommentBuilder 기본_빌더_생성() {
+    public CommentBuilder 기본_빌더_생성(){
         return Comment.builder()
-                .content(this.content);
+                .content(content)
+                .status(status);
     }
 
-    public Comment 댓글_생성(Long id, Solution solution, Member member) {
+    public Comment 기본_정보_생성(Member member, Solution solution, LocalDateTime createdDate){
         return 기본_빌더_생성()
-                .id(id)
-                .solution(solution)
                 .member(member)
-                .build();
-    }
-
-    public Comment 기본_댓글_생성(Long id){
-        return 기본_빌더_생성()
-                .id(id)
+                .solution(solution)
+                .createdDate(createdDate)
                 .build();
     }
 }
