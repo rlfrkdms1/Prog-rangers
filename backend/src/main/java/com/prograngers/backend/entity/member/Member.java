@@ -2,6 +2,7 @@ package com.prograngers.backend.entity.member;
 
 import com.prograngers.backend.support.Encrypt;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,10 +29,13 @@ public class Member {
     private Long socialId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MemberType type;
 
+    @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
     private String email;
 
     @Nullable
@@ -40,6 +44,7 @@ public class Member {
     @Nullable
     private String introduction;
 
+    @Column(nullable = false)
     private String password;
 
     private String photo;

@@ -2,6 +2,7 @@ package com.prograngers.backend.entity.comment;
 
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,20 +33,23 @@ public class Comment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id",nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "solution_id")
+    @JoinColumn(name = "solution_id",nullable = false)
     private Solution solution;
     private String mention;
 
+    @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     private Long parentId;
 
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private CommentStatusConStant status;
 
