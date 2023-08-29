@@ -15,6 +15,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -130,6 +131,9 @@ public class SolutionService {
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
+        if (!solution.isPublic()){
+            throw new PrivateSolutionException();
+        }
         boolean isMine = false;
         if (memberId!=null){
             Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
