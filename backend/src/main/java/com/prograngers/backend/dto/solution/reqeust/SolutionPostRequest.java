@@ -10,6 +10,7 @@ import com.prograngers.backend.entity.solution.Solution;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,9 @@ public class SolutionPostRequest {
     private DataStructureConstant dataStructure;
 
     private LanguageConstant language;
+
+    @NotNull
+    private boolean isPublic;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
@@ -72,6 +76,7 @@ public class SolutionPostRequest {
                 .description(description)
                 .scrapSolution(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
+                .isPublic(isPublic)
                 .build();
     }
 
