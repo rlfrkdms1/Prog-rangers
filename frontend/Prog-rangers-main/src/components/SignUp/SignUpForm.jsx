@@ -6,23 +6,9 @@ import {
   inputStyle,
   submitButtonStyle,
   inputContainerStyle,
-  confirmButtonStyle,
-} from '../../styles/signUpPage';
-import ErrorText from '../common/ErrorText';
+} from './signUpPage';
 
-export default function SignUpForm() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { isSubmitting, errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
-
-  const password = watch('password', '');
-
+export const SignUpForm = () => {
   return (
     <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
       <label
@@ -32,15 +18,19 @@ export default function SignUpForm() {
         이메일
       </label>
       <input
-        type="email"
-        {...register('email', {
-          required: { value: true, message: '이메일을 입력해주세요' },
-        })}
+        placeholder="이름을 입력해주세요"
         css={inputStyle}
-        placeholder="이메일을 입력해주세요"
       />
-      {errors['email']?.message && <ErrorText text={errors['email'].message} />}
-      <label htmlFor="password" css={labelStyle}>
+      <label htmlFor="email" css={labelStyle}>
+        아이디
+      </label>
+      <div css={inputContainerStyle}>
+        <input
+          placeholder="아이디를 입력해주세요"
+          css={inputStyle}
+        />
+      </div>
+      <label htmlFor="email" css={labelStyle}>
         비밀번호
       </label>
       <input
@@ -78,6 +68,15 @@ export default function SignUpForm() {
       )}
       <label htmlFor="nickName" css={labelStyle}>
         닉네임
+      </label>
+      <div css={inputContainerStyle}>
+        <input
+          placeholder="이름을 입력해주세요"
+          css={inputStyle}
+        />
+      </div>
+      <label htmlFor="email" css={labelStyle}>
+        휴대전화
       </label>
       <div css={inputContainerStyle}>
         <input

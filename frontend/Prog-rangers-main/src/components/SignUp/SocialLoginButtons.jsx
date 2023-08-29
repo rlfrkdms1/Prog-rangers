@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { theme } from '../../styles/theme';
+import { theme } from '../Header/theme';
 
 const Wrapper = styled.div`
   margin-top: 140px;
@@ -17,7 +17,7 @@ const Heading = styled.h2`
   margin-bottom: 50px;
 `;
 
-export default function SocialLoginButtons() {
+export const SocialLoginButtons = () => {
   return (
     <Wrapper>
       <Heading>소셜 로그인</Heading>

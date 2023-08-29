@@ -1,7 +1,11 @@
 import React from 'react';
-import { pageStyle, innerPageStyle, headingStyle } from '../styles/signUpPage';
-import DefaultSignInForm from '../components/SignIn/DefaultSignInForm';
-import SocialSignInForm from '../components/SignUp/SocialLoginButtons';
+import {
+  pageStyle,
+  innerPageStyle,
+  headingStyle,
+} from '../components/SignUp/signUpPage';
+import { DefaultSignInForm } from '../components/SignIn/DefaultSignInForm';
+import { SocialLoginButtons } from '../components/SignUp/SocialLoginButtons';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
@@ -28,7 +32,7 @@ const Label = styled.label`
   margin-left: 5px;
 `;
 
-export default function SignIn() {
+export const SignIn = () => {
   return (
     <div css={pageStyle}>
       <div css={innerPageStyle}>
@@ -44,7 +48,10 @@ export default function SignIn() {
             </div>
             <div>
               <input type="checkbox" id="savePassword" />
-              <Label htmlFor="savePassword" css={grayTextStyle}>
+              <Label
+                htmlFor="savePassword"
+                css={grayTextStyle}
+              >
                 자동 로그인
               </Label>
             </div>
@@ -55,7 +62,7 @@ export default function SignIn() {
             <span css={grayTextStyle}>비밀번호 찾기</span>
           </Options>
         </OptionWrapper>
-        <SocialSignInForm />
+        <SocialLoginButtons />
       </div>
     </div>
   );

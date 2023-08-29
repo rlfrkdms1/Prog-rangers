@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function SolutionDetail() {
+export const SolutionDetail = () =>  {
   return <div>Solution Detail Page</div>;
 }
