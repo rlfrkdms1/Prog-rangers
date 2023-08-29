@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import { useForm } from 'react-hook-form';
+import ErrorText from '../common/ErrorText';
 import { inputStyle } from '../SignUp/signUpPage';
 
 const StyledButton = styled.button`
@@ -20,7 +22,17 @@ const formStyle = css`
   flex-direction: column;
 `;
 
-export const DefaultSignInForm = () => {
+export const DefaultSignInForm = () =>  {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+  };
+
   return (
     <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
       <input
