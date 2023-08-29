@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class SolutionPostRequest {
 
     @NotBlank(message = "문제 제목을 입력해주세요")
@@ -43,7 +45,7 @@ public class SolutionPostRequest {
     private LanguageConstant language;
 
     @NotNull(message = "공개 여부를 설정해주세요")
-    private boolean isPublic;
+    private Boolean isPublic;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
     private String description;
@@ -52,6 +54,8 @@ public class SolutionPostRequest {
     private String code;
 
     public Solution toSolution() {
+
+        log.info("isPublic : {}",isPublic);
         /*
         파싱해서 ojname 알아내서 문제에 넣기
         로그인정보로 멤버 알아내서 넣기
