@@ -5,9 +5,9 @@ import {
   arrow1,
   arrow2,
   arrow3,
-} from '../../styles/MainScrollDown';
+} from './MainScrollDown';
 
-const ScrollDownArrow = () => {
+export const ScrollDownArrow = () => {
   return (
     <>
       <div
@@ -39,5 +39,3 @@ const ScrollDownArrow = () => {
     </>
   );
 };
-
-export default ScrollDownArrow;

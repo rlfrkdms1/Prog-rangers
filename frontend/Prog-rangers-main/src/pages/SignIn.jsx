@@ -3,9 +3,9 @@ import {
   pageStyle,
   innerPageStyle,
   headingStyle,
-} from '../styles/signUpPage';
-import DefaultSignInForm from '../components/SignIn/DefaultSignInForm';
-import SocialSignInForm from '../components/SignUp/SocialLoginButtons';
+} from '../components/SignUp/signUpPage';
+import { DefaultSignInForm } from '../components/SignIn/DefaultSignInForm';
+import { SocialLoginButtons } from '../components/SignUp/SocialLoginButtons';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
@@ -32,7 +32,7 @@ const Label = styled.label`
   margin-left: 5px;
 `;
 
-export default function SignIn() {
+export const SignIn = () => {
   return (
     <div css={pageStyle}>
       <div css={innerPageStyle}>
@@ -62,7 +62,7 @@ export default function SignIn() {
             <span css={grayTextStyle}>비밀번호 찾기</span>
           </Options>
         </OptionWrapper>
-        <SocialSignInForm />
+        <SocialLoginButtons />
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
 import React from 'react';
-import SignUpForm from '../components/SignUp/SignUpForm';
+import { SignUpForm } from '../components/SignUp/SignUpForm';
 import {
   pageStyle,
   innerPageStyle,
   headingStyle,
-} from '../styles/signUpPage';
+} from '../components/SignUp/signUpPage';
 
-export default function SignUp() {
+export const SignUp = () => {
   return (
     <div css={pageStyle}>
       <div css={innerPageStyle}>

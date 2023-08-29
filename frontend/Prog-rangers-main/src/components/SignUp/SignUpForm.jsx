@@ -6,9 +6,9 @@ import {
   inputStyle,
   submitButtonStyle,
   inputContainerStyle,
-} from '../../styles/signUpPage';
+} from './signUpPage';
 
-export default function SignUpForm() {
+export const SignUpForm = () => {
   return (
     <form css={formStyle}>
       <label htmlFor="email" css={labelStyle}>

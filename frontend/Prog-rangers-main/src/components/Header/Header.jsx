@@ -1,20 +1,20 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { theme } from '../styles/theme';
+import { theme } from './theme';
 import { Link } from 'react-router-dom';
 
-import Logo from '../assets/logo.svg';
+import Logo from '../../assets/logo.svg';
 import { IoSearchOutline } from 'react-icons/io5';
 
 // import BeforeLoginNav from './BeforeLoginNav';
-import AfterLoginNav from './AfterLoginNav';
+import { AfterLoginNav } from './AfterLoginNav';
 
 const flexAlign = css`
   display: flex;
   align-items: center;
 `;
 
-const Header = () => {
+export const Header = () => {
   return (
     <div
       className="NavbarWarp"
@@ -114,5 +114,3 @@ const Header = () => {
     </div>
   );
 };
-
-export default Header;

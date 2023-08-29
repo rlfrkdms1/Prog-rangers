@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import {
   navStyle,
   linkDefault,
-} from '../styles/headerStyle';
+} from './headerStyle';
 
-const AfterLoginNav = () => {
+export const AfterLoginNav = () => {
   return (
     <div className="AfterLoginNav" css={navStyle}>
       <Link to="problems" css={linkDefault}>
@@ -19,5 +19,3 @@ const AfterLoginNav = () => {
     </div>
   );
 };
-
-export default AfterLoginNav;

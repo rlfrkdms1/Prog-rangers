@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
-import { inputStyle } from '../../styles/signUpPage';
+import { inputStyle } from '../SignUp/signUpPage';
 
 const StyledButton = styled.button`
   width: 600px;
@@ -21,7 +21,7 @@ const formStyle = css`
   flex-direction: column;
 `;
 
-export default function DefaultSignInForm() {
+export const DefaultSignInForm = () => {
   return (
     <form css={formStyle}>
       <input placeholder="아이디" css={inputStyle} />
