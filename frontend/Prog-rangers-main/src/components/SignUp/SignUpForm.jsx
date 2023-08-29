@@ -1,16 +1,26 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  labelStyle,
-  formStyle,
-  inputStyle,
-  submitButtonStyle,
-  inputContainerStyle,
-} from './signUpPage';
+import { labelStyle, formStyle, inputStyle,submitButtonStyle,
+    inputContainerStyle,
+    confirmButtonStyle } from './signUpPage';
+
+import ErrorText from '../common/ErrorText';
 
 export const SignUpForm = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { isSubmitting, errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+  };
+
+  const password = watch('password', '');
+
   return (
-    <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
+      <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
       <label
         htmlFor="email"
         placeholder="이메일을 입력해주세요"
@@ -18,18 +28,14 @@ export const SignUpForm = () => {
         이메일
       </label>
       <input
-        placeholder="이름을 입력해주세요"
+        type="email"
+        {...register('email', {
+          required: { value: true, message: '이메일을 입력해주세요' },
+        })}
         css={inputStyle}
+        placeholder="이메일을 입력해주세요"
       />
-      <label htmlFor="email" css={labelStyle}>
-        아이디
-      </label>
-      <div css={inputContainerStyle}>
-        <input
-          placeholder="아이디를 입력해주세요"
-          css={inputStyle}
-        />
-      </div>
+      {errors['email']?.message && <ErrorText text={errors['email'].message} />}
       <label htmlFor="email" css={labelStyle}>
         비밀번호
       </label>
@@ -68,15 +74,6 @@ export const SignUpForm = () => {
       )}
       <label htmlFor="nickName" css={labelStyle}>
         닉네임
-      </label>
-      <div css={inputContainerStyle}>
-        <input
-          placeholder="이름을 입력해주세요"
-          css={inputStyle}
-        />
-      </div>
-      <label htmlFor="email" css={labelStyle}>
-        휴대전화
       </label>
       <div css={inputContainerStyle}>
         <input
