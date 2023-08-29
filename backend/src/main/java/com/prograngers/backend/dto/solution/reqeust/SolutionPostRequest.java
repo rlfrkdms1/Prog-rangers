@@ -42,7 +42,7 @@ public class SolutionPostRequest {
 
     private LanguageConstant language;
 
-    @NotNull
+    @NotNull(message = "공개 여부를 설정해주세요")
     private boolean isPublic;
 
     @NotBlank(message = "풀이 설명을 입력해주세요")
