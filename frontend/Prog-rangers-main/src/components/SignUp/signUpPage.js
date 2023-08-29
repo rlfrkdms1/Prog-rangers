@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { theme } from './theme';
+import { theme } from '../Header/theme';
 
 export const pageStyle = css`
   width: 100%;

@@ -1,5 +1,5 @@
 import { css, keyframes } from '@emotion/react';
-import { theme } from './theme';
+import { theme } from '../Header/theme';
 
 const webkitKeyframe = keyframes`
   0% {
