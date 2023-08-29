@@ -33,7 +33,7 @@ public class AuthController {
 
     @GetMapping("/check-nickname-duplication")
     public ResponseEntity<Void> checkNicknameDuplication(@RequestParam String nickname) {
-        authService.checkNicknameDuplication(nickname);
+        authService.validNicknameDuplication(nickname);
         return ResponseEntity.noContent().build();
     }
 
