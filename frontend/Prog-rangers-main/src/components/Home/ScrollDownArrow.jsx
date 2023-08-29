@@ -5,35 +5,37 @@ import {
   arrow1,
   arrow2,
   arrow3,
-} from '../../styles/MainScrollDown';
+} from './MainScrollDown';
 
-const ScrollDownArrow = () => {
+export const ScrollDownArrow = () => {
   return (
     <>
       <div
         className="scrollDownArea"
         css={css`
           ${scrollDownArea}
-        `}>
+        `}
+      >
         <span
           css={css`
             ${scrollDownArrow}
             ${arrow1}
-          `}></span>
+          `}
+        ></span>
         <span
           css={css`
             ${scrollDownArrow}
             ${arrow2}
-          `}></span>
+          `}
+        ></span>
         <span
           css={css`
             ${scrollDownArrow}
             ${arrow3}
-          `}></span>
+          `}
+        ></span>
         SCROLL DOWN
       </div>
     </>
   );
 };
-
-export default ScrollDownArrow;

@@ -1,8 +1,8 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.problem.JudgeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class SolutionListResponse {
                 .totalPages(pages.getTotalPages())
                 .build();
 
-        for (com.prograngers.backend.entity.Solution solution : solutions){
+        for (Solution solution : solutions){
             solutionListResponse.getSolutionListSolutions().add(
                     SolutionListSolution.builder()
                             .solutionName(solution.getTitle())

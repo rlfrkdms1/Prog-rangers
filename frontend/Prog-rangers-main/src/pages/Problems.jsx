@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function Problems() {
+export const Problems = () => {
   return <div>Problems page</div>;
 }

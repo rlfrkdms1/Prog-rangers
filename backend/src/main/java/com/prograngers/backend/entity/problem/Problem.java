@@ -1,10 +1,10 @@
-package com.prograngers.backend.entity;
+package com.prograngers.backend.entity.problem;
 
-import com.prograngers.backend.entity.constants.JudgeConstant;
+import com.prograngers.backend.entity.problem.JudgeConstant;
+import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +32,11 @@ public class Problem {
 
     private String link;
 
-    private LocalDateTime date;
-
     @Enumerated(EnumType.STRING)
     private JudgeConstant ojName;
 
     @OneToMany(mappedBy = "problem")
+    @Builder.Default
     List<Solution> solutions = new ArrayList<>();
 
     public void updateTitle(String title) {
@@ -59,6 +56,4 @@ public class Problem {
             this.ojName = ojName;
         }
     }
-
-
 }

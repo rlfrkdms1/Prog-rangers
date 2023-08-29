@@ -1,6 +1,7 @@
 package com.prograngers.backend.entity;
 
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity.constants;
+package com.prograngers.backend.entity.problem;
 
 import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import lombok.AllArgsConstructor;

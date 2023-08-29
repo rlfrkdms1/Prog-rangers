@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { theme } from './theme';
+import { theme } from '../Header/theme';
 
 export const pageStyle = css`
   width: 100%;
@@ -38,7 +38,7 @@ export const labelStyle = css`
   font-weight: 400;
   margin-bottom: 10px;
   padding-left: 25px;
-  margin-top: 30px;
+  margin-top: 10px;
   &::after {
     color: ${theme.main};
     font-size: 16px;
@@ -81,9 +81,12 @@ export const submitButtonStyle = css`
 `;
 
 export const confirmButtonStyle = css`
+  position: absolute;
+  top: 10px;
+  right: 10px;
   width: 100px;
   height: 30px;
-  border-radius: 15px;
+  border-radius: 12px;
   background: var(--main-opa-30, #c2dbe3);
   color: #303030;
   font-size: 14px;

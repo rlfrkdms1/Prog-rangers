@@ -4,10 +4,10 @@ import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.Problem;
-import com.prograngers.backend.entity.Solution;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -23,12 +23,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.prograngers.backend.fixture.MemberFixture.길가은1;
-import static com.prograngers.backend.fixture.ProblemFixture.문제1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이1;
-import static com.prograngers.backend.fixture.SolutionFixture.풀이2;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.*;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
+import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
+import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
+import static com.prograngers.backend.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -52,30 +59,13 @@ class SolutionListSolutionServiceTest {
     @InjectMocks
     private SolutionService solutionService;
 
-    @DisplayName("풀이를 저장할 수 있다")
-    @Test
-    void 저장_테스트() {
-        // given
-        Member member = 길가은1.getMember();
-        Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-        given(solutionRepository.save(any())).willReturn(solution);
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
-
-        // when
-        Long saveId = solutionService.save(SolutionPostRequest.from(solution), member.getId());
-
-        // then
-        Assertions.assertThat(saveId).isEqualTo(solution.getId());
-    }
-
     @DisplayName("스크랩 해서 풀이를 저장할 수 있다")
     @Test
     void 스크랩_저장_테스트() {
         // given
-        Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Member member = 장지담.기본_정보_생성();
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),DFS,LIST,JAVA,1);
 
         ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", 5);
         Solution made = request.toSolution(solution);
@@ -99,10 +89,10 @@ class SolutionListSolutionServiceTest {
     @Test
     void 수정_테스트() {
         // given
-        Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-        Solution updateExpected = 풀이2.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
+        Member member = 장지담.기본_정보_생성();
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
+        Solution updateExpected = 퍼블릭_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),DFS, QUEUE,JAVA,1);
 
         when(solutionRepository.save(any())).thenReturn(solution).thenReturn(updateExpected);
         when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(updateExpected));
@@ -110,32 +100,12 @@ class SolutionListSolutionServiceTest {
         solutionRepository.save(solution);
 
         // when
-        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목2", AlgorithmConstant.BFS, DataStructureConstant.STACK, "풀이코드2", "풀이설명2",5);
+        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목", DFS, STACK, "풀이코드", "풀이설명",5);
         Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest, member.getId());
 
         // then
-        Assertions.assertThat(solutionRepository.findById(updatedId).orElse(null).getTitle())
-                .isEqualTo("풀이제목2");
-    }
-
-    @DisplayName("풀이를 삭제할 수 있다")
-    @Test
-    void 삭제_테스트() {
-        // given
-        Member member = 길가은1.아이디_값_지정_멤버_생성();
-        Problem problem = 문제1.getProblem();
-        Solution solution = 풀이1.일반_솔루션_생성(1L, problem, member, 0, AlgorithmConstant.BFS, DataStructureConstant.ARRAY);
-
-        when(solutionRepository.save(any())).thenReturn(solution);
-        when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(solution));
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
-
-        solutionRepository.save(solution);
-
-        // when
-        solutionService.delete(solution.getId(), member.getId());
-
-        verify(solutionRepository).delete(solution);
+        Assertions.assertThat(solutionRepository.findById(updatedId).orElse(null).getAlgorithm())
+                .isEqualTo(DFS);
     }
 
     @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")

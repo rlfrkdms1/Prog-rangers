@@ -1,11 +1,12 @@
 package com.prograngers.backend.dto.solution.reqeust;
 
-import com.prograngers.backend.entity.*;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.JudgeConstant;
-import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.problem.JudgeConstant;
+import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -57,14 +58,14 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, LocalDateTime.now(),judge, null))
+                .problem(new Problem(null, problemTitle, problemLink, judge, null))
                 .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .date(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .level(level)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)

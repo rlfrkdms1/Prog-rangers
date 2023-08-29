@@ -1,11 +1,10 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.problem.response.ProblemListProblem;
 import com.prograngers.backend.dto.problem.response.ProblemListResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.entity.constants.AlgorithmConstant;
-import com.prograngers.backend.entity.constants.DataStructureConstant;
-import com.prograngers.backend.entity.constants.LanguageConstant;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.service.ProblemService;
 import com.prograngers.backend.service.SolutionService;
@@ -19,10 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
-import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
 
 @RestController
 @RequiredArgsConstructor
