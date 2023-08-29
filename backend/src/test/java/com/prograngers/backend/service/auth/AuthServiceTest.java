@@ -62,5 +62,16 @@ class AuthServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("회원가입시 존재하는 닉네임으로 요청하면 예외를 반환한다.")
+    public void 이미_존재하는_닉네임의_경우_예외를_반환한다(){
+        String nickname = "rlfrkdms1";
+        given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.signUp(new SignUpRequest("1234", "email", nickname))).isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> verify(memberRepository).findByNickname(nickname)
+        );
+    }
+
 
 }
