@@ -29,9 +29,8 @@ public enum MemberFixture {
                 .build();
     }
 
-    public Member 닉네임_지정_생성(String nickname) {
+    public Member 이메일_추가_생성(String email) {
         return 기본_정보_빌더_생성()
-                .nickname(nickname)
-                .build();
+                .email(email).build();
     }
 }

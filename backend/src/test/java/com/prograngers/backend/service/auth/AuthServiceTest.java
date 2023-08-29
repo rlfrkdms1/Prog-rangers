@@ -1,12 +1,16 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,20 +36,31 @@ class AuthServiceTest {
     @Test
     @DisplayName("같은 닉네임을 가진 회원이 이미 존재할 경우 중복 검사시 예외를 반환한다.")
     public void 닉네임이_중복검사시_예외를_반환할_수_있다(){
-        given(memberRepository.findByNickname("rlfrkdms1")).willReturn(Optional.of(길가은.기본_정보_생성()));
+        String nickname = "rlfrkdms1";
+        given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
-                () -> assertThatThrownBy(() -> authService.validNicknameDuplication("rlfrkdms1")).isExactlyInstanceOf(AlreadyExistNicknameException.class),
-                () -> verify(memberRepository).findByNickname("rlfrkdms1")
+                () -> assertThatThrownBy(() -> authService.validNicknameDuplication(nickname)).isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> verify(memberRepository).findByNickname(nickname)
         );
     }
 
     @Test
     public void 닉네임_중복검사를_할_수_있다() {
-        given(memberRepository.findByNickname("rlfrkdms1")).willReturn(Optional.empty());
-        authService.validNicknameDuplication("rlfrkdms1");
-        verify(memberRepository).findByNickname("rlfrkdms1");
+        String nickname = "rlfrkdms1";
+        given(memberRepository.findByNickname(nickname)).willReturn(Optional.empty());
+        authService.validNicknameDuplication(nickname);
+        verify(memberRepository).findByNickname(nickname);
     }
 
+    @Test
+    public void 이미_가입된_회원의_경우_예외를_반환한다(){
+        String email = "rlfrkdms1@naver.com";
+        given(memberRepository.findByEmail(email)).willReturn(Optional.of(길가은.이메일_추가_생성(email)));
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.signUp(new SignUpRequest("1234", email, "rlfrkdms"))).isExactlyInstanceOf(AlreadyExistMemberException.class),
+                () -> verify(memberRepository).findByEmail(email)
+        );
+    }
 
 
 }
