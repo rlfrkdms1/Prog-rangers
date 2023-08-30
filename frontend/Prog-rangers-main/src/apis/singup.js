@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_END_POINT = '/prog-rangers'
+export const API_END_POINT = '/prog-rangers'
 
 // TODO response 처리 로직
 export const signup= async (data)=>{
