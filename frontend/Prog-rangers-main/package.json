@@ -50,5 +50,6 @@
     "@emotion/babel-preset-css-prop": "^11.11.0",
     "eslint-plugin-react": "^7.33.2",
     "prettier": "3.0.2"
-  }
+  },
+  "proxy": "http://13.124.131.171:8080"
 }

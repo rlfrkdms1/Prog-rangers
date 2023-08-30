@@ -1,23 +1,56 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import { labelStyle, formStyle, inputStyle,submitButtonStyle,
-    inputContainerStyle,
-    confirmButtonStyle } from './signUpPage';
-
+    inputContainerStyle, } from './signUpPage';
+import { theme } from '../Header/theme';
+import styled from '@emotion/styled';
 import ErrorText from '../common/ErrorText';
+import { checkNicknameDuplication, signup } from '../../apis/singup';
 
 export const SignUpForm = () => {
   const {
     register,
     handleSubmit,
     watch,
+    trigger,
     formState: { isSubmitting, errors },
   } = useForm();
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+
+  const onSubmit = async ({email, password, nickname}) => {
+    try {
+      const response = await signup({email,password,nickname});
+      console.log(response)
+      alert('회원가입 성공')
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   const password = watch('password', '');
+  const nickname = watch('nickname', '');
+
+  const [nicknameChecked, setNickNameChecked] = useState(false);
+
+  const checkNickname = async () => {
+    if(nickname.trim().length === 0) return;
+    if(nicknameChecked) return;
+    try {
+      await checkNicknameDuplication({nickname})
+      setNickNameChecked(true);
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
+  useEffect(() => {
+    if (nicknameChecked) {
+      trigger('nickname');
+    }
+  }, [nicknameChecked, trigger]);
+
+  useEffect(() => {
+    setNickNameChecked(false);
+  }, [nickname]);
 
   return (
       <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
@@ -72,24 +105,25 @@ export const SignUpForm = () => {
       {errors['passwordCheck']?.message && (
         <ErrorText text={errors['passwordCheck'].message} />
       )}
-      <label htmlFor="nickName" css={labelStyle}>
+      <label htmlFor="nickname" css={labelStyle}>
         닉네임
       </label>
       <div css={inputContainerStyle}>
         <input
           placeholder="닉네임을 입력해주세요"
-          {...register('nickName', {
+          {...register('nickname', {
             required: { value: true, message: '닉네임을 입력해주세요.' },
+            validate: ()=>
+              nicknameChecked || '닉네임 중복체크를 해주세요'
           })}
           css={inputStyle}
         />
-        {errors['nickName']?.message && (
-          <ErrorText text={errors['nickName'].message} />
+        {errors['nickname']?.message && (
+          <ErrorText text={errors['nickname'].message} />
         )}
-        {/* {TODO 중복확인 체크 안하면 회원가입 못하도록 서버와 통신해야함} */}
-        <button type="button" css={confirmButtonStyle}>
-          중복 확인
-        </button>
+        <ConfirmButton type="button" onClick={checkNickname} isChecked={nicknameChecked}>
+          { nicknameChecked ? '인증 완료' : '중복 확인' }
+          </ConfirmButton>
       </div>
       <button css={submitButtonStyle} disabled={isSubmitting} type="submit">
         회원가입
@@ -97,3 +131,17 @@ export const SignUpForm = () => {
     </form>
   );
 }
+
+
+const ConfirmButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 100px;
+  height: 30px;
+  border-radius: 12px;
+  color:#303030;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: ${({isChecked}) => isChecked ?`${theme.colors.programmers}`: `${theme.colors.main30}`};
+`;
