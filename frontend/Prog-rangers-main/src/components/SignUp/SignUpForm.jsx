@@ -6,6 +6,7 @@ import { theme } from '../Header/theme';
 import styled from '@emotion/styled';
 import ErrorText from '../common/ErrorText';
 import { checkNicknameDuplication, signup } from '../../apis/singup';
+import { useNavigate } from 'react-router-dom';
 
 export const SignUpForm = () => {
   const {
@@ -15,12 +16,14 @@ export const SignUpForm = () => {
     trigger,
     formState: { isSubmitting, errors },
   } = useForm();
+  const navigate = useNavigate()
 
   const onSubmit = async ({email, password, nickname}) => {
     try {
       const response = await signup({email,password,nickname});
       console.log(response)
       alert('회원가입 성공')
+      navigate('/')
     } catch (error) {
       console.error(error)
     }
@@ -38,7 +41,13 @@ export const SignUpForm = () => {
       await checkNicknameDuplication({nickname})
       setNickNameChecked(true);
     } catch (error) {
-      console.error(error)
+      //TODO errorCode 상수처리
+      if(error.response.data.errorCode === "ALREADY_EXIST_NICKNAME"){
+        alert('중복된 닉네임입니다!');
+      }else{
+        console.error(error)
+      }
+
     }
   };
 
