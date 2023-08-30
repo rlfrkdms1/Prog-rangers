@@ -67,6 +67,11 @@ public class Comment {
         }
     }
 
+    public void updateComment(String mention, String content){
+        updateMention(mention);
+        updateContent(content);
+    }
+
     public void deleteComment(){
         this.status = DELETED;
     }
