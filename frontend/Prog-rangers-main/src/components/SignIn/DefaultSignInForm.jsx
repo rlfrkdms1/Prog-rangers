@@ -6,6 +6,7 @@ import ErrorText from '../common/ErrorText';
 import { inputStyle } from '../SignUp/signUpPage';
 import { signIn } from '../../apis/signin';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const StyledButton = styled.button`
   width: 600px;
@@ -30,11 +31,14 @@ export const DefaultSignInForm = () =>  {
     formState: { isSubmitting, errors },
   } = useForm();
   const navigate = useNavigate()
-  const onSubmit = async ({email,password}) => {
+  const {setAccessToken} = useAuth()
 
+
+  const onSubmit = async ({email,password}) => {
     try {
-      await signIn({email,password})
-      alert(JSON.stringify('로그인 성공'));
+      const newAccessToken = await signIn({email,password})
+      alert(JSON.stringify(`로그인 성공! accessToken : ${newAccessToken}`));
+      setAccessToken(newAccessToken)
       navigate('/')
     } catch (error) {
       console.error(error)
