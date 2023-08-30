@@ -35,7 +35,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         if (sortBy.equals(NEWEST)){
             result = jpaQueryFactory
                     .selectFrom(solution)
-                    .where(solution.isPublic.eq(true),solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                    .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                     .orderBy(solution.createdDate.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -45,7 +45,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .select(solution)
                     .from(likes)
                     .rightJoin(likes.solution, solution)
-                    .where(solution.isPublic.eq(true),solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                    .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                     .groupBy(solution.id)
                     .orderBy(likes.id.count().desc(),solution.createdDate.desc())
                     .offset(pageable.getOffset())
@@ -57,7 +57,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                     .select(solution)
                     .from(subSolution)
                     .rightJoin(subSolution.scrapSolution,solution)
-                    .where(solution.isPublic.eq(true),solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                    .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                     .groupBy(solution.id)
                     .orderBy(subSolution.count().desc(),solution.createdDate.desc())
                     .offset(pageable.getOffset())
@@ -67,7 +67,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         Long count = jpaQueryFactory
                 .select(solution.count())
                 .from(solution)
-                .where(solution.isPublic.eq(true),solution.problem.id.eq(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .fetchOne();
         PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
         return solutions;
@@ -94,4 +94,13 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     private BooleanExpression languageEq(LanguageConstant language) {
         return language != null ? solution.language.eq(language) : null;
     }
+
+    private static BooleanExpression solutionEqProblemId(Long problemId) {
+        return solution.problem.id.eq(problemId);
+    }
+
+    private static BooleanExpression solutionPublic() {
+        return solution.isPublic.eq(true);
+    }
+
 }
