@@ -31,47 +31,29 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     public PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
-        List<Solution> result = null;
+
+             List<Solution> result = null;
         if (sortBy.equals(NEWEST)){
-            result = jpaQueryFactory
-                    .selectFrom(solution)
-                    .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                    .orderBy(solution.createdDate.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
-        } else if (sortBy.equals(LIKES)){
-            result = jpaQueryFactory
-                    .select(solution)
-                    .from(likes)
-                    .rightJoin(likes.solution, solution)
-                    .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                    .groupBy(solution.id)
-                    .orderBy(likes.id.count().desc(),solution.createdDate.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
-        } else if (sortBy.equals(SCRAPS)){
-            QSolution subSolution = new QSolution("subSolution");
-            result = jpaQueryFactory
-                    .select(solution)
-                    .from(subSolution)
-                    .rightJoin(subSolution.scrapSolution,solution)
-                    .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                    .groupBy(solution.id)
-                    .orderBy(subSolution.count().desc(),solution.createdDate.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
+            result = getNewestSolutions(pageable, problemId, language, algorithm, dataStructure);
+            Long count = getCount(problemId, language, algorithm, dataStructure);
+            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+            return solutions;
         }
-        Long count = jpaQueryFactory
-                .select(solution.count())
-                .from(solution)
-                .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                .fetchOne();
-        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-        return solutions;
+        if (sortBy.equals(LIKES)){
+            result = getLikesSolutions(pageable, problemId, language, algorithm, dataStructure);
+            Long count = getCount(problemId, language, algorithm, dataStructure);
+            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+            return solutions;
+        }
+        if (sortBy.equals(SCRAPS)){
+            result = getScrapsSolutions(pageable, problemId, language, algorithm, dataStructure);
+            Long count = getCount(problemId, language, algorithm, dataStructure);
+            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+            return solutions;
+        }
+        return null;
     }
+
 
     @Override
     public List<Solution> findProfileSolutions(Long memberId,Long page) {
@@ -103,4 +85,55 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         return solution.isPublic.eq(true);
     }
 
+    private List<Solution> getScrapsSolutions(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        QSolution subSolution = new QSolution("subSolution");
+        result = jpaQueryFactory
+                .select(solution)
+                .from(subSolution)
+                .rightJoin(subSolution.scrapSolution,solution)
+                .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                .groupBy(solution.id)
+                .orderBy(subSolution.count().desc(),solution.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return result;
+    }
+
+    private List<Solution> getLikesSolutions(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = jpaQueryFactory
+                .select(solution)
+                .from(likes)
+                .rightJoin(likes.solution, solution)
+                .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                .groupBy(solution.id)
+                .orderBy(likes.id.count().desc(),solution.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return result;
+    }
+
+    private List<Solution> getNewestSolutions(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = jpaQueryFactory
+                .selectFrom(solution)
+                .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                .orderBy(solution.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return result;
+    }
+
+    private Long getCount(Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        Long count = jpaQueryFactory
+                .select(solution.count())
+                .from(solution)
+                .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
+                .fetchOne();
+        return count;
+    }
 }
