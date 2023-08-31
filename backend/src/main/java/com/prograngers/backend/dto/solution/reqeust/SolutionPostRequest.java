@@ -54,14 +54,6 @@ public class SolutionPostRequest {
     private String code;
 
     public Solution toSolution() {
-
-        /*
-        파싱해서 ojname 알아내서 문제에 넣기
-        로그인정보로 멤버 알아내서 넣기
-        스크랩 여부 알아내서 넣기
-         */
-
-        // 입력 링크 파싱해서 저지 정보 알아내기 아닐 경우 ProblemLinkNotFoundException
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
