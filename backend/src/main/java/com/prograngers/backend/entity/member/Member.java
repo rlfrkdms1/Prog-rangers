@@ -34,7 +34,6 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
     private String email;
 
     @Nullable
@@ -43,7 +42,6 @@ public class Member {
     @Nullable
     private String introduction;
 
-    @Column(nullable = false)
     private String password;
 
     private String photo;
