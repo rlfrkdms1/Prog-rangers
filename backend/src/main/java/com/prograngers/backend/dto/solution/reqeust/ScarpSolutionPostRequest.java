@@ -28,8 +28,7 @@ public class ScarpSolutionPostRequest {
     private Integer level;
 
     public Solution toSolution(Solution scrap){
-        Solution solution = Solution.builder().
-                id(null)
+        Solution solution = Solution.builder()
                 .level(level).
                 description(description).
                 title(title)
