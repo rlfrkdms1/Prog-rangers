@@ -55,7 +55,6 @@ public class SolutionPostRequest {
 
     public Solution toSolution() {
 
-        log.info("isPublic : {}",isPublic);
         /*
         파싱해서 ojname 알아내서 문제에 넣기
         로그인정보로 멤버 알아내서 넣기
