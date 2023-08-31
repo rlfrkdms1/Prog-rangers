@@ -68,11 +68,11 @@ export const flexColLayout = css`
 // button
 export const buttonSytle = css`
   width: 996px;
-  height: 80px;
+  height: 70px;
   background-color: ${theme.colors.white};
   border-radius: 40px;
 
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
 
   box-shadow: 5px 5px 10px rgba(52, 134, 160, 0.3);
