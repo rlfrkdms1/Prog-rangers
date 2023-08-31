@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
@@ -77,10 +78,30 @@ class LikesRepositoryTest {
     @DisplayName("풀이와 회원으로 좋아요를 조회한다")
     void 풀이와_회원으로_좋아요_조회(){
         // given
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+
+        Likes like1 = Likes.builder().member(member1).solution(solution1).build();
+        Likes like2 = Likes.builder().member(member2).solution(solution1).build();
+        Likes like3 = Likes.builder().member(member1).solution(solution2).build();
+        Likes like4 = Likes.builder().member(member2).solution(solution2).build();
+
+        저장(like1);
+        저장(like2);
+        저장(like3);
+        저장(like4);
+
 
         // when
+        Likes byMemberAndSolution1 = likesRepository.findByMemberAndSolution(member1, solution1).get();
+        Likes byMemberAndSolution2 = likesRepository.findByMemberAndSolution(member2, solution2).get();
 
         // then
+        Assertions.assertThat(byMemberAndSolution1).isEqualTo(like1);
+        Assertions.assertThat(byMemberAndSolution2).isEqualTo(like4);
     }
 
 
