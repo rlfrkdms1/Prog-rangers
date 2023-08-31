@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -53,10 +55,30 @@ public class SolutionPostRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Solution toSolution() {
+    public Problem toProblem(ProblemRepository problemRepository){
+        // 유효한 문제 링크인지 확인
         JudgeConstant judge = checkLink(problemLink);
 
-        return Solution.builder()
+        // 이미 존재하는 문제일 경우
+        Problem problem = problemRepository.findByLink(problemLink);
+        if (problem!=null){
+            return problem;
+        }
+        // 아닐 경우, 새로 만들어서 problem repository에 저장하고 반환
+        Problem newProblem = Problem.builder()
+                .link(problemLink)
+                .ojName(judge)
+                .title(problemTitle)
+                .solutions(new ArrayList<>())
+                .build();
+        return problemRepository.save(newProblem);
+    }
+
+    public Solution toSolution(Problem problem, Member member) {
+
+        Solution solution = Solution.builder()
+                .problem(problem)
+                .member(member)
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
@@ -70,6 +92,10 @@ public class SolutionPostRequest {
                 .code(code)
                 .isPublic(isPublic)
                 .build();
+
+        problem.getSolutions().add(solution);
+
+        return solution;
     }
 
     public static SolutionPostRequest from(Solution solution){

@@ -60,12 +60,8 @@ public class SolutionService {
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
-        Solution solution = solutionPostRequest.toSolution();
-        solution.updateMember(member);
-        Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
-        if (problem != null) {
-            solution.updateProblem(problem);
-        }
+        Problem problem = solutionPostRequest.toProblem(problemRepository);
+        Solution solution = solutionPostRequest.toSolution(problem,member);
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
     }
