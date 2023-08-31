@@ -66,8 +66,6 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         return Solution.builder()
-                .problem(new Problem(null, problemTitle, problemLink, judge, null))
-                .member(new Member()) // 로그인정보로 멤버를 알아내야함
                 .title(solutionTitle)
                 .language(language)
                 .isPublic(true)
@@ -78,7 +76,6 @@ public class SolutionPostRequest {
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
                 .description(description)
-                .scrapSolution(null) // 스크랩 하지 않은 Solution이므로 null로 놓는다
                 .code(code)
                 .isPublic(isPublic)
                 .build();
