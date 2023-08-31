@@ -22,14 +22,14 @@ export const secMain = css`
 
 //fonts
 
-export const fontSize50 = css`
-  font-size: 50px;
+export const fontSize40 = css`
+  font-size: 40px;
   font-weight: 700;
   color: ${theme.colors.dark1};
 `;
 
-export const fontSize60 = css`
-  font-size: 60px;
+export const fontSize50 = css`
+  font-size: 50px;
   font-weight: 700;
   color: ${theme.colors.dark1};
 `;
@@ -40,8 +40,8 @@ export const fontSize70 = css`
   color: ${theme.colors.dark1};
 `;
 
-export const fontSize30 = css`
-  font-size: 30px;
+export const fontSize26 = css`
+  font-size: 26px;
   font-weight: 500;
   color: ${theme.colors.dark2};
 `;
@@ -54,6 +54,7 @@ export const alignCenter = css`
 
 export const flexRowLayout = css`
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
 `;
 

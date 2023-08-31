@@ -13,7 +13,8 @@ export const ScrollDownArrow = () => {
       <div
         className="scrollDownArea"
         css={css`
-          ${scrollDownArea}
+          ${scrollDownArea};
+          font-size: 14px;
         `}
       >
         <span
