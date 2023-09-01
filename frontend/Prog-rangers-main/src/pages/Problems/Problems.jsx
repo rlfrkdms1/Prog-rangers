@@ -4,6 +4,7 @@ import {
   MainBody
 } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
+import { QuestionForm } from '../../components/Question';
 
 const ALGORITHMS = [
   { value: "ALL", name: "알고리즘" },
@@ -62,6 +63,7 @@ export const Problems = () => {
         <div
           css={css`
             margin: 25px 0 0 4px;
+            height: 50px;
             width: 742px;
             display: flex;
             flex-direction: row;
@@ -71,6 +73,12 @@ export const Problems = () => {
           <FilterBar options={ALGORITHMS}/>
           <FilterBar options={DATASTRUCTURE}/>
           <FilterBar options={LEVEL}/>
+        </div>
+        <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
+          <QuestionForm/>
+        </div>
+        <div css={css`margin-top: 100px; border: 1px solid black;`}>
+
         </div>
       </div>
     </div>
