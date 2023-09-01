@@ -252,6 +252,34 @@ class SolutionRepositoryTest {
         Assertions.assertThat(result3).containsExactly(solution4);
     }
 
+    @DisplayName("프로필 풀이 찾을 수 있다 (무한스크롤)")
+    @Test
+    void 프로필_풀이_찾기(){
+        // given
+        // 회원
+        Member member1 = 저장(장지담.기본_정보_생성());
+
+        // 문제
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+
+        //풀이
+        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
+        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS,LIST,JAVA,1));
+        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),DFS,LIST,JAVA,1));
+        Solution solution4 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS,LIST,JAVA,1));
+        Solution solution5 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(4),DFS,LIST,JAVA,1));
+        Solution solution6 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS,LIST,JAVA,1));
+
+        // when
+        List<Solution> profileSolutions1 = solutionRepository.findProfileSolutions(member1.getId(), 9223372036854775807L);
+        List<Solution> profileSolutions2 = solutionRepository.findProfileSolutions(member1.getId(), solution3.getId());
+
+        // then
+        Assertions.assertThat(profileSolutions1).contains(solution4,solution5,solution6).doesNotContain(solution1,solution2,solution3);
+        Assertions.assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6);
+    }
+
+
     Member 저장(Member member) {
         return memberRepository.save(member);
     }
