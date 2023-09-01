@@ -2,6 +2,7 @@ package com.prograngers.backend.entity.problem;
 
 import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.solution.Solution;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,15 +29,17 @@ public class Problem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String link;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private JudgeConstant ojName;
 
     @OneToMany(mappedBy = "problem")
-    @Builder.Default
     List<Solution> solutions = new ArrayList<>();
 
     public void updateTitle(String title) {

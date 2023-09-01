@@ -3,6 +3,7 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.dto.error.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
 import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
+import com.prograngers.backend.exception.badrequest.InvalidValueException;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
@@ -69,6 +70,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> alreadyExistsException(AlreadyExistsException exception) {
+        String message = exception.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidValueException.class)
+    public ResponseEntity<ErrorResponse> invalidValueException(InvalidValueException exception) {
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
