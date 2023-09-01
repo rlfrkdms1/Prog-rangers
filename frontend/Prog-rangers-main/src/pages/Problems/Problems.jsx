@@ -20,6 +20,25 @@ const ALGORITHMS = [
   { value: "DIJKSTRA", name: "데이크스트라"}
 ];
 
+const DATASTRUCTURE = [
+  { value: "ALL", name: "자료구조" },
+  { value: "LIST", name: "리스트" },
+  { value: "ARRAY", name: "배열" },
+  { value: "STACK", name: "스택" },
+  { value: "QUEUE", name: "큐" },
+  { value: "MAP", name: "맵" },
+  { value: "HEAP", name: "힙" }
+];
+
+const LEVEL = [
+  { value: "ALL", name: "난이도"},
+  { value: "1", name: "1" },
+  { value: "2", name: "2" },
+  { value: "3", name: "3" },
+  { value: "4", name: "4" },
+  { value: "5", name: "5" }
+];
+
 export const Problems = () => {
   return (
     <div 
@@ -43,10 +62,15 @@ export const Problems = () => {
         <div
           css={css`
             margin: 25px 0 0 4px;
-            height: 50px;
             width: 742px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            z-index: 2;
         `}>
           <FilterBar options={ALGORITHMS}/>
+          <FilterBar options={DATASTRUCTURE}/>
+          <FilterBar options={LEVEL}/>
         </div>
       </div>
     </div>

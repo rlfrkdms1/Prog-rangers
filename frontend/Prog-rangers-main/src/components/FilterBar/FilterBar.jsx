@@ -11,10 +11,7 @@ import ToggleDown from '../../assets/icons/main-toggle-down.svg';
 import ToggleUp from '../../assets/icons/main-toggle-up.svg';
 
 export const FilterBar = ({options}) => {
-  const [ selectedOption, setSelectedOption ] = useState({
-    value: 'ALL',
-    name: '알고리즘',
-  }); 
+  const [ selectedOption, setSelectedOption ] = useState(options[0]); 
   const [ isOpen, setIsOpen ] = useState(false);
   const [ isClicked, setIsClicked ] = useState(false);
 
@@ -26,7 +23,7 @@ export const FilterBar = ({options}) => {
     setIsClicked(true);
   };
 
-  console.log(selectedOption);
+  // console.log(options[0]);
 
   return(
     <div css={css`${Fragment}`}>
@@ -49,7 +46,7 @@ export const FilterBar = ({options}) => {
             font-weight: ${isClicked ? 'bold' : 'normal'};
           `}
         >
-         {selectedOption ? selectedOption.name : '알고리즘'}
+          {selectedOption.name}
         </div>
         {isOpen?(
           <img css={css`width: 18px; height: 100%; &:hover{cursor: pointer;}`} src={ToggleUp} alt="toggle_up" onClick={handleToggle}/>
