@@ -19,11 +19,14 @@ export const Wrapper = (props) => css`
   flex-direction: column; 
   width: 230px;
   max-height: 200px;
+  margin-top: 50px;
+  background-color: white;
   border-radius: 0 0 25px 25px;
   border: 1px solid #959595;
   box-shadow: 0px 8px 8px 0px rgba(100, 116, 139, 0.1);
   overflow: hidden;
   overflow-y: auto;
+  position: absolute;
   z-index: 2;
 
   &::-webkit-scrollbar {
