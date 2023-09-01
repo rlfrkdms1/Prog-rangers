@@ -32,7 +32,7 @@ public class ProblemController {
     // problem 목록보기
     @GetMapping
     public ResponseEntity<?> problems(
-            @PageableDefault(size = 4)Pageable pageable,
+            @PageableDefault(size = 5)Pageable pageable,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = "NEWEST") SortConstant sortBy) {
@@ -44,7 +44,7 @@ public class ProblemController {
     // solution 목록보기
     @GetMapping("{problemId}/solutions")
     public ResponseEntity<?> solutionList(
-            @PageableDefault(size = 4)Pageable pageable,
+            @PageableDefault(size = 5)Pageable pageable,
             @PathVariable Long problemId,
             @RequestParam(required = false) LanguageConstant language,
             @RequestParam(required = false) AlgorithmConstant algorithm,

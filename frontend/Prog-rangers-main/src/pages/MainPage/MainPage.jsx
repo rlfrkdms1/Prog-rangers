@@ -6,9 +6,9 @@ import {
   secLight,
   secMain,
   secLayout,
-  fontSize30,
+  fontSize26,
+  fontSize40,
   fontSize50,
-  fontSize60,
   fontSize70,
   alignCenter,
   flexRowLayout,
@@ -58,7 +58,7 @@ export const MainPage = () => {
         className="secWrap"
         css={css`
           ${secLight}
-          height: calc(100vh - 120px);
+          height: calc(100vh - 100px);
         `}
       >
         <div
@@ -98,7 +98,7 @@ export const MainPage = () => {
             <div
               className="subtitle"
               css={css`
-                ${fontSize60}
+                ${fontSize50}
                 color: ${theme.colors.main}
               `}
             >
@@ -135,7 +135,7 @@ export const MainPage = () => {
           <div
             className="sec2Left"
             css={css`
-              padding-top: 55vh;
+              padding-top: 52vh;
               padding-left: 30px;
             `}
           >
@@ -143,13 +143,13 @@ export const MainPage = () => {
               className="title"
               css={css`
                 padding-bottom: 50px;
-                ${fontSize60}
+                ${fontSize50}
               `}
             >
               코딩테스트 문제를
               <span css={displayBlock}>풀이해봐요</span>
             </div>
-            <div className="description" css={fontSize30}>
+            <div className="description" css={fontSize26}>
               <span>
                 나만의 방법으로 푼 문제를 올려보세요.
               </span>
@@ -164,9 +164,9 @@ export const MainPage = () => {
               src={Sec2Mockup}
               alt="사이트 문제 목록 페이지 목업"
               css={css`
-                width: 700px;
+                width: 650px;
 
-                padding-top: 150px;
+                padding-top: 100px;
               `}
               data-aos="fade-up"
               data-aos-anchor-placement="center-center"
@@ -204,7 +204,7 @@ export const MainPage = () => {
                 src={Sec3Mock1}
                 alt="다른 사람의 프로필 보기 페이지 목업"
                 css={css`
-                  width: 550px;
+                  width: 500px;
                 `}
                 data-aos="fade-up"
                 data-aos-anchor-placement="center-center"
@@ -214,9 +214,9 @@ export const MainPage = () => {
             <div
               className="description"
               css={css`
-                margin-bottom: 120px;
+                margin-bottom: 60px;
                 margin-left: -20px;
-                ${fontSize30}
+                ${fontSize26}
               `}
             >
               <span>
@@ -240,8 +240,9 @@ export const MainPage = () => {
             <div
               className="title"
               css={css`
-                padding-top: 150px;
-                ${fontSize60};
+                padding-top: 100px;
+                margin-bottom: 50px;
+                ${fontSize50};
               `}
             >
               <span>다른 사람들에게</span>
@@ -273,7 +274,7 @@ export const MainPage = () => {
                 src={Sec3Mock2}
                 alt="풀이 상세보기 페이지 목업"
                 css={css`
-                  width: 550px;
+                  width: 500px;
                   margin-bottom: 100px;
                 `}
                 data-aos="fade-up"
@@ -317,7 +318,7 @@ export const MainPage = () => {
             className="ctaDesc"
             css={css`
               text-align: center;
-              ${fontSize50}
+              ${fontSize40}
             `}
           >
             <span>다른 사람들과 함께 소통하며</span>

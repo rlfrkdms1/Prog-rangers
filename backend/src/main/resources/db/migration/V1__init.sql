@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `comment` (
     `id`           bigint       NOT NULL AUTO_INCREMENT,
     `create_date`  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
-    `is_fixed`     TINYINT(1)            DEFAULT '0',
+    `status`         varchar(255),
     `content`      varchar(255) NOT NULL,
     `mention`      varchar(255),
     `parent_id`    bigint,
