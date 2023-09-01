@@ -55,15 +55,10 @@ class LikesRepositoryTest {
         Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
         Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
-        Likes like1 = Likes.builder().member(member).solution(solution1).build();
-        Likes like2 = Likes.builder().member(member).solution(solution1).build();
-        Likes like3 = Likes.builder().member(member).solution(solution2).build();
-        Likes like4 = Likes.builder().member(member).solution(solution2).build();
-
-        저장(like1);
-        저장(like2);
-        저장(like3);
-        저장(like4);
+        Likes like1 = 저장(Likes.builder().member(member).solution(solution1).build());
+        Likes like2 = 저장(Likes.builder().member(member).solution(solution1).build());
+        Likes like3 = 저장(Likes.builder().member(member).solution(solution2).build());
+        Likes like4 = 저장(Likes.builder().member(member).solution(solution2).build());
 
         // when
         List<Likes> allBySolution1 = likesRepository.findAllBySolution(solution1);
