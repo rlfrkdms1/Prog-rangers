@@ -17,4 +17,11 @@ public class SseEmitterRepository {
         return emitter;
     }
 
+    public Map<String, SseEmitter> findAllByMemberId(String memberId) {
+        return emitters.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(memberId))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+
 }
