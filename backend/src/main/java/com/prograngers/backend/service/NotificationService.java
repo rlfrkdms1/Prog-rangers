@@ -59,6 +59,31 @@ public class NotificationService {
         return notification;
     }
 
+    public void send(Comment comment, Solution solution, Member writer){
+        String title = String.format(COMMENT_NOTIFICATION_FORMAT, writer.getNickname(), solution.getTitle());
+        Notification notification = createCommentNotification(comment, solution, title);
+        NotificationResponse notificationResponse = NotificationResponse.from(notification);
+        sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
+                .forEach((emitterId, emitter) -> {
+                    cachedEventRepository.save(emitterId, notificationResponse);
+                    sendToClient(emitter, emitterId, notificationResponse);
+                });
+        notificationRepository.save(notification);
+    }
+
+
+    private Notification createCommentNotification(Comment comment, Solution solution, String title) {
+        Notification notification = Notification.builder()
+                .type(COMMENT)
+                .title(title)
+                .comment(comment)
+                .solution(solution)
+                .isRead(false)
+                .receiver(solution.getMember())
+                .build();
+        return notification;
+    }
+
 
     private void sendToClient(SseEmitter emitter, String emitterId, Object data) {
         try {
