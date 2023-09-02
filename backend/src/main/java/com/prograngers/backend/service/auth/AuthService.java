@@ -55,8 +55,12 @@ public class AuthService {
     private AuthResult issueToken(Long memberId) {
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
         //refresh token 발급, 저장, 쿠키 생성
-        RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder().memberId(memberId).refreshToken(UUID.randomUUID().toString()).build());
+        RefreshToken refreshToken = refreshTokenRepository.save(createRefreshToken(memberId));
         return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
+    }
+
+    private RefreshToken createRefreshToken(Long memberId) {
+        return RefreshToken.builder().memberId(memberId).refreshToken(UUID.randomUUID().toString()).build();
     }
 
     @Transactional
