@@ -2,11 +2,11 @@ import { css } from "@emotion/react";
 import questions from '../../db/question.json';
 import { ojNameTag, tags } from "./tagsform";
 
-export const QuestionForm = () => {
+export const QuestionForm = ({data}) => {
   
   return(
     <>
-      {questions.map((item,index) => (
+      {data.map((item,index) => (
         <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
           <div css={css`
             height: 29px; 
@@ -16,7 +16,8 @@ export const QuestionForm = () => {
             font-weight: bold;
             font-size: 20px;
             color: #303030;`
-          }>
+          }            
+          >
             {item.title}
           </div>
           <div css={css`

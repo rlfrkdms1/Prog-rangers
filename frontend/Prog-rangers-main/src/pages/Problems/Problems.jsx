@@ -5,9 +5,9 @@ import {
 } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
 import { QuestionForm } from '../../components/Question';
-// import { Pagination, PaginationItem } from "@mui/material";
 import { Pagination } from '../../components/Pagination/Pagination';
 import questions from '../../db/question.json';
+import { Provider, atom, useAtom } from 'jotai';
 
 const ALGORITHMS = [
   { value: "ALL", name: "알고리즘" },
@@ -43,25 +43,26 @@ const LEVEL = [
   { value: "5", name: "5" }
 ];
 
+const questionAtom = atom(questions);
+
 export const Problems = () => {
   const [ page, setPage ] = useState(1);
-  const [ data, setData] = useState([]);
+  const [ Questions, setQuestions ] = useAtom(questionAtom);
   const itemsPerPage = 5;
-  const LAST_PAGE = questions.length % 5 === 0 ? parseInt(questions.length / 5) : parseInt(questions.length / 5) + 1;
+  // const LAST_PAGE = Questions.length % 5 === 0 ? parseInt(Questions.length / 5) : parseInt(Questions.length / 5) + 1;
   const totalQuestions = questions.length;
   const totalPages = Math.ceil(totalQuestions / itemsPerPage);
-
-  // useEffect(() => {
-  //   if(page === LAST_PAGE){
-  //     setData(questions.slice(5 * (page-1)));
-  //   } else{
-  //     setData(questions.slice(5 * (page-1), 5 * (page-1) + 5));
-  //   }
-  // }, [page]);
 
   const handlePageChange = (e, page) => {
     setPage(page);
   };
+
+  useEffect(() => {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentQuestions = questions.slice(startIndex, endIndex);
+    setQuestions(currentQuestions);
+  }, [page, Questions])
 
   return (
     <div 
@@ -97,7 +98,7 @@ export const Problems = () => {
           <FilterBar options={LEVEL}/>
         </div>
         <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
-          <QuestionForm/>
+          <QuestionForm data={Questions}/>
         </div>
         <div css={css`
           margin-top: 110px; 
@@ -107,9 +108,9 @@ export const Problems = () => {
           align-items:center;
         `}>
           <Pagination
-           totalPages={totalPages}
-           page={page}
-           handlePageChange={handlePageChange}
+            totalPages={totalPages}
+            page={page}
+            handlePageChange={handlePageChange}
           />
         </div>
       </div>
