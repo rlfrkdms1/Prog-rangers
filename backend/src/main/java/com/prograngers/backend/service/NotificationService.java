@@ -31,6 +31,34 @@ public class NotificationService {
     private final SseEmitterRepository sseEmitterRepository;
     private final CachedEventRepository cachedEventRepository;
 
+    /**
+     * @ddongguri-bing님이 풀이1에 리뷰를 남겼습니다.
+     * "이 부분은 ~ 로 고칠 수 있을 것 같아요 ?"
+     */
+    public void send(Review review, Solution solution, Member writer){
+        String title = String.format(REVIEW_NOTIFICATION_FORMAT, writer.getNickname(), solution.getTitle());
+        Notification notification = createReviewNotification(review, solution, title);
+        NotificationResponse notificationResponse = NotificationResponse.from(notification);
+        sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
+                .forEach((emitterId, emitter) -> {
+                    cachedEventRepository.save(emitterId, notificationResponse);
+                    sendToClient(emitter, emitterId, notificationResponse);
+                });
+        notificationRepository.save(notification);
+    }
+
+    private Notification createReviewNotification(Review review, Solution solution, String title) {
+        Notification notification = Notification.builder()
+                .type(REVIEW)
+                .title(title)
+                .review(review)
+                .solution(solution)
+                .isRead(false)
+                .receiver(solution.getMember())
+                .build();
+        return notification;
+    }
+
 
     private void sendToClient(SseEmitter emitter, String emitterId, Object data) {
         try {
