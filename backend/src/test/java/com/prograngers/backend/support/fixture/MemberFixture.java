@@ -1,5 +1,6 @@
 package com.prograngers.backend.support.fixture;
 
+import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import lombok.AllArgsConstructor;
@@ -32,5 +33,17 @@ public enum MemberFixture {
     public Member 이메일_추가_생성(String email) {
         return 기본_정보_빌더_생성()
                 .email(email).build();
+    }
+
+    public Member 일반_회원_생성(Long id, String email, String password){
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .email(email)
+                .password(password)
+                .build();
+    }
+
+    public SignUpRequest 회원_가입_요청_생성(String email, String password) {
+        return new SignUpRequest(password, email, this.nickname);
     }
 }
