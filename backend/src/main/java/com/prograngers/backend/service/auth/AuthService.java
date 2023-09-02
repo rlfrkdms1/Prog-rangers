@@ -85,7 +85,7 @@ public class AuthService {
     }
 
     public void validPassword(String savedPassword, String inputPassword) {
-        if (!Encrypt.decoding(savedPassword).equals(inputPassword)) {
+        if (!savedPassword.equals(Encrypt.encoding(inputPassword))) {
             throw new IncorrectPasswordException();
         }
     }
