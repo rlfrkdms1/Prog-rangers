@@ -16,4 +16,10 @@ public class CachedEventRepository {
         cachedEvents.put(id, data);
     }
 
+    public Map<String, NotificationResponse> findAllByMemberId(String memberId) {
+        return cachedEvents.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(memberId))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
 }
