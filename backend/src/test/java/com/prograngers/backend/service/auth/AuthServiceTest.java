@@ -6,22 +6,23 @@ import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberExcep
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.support.Encrypt;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,13 +66,49 @@ class AuthServiceTest {
     @Test
     @DisplayName("회원가입시 존재하는 닉네임으로 요청하면 예외를 반환한다.")
     public void 이미_존재하는_닉네임의_경우_예외를_반환한다(){
+        String email = "email";
         String nickname = "rlfrkdms1";
+        given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
-                () -> assertThatThrownBy(() -> authService.signUp(new SignUpRequest("1234", "email", nickname))).isExactlyInstanceOf(AlreadyExistNicknameException.class),
-                () -> verify(memberRepository).findByNickname(nickname)
+                () -> assertThatThrownBy(() -> authService.signUp(new SignUpRequest("1234", email, nickname))).isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> verify(memberRepository).findByNickname(nickname),
+                () -> verify(memberRepository).findByEmail(email)
         );
     }
 
+    @Test
+    public void 회원가입을_진행할_수_있다() {
+        String email = "email";
+        String nickname = "rlfrkdms1";
+        String expectedToken = "expectedAccessToken";
+        String password = "test";
+        String encodedPassword = "encodedPassword";
+        SignUpRequest signUpRequest = 길가은.회원_가입_요청_생성(email, password);
+        Member member = 길가은.일반_회원_생성(1L, email, encodedPassword);
+        RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).refreshToken(UUID.randomUUID().toString()).build();
 
+
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
+            given(memberRepository.findByNickname(nickname)).willReturn(Optional.empty());
+            encryptMockedStatic.when(() -> Encrypt.encoding(password)).thenReturn(encodedPassword);
+            given(memberRepository.save(any())).willReturn(member);
+            given(jwtTokenProvider.createAccessToken(any())).willReturn(expectedToken);
+            given(refreshTokenRepository.save(any())).willReturn(refreshToken);
+            authService.signUp(signUpRequest);
+        }
+
+
+        assertAll(
+                () -> verify(memberRepository).findByNickname(nickname),
+                () -> verify(memberRepository).findByEmail(email)
+                /*
+                () -> verify(memberRepository.save(any())),
+                () -> verify(jwtTokenProvider.createAccessToken(any())),
+                () -> verify(refreshTokenRepository.save(any()))
+        */
+        );
+
+    }
 }
