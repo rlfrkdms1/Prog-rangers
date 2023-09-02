@@ -23,5 +23,9 @@ public class SseEmitterRepository {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    public void deleteById(String id) {
+        emitters.remove(id);
+    }
+
 
 }
