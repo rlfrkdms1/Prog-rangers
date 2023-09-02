@@ -1,10 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import {
   MainBody
 } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
 import { QuestionForm } from '../../components/Question';
+// import { Pagination, PaginationItem } from "@mui/material";
+import { Pagination } from '../../components/Pagination/Pagination';
+import questions from '../../db/question.json';
 
 const ALGORITHMS = [
   { value: "ALL", name: "알고리즘" },
@@ -41,6 +44,25 @@ const LEVEL = [
 ];
 
 export const Problems = () => {
+  const [ page, setPage ] = useState(1);
+  const [ data, setData] = useState([]);
+  const itemsPerPage = 5;
+  const LAST_PAGE = questions.length % 5 === 0 ? parseInt(questions.length / 5) : parseInt(questions.length / 5) + 1;
+  const totalQuestions = questions.length;
+  const totalPages = Math.ceil(totalQuestions / itemsPerPage);
+
+  // useEffect(() => {
+  //   if(page === LAST_PAGE){
+  //     setData(questions.slice(5 * (page-1)));
+  //   } else{
+  //     setData(questions.slice(5 * (page-1), 5 * (page-1) + 5));
+  //   }
+  // }, [page]);
+
+  const handlePageChange = (e, page) => {
+    setPage(page);
+  };
+
   return (
     <div 
       css={css`
@@ -77,8 +99,18 @@ export const Problems = () => {
         <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
           <QuestionForm/>
         </div>
-        <div css={css`margin-top: 100px; border: 1px solid black;`}>
-
+        <div css={css`
+          margin-top: 110px; 
+          height: 50px; 
+          display: flex; 
+          justify-content: center; 
+          align-items:center;
+        `}>
+          <Pagination
+           totalPages={totalPages}
+           page={page}
+           handlePageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>

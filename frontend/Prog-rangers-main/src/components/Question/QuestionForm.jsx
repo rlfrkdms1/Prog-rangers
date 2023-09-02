@@ -3,6 +3,7 @@ import questions from '../../db/question.json';
 import { ojNameTag, tags } from "./tagsform";
 
 export const QuestionForm = () => {
+  
   return(
     <>
       {questions.map((item,index) => (
@@ -15,7 +16,9 @@ export const QuestionForm = () => {
             font-weight: bold;
             font-size: 20px;
             color: #303030;`
-          }>{item.title}</div>
+          }>
+            {item.title}
+          </div>
           <div css={css`
             width: 100%; 
             height: 39px; 
@@ -26,7 +29,7 @@ export const QuestionForm = () => {
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
               {item.tags.map((index) => (
-                <div css={css`${tags}`}>{index}</div>
+                <div key={index} css={css`${tags}`}>{index}</div>
               ))}
             </div>
             <div css={css`

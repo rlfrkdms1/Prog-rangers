@@ -6,5 +6,4 @@ export const MainBody = css`
   display: flex;
   flex-direction: column;
   margin-top: 50px;
-  border: 1px solid black;
 `;
