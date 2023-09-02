@@ -6,6 +6,7 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
+import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.support.Encrypt;
@@ -125,5 +126,24 @@ class AuthServiceTest {
                 () -> verify(memberRepository).findByEmail(email)
         );
 
+    }
+
+    @Test
+    public void 일반_로그인_비밀번호_틀렸을_떄(){
+        String email = "rlfrkdms@naver.com";
+        String correctEncodedPassword = "rlfrkdms";
+        String wrongPassword = "rlfrk";
+        String encodedWrongPassword = "correctEncoding";
+        LoginRequest loginRequest = 길가은.로그인_요청_생성(email, wrongPassword);
+        Member member = 길가은.일반_회원_생성(email, correctEncodedPassword);
+        given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            encryptMockedStatic.when(() -> Encrypt.encoding(wrongPassword)).thenReturn(encodedWrongPassword);
+
+            assertAll(
+                    () -> assertThatThrownBy(() -> authService.login(loginRequest)).isExactlyInstanceOf(IncorrectPasswordException.class),
+                    () -> verify(memberRepository).findByEmail(email)
+            );
+        }
     }
 }

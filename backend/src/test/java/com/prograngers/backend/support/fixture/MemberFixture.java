@@ -44,6 +44,10 @@ public enum MemberFixture {
                 .build();
     }
 
+    public Member 일반_회원_생성(String email, String password){
+        return 일반_회원_생성(null, email, password);
+    }
+
     public SignUpRequest 회원_가입_요청_생성(String email, String password) {
         return new SignUpRequest(password, email, this.nickname);
     }
