@@ -33,6 +33,7 @@ import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
 
+import static com.prograngers.backend.fixture.SolutionFixture.프라이빗_풀이;
 import static org.assertj.core.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -279,6 +280,27 @@ class SolutionRepositoryTest {
         Assertions.assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6);
     }
 
+    @DisplayName("풀이 목록 조회 시 퍼블릭 풀이만 보인다")
+    @Test
+    void 퍼블릭_풀이만_보인다(){
+        // given
+        // 회원
+        Member member1 = 저장(장지담.기본_정보_생성());
+
+        // 문제
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+
+        // 풀이
+        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
+        Solution solution2 = 저장(프라이빗_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
+
+        // when
+        List<Solution> result = solutionRepository
+                .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
+
+        // then
+        Assertions.assertThat(result).contains(solution1).doesNotContain(solution2);
+    }
 
     Member 저장(Member member) {
         return memberRepository.save(member);
