@@ -41,8 +41,8 @@ export const scrollDownArrow = css`
   position: absolute;
   top: 0;
   left: 50%;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 20px;
   margin-left: -12px;
   border-left: 2px solid ${theme.colors.dark2};
   border-bottom: 2px solid ${theme.colors.dark2};

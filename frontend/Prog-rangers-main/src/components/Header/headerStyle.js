@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 export const navStyle = css`
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   justify-content: flex-end;
   gap: 40px;

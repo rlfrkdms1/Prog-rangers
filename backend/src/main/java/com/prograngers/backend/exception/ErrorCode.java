@@ -36,4 +36,5 @@ public enum ErrorCode {
     ALREADY_EXISTS_LIKE,
     NOT_FOUND_LIKE,
     INVALID_CLAIM_TYPE;
+    PRIVATE_SOLUTION;
 }
