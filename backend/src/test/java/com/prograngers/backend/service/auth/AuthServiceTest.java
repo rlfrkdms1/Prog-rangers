@@ -146,4 +146,28 @@ class AuthServiceTest {
             );
         }
     }
+
+    @Test
+    public void 일반_로그인(){
+        String email = "rlfrkdms@naver.com";
+        String password = "password";
+        String encodedPassword = "encodedPassword";
+        String expectedAccessToken = "expectedToken";
+        LoginRequest loginRequest = 길가은.로그인_요청_생성(email, password);
+        Member member = 길가은.일반_회원_생성(email, encodedPassword);
+        RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).build();
+        given(memberRepository.findByEmail(email)).willReturn(Optional.of(member));
+        given(jwtTokenProvider.createAccessToken(member.getId())).willReturn(expectedAccessToken);
+        given(refreshTokenRepository.save(any())).willReturn(refreshToken);
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            encryptMockedStatic.when(() -> Encrypt.encoding(password)).thenReturn(encodedPassword);
+            authService.login(loginRequest);
+            assertAll(
+                    () -> verify(memberRepository).findByEmail(email),
+                    () -> verify(jwtTokenProvider).createAccessToken(member.getId()),
+                    () -> verify(refreshTokenRepository).save(any())
+            );
+
+        }
+    }
 }
