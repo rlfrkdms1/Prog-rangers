@@ -51,6 +51,15 @@ public class AuthService {
         return issueToken(member.getId());
     }
 
+    private Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private void validPassword(String savedPassword, String inputPassword) {
+        if (!savedPassword.equals(Encrypt.encoding(inputPassword))) {
+            throw new IncorrectPasswordException();
+        }
+    }
 
     private AuthResult issueToken(Long memberId) {
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
@@ -80,15 +89,6 @@ public class AuthService {
         }
     }
 
-    private Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
-    }
-
-    public void validPassword(String savedPassword, String inputPassword) {
-        if (!savedPassword.equals(Encrypt.encoding(inputPassword))) {
-            throw new IncorrectPasswordException();
-        }
-    }
 
     @Transactional
     public AuthResult reissue(String refreshToken) {
