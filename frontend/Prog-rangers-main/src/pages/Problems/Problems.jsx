@@ -59,7 +59,7 @@ export const Problems = () => {
     const endIndex = startIndex + itemsPerPage;
     const currentQuestions = questions.slice(startIndex, endIndex);
     setQuestions(currentQuestions);
-  }, [page, Questions])
+  }, [page])
 
   return (
     <div 
