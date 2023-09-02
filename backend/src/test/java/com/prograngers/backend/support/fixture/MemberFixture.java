@@ -1,5 +1,6 @@
 package com.prograngers.backend.support.fixture;
 
+import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
@@ -45,5 +46,9 @@ public enum MemberFixture {
 
     public SignUpRequest 회원_가입_요청_생성(String email, String password) {
         return new SignUpRequest(password, email, this.nickname);
+    }
+
+    public LoginRequest 로그인_요청_생성(String email, String password) {
+        return new LoginRequest(email, password);
     }
 }

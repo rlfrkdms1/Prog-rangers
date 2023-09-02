@@ -1,7 +1,9 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.dto.request.auth.LoginRequest;
 import com.prograngers.backend.dto.request.auth.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
@@ -108,6 +110,19 @@ class AuthServiceTest {
                 () -> verify(jwtTokenProvider.createAccessToken(any())),
                 () -> verify(refreshTokenRepository.save(any()))
         */
+        );
+
+    }
+
+    @Test
+    public void 일반_로그인_이메일이_틀렸을_떄(){
+        String email = "rlfrkdms@naver.com";
+        String password = "rlfrkdms";
+        LoginRequest loginRequest = 길가은.로그인_요청_생성(email, password);
+        given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.login(loginRequest)).isExactlyInstanceOf(MemberNotFoundException.class),
+                () -> verify(memberRepository).findByEmail(email)
         );
 
     }
