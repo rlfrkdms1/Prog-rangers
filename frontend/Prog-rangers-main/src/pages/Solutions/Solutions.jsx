@@ -1,13 +1,22 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
-import {
-  MainBody
-} from './MainBody';
+import { MainBody } from '../Problems/MainBody';
 import { FilterBar } from '../../components/FilterBar';
-import { QuestionForm } from '../../components/Question';
+import { QSolving } from '../../components/Solving';
 import { Pagination } from '../../components/Pagination/Pagination';
-import questions from '../../db/question.json';
-import { Provider, atom, useAtom } from 'jotai';
+import solvings from '../../db/solving.json';
+import { atom, useAtom } from 'jotai';
+import{ 
+  fontSize24,
+  filterStyle,
+} from './SolutionsStyle';
+
+const LANGUAGE = [
+  {value: "ALL", name: "언어"},
+  {value: "PYTHON", name: "PYTHON"},
+  {value: "JAVA", name: "JAVA"},
+  {value: "C++", name: "C++"},
+]
 
 const ALGORITHMS = [
   { value: "ALL", name: "알고리즘" },
@@ -40,15 +49,16 @@ const LEVEL = [
   { value: "VIEWS", name: "조회순" }
 ];
 
-const questionAtom = atom(questions);
+const solvingAtom = atom(solvings);
 
-export const Problems = () => {
+export const Solutions = () => {
+
+  // 페이지네이션
   const [ page, setPage ] = useState(1);
-  const [ Questions, setQuestions ] = useAtom(questionAtom);
+  const [ Solvings, setSolvings ] = useAtom(solvingAtom);
   const itemsPerPage = 5;
-  // const LAST_PAGE = Questions.length % 5 === 0 ? parseInt(Questions.length / 5) : parseInt(Questions.length / 5) + 1;
-  const totalQuestions = questions.length;
-  const totalPages = Math.ceil(totalQuestions / itemsPerPage);
+  const totalSolvings = solvings.length;
+  const totalPages = Math.ceil(totalSolvings / itemsPerPage);
 
   const handlePageChange = (e, page) => {
     setPage(page);
@@ -57,47 +67,40 @@ export const Problems = () => {
   useEffect(() => {
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentQuestions = questions.slice(startIndex, endIndex);
-    setQuestions(currentQuestions);
+    const currentSolvings = solvings.slice(startIndex, endIndex);
+    setSolvings(currentSolvings);
   }, [page]);
-
-  return (
-    <div 
-      css={css`
-        display: flex; 
-        justify-content: center;
-    `}>    
-      <div
-        css={css`
+  
+  return( 
+    <div css={css`
+          display: flex; 
+          justify-content: center;
+          `}>
+      <div css={css`
           ${MainBody}
         `}>
-        <div 
-          css={css`
-            font-weight: 700;
-            font-size: 24px;
-            margin-left: 4px;
-          `}
-        >
+        <div css={css`${fontSize24}`}>
           원하는 조건으로 풀이를 찾아보세요
-        </div>
-        <div
-          css={css`
-            margin: 25px 0 0 4px;
-            height: 50px;
-            width: 742px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            z-index: 2;
-        `}>
-          <FilterBar options={ALGORITHMS}/>
-          <FilterBar options={DATASTRUCTURE}/>
-          <FilterBar options={LEVEL}/>
-        </div>
-        <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
-          <QuestionForm data={Questions}/>
-        </div>
-        <div css={css`
+          </div>
+          <div classname="filter"
+            css={css`${filterStyle}`}>
+                <FilterBar options={LANGUAGE}/>
+                <FilterBar options={ALGORITHMS}/>
+                <FilterBar options={DATASTRUCTURE}/>
+                <FilterBar options={LEVEL}/>
+          </div>
+
+          <div css={css`
+            ${fontSize24}
+            margin-top: 30px`}> 
+            쿼리의 모음 개수 
+          </div>    
+
+      <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
+          <QSolving data={Solvings}/>
+      </div>
+
+      <div css={css`
           margin-top: 110px; 
           height: 50px; 
           display: flex; 

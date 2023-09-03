@@ -11,6 +11,7 @@ export const SelectBox = css`
   flex-direction: row;
   width: 230px;
   border: 1px solid #959595;
+  box-shadow: 0px 8px 8px 0px rgba(100, 116, 139, 0.1);
   height: 50px;
 `;
 
@@ -24,7 +25,7 @@ export const Wrapper = (props) => css`
   border-radius: 0 0 25px 25px;
   border: 1px solid #959595;
   box-shadow: 0px 8px 8px 0px rgba(100, 116, 139, 0.1);
-  overflow: hidden;
+  overflow: scroll;
   overflow-y: auto;
   position: absolute;
   z-index: 2;
@@ -41,16 +42,22 @@ export const Wrapper = (props) => css`
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
+  
+  &::-webkit-scrollbar-corner{
+  background-color: transparent;
+  border-radius: 40px;
+}
 `;
 
 export const OptionBox = css`
+  box-sizing: border-box;
   font-size: 18px;
   color: #959595;
   width: 100%;
-  text-align: center;
-  margin-top: 8px;
-
+  margin-top: 13px;
+  padding-left: 30px;
   &:hover{
     cursor: pointer;
+    background-color: #f4f4f4;
   }
 `;
