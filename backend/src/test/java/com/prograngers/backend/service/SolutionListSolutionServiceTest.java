@@ -116,4 +116,21 @@ class SolutionListSolutionServiceTest {
             , () -> solutionService.findById(1L)
         );
     }
+
+    @DisplayName("내 풀이가 아닌 프라이빗 풀이를 조회하면 예외가 발생한다")
+    @Test
+    void 프라이빗_풀이_조회_예외_발생(){
+        // given
+        Member member1 = 장지담.기본_정보_생성();
+        Member member2 = 장지담.기본_정보_생성();
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
+
+        // when
+
+        // then
+
+
+    }
+
 }
