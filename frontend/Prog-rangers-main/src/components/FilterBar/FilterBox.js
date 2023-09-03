@@ -46,7 +46,7 @@ export const Wrapper = (props) => css`
   &::-webkit-scrollbar-corner{
   background-color: transparent;
   border-radius: 40px;
-}
+  }
 `;
 
 export const OptionBox = css`

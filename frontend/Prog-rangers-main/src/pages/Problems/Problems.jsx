@@ -82,7 +82,7 @@ export const Problems = () => {
         </div>
         <div
           css={css`
-            margin: 25px 0 0 4px;
+            margin-top: 25px;
             height: 50px;
             width: 742px;
             display: flex;
