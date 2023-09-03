@@ -8,6 +8,7 @@ import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -36,6 +37,8 @@ import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
+import static com.prograngers.backend.fixture.SolutionFixture.프라이빗_풀이;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -112,7 +115,7 @@ class SolutionListSolutionServiceTest {
     @Test
     void 없는_풀이_조회() {
         // then
-        org.junit.jupiter.api.Assertions.assertThrows(SolutionNotFoundException.class
+        assertThrows(SolutionNotFoundException.class
             , () -> solutionService.findById(1L)
         );
     }
@@ -121,16 +124,17 @@ class SolutionListSolutionServiceTest {
     @Test
     void 프라이빗_풀이_조회_예외_발생(){
         // given
-        Member member1 = 장지담.기본_정보_생성();
-        Member member2 = 장지담.기본_정보_생성();
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
+        Solution solution = 프라이빗_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
 
         // when
+        when(solutionRepository.findById(solution.getId())).thenReturn(Optional.ofNullable(solution));
+        when(memberRepository.findById(member2.getId())).thenReturn(Optional.ofNullable(member2));
 
         // then
-
-
+        assertThrows(PrivateSolutionException.class,()->solutionService.getSolutionDetail(solution.getId(),member2.getId()));
     }
 
 }
