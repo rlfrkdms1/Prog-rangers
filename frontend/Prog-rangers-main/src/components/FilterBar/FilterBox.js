@@ -42,11 +42,11 @@ export const Wrapper = (props) => css`
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
-
+  
   &::-webkit-scrollbar-corner{
-    background-color: transparent;
-    border-radius: 40px;
-  }
+  background-color: transparent;
+  border-radius: 40px;
+}
 `;
 
 export const OptionBox = css`
@@ -56,7 +56,6 @@ export const OptionBox = css`
   width: 100%;
   margin-top: 13px;
   padding-left: 30px;
-
   &:hover{
     cursor: pointer;
     background-color: #f4f4f4;
