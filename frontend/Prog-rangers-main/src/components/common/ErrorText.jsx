@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { theme } from '../../styles/theme';
+import { theme } from '../Header/theme';
 
 const StyledSmall = styled.small`
   color: ${theme.colors.red};

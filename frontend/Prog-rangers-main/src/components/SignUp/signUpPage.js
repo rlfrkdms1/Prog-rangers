@@ -79,16 +79,3 @@ export const submitButtonStyle = css`
   background-color: #3486a0;
   margin-top: 50px;
 `;
-
-export const confirmButtonStyle = css`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 100px;
-  height: 30px;
-  border-radius: 12px;
-  background: var(--main-opa-30, #c2dbe3);
-  color: #303030;
-  font-size: 14px;
-  font-weight: 400;
-`;
