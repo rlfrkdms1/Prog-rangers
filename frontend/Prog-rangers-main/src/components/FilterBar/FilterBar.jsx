@@ -42,7 +42,6 @@ export const FilterBar = ({options}) => {
             margin-left:30px;
             padding-top: 9px;
             width: 165px;
-            text-align: ${isClicked ? 'center' : 'left'};
             font-weight: ${isClicked ? 'bold' : 'normal'};
           `}
         >
@@ -57,17 +56,17 @@ export const FilterBar = ({options}) => {
       </div>  
       <div css={css`${Wrapper({isOpen})}`}>
         {options.map((item, index) => (
-            <div
-              css={css`
-                ${OptionBox}
-              `}
-              key={index}
-              data-value={item.value}
-              onClick={()=>handleSelect(item)}
-            >
-              {item.name}
-            </div> 
-          ))}
+          <div
+            css={css`
+              ${OptionBox}
+            `}
+            key={index}
+            data-value={item.value}
+            onClick={()=>handleSelect(item)}
+          >
+            {item.name}
+          </div> 
+        ))}
       </div>  
     </div>
   );
