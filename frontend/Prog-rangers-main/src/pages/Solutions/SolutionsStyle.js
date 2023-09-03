@@ -21,9 +21,9 @@ export const fontSize24 = css`
 
 
 export const filterStyle = css`
-  margin: 25px 0 0 4px;
+  margin: 25px 0 0 0;
   height: 50px;
-  width: 742px;
+  width: 998px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

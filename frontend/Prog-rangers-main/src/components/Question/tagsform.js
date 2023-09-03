@@ -13,7 +13,7 @@ export const tags = css`
   color: #303030;
   font-size: 16px;
   font-weight: 400;
-   
+  
   &:hover{
     cursor: pointer;
   }
@@ -25,4 +25,5 @@ export const ojNameTag = css`
   padding: 8px 20px;
   border-radius: 20px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
   `;

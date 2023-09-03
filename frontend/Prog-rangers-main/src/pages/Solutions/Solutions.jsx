@@ -92,7 +92,7 @@ export const Solutions = () => {
 
           <div css={css`
             ${fontSize24}
-            margin-top: 30px`}> 
+            margin-top: 53px`}> 
             쿼리의 모음 개수 
           </div>    
 

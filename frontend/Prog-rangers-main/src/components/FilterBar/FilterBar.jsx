@@ -55,18 +55,18 @@ export const FilterBar = ({options}) => {
         }
       </div>  
       <div css={css`${Wrapper({isOpen})}`}>
-        {options.map((item, index) => (
-          <div
-            css={css`
-              ${OptionBox}
-            `}
-            key={index}
-            data-value={item.value}
-            onClick={()=>handleSelect(item)}
-          >
-            {item.name}
-          </div> 
-        ))}
+          {options.map((item, index) => (
+              <div
+                css={css`
+                  ${OptionBox}
+                `}
+                key={index}
+                data-value={item.value}
+                onClick={()=>handleSelect(item)}
+              >
+                {item.name}
+              </div> 
+            ))}
       </div>  
     </div>
   );
