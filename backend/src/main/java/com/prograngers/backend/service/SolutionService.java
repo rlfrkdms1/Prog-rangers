@@ -128,14 +128,14 @@ public class SolutionService {
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
         boolean isMine = false;
-        if (!solution.isPublic()&&!isMine){
-            throw new PrivateSolutionException();
-        }
         if (memberId!=null){
             Member member = getMember(memberId);
             if (solution.getMember().getId().equals(member.getId())){
                 isMine = true;
             }
+        }
+        if (!solution.isPublic()&&!isMine){
+            throw new PrivateSolutionException();
         }
 
         log.info("target solution id : {}",solution.getId());
