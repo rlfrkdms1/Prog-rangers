@@ -35,12 +35,9 @@ const DATASTRUCTURE = [
 ];
 
 const LEVEL = [
-  { value: "ALL", name: "난이도"},
-  { value: "1", name: "1" },
-  { value: "2", name: "2" },
-  { value: "3", name: "3" },
-  { value: "4", name: "4" },
-  { value: "5", name: "5" }
+  { value: "LATEST", name: "최신순"},
+  { value: "LIKES", name: "관심순" },
+  { value: "VIEWS", name: "조회순" }
 ];
 
 const questionAtom = atom(questions);
@@ -62,7 +59,7 @@ export const Problems = () => {
     const endIndex = startIndex + itemsPerPage;
     const currentQuestions = questions.slice(startIndex, endIndex);
     setQuestions(currentQuestions);
-  }, [page, Questions])
+  }, [page]);
 
   return (
     <div 
