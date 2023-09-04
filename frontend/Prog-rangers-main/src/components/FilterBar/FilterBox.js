@@ -56,6 +56,7 @@ export const OptionBox = css`
   width: 100%;
   margin-top: 13px;
   padding-left: 30px;
+
   &:hover{
     cursor: pointer;
     background-color: #f4f4f4;
