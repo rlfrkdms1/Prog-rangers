@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
@@ -30,12 +31,14 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
-import static com.prograngers.backend.fixture.SolutionFixture.비공개_풀이;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,7 +78,7 @@ class SolutionListSolutionServiceTest {
                 thenReturn(Optional.ofNullable(solution)).
                 thenReturn(Optional.ofNullable(made));
 
-        solutionService.save(공개_풀이.풀이_생성_요청_생성(problem,solution), member.getId());
+        solutionService.save(SolutionPostRequest.from(solution), member.getId());
 
         // when
         Long scrapedId = solutionService.saveScrap(solution.getId(), request,member.getId());

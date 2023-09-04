@@ -6,7 +6,6 @@ import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
-import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,11 +28,11 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRA
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
-import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 
-import static com.prograngers.backend.fixture.SolutionFixture.비공개_풀이;
+import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

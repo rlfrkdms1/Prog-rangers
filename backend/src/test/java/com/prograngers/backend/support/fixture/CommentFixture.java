@@ -1,4 +1,4 @@
-package com.prograngers.backend.fixture;
+package com.prograngers.backend.support.fixture;
 
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.comment.CommentStatusConStant;

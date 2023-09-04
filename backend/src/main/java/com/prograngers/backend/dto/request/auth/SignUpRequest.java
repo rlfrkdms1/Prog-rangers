@@ -3,9 +3,11 @@ package com.prograngers.backend.dto.request.auth;
 import com.prograngers.backend.entity.member.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class SignUpRequest {
 
 
@@ -27,4 +29,6 @@ public class SignUpRequest {
                 .nickname(nickname)
                 .build();
     }
+
+
 }

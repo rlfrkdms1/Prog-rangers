@@ -24,9 +24,9 @@ import java.util.List;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

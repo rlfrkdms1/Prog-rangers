@@ -27,11 +27,12 @@ import static com.prograngers.backend.entity.comment.CommentStatusConStant.DELET
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.fixture.CommentFixture.삭제된_댓글;
-import static com.prograngers.backend.fixture.CommentFixture.생성된_댓글;
-import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
+import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
