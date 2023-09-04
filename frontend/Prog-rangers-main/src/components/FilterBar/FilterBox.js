@@ -54,7 +54,7 @@ export const OptionBox = css`
   font-size: 18px;
   color: #959595;
   width: 100%;
-  padding: 6px 0 6px 13px;
+  padding: 6px 0 6px 30px;
 
   &:hover{
     cursor: pointer;
