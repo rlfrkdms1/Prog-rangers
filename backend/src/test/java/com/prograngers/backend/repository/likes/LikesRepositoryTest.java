@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
@@ -55,10 +54,10 @@ class LikesRepositoryTest {
         Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
         Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
-        Likes like1 = 저장(Likes.builder().member(member).solution(solution1).build());
-        Likes like2 = 저장(Likes.builder().member(member).solution(solution1).build());
-        Likes like3 = 저장(Likes.builder().member(member).solution(solution2).build());
-        Likes like4 = 저장(Likes.builder().member(member).solution(solution2).build());
+        Likes like1 = 저장(createLike(member, solution1));
+        Likes like2 = 저장(createLike(member, solution1));
+        Likes like3 = 저장(createLike(member, solution2));
+        Likes like4 = 저장(createLike(member, solution2));
 
         // when
         List<Likes> allBySolution1 = likesRepository.findAllBySolution(solution1);
@@ -79,10 +78,10 @@ class LikesRepositoryTest {
         Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
         Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
-        Likes like1 = 저장(Likes.builder().member(member1).solution(solution1).build());
-        Likes like2 = 저장(Likes.builder().member(member2).solution(solution1).build());
-        Likes like3 = 저장(Likes.builder().member(member1).solution(solution2).build());
-        Likes like4 = 저장(Likes.builder().member(member2).solution(solution2).build());
+        Likes like1 = 저장(createLike(member1, solution1));
+        Likes like2 = 저장(createLike(member2, solution1));
+        Likes like3 = 저장(createLike(member1, solution2));
+        Likes like4 = 저장(createLike(member2, solution2));
 
         // when
         Likes byMemberAndSolution1 = likesRepository.findByMemberAndSolution(member1, solution1).get();
@@ -91,6 +90,10 @@ class LikesRepositoryTest {
         // then
         Assertions.assertThat(byMemberAndSolution1).isEqualTo(like1);
         Assertions.assertThat(byMemberAndSolution2).isEqualTo(like4);
+    }
+
+    private static Likes createLike(Member member2, Solution solution2) {
+        return Likes.builder().member(member2).solution(solution2).build();
     }
 
 
