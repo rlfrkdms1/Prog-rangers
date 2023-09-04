@@ -34,13 +34,13 @@ class FollowRepositoryTest {
         // given
         Member member1 = 저장(장지담.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
-        Follow follow1 = 저장(Follow.builder().member(member1).targetId(member2.getId()).build());
-        Follow follow2 = 저장(Follow.builder().member(member1).targetId(member2.getId()).build());
-        Follow follow3 = 저장(Follow.builder().member(member1).targetId(member2.getId()).build());
-        Follow follow4 = 저장(Follow.builder().member(member2).targetId(member1.getId()).build());
-        Follow follow5 = 저장(Follow.builder().member(member2).targetId(member1.getId()).build());
-        Follow follow6 = 저장(Follow.builder().member(member2).targetId(member1.getId()).build());
-        Follow follow7 = 저장(Follow.builder().member(member2).targetId(member1.getId()).build());
+        Follow follow1 = 저장(createFollow(member1, member2));
+        Follow follow2 = 저장(createFollow(member1, member2));
+        Follow follow3 = 저장(createFollow(member1, member2));
+        Follow follow4 = 저장(createFollow(member2, member1));
+        Follow follow5 = 저장(createFollow(member2, member1));
+        Follow follow6 = 저장(createFollow(member2, member1));
+        Follow follow7 = 저장(createFollow(member2, member1));
 
         // when
         Long follow = followRepository.getFollow(member1);
@@ -52,6 +52,9 @@ class FollowRepositoryTest {
 
     }
 
+    private static Follow createFollow(Member member1, Member member2) {
+        return Follow.builder().member(member1).targetId(member2.getId()).build();
+    }
 
 
     Member 저장(Member member) {
