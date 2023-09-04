@@ -40,7 +40,7 @@ public class Notification {
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
 
-    @Column(name = "id_read", nullable = false)
+    @Column(name = "is_read", nullable = false)
     private boolean isRead;
 
     @ManyToOne(fetch = FetchType.LAZY)
