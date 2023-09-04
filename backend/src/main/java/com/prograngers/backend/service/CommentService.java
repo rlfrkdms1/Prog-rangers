@@ -46,8 +46,8 @@ public class CommentService {
     @Transactional
     public void addComment(Long solutionId, CommentRequest commentRequest, Long memberId) {
 
-        Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Solution solution = findSolutionById(solutionId);
+        Member member = findMemberById(memberId);
 
         Comment comment = Comment.builder().
                 member(member).
@@ -60,14 +60,16 @@ public class CommentService {
 
         Comment saved = commentRepository.save(comment);
     }
+
+
+
     @Transactional
     public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest, Long memberId) {
         Comment comment = findById(commentId);
         Long targetMemberId = comment.getMember().getId();
 
 
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        log.info("targetMemberId = {} , member.getId = {}",targetMemberId,member.getId());
+        Member member = findMemberById(memberId);
         if (!targetMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }
@@ -84,7 +86,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId,Long memberId) {
         Comment comment = findById(commentId);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
         if (!targetCommentMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
@@ -94,5 +96,13 @@ public class CommentService {
         }
         comment.deleteComment();
         commentRepository.save(comment);
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Solution findSolutionById(Long solutionId) {
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 }
