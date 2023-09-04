@@ -1,5 +1,6 @@
 package com.prograngers.backend.fixture;
 
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
@@ -59,4 +60,12 @@ public enum SolutionFixture {
                 .scrapSolution(scrapSolution)
                 .build();
     }
+
+    public SolutionPostRequest 풀이_생성_요청_생성(Problem problem,Solution solution){
+        return new SolutionPostRequest(
+                problem.getTitle(),solution.getTitle(),problem.getLink(),solution.getLevel(),solution.getAlgorithm(),solution.getDataStructure(),
+                solution.getLanguage(),solution.isPublic(),solution.getDescription(),solution.getCode()
+        );
+    }
+
 }

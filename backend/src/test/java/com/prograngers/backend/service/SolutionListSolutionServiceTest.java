@@ -2,12 +2,9 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.entity.solution.AlgorithmConstant;
-import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.comment.CommentRepository;
@@ -27,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.prograngers.backend.entity.solution.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
@@ -40,8 +36,6 @@ import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.fixture.SolutionFixture.비공개_풀이;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,11 +69,13 @@ class SolutionListSolutionServiceTest {
 
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
         when(solutionRepository.save(any())).thenReturn(solution).thenReturn(made);
+        when(problemRepository.findByLink(any())).thenReturn(null);
+        when(problemRepository.save(any())).thenReturn(problem);
         when(solutionRepository.findById(any())).
                 thenReturn(Optional.ofNullable(solution)).
                 thenReturn(Optional.ofNullable(made));
 
-        solutionService.save(SolutionPostRequest.from(solution), member.getId());
+        solutionService.save(공개_풀이.풀이_생성_요청_생성(problem,solution), member.getId());
 
         // when
         Long scrapedId = solutionService.saveScrap(solution.getId(), request,member.getId());
