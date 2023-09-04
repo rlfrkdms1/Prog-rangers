@@ -10,7 +10,6 @@ import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +31,8 @@ import static com.prograngers.backend.support.fixture.CommentFixture.생성된_�
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
-import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -77,7 +77,7 @@ class CommentServiceTest {
         List<Comment> bySolution = commentService.findBySolution(solution);
 
         // then
-        Assertions.assertThat(bySolution.size()).isEqualTo(2);
+        assertThat(bySolution.size()).isEqualTo(2);
     }
 
     @DisplayName("댓글 아이디로 댓글을 찾을 수 있다")
@@ -102,7 +102,7 @@ class CommentServiceTest {
         Comment found = commentService.findById(1L);
 
         // then
-        Assertions.assertThat(found).isEqualTo(saved);
+        assertThat(found).isEqualTo(saved);
     }
 
 
@@ -127,7 +127,7 @@ class CommentServiceTest {
         Comment updated = commentRepository.findById(comment.getId()).orElse(null);
 
         // then
-        Assertions.assertThat(updated.getContent()).isEqualTo("수정내용");
+        assertThat(updated.getContent()).isEqualTo("수정내용");
 
     }
 
@@ -158,16 +158,18 @@ class CommentServiceTest {
         commentService.deleteComment(comment.getId(),member.getId());
 
         // then
-        verify(commentRepository,times(2)).save(comment);
         Comment found = commentRepository.findById(deleted.getId()).orElse(null);
-        Assertions.assertThat(found.getStatus()).isEqualTo(DELETED);
+        assertAll(
+                ()->verify(commentRepository,times(2)).save(comment),
+                ()-> assertThat(found.getStatus()).isEqualTo(DELETED)
+        );
 
     }
 
     @DisplayName("없는 댓글을 조회할 경우 예외 발생")
     @Test
     void 없는_댓글_조회() {
-        org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
+        assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
     }
 
     Member 저장(Member member) {

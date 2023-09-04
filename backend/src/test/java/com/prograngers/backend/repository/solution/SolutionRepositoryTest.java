@@ -7,7 +7,6 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,7 @@ import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀
 
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
@@ -72,8 +72,10 @@ class SolutionRepositoryTest {
         List<Solution> result = solutionRepository.findAllByMember(member1);
 
         // then
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result).contains(solution1,solution2).doesNotContain(solution3);
+        assertAll(
+                ()-> assertThat(result.size()).isEqualTo(2),
+                ()->assertThat(result).contains(solution1,solution2).doesNotContain(solution3)
+        );
     }
 
     @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -98,10 +100,12 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem2.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        assertThat(result1).contains(solution1);
-        assertThat(result1).doesNotContain(solution2);
-        assertThat(result2).contains(solution2);
-        assertThat(result2).doesNotContain(solution1);
+        assertAll(
+                ()-> assertThat(result1).contains(solution1),
+                ()-> assertThat(result1).doesNotContain(solution2),
+                ()-> assertThat(result2).contains(solution2),
+                ()->assertThat(result2).doesNotContain(solution1)
+        );
     }
 
     @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -130,9 +134,11 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, NEWEST).getContent();
 
         // then
-        assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
-        assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4);
-        assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4);
+        assertAll(
+                ()-> assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4),
+                ()->assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4),
+                ()-> assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4)
+        );
     }
 
     @DisplayName("언어로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -159,9 +165,11 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), PYTHON, null, null, NEWEST).getContent();
 
         // then
-        assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4);
-        assertThat(result2).contains(solution3).doesNotContain(solution1, solution2, solution4);
-        assertThat(result3).contains(solution4).doesNotContain(solution1, solution2, solution3);
+        assertAll(
+                ()->assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4),
+                ()-> assertThat(result2).contains(solution3).doesNotContain(solution1, solution2, solution4),
+                ()->assertThat(result3).contains(solution4).doesNotContain(solution1, solution2, solution3)
+        );
     }
 
     @DisplayName("페이지에 맞게 문제 목록을 조회할 수 있다")
@@ -193,8 +201,7 @@ class SolutionRepositoryTest {
         List<Solution> result4 = solutionRepository.getSolutionList(PageRequest.of(3, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        org.junit.jupiter.api.Assertions
-                        .assertAll(
+        assertAll(
                                 ()-> assertThat(result1)
                                         .containsExactly(solution9,solution8,solution7,solution6)
                                         .doesNotContain(solution1,solution2,solution3,solution4,solution5),
@@ -247,9 +254,11 @@ class SolutionRepositoryTest {
                 .getContent();
 
         // then
-        Assertions.assertThat(result1).containsExactly(solution3,solution2,solution1,solution9);
-        Assertions.assertThat(result2).containsExactly(solution8,solution7,solution6,solution5);
-        Assertions.assertThat(result3).containsExactly(solution4);
+        assertAll(
+                ()->assertThat(result1).containsExactly(solution3,solution2,solution1,solution9),
+                ()-> assertThat(result2).containsExactly(solution8,solution7,solution6,solution5),
+                ()->assertThat(result3).containsExactly(solution4)
+        );
     }
 
     @DisplayName("프로필 풀이 찾을 수 있다 (무한스크롤)")
@@ -275,8 +284,10 @@ class SolutionRepositoryTest {
         List<Solution> profileSolutions2 = solutionRepository.findProfileSolutions(member1.getId(), solution3.getId());
 
         // then
-        Assertions.assertThat(profileSolutions1).contains(solution4,solution5,solution6).doesNotContain(solution1,solution2,solution3);
-        Assertions.assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6);
+        assertAll(
+                ()->assertThat(profileSolutions1).contains(solution4,solution5,solution6).doesNotContain(solution1,solution2,solution3),
+                ()->assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6)
+        );
     }
 
     @DisplayName("풀이 목록 조회 시 공개 풀이만 보인다")
@@ -298,7 +309,7 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result).contains(solution1).doesNotContain(solution2);
+        assertThat(result).contains(solution1).doesNotContain(solution2);
     }
 
     Member 저장(Member member) {

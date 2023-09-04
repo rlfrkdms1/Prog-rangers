@@ -7,7 +7,6 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import java.util.List;
 
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.solution.LanguageConstant.CPP;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.entity.constants.SortConstant.*;
@@ -29,6 +29,8 @@ import static com.prograngers.backend.entity.solution.LanguageConstant.PYTHON;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -74,9 +76,11 @@ class ProblemListProblemRepositoryTest {
         ).getContent();
 
         // then // 현재 id에 의해 정렬함
-        Assertions.assertThat(result.get(0).getId()).isEqualTo(problem3.getId());
-        Assertions.assertThat(result.get(1).getId()).isEqualTo(problem2.getId());
-        Assertions.assertThat(result.get(2).getId()).isEqualTo(problem1.getId());
+        assertAll(
+                ()->assertThat(result.get(0).getId()).isEqualTo(problem3.getId()),
+                ()-> assertThat(result.get(1).getId()).isEqualTo(problem2.getId()),
+                ()->assertThat(result.get(2).getId()).isEqualTo(problem1.getId())
+        );
     }
 
     @DisplayName("문제 목록 조회 시 풀이의 알고리즘, 자료구조 필터에 따라 조회한다")
@@ -111,12 +115,15 @@ class ProblemListProblemRepositoryTest {
         ).getContent();
 
         // then
-        Assertions.assertThat(result1).contains(problem1, problem3);
-        Assertions.assertThat(result1).doesNotContain(problem2, problem4);
-        Assertions.assertThat(result2).contains(problem2, problem4);
-        Assertions.assertThat(result2).doesNotContain(problem1, problem3);
-        Assertions.assertThat(result3).contains(problem1);
-        Assertions.assertThat(result3).doesNotContain(problem2, problem3, problem4);
+
+        assertAll(
+                ()->assertThat(result1).contains(problem1, problem3),
+                ()->assertThat(result1).doesNotContain(problem2, problem4),
+                ()-> assertThat(result2).contains(problem2, problem4),
+                ()->assertThat(result2).doesNotContain(problem1, problem3),
+                ()->assertThat(result3).contains(problem1),
+                ()->assertThat(result3).doesNotContain(problem2, problem3, problem4)
+        );
     }
 
     @DisplayName("문제 목록 조회 시 페이지에 맞는 문제를 가져온다")
@@ -154,10 +161,11 @@ class ProblemListProblemRepositoryTest {
         List<Problem> result3 = problemRepository.findAll(PageRequest.of(2, 4), null, null, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result1).contains(problem9, problem8, problem7, problem6).doesNotContain(problem1, problem2, problem3, problem4, problem5);
-        Assertions.assertThat(result2).contains(problem2, problem3, problem4, problem5).doesNotContain(problem1, problem6, problem7, problem8, problem9);
-        Assertions.assertThat(result3).contains(problem1)
-                .doesNotContain(problem2, problem3, problem4, problem5, problem6, problem7, problem8, problem9);
+        assertAll(
+                ()->assertThat(result1).contains(problem9, problem8, problem7, problem6).doesNotContain(problem1, problem2, problem3, problem4, problem5),
+                ()->assertThat(result2).contains(problem2, problem3, problem4, problem5).doesNotContain(problem1, problem6, problem7, problem8, problem9),
+                ()->assertThat(result3).contains(problem1).doesNotContain(problem2, problem3, problem4, problem5, problem6, problem7, problem8, problem9)
+        );
     }
 
     Member 저장(Member member) {
