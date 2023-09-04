@@ -2,39 +2,46 @@ import { css } from '@emotion/react';
 
 const positionA = css`
   position: absolute;
+  width: 120px;
+  height: 120px;
 `;
 
 export const penPosition = css`
   ${positionA}
-  top: 260px;
-  left: 100px;
+  top: 190px;
+  left: 150px;
 `;
 
 export const folderPosition = css`
   ${positionA}
-  bottom: 330px;
-  right: 130px;
+  bottom: 230px;
+  right: 180px;
 `;
 
 export const notePosition = css`
   ${positionA}
-  top: 43vh;
-  left: -10px;
+  top: 37vh;
+  left: 50px;
 `;
 
 export const commentsPosition = css`
   ${positionA}
-  bottom: 31vh;
+  bottom: 25vh;
+  left: 30px;
 `;
 
 export const chatPosition = css`
   ${positionA}
-  top: 80px;
-  right: 210px;
+  width: 100px;
+  height: 100px;
+  top: 100px;
+  right: 270px;
 `;
 
 export const bookPosition = css`
   ${positionA}
+  width: 100px;
+  height: 100px;
   top: 215px;
-  left: 210px;
+  left: 250px;
 `;

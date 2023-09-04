@@ -4,6 +4,9 @@ import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 import ErrorText from '../common/ErrorText';
 import { inputStyle } from '../SignUp/signUpPage';
+import { signIn } from '../../apis/signin';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const StyledButton = styled.button`
   width: 600px;
@@ -21,16 +24,26 @@ const formStyle = css`
   display: flex;
   flex-direction: column;
 `;
-
 export const DefaultSignInForm = () =>  {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
+  const navigate = useNavigate()
+  const {setAccessToken} = useAuth()
 
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+
+  const onSubmit = async ({email,password}) => {
+    try {
+      const newAccessToken = await signIn({email,password})
+      alert(JSON.stringify(`로그인 성공! accessToken : ${newAccessToken}`));
+      setAccessToken(newAccessToken)
+      navigate('/')
+    } catch (error) {
+      console.error(error)
+      alert(error.response.data.description)
+    }
   };
 
   return (

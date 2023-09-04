@@ -2,6 +2,7 @@ package com.prograngers.backend.entity.member;
 
 import com.prograngers.backend.support.Encrypt;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,6 +31,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberType type;
 
+    @Column(nullable = false)
     private String nickname;
 
     private String email;
