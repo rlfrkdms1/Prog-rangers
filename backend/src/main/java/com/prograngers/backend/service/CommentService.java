@@ -49,14 +49,7 @@ public class CommentService {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
 
-        Comment comment = Comment.builder().
-                member(member).
-                solution(solution).
-                mention(commentRequest.getMention()).
-                content(commentRequest.getContent()).
-                createdDate(LocalDateTime.now()).parentId(commentRequest.getParentId())
-                .status(CREATED)
-                .build();
+        Comment comment = commentRequest.toComment(member,solution);
 
         Comment saved = commentRepository.save(comment);
     }

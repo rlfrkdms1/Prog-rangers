@@ -1,5 +1,6 @@
 package com.prograngers.backend.support.fixture;
 
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
@@ -16,8 +17,8 @@ import static com.prograngers.backend.entity.solution.Solution.*;
 @AllArgsConstructor
 public enum SolutionFixture {
 
-    퍼블릭_풀이("풀이제목",true,"풀이코드","풀이설명"),
-    프라이빗_풀이("풀이제목",false,"풀이코드","풀이설명");
+    공개_풀이("풀이제목",true,"풀이코드","풀이설명"),
+    비공개_풀이("풀이제목",false,"풀이코드","풀이설명");
     private final String title;
     private final boolean isPublic;
     private final String code;
@@ -59,4 +60,12 @@ public enum SolutionFixture {
                 .scrapSolution(scrapSolution)
                 .build();
     }
+
+    public SolutionPostRequest 풀이_생성_요청_생성(Problem problem,Solution solution){
+        return new SolutionPostRequest(
+                problem.getTitle(),solution.getTitle(),problem.getLink(),solution.getLevel(),solution.getAlgorithm(),solution.getDataStructure(),
+                solution.getLanguage(),solution.isPublic(),solution.getDescription(),solution.getCode()
+        );
+    }
+
 }
