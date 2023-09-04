@@ -26,7 +26,7 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
+import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -51,8 +51,8 @@ class LikesRepositoryTest {
         // given
         Member member = 저장(장지담.기본_정보_생성());
         Problem problem = 저장(백준_문제.기본_정보_생성());
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
         Likes like1 = 저장(createLike(member, solution1));
         Likes like2 = 저장(createLike(member, solution1));
@@ -75,8 +75,8 @@ class LikesRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
         Problem problem = 저장(백준_문제.기본_정보_생성());
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
         Likes like1 = 저장(createLike(member1, solution1));
         Likes like2 = 저장(createLike(member2, solution1));

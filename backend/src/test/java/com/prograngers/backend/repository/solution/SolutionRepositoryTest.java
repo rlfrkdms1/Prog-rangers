@@ -31,9 +31,9 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEU
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
 import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
+import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
 
-import static com.prograngers.backend.fixture.SolutionFixture.프라이빗_풀이;
+import static com.prograngers.backend.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -61,9 +61,9 @@ class SolutionRepositoryTest {
         Member member2 = 저장(장지담.기본_정보_생성());
         Problem problem = 백준_문제.기본_정보_생성();
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
-        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem,member2,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem,member2,LocalDateTime.now(),BFS, LIST,JAVA,1));
 
         solutionRepository.save(solution1);
         solutionRepository.save(solution2);
@@ -89,8 +89,8 @@ class SolutionRepositoryTest {
 
 
         // 풀이
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem2,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem2,member1,LocalDateTime.now(),BFS, LIST,JAVA,1));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -116,10 +116,10 @@ class SolutionRepositoryTest {
         Problem problem1 = 백준_문제.기본_정보_생성();
 
         // 풀이
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,JAVA,1));
-        Solution solution4 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,JAVA,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,JAVA,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,JAVA,1));
 
 
         // when
@@ -146,10 +146,10 @@ class SolutionRepositoryTest {
         Problem problem1 = 백준_문제.기본_정보_생성();
 
         // 풀이
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,PYTHON,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,CPP,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,PYTHON,1));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -177,15 +177,15 @@ class SolutionRepositoryTest {
 
         // 풀이 : solution9 ~ 1 순서로 최신
         // 풀이
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1));
-        Solution solution5 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(4),BFS, QUEUE,JAVA,1));
-        Solution solution6 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS, QUEUE,JAVA,1));
-        Solution solution7 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(6),BFS, ARRAY,CPP,1));
-        Solution solution8 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(7),DFS, ARRAY,PYTHON,1));
-        Solution solution9 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(8),DFS, ARRAY,PYTHON,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(4),BFS, QUEUE,JAVA,1));
+        Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS, QUEUE,JAVA,1));
+        Solution solution7 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(6),BFS, ARRAY,CPP,1));
+        Solution solution8 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(7),DFS, ARRAY,PYTHON,1));
+        Solution solution9 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(8),DFS, ARRAY,PYTHON,1));
 
         // when
         List<Solution> result1 = solutionRepository.getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
@@ -226,15 +226,15 @@ class SolutionRepositoryTest {
          *  solution 1 : 스크랩 한 풀이 1개
          *  스크랩 수가 같으면 날짜수느로 정렬 (solution 9~4 순서)
          */
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(퍼블릭_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1,solution1));
-        Solution solution5 = 저장(퍼블릭_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(4),BFS, QUEUE,JAVA,1,solution2));
-        Solution solution6 = 저장(퍼블릭_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS, QUEUE,JAVA,1,solution2));
-        Solution solution7 = 저장(퍼블릭_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(6),BFS, ARRAY,CPP,1,solution3));
-        Solution solution8 = 저장(퍼블릭_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(7),DFS, ARRAY,PYTHON,1,solution3));
-        Solution solution9 = 저장(퍼블릭_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(8),DFS, ARRAY,PYTHON,1,solution3));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
+        Solution solution4 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1,solution1));
+        Solution solution5 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(4),BFS, QUEUE,JAVA,1,solution2));
+        Solution solution6 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS, QUEUE,JAVA,1,solution2));
+        Solution solution7 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(6),BFS, ARRAY,CPP,1,solution3));
+        Solution solution8 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(7),DFS, ARRAY,PYTHON,1,solution3));
+        Solution solution9 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(8),DFS, ARRAY,PYTHON,1,solution3));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -264,12 +264,12 @@ class SolutionRepositoryTest {
         Problem problem1 = 저장(백준_문제.기본_정보_생성());
 
         //풀이
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
-        Solution solution2 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS,LIST,JAVA,1));
-        Solution solution3 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),DFS,LIST,JAVA,1));
-        Solution solution4 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS,LIST,JAVA,1));
-        Solution solution5 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(4),DFS,LIST,JAVA,1));
-        Solution solution6 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS,LIST,JAVA,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS,LIST,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),DFS,LIST,JAVA,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS,LIST,JAVA,1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(4),DFS,LIST,JAVA,1));
+        Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS,LIST,JAVA,1));
 
         // when
         List<Solution> profileSolutions1 = solutionRepository.findProfileSolutions(member1.getId(), 9223372036854775807L);
@@ -280,9 +280,9 @@ class SolutionRepositoryTest {
         Assertions.assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6);
     }
 
-    @DisplayName("풀이 목록 조회 시 퍼블릭 풀이만 보인다")
+    @DisplayName("풀이 목록 조회 시 공개 풀이만 보인다")
     @Test
-    void 퍼블릭_풀이만_보인다(){
+    void 공개_풀이만_보인다(){
         // given
         // 회원
         Member member1 = 저장(장지담.기본_정보_생성());
@@ -291,8 +291,8 @@ class SolutionRepositoryTest {
         Problem problem1 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이
-        Solution solution1 = 저장(퍼블릭_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
-        Solution solution2 = 저장(프라이빗_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
+        Solution solution2 = 저장(비공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS,LIST,JAVA,1));
 
         // when
         List<Solution> result = solutionRepository

@@ -36,8 +36,8 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEU
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
-import static com.prograngers.backend.fixture.SolutionFixture.프라이빗_풀이;
+import static com.prograngers.backend.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.fixture.SolutionFixture.비공개_풀이;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -68,7 +68,7 @@ class SolutionListSolutionServiceTest {
         // given
         Member member = 장지담.기본_정보_생성();
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),DFS,LIST,JAVA,1);
+        Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),DFS,LIST,JAVA,1);
 
         ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", 5);
         Solution made = request.toSolution(solution);
@@ -94,8 +94,8 @@ class SolutionListSolutionServiceTest {
         // given
         Member member = 장지담.기본_정보_생성();
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
-        Solution updateExpected = 퍼블릭_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),DFS, QUEUE,JAVA,1);
+        Solution solution = 공개_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
+        Solution updateExpected = 공개_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),DFS, QUEUE,JAVA,1);
 
         when(solutionRepository.save(any())).thenReturn(solution).thenReturn(updateExpected);
         when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(updateExpected));
@@ -120,14 +120,14 @@ class SolutionListSolutionServiceTest {
         );
     }
 
-    @DisplayName("내 풀이가 아닌 프라이빗 풀이를 조회하면 예외가 발생한다")
+    @DisplayName("내 풀이가 아닌 비공개 풀이를 조회하면 예외가 발생한다")
     @Test
-    void 프라이빗_풀이_조회_예외_발생(){
+    void 비공개_풀이_조회_예외_발생(){
         // given
         Member member1 = 장지담.아이디_지정_생성(1L);
         Member member2 = 장지담.아이디_지정_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 프라이빗_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
+        Solution solution = 비공개_풀이.기본_정보_생성(problem,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
 
         // when
         when(solutionRepository.findById(solution.getId())).thenReturn(Optional.ofNullable(solution));
