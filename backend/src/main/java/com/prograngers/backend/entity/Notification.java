@@ -37,8 +37,8 @@ public class Notification {
     @Column(name = "type", nullable = false)
     private NotificationType type;
     @CreatedDate
-    @Column(name = "create_at", nullable = false, updatable = false)
-    private LocalDateTime createAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "is_read", nullable = false)
     private boolean isRead;
