@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -43,13 +45,14 @@ class FollowRepositoryTest {
         Follow member2FollowMember1_4 = 저장(createFollow(member2, member1));
 
         // when
-        Long follow = followRepository.getFollow(member1);
-        Long following = followRepository.getFollowing(member1);
+        Long follow = followRepository.getFollowCount(member1);
+        Long following = followRepository.getFollowingCount(member1);
 
         // then
-        Assertions.assertThat(follow).isEqualTo(3L);
-        Assertions.assertThat(following).isEqualTo(4L);
-
+        assertAll(
+                ()->assertThat(follow).isEqualTo(3L),
+                ()->assertThat(following).isEqualTo(4L)
+        );
     }
 
     private static Follow createFollow(Member member1, Member member2) {
