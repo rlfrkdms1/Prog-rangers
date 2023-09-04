@@ -29,9 +29,9 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRA
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
-import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.퍼블릭_풀이;
 
 import static org.assertj.core.api.Assertions.*;
 

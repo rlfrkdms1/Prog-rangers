@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
-import { labelStyle, formStyle, inputStyle,submitButtonStyle,
-    inputContainerStyle, } from './signUpPage';
+import { 
+  labelStyle, 
+  formStyle, 
+  inputStyle,
+  submitButtonStyle,
+  inputContainerStyle,
+} from './signUpPage';
 import { theme } from '../Header/theme';
 import styled from '@emotion/styled';
 import ErrorText from '../common/ErrorText';

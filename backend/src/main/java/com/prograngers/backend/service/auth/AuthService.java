@@ -51,29 +51,36 @@ public class AuthService {
         return issueToken(member.getId());
     }
 
+    private Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private void validPassword(String savedPassword, String inputPassword) {
+        if (!savedPassword.equals(Encrypt.encoding(inputPassword))) {
+            throw new IncorrectPasswordException();
+        }
+    }
 
     private AuthResult issueToken(Long memberId) {
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
         //refresh token 발급, 저장, 쿠키 생성
-        RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder().memberId(memberId).refreshToken(UUID.randomUUID().toString()).build());
+        RefreshToken refreshToken = refreshTokenRepository.save(createRefreshToken(memberId));
         return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
+    }
+
+    private RefreshToken createRefreshToken(Long memberId) {
+        return RefreshToken.builder().memberId(memberId).refreshToken(UUID.randomUUID().toString()).build();
     }
 
     @Transactional
     public AuthResult signUp(SignUpRequest signUpRequest) {
         validExistMember(signUpRequest);
-        validExistNickname(signUpRequest.getNickname());
+        validNicknameDuplication(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
         member.encodePassword(member.getPassword());
         memberRepository.save(member);
         //access token 발급
         return issueToken(member.getId());
-    }
-
-    private void validExistNickname(String nickname) {
-        if(memberRepository.findByNickname(nickname).isPresent()){
-            throw new AlreadyExistNicknameException();
-        }
     }
 
     private void validExistMember(SignUpRequest signUpRequest) {
@@ -82,15 +89,6 @@ public class AuthService {
         }
     }
 
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
-    }
-
-    public void validPassword(String savedPassword, String inputPassword) {
-        if (!Encrypt.decoding(savedPassword).equals(inputPassword)) {
-            throw new IncorrectPasswordException();
-        }
-    }
 
     @Transactional
     public AuthResult reissue(String refreshToken) {
@@ -149,7 +147,7 @@ public class AuthService {
         return memberRepository.findByNickname(nickname).isPresent();
     }
 
-    public void checkNicknameDuplication(String nickname) {
+    public void validNicknameDuplication(String nickname) {
         if (isDuplicateNickname(nickname)) {
             throw new AlreadyExistNicknameException();
         }
