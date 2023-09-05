@@ -235,12 +235,12 @@ class SolutionRepositoryTest {
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
         Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
         Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1,solution1));
-        Solution solution5 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(4),BFS, QUEUE,JAVA,1,solution2));
-        Solution solution6 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS, QUEUE,JAVA,1,solution2));
-        Solution solution7 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(6),BFS, ARRAY,CPP,1,solution3));
-        Solution solution8 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(7),DFS, ARRAY,PYTHON,1,solution3));
-        Solution solution9 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(8),DFS, ARRAY,PYTHON,1,solution3));
+        Solution solution4 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(3),1,solution1));
+        Solution solution5 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(4),1,solution2));
+        Solution solution6 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(5),1,solution2));
+        Solution solution7 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(6),1,solution3));
+        Solution solution8 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(7),1,solution3));
+        Solution solution9 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(8),1,solution3));
 
         // when
         List<Solution> result1 = solutionRepository

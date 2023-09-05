@@ -46,16 +46,14 @@ public enum SolutionFixture {
                 .build();
     }
 
-    public Solution 스크랩_생성(Problem problem, Member member, LocalDateTime createdDate,
-                              AlgorithmConstant algorithm, DataStructureConstant dataStructure,
-                              LanguageConstant language, Integer level, Solution scrapSolution){
+    public Solution 스크랩_생성(Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
         return 기본_정보_빌더_생성()
-                .problem(problem)
+                .problem(scrapSolution.getProblem())
                 .member(member)
                 .createdDate(createdDate)
-                .algorithm(algorithm)
-                .dataStructure(dataStructure)
-                .language(language)
+                .algorithm(scrapSolution.getAlgorithm())
+                .dataStructure(scrapSolution.getDataStructure())
+                .language(scrapSolution.getLanguage())
                 .level(level)
                 .scrapSolution(scrapSolution)
                 .build();
