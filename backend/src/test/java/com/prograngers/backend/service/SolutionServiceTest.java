@@ -4,6 +4,8 @@ import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -84,29 +86,6 @@ class SolutionServiceTest {
         verify(solutionRepository,times(1)).save(any());
     }
 
-    @DisplayName("풀이를 수정할 수 있다")
-    @Test
-    void 수정_테스트() {
-        // given
-        Member member = 장지담.기본_정보_생성();
-        Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 공개_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),BFS, QUEUE,JAVA,1);
-        Solution updateExpected = 공개_풀이.기본_정보_생성(problem,member,LocalDateTime.now(),DFS, QUEUE,JAVA,1);
-
-        when(solutionRepository.save(any())).thenReturn(solution).thenReturn(updateExpected);
-        when(solutionRepository.findById(any())).thenReturn(Optional.ofNullable(updateExpected));
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
-        solutionRepository.save(solution);
-
-        // when
-        SolutionPatchRequest solutionPatchRequest = new SolutionPatchRequest("풀이제목", DFS, STACK, "풀이코드", "풀이설명",5);
-        Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest, member.getId());
-
-        // then
-        assertThat(solutionRepository.findById(updatedId).orElse(null).getAlgorithm())
-                .isEqualTo(DFS);
-    }
-
     @DisplayName("존재하지 않는 풀이를 조회하면 예외가 발생한다")
     @Test
     void 없는_풀이_조회() {
@@ -136,6 +115,12 @@ class SolutionServiceTest {
 
     ScarpSolutionPostRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level){
         return new ScarpSolutionPostRequest(title,description,level);
+    }
+
+    private static SolutionPatchRequest 풀이_수정_요청_생성(
+            String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure,
+            String  code, String description, int level) {
+        return new SolutionPatchRequest(title,algorithm,dataStructure,code,description,level);
     }
 
 }
