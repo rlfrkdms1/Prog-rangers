@@ -2,7 +2,6 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
@@ -13,7 +12,6 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,13 +33,16 @@ import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-class SolutionListSolutionServiceTest {
+class SolutionServiceTest {
 
     @Mock
     private SolutionRepository solutionRepository;
@@ -61,28 +62,26 @@ class SolutionListSolutionServiceTest {
     @Test
     void 스크랩_저장_테스트() {
         // given
-        Member member = 장지담.기본_정보_생성();
+        Member member = 장지담.아이디_지정_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),DFS,LIST,JAVA,1);
+        // 스크랩 당할 풀이 scrapTarget
+        Solution scrapTarget = 공개_풀이.아이디_지정_생성(1L,problem,member, LocalDateTime.now(),DFS,LIST,JAVA,1);
 
-        ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", 5);
-        Solution made = request.toSolution(solution);
+        // 스크랩 요청 생성
+        ScarpSolutionPostRequest request = 스크랩_풀이_생성_요청_생성("풀이제목","풀이설명", 5);
 
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
-        when(solutionRepository.save(any())).thenReturn(solution).thenReturn(made);
-        when(problemRepository.findByLink(any())).thenReturn(null);
-        when(problemRepository.save(any())).thenReturn(problem);
-        when(solutionRepository.findById(any())).
-                thenReturn(Optional.ofNullable(solution)).
-                thenReturn(Optional.ofNullable(made));
+        // 스크랩의 결과로 만들어져야 하는 풀이
+        Solution scrapResult = request.toSolution(scrapTarget, member);
 
-        solutionService.save(SolutionPostRequest.from(solution), member.getId());
+        when(solutionRepository.findById(any())).thenReturn(Optional.of(scrapTarget));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
+        when(solutionRepository.save(any())).thenReturn(Optional.of(scrapResult).get());
 
         // when
-        Long scrapedId = solutionService.saveScrap(solution.getId(), request,member.getId());
+        solutionService.saveScrap(scrapTarget.getId(), request, member.getId());
 
         // then
-        Assertions.assertThat(solutionService.findById(scrapedId).getTitle()).isEqualTo("스크랩풀이");
+        verify(solutionRepository,times(1)).save(any());
     }
 
     @DisplayName("풀이를 수정할 수 있다")
@@ -104,7 +103,7 @@ class SolutionListSolutionServiceTest {
         Long updatedId = solutionService.update(solution.getId(), solutionPatchRequest, member.getId());
 
         // then
-        Assertions.assertThat(solutionRepository.findById(updatedId).orElse(null).getAlgorithm())
+        assertThat(solutionRepository.findById(updatedId).orElse(null).getAlgorithm())
                 .isEqualTo(DFS);
     }
 
@@ -132,6 +131,11 @@ class SolutionListSolutionServiceTest {
 
         // then
         assertThrows(PrivateSolutionException.class,()->solutionService.getSolutionDetail(solution.getId(),member2.getId()));
+    }
+
+
+    ScarpSolutionPostRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level){
+        return new ScarpSolutionPostRequest(title,description,level);
     }
 
 }
