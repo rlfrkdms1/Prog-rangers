@@ -3,9 +3,9 @@ import {
   pageStyle,
   innerPageStyle,
   headingStyle,
-} from '../components/SignUp/signUpPage';
-import { DefaultSignInForm } from '../components/SignIn/DefaultSignInForm';
-import { SocialLoginButtons } from '../components/SignUp/SocialLoginButtons';
+} from '../../components/SignUp/signUpPage';
+import { DefaultSignInForm } from '../../components/SignIn/DefaultSignInForm';
+import { SocialLoginButtons, ForSignUp } from '../../components/SignUp';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
@@ -15,7 +15,7 @@ const OptionWrapper = styled.div`
   align-items: center;
   width: 600px;
   padding: 15px;
-`;
+  `;
 
 const grayTextStyle = css`
   color: #545454;
@@ -63,6 +63,7 @@ export const SignIn = () => {
           </Options>
         </OptionWrapper>
         <SocialLoginButtons />
+        <ForSignUp/>
       </div>
     </div>
   );
