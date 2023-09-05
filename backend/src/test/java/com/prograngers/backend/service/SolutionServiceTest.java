@@ -9,11 +9,13 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +30,7 @@ import java.util.Optional;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
@@ -36,6 +39,7 @@ import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문�
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -110,6 +114,27 @@ class SolutionServiceTest {
 
         // then
         assertThrows(PrivateSolutionException.class,()->solutionService.getSolutionDetail(solution.getId(),member2.getId()));
+    }
+
+    @DisplayName("내 풀이가 아닌 풀이를 수정하려고 하면 예외가 발생한다")
+    @Test
+    void 내_풀이_아닌_풀이_수정_시_예외_발생(){
+        // given
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
+
+        SolutionPatchRequest request = 풀이_수정_요청_생성("수정제목", BFS, ARRAY, "수정코드", "수정설명", 1);
+
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
+        when(solutionRepository.findById(any())).thenReturn(Optional.of(solution1));
+
+        // when , then
+        assertThrows(
+                MemberUnAuthorizedException.class,
+                ()->solutionService.update(solution1.getId(),request,member2.getId()
+        ));
     }
 
 
