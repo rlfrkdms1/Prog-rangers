@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import Arrow from '../../assets/icons/signin-arrow.svg';
+import { useNavigate } from 'react-router-dom';
 
 const buttonPage = css`
   display: flex; 
@@ -12,6 +13,9 @@ const buttonPage = css`
 `;
 
 export const ForSignUp = () => {
+  const navigate = useNavigate();
+  const handleSignUp = navigate(`/signup`);
+
   return(
     <div css={css`
       display: flex; 
@@ -22,7 +26,7 @@ export const ForSignUp = () => {
       font-size: 12px;
     `}>
       <div css={css`color: #545454;`}>프로그래인저 계정에 아직 가입하지 않으셨나요?</div>
-      <div css={css`${buttonPage}`}>
+      <div css={css`${buttonPage}`} onClick={handleSignUp}>
         <div css={css`margin-left: 50px; font-weight: 700; color: #3486A0; width: 55px;`}>회원가입</div>
         <img css={css`margin-left: 10px;`} src={Arrow} alt="next_page"/>
       </div>
