@@ -1,7 +1,5 @@
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import React from 'react';
-import { theme } from '../Header/theme';
 import Kakao from '../../assets/icons/signin-kakao-logo.svg';
 import Naver from '../../assets/icons/signin-naver-logo.svg';
 import Google from '../../assets/icons/signin-google-logo.svg';
@@ -31,7 +29,6 @@ export const SocialLoginButtons = () => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
   `}>
     <div css={css`
       color: #101010;
