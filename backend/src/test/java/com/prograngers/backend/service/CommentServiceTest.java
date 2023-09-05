@@ -6,10 +6,12 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -172,11 +174,61 @@ class CommentServiceTest {
         assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
     }
 
+    @DisplayName("내 댓글이 아닌 댓글을  수정하려 할 경우 예외 발생")
+    @Test
+    void 내_댓글_아닌_댓글_수정(){
+        // given
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 공개_풀이.아이디_지정_생성(1L,problem,member1, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Comment comment = 생성된_댓글.아이디_지정_생성(1L,member1,solution,LocalDateTime.now());
+
+        CommentPatchRequest request = 댓글_수정_요청_생성("수정 댓글", "수정 멘션");
+
+        when(commentRepository.findById(any())).thenReturn(Optional.of(comment));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
+
+        // when then
+        // member1의 댓글을 member2가 수정하려 한다
+        Assertions.assertThrows(
+                MemberUnAuthorizedException.class,
+                ()->commentService.updateComment(comment.getId(),request,member2.getId())
+        );
+    }
+
+    @DisplayName("내 댓글이 아닌 댓글을  삭제하려 할 경우 예외 발생")
+    @Test
+    void 내_댓글_아닌_댓글_삭제(){
+        // given
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 공개_풀이.아이디_지정_생성(1L,problem,member1, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Comment comment = 생성된_댓글.아이디_지정_생성(1L,member1,solution,LocalDateTime.now());
+
+        CommentPatchRequest request = 댓글_수정_요청_생성("수정 댓글", "수정 멘션");
+
+        when(commentRepository.findById(any())).thenReturn(Optional.of(comment));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
+
+        // when then
+        // member1의 댓글을 member2가 수정하려 한다
+        Assertions.assertThrows(
+                MemberUnAuthorizedException.class,
+                ()->commentService.deleteComment(comment.getId(),member2.getId())
+        );
+    }
+
     Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
     Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
+    }
+
+    CommentPatchRequest 댓글_수정_요청_생성(String content, String mention){
+        return new CommentPatchRequest(content,mention);
     }
 }
