@@ -213,7 +213,7 @@ class CommentServiceTest {
         when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
 
         // when then
-        // member1의 댓글을 member2가 수정하려 한다
+        // member1의 댓글을 member2가 삭제하려 한다
         Assertions.assertThrows(
                 MemberUnAuthorizedException.class,
                 ()->commentService.deleteComment(comment.getId(),member2.getId())
