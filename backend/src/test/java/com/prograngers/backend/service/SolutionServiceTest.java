@@ -137,6 +137,25 @@ class SolutionServiceTest {
         ));
     }
 
+    @DisplayName("내 풀이가 아닌 풀이를 삭제하려고 하면 예외가 발생한다")
+    @Test
+    void 내_풀이_아닌_풀이_삭제_시_예외_발생(){
+        // given
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
+
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
+        when(solutionRepository.findById(any())).thenReturn(Optional.of(solution1));
+
+        // when , then
+        assertThrows(
+                MemberUnAuthorizedException.class,
+                ()->solutionService.delete(solution1.getId(),member2.getId()
+                ));
+    }
+
 
     ScarpSolutionPostRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level){
         return new ScarpSolutionPostRequest(title,description,level);
