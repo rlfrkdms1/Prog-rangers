@@ -61,11 +61,18 @@ public enum SolutionFixture {
                 .build();
     }
 
-    public SolutionPostRequest 풀이_생성_요청_생성(Problem problem,Solution solution){
-        return new SolutionPostRequest(
-                problem.getTitle(),solution.getTitle(),problem.getLink(),solution.getLevel(),solution.getAlgorithm(),solution.getDataStructure(),
-                solution.getLanguage(),solution.isPublic(),solution.getDescription(),solution.getCode()
-        );
+    public Solution 아이디_지정_생성(
+            Long id, Problem problem, Member member, LocalDateTime createdDate,
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure,LanguageConstant language, Integer level) {
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .problem(problem)
+                .member(member)
+                .createdDate(createdDate)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
+                .language(language)
+                .level(level)
+                .build();
     }
-
 }
