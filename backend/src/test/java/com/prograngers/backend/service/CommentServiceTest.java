@@ -73,7 +73,7 @@ class CommentServiceTest {
         comments.add(comment1);
         comments.add(comment2);
 
-        when(commentRepository.findAllBySolution(any())).thenReturn(comments);
+        when(commentRepository.findAllBySolution(solution)).thenReturn(comments);
 
         // when
         List<Comment> bySolution = commentService.findBySolution(solution);
