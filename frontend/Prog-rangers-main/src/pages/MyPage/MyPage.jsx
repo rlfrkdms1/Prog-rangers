@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
-import { MainBody } from './MainBody';
+import { LeftBody, MainBody, RightBody } from './MainBody';
 import 'react-calendar/dist/Calendar.css';
 import { 
   fontSize16,
+  fontSize20,
   alignCenter, 
   dateStyle,
   gridStyle
@@ -38,13 +39,11 @@ export const MyPage = () => {
 
   return(
     <div 
-    css={css`
-      display: flex; 
-      justify-content: center;
+    css={css`${MainBody}
   `}>    
     <div
       css={css`
-        ${MainBody}
+        ${LeftBody}
       `}>
           <div css={css`
           width: 365px;
@@ -69,8 +68,70 @@ export const MyPage = () => {
             </div>
           </div>
           </div>
+
+          <div css={css`
+          ${fontSize20}
+          margin-top: 50px
+          `}>최근 쓴 풀이</div>
+
+          <div css={css`
+          width: 365px;
+          height: 181px;
+          border-radius: 5px;
+          margin-top: 10px;
+          background-color: ${theme.colors.light4};
+          `}>
+
+          </div>
+
+          <div css={css`
+          ${fontSize20}
+          margin-top: 50px
+          `}>팔로우의 최근 풀이</div>
+
+          <div css={css`
+          width: 365px;
+          height: 295px;
+          border-radius: 5px;
+          margin-top: 10px;
+          background-color: ${theme.colors.light4};
+          `}></div>
+    </div>  
+     <div css={css`
+      ${RightBody}`}>
+        <div css={css`
+          width: 365px;
+          height: 123px;
+          `}>
+            <div css={css`
+            ${[fontSize20, alignCenter]}
+            `}> 달성 </div> 
+            <div css={css`
+            width: 365px;
+            height: 90px;
+            border-radius: 5px;
+            margin-top: 4px;
+            background-color: ${theme.colors.light4}`}>
+            </div>  
+          </div>
+
+          <div css={css`
+          width: 365px;
+          height: 604px;
+          padding-top: 50px;
+          `}>
+            <div css={css`${fontSize20}`}>알림</div>
+            <div css={css`
+            width: 365px;
+            height: 565px;
+            border-radius: 5px;
+            margin-top: 10px;
+            background-color: ${theme.colors.light4}
+            `}></div>
         </div>
+
       </div>
+    </div>
   )
 }
 

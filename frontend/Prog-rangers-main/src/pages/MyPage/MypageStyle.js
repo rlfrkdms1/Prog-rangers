@@ -7,6 +7,12 @@ export const fontSize16 = css`
   color: ${theme.colors.dark2}
   `;
 
+export const fontSize20 = css`
+  font-size: 20px;
+  font-weight: 700;
+  color: ${theme.colors.black}
+  `;
+
 export const alignCenter = css`
   text-align: center;
   `;
