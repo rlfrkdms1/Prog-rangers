@@ -19,7 +19,6 @@ export const fontSize24 = css`
   color: ${theme.colors.dark1};
 `;
 
-
 export const filterStyle = css`
   margin: 25px 0 0 0;
   height: 50px;

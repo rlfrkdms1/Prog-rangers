@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
-import { MainBody } from '../Problems/MainBody';
+import { MainBody } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
 import { QSolving } from '../../components/Solving';
 import { Pagination } from '../../components/Pagination/Pagination';
