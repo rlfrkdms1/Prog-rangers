@@ -25,9 +25,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BadgeRepository badgeRepository;
-
     private final SolutionRepository solutionRepository;
-
     private final FollowRepository followRepository;
 
     public MemberAccountInfoResponse getMemberAccount(Long memberId){

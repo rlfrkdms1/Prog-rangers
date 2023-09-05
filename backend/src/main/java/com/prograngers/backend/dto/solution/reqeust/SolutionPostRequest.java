@@ -103,6 +103,7 @@ public class SolutionPostRequest {
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())
                 .level(solution.getLevel())
+                .isPublic(solution.isPublic())
                 .description(solution.getDescription())
                 .dataStructure(solution.getDataStructure())
                 .language(solution.getLanguage())

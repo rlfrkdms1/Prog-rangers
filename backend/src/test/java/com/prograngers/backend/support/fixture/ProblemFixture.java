@@ -1,8 +1,10 @@
-package com.prograngers.backend.fixture;
+package com.prograngers.backend.support.fixture;
 
 import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
 import lombok.AllArgsConstructor;
+
+import java.util.ArrayList;
 
 import static com.prograngers.backend.entity.problem.JudgeConstant.백준;
 import static com.prograngers.backend.entity.problem.JudgeConstant.프로그래머스;
@@ -22,7 +24,8 @@ public enum ProblemFixture {
         return Problem.builder()
                 .title(title)
                 .link(link)
-                .ojName(ojName);
+                .ojName(ojName)
+                .solutions(new ArrayList<>());
     }
 
     public Problem 기본_정보_생성(){

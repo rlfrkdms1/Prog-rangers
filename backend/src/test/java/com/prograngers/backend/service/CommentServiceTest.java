@@ -27,11 +27,12 @@ import static com.prograngers.backend.entity.comment.CommentStatusConStant.DELET
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.fixture.CommentFixture.삭제된_댓글;
-import static com.prograngers.backend.fixture.CommentFixture.생성된_댓글;
-import static com.prograngers.backend.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.fixture.SolutionFixture.퍼블릭_풀이;
+import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
+import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -60,7 +61,7 @@ class CommentServiceTest {
         // given
         Member member = 저장(장지담.기본_정보_생성());
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 저장(퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution = 저장(공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
 
 
         Comment comment1 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
@@ -85,7 +86,7 @@ class CommentServiceTest {
         // given
         Member member = 저장(장지담.기본_정보_생성());
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 저장(퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
+        Solution solution = 저장(공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
 
 
         Comment comment1 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
@@ -112,7 +113,7 @@ class CommentServiceTest {
         // given
         Member member = 장지담.아이디_지정_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
         Comment comment = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 
 
@@ -136,7 +137,7 @@ class CommentServiceTest {
         // given
         Member member = 장지담.아이디_지정_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 퍼블릭_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
         Comment comment = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
         Comment deleted = 삭제된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 
