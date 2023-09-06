@@ -67,7 +67,7 @@ public class CommentService {
             throw new MemberUnAuthorizedException();
         }
 
-        comment.update(commentPatchRequest.getMention(), commentPatchRequest.getContent());
+        comment.update(commentPatchRequest.getContent());
 
         Comment saved = commentRepository.save(comment);
 
