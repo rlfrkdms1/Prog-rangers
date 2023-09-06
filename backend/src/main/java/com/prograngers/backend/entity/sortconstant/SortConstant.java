@@ -1,4 +1,4 @@
-package com.prograngers.backend.entity.constants;
+package com.prograngers.backend.entity.sortconstant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -11,7 +11,7 @@ public enum SortConstant {
     SCRAPS("SCRAPS"),
     LIKES("LIKES"),
     SOLUTIONS("SOLUTIONS");
-    String stringValue;
+    String value;
 
     @JsonCreator
     public static SortConstant from(String value){
@@ -25,6 +25,6 @@ public enum SortConstant {
 
     @JsonValue
     public String getStringValue(){
-        return this.stringValue;
+        return this.value;
     }
 }

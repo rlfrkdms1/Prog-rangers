@@ -13,7 +13,7 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
-import com.prograngers.backend.entity.constants.SortConstant;
+import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;

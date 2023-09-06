@@ -5,7 +5,7 @@ import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
-import com.prograngers.backend.entity.constants.SortConstant;
+import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.service.ProblemService;
 import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
