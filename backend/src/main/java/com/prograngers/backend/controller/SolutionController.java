@@ -39,10 +39,7 @@ public class SolutionController {
         Long saveId = solutionService.save(solutionPostRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+saveId)).build();
     }
 
     // scrap해서 생성
@@ -53,11 +50,8 @@ public class SolutionController {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
 
-        // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+saveId)).build();
     }
 
     // 수정 폼 반환
@@ -78,10 +72,7 @@ public class SolutionController {
         Long updateId = solutionService.update(solutionId, solutionPatchRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + updateId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+updateId)).build();
     }
 
     // 삭제 요청
@@ -92,11 +83,8 @@ public class SolutionController {
         // solutionService로 delete한다
         solutionService.delete(solutionId, memberId);
 
-        // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH)).build();
 
     }
 
