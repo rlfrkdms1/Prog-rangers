@@ -32,7 +32,7 @@ public class CommentRequest {
                 .member(member)
                 .solution(solution)
                 .content(content)
-                .createdDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .parentId(parentId)
                 .status(CREATED)
                 .build();

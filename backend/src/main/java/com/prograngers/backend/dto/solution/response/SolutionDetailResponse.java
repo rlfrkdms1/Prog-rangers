@@ -68,7 +68,6 @@ public class SolutionDetailResponse {
                         comment.getId(),
                         comment.getMember().getNickname(),
                         comment.getContent(),
-                        comment.getMention(),
                         comment.getStatus(),
                         new ArrayList<>()
                 )));
@@ -86,7 +85,6 @@ public class SolutionDetailResponse {
                                         comment.getId(),
                                         comment.getMember().getNickname(),
                                         comment.getContent(),
-                                        comment.getMention(),
                                         comment.getStatus(),
                                         null
                                 )

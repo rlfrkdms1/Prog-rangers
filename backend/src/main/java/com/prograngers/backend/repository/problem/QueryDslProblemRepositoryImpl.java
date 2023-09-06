@@ -59,7 +59,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
         if (orderBy.equals(NEWEST)) {
             return
-                    solution.createdDate.desc();
+                    solution.createdAt.desc();
         } else if (orderBy.equals(SOLUTIONS)) {
             log.info("orderBySolutionCount");
             return problem.solutions.size().desc();

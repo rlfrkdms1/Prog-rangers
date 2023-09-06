@@ -61,7 +61,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .select(solution)
                 .from(solution)
                 .where(solution.member.id.eq(memberId), solution.id.loe(page))
-                .orderBy(solution.createdDate.desc())
+                .orderBy(solution.createdAt.desc())
                 .limit(3)
                 .fetch();
     }
@@ -94,7 +94,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .rightJoin(subSolution.scrapSolution,solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .groupBy(solution.id)
-                .orderBy(subSolution.count().desc(),solution.createdDate.desc())
+                .orderBy(subSolution.count().desc(),solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -109,7 +109,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .rightJoin(likes.solution, solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .groupBy(solution.id)
-                .orderBy(likes.id.count().desc(),solution.createdDate.desc())
+                .orderBy(likes.id.count().desc(),solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -121,7 +121,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         result = jpaQueryFactory
                 .selectFrom(solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                .orderBy(solution.createdDate.desc())
+                .orderBy(solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

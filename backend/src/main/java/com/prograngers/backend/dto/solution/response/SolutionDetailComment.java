@@ -19,7 +19,6 @@ public class SolutionDetailComment {
     Long id;
     String nickname;
     String content;
-    String mention;
 
     CommentStatusConStant status;
 
