@@ -49,17 +49,4 @@ public class Review {
 
     @Column(nullable = false)
     private LocalDateTime createdDate;
-
-    public void updateMention(String mention) {
-        if (mention != null) {
-            this.mention = mention;
-        }
-    }
-
-    public void updateContent(String content) {
-        if (content != null) {
-            this.content = content;
-        }
-    }
-
 }
