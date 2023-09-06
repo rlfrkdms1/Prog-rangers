@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -57,7 +58,8 @@ public class Solution {
     @Nullable
     private Solution scrapSolution;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
