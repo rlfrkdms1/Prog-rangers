@@ -35,30 +35,17 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id",nullable = false)
     private Solution solution;
-    private String mention;
-
     @Column(nullable = false)
     private String content;
-
     @Column(nullable = false)
     private LocalDateTime createdDate;
-
     private Long parentId;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private CommentStatusConStant status;
-
-    private void updateMention(String mention) {
-        if (mention != null) {
-            this.mention = mention;
-            this.status = FIXED;
-        }
-    }
 
     private void updateContent(String content) {
         if (content != null) {
@@ -66,14 +53,10 @@ public class Comment {
             this.status = FIXED;
         }
     }
-
     public void update(String mention, String content){
-        updateMention(mention);
         updateContent(content);
     }
-
     public void delete(){
         this.status = DELETED;
     }
-
 }
