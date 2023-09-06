@@ -12,7 +12,6 @@ export const SideBar = () => {
         width: 180px;
         height: 100%;
         alignItems: stretch;
-        float: left;
 
         border-left: 1px solid ${theme.colors.light3};
         border-right: 1px solid ${theme.colors.light3};
