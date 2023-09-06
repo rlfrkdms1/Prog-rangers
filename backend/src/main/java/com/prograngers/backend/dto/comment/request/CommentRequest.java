@@ -31,7 +31,6 @@ public class CommentRequest {
                 .builder()
                 .member(member)
                 .solution(solution)
-                .mention(mention)
                 .content(content)
                 .createdDate(LocalDateTime.now())
                 .parentId(parentId)
