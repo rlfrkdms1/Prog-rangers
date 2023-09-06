@@ -71,31 +71,14 @@ public class Solution {
     @Column(nullable = false)
     private Integer level;
 
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LanguageConstant language;
-
-    public void updateProblem(Problem problem) {
-        if (problem != null) {
-            this.problem = problem;
-        }
-    }
-
-    public void updateMember(Member member) {
-        if (member != null) {
-            this.member = member;
-        }
-    }
 
     public void updateTitle(String title) {
         if (title != null) {
             this.title = title;
         }
-    }
-
-    public void updateIsPublic(boolean isPublic) {
-        this.isPublic = isPublic;
     }
 
     public void updateCode(String code) {
@@ -107,12 +90,6 @@ public class Solution {
     public void updateDescription(String description) {
         if (!code.isEmpty()) {
             this.description = description;
-        }
-    }
-
-    public void updateScrapId(Solution solution) {
-        if (solution != null) {
-            this.scrapSolution = solution;
         }
     }
 

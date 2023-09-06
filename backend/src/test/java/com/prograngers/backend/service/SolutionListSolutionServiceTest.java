@@ -68,7 +68,7 @@ class SolutionListSolutionServiceTest {
         Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),DFS,LIST,JAVA,1);
 
         ScarpSolutionPostRequest request = new ScarpSolutionPostRequest("스크랩풀이", "스크랩풀이설명", 5);
-        Solution made = request.toSolution(solution);
+        Solution made = request.toSolution(solution,member);
 
         when(memberRepository.findById(member.getId())).thenReturn(Optional.ofNullable(member));
         when(solutionRepository.save(any())).thenReturn(solution).thenReturn(made);
