@@ -67,8 +67,7 @@ public class CommentService {
             throw new MemberUnAuthorizedException();
         }
 
-        comment.updateContent(commentPatchRequest.getContent());
-        comment.updateMention(commentPatchRequest.getMention());
+        comment.update(commentPatchRequest.getMention(), commentPatchRequest.getContent());
 
         Comment saved = commentRepository.save(comment);
 
@@ -87,7 +86,7 @@ public class CommentService {
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
-        comment.deleteComment();
+        comment.delete();
         commentRepository.save(comment);
     }
 
