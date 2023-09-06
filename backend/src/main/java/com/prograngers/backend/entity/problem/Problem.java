@@ -42,5 +42,5 @@ public class Problem {
     @OneToMany(mappedBy = "problem")
     List<Solution> solutions = new ArrayList<>();
 
-    }
+
 }
