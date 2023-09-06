@@ -53,7 +53,7 @@ public class Comment {
             this.status = FIXED;
         }
     }
-    public void update(String mention, String content){
+    public void update(String content){
         updateContent(content);
     }
     public void delete(){
