@@ -30,7 +30,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
+    private final String REDIRECT_PATH = "/prog-rangers/solutions";
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // 댓글 작성
@@ -43,10 +43,7 @@ public class CommentController {
         commentService.addComment(solutionId, commentRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
     }
 
     // 댓글 수정
@@ -60,10 +57,7 @@ public class CommentController {
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
     }
 
     // 댓글 삭제
@@ -75,10 +69,6 @@ public class CommentController {
         commentService.deleteComment(commentId, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + solutionId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
     }
-
 }
