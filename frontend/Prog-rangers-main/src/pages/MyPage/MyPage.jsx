@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
+import { SideBar } from '../../components/SideBar/SideBar';
 import { LeftBody, MainBody, RightBody } from './MainBody';
-import 'react-calendar/dist/Calendar.css';
 import { 
   fontSize16,
   fontSize20,
@@ -12,7 +12,8 @@ import {
  } from './MypageStyle';
 
 export const MyPage = () => {
-  const [value, onChange] = useState(new Date());
+  const [value, setValue] = useState(new Date());
+  const [calendar, setCalendar] = useState([]);
 
   const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
   const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0);
@@ -37,10 +38,34 @@ export const MyPage = () => {
     return calendar;
   };
 
+  const goToPreviousMonth = () => {
+    const previousMonth = new Date(value.getFullYear(), value.getMonth() - 1, 1);
+    setValue(previousMonth);
+    renderCalendar();
+  };
+
+  const goToNextMonth = () => {
+    const nextMonth = new Date(value.getFullYear(), value.getMonth() + 1, 1);
+    setValue(nextMonth);
+    renderCalendar();
+  };
+
   return(
+    <div 
+    className='container' 
+    css={css`
+    width: 1200px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+  ` }
+  >
+    <SideBar />
     <div 
     css={css`${MainBody}
   `}>    
+   
     <div
       css={css`
         ${LeftBody}
@@ -50,10 +75,28 @@ export const MyPage = () => {
           height: 123px;
           `}>
             <div css={css`
-            ${[fontSize16, alignCenter]} 
-            margin-bottom: 10px`}>
-              {currentMonth}
+              display: flex;
+              align-items: center;
+              `}>
+              <button onClick={goToPreviousMonth} css={css`
+              flex: 1;`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="6" height="14" viewBox="0 0 6 14" fill="none" >
+                  <path d="M5.5 1L1 7L5.5 13" stroke="#545454"/>
+                </svg>
+              </button>
+              <div css={css`
+              ${[fontSize16, alignCenter]} 
+              margin-bottom: 10px`}>
+                {currentMonth}
+              </div>
+              <button onClick={goToNextMonth} css={css`
+              flex: 1;`}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="6" height="14" viewBox="0 0 6 14" fill="none">
+                <path d="M0.5 13L5 7L0.500001 1" stroke="#545454"/>
+              </svg>
+              </button>
             </div>
+
             <div css={css`
             width: 365px;
             height: 90px;
@@ -81,6 +124,7 @@ export const MyPage = () => {
           margin-top: 10px;
           background-color: ${theme.colors.light4};
           `}>
+            {/* 최근 풀이 3개만 불러오기 */}
 
           </div>
 
@@ -95,7 +139,9 @@ export const MyPage = () => {
           border-radius: 5px;
           margin-top: 10px;
           background-color: ${theme.colors.light4};
-          `}></div>
+          `}>
+            {/* 최근 풀이 5개만 불러오기 */}
+          </div>
     </div>  
      <div css={css`
       ${RightBody}`}>
@@ -131,6 +177,7 @@ export const MyPage = () => {
         </div>
 
       </div>
+    </div>
     </div>
   )
 }
