@@ -30,7 +30,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    private final String REDIRECT_PATH = "/prog-rangers/solutions";
+    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
     private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // 댓글 작성
