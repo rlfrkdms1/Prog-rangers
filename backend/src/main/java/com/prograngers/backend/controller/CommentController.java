@@ -37,8 +37,7 @@ public class CommentController {
     @PostMapping("/{solutionId}/comments")
     @Login
     public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
-                                        @LoggedInMember Long memberId)
-            throws URISyntaxException {
+                                        @LoggedInMember Long memberId) {
 
         commentService.addComment(solutionId, commentRequest, memberId);
 
@@ -52,7 +51,7 @@ public class CommentController {
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
                                            @RequestBody @Valid  CommentPatchRequest commentPatchRequest,
                                            @LoggedInMember Long memberId
-                                           ) throws URISyntaxException {
+                                           ){
 
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
 
@@ -65,7 +64,7 @@ public class CommentController {
     @Login
     public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
                                            @LoggedInMember Long memberId
-    ) throws URISyntaxException {
+    ) {
         commentService.deleteComment(commentId, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
