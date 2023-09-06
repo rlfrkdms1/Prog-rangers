@@ -75,34 +75,43 @@ public class Solution {
     @Column(nullable = false)
     private LanguageConstant language;
 
-    public void updateTitle(String title) {
+    private void updateTitle(String title) {
         if (title != null) {
             this.title = title;
         }
     }
 
-    public void updateCode(String code) {
+    private void updateCode(String code) {
         if (!code.isEmpty()) {
             this.code = code;
         }
     }
 
-    public void updateDescription(String description) {
+    private void updateDescription(String description) {
         if (!code.isEmpty()) {
             this.description = description;
         }
     }
 
-    public void updateLevel(Integer level){
+    private void updateLevel(Integer level){
         this.level = level;
     }
 
-    public void updateAlgorithm(AlgorithmConstant algorithm) {
+    private void updateAlgorithm(AlgorithmConstant algorithm) {
         this.algorithm = algorithm;
     }
 
-    public void updateDataStructure(DataStructureConstant dataStructure) {
+    private void updateDataStructure(DataStructureConstant dataStructure) {
         this.dataStructure = dataStructure;
+    }
+
+    public void update(String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure, int level, String code, String description){
+        updateTitle(title);
+        updateAlgorithm(algorithm);
+        updateDataStructure(dataStructure);
+        updateLevel(level);
+        updateCode(code);
+        updateDescription(description);
     }
 
 }

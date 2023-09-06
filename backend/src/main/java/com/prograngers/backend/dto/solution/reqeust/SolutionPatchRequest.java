@@ -31,12 +31,7 @@ public class SolutionPatchRequest {
     private int level;
 
     public Solution toSolution(Solution target) {
-        target.updateTitle(title);
-        target.updateAlgorithm(algorithmName);
-        target.updateDataStructure(dataStructureName);
-        target.updateLevel(level);
-        target.updateCode(code);
-        target.updateDescription(description);
+        target.update(title,algorithmName,dataStructureName,level,code,description);
         return target;
     }
 }
