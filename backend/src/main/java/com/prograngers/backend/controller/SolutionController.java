@@ -31,7 +31,7 @@ public class SolutionController {
     // solution 쓰기
     @Login
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest) throws URISyntaxException {
+    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest){
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
@@ -45,8 +45,7 @@ public class SolutionController {
     // scrap해서 생성
     @Login
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request)
-            throws URISyntaxException {
+    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request) {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
 
@@ -66,7 +65,7 @@ public class SolutionController {
     @Login
     @PatchMapping("/{solutionId}")
     public ResponseEntity<?> update(@PathVariable Long solutionId, @LoggedInMember Long memberId,
-                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
+                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest){
 
         // solutionService로 update한다
         Long updateId = solutionService.update(solutionId, solutionPatchRequest, memberId);
@@ -78,7 +77,7 @@ public class SolutionController {
     // 삭제 요청
     @Login
     @DeleteMapping("/{solutionId}")
-    public ResponseEntity<?> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId) throws URISyntaxException {
+    public ResponseEntity<?> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId){
 
         // solutionService로 delete한다
         solutionService.delete(solutionId, memberId);
