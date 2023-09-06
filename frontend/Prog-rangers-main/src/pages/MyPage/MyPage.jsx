@@ -13,7 +13,6 @@ import {
 
 export const MyPage = () => {
   const [value, setValue] = useState(new Date());
-  const [calendar, setCalendar] = useState([]);
 
   const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
   const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0);
@@ -181,4 +180,3 @@ export const MyPage = () => {
     </div>
   )
 }
-

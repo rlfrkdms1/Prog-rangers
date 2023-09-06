@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { MainBody } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
+import { QuestionForm } from '../../components/Question';
 import { QSolving } from '../../components/Solving';
 import { Pagination } from '../../components/Pagination/Pagination';
+import questions from '../../db/question.json';
 import solvings from '../../db/solving.json';
 import { atom, useAtom } from 'jotai';
 import{ 
   fontSize24,
   filterStyle,
+  ojNameTag
 } from './SolutionsStyle';
 
 const LANGUAGE = [
@@ -53,7 +56,6 @@ const solvingAtom = atom(solvings);
 
 export const Solutions = () => {
 
-  // 페이지네이션
   const [ page, setPage ] = useState(1);
   const [ Solvings, setSolvings ] = useAtom(solvingAtom);
   const itemsPerPage = 5;
@@ -70,6 +72,9 @@ export const Solutions = () => {
     const currentSolvings = solvings.slice(startIndex, endIndex);
     setSolvings(currentSolvings);
   }, [page]);
+ 
+  // 임시 문제 제목 추출
+  const firstItem = questions[0];
   
   return( 
     <div css={css`
@@ -89,12 +94,22 @@ export const Solutions = () => {
                 <FilterBar options={DATASTRUCTURE}/>
                 <FilterBar options={LEVEL}/>
           </div>
-
+          
           <div css={css`
-            ${fontSize24}
-            margin-top: 53px`}> 
-            쿼리의 모음 개수 
-          </div>    
+            display: flex;
+            margin-top: 53px;`}>
+            <div css={css`
+              ${fontSize24}
+              margin-right: 20px;
+              `}> {firstItem.title} 
+            </div>
+            <div css={css`
+              ${ojNameTag}
+              background-color: ${firstItem.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
+              color: white;
+            `}> {firstItem.ojName}
+            </div>  
+          </div>           
 
       <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
           <QSolving data={Solvings}/>
