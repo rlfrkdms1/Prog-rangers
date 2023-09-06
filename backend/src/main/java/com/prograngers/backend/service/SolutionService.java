@@ -15,6 +15,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.constants.SortConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -58,13 +59,9 @@ public class SolutionService {
 
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
-        Solution solution = solutionPostRequest.toSolution();
-        solution.updateMember(member);
-        Problem problem = problemRepository.findByLink(solution.getProblem().getLink());
-        if (problem != null) {
-            solution.updateProblem(problem);
-        }
+        Member member = getMember(memberId);
+        Problem problem = solutionPostRequest.toProblem(problemRepository);
+        Solution solution = solutionPostRequest.toSolution(problem,member);
         Solution saved = solutionRepository.save(solution);
         return saved.getId();
     }
@@ -72,7 +69,7 @@ public class SolutionService {
     @Transactional
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = getMember(memberId);
         if (target.getMember().getId()!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
@@ -84,7 +81,7 @@ public class SolutionService {
     @Transactional
     public void delete(Long solutionId, Long memberId) throws SolutionNotFoundException {
         Solution target = findById(solutionId);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = getMember(memberId);
         if (target.getMember().getId()!=member.getId()){
             throw new MemberUnAuthorizedException();
         }
@@ -107,7 +104,7 @@ public class SolutionService {
     @Transactional
     public Long saveScrap(Long id, ScarpSolutionPostRequest request, Long memberId) {
         Solution scrap = findById(id);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = getMember(memberId);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
         Solution solution = request.toSolution(scrap);
@@ -130,9 +127,12 @@ public class SolutionService {
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
+        if (!solution.isPublic()){
+            throw new PrivateSolutionException();
+        }
         boolean isMine = false;
         if (memberId!=null){
-            Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+            Member member = getMember(memberId);
             if (solution.getMember().getId().equals(member.getId())){
                 isMine = true;
             }
@@ -164,5 +164,10 @@ public class SolutionService {
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
 
         return SolutionListResponse.from(solutions,pageable.getPageNumber());
+    }
+
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 }

@@ -20,7 +20,7 @@ export const Header = () => {
       className="NavbarWarp"
       css={css`
         width: 100%;
-        height: 120px;
+        height: 100px;
 
         border-bottom: 1px solid ${theme.colors.light2};
       `}
@@ -30,20 +30,27 @@ export const Header = () => {
         css={css`
           width: 1200px;
           margin: 0 auto;
-          padding: 20px;
+          padding: 15px;
 
           ${flexAlign};
         `}
       >
         <Link to="/">
-          <img src={Logo} alt="Prog-rangers" />
+          <img
+            src={Logo}
+            alt="Prog-rangers"
+            css={css`
+              height: 65px;
+            `}
+          />
         </Link>
         <div
           className="searchAll"
           css={css`
             ${flexAlign}
 
-            margin-left: 50px;
+            margin-top: 5px;
+            margin-left: 30px;
           `}
         >
           <div
@@ -106,6 +113,8 @@ export const Header = () => {
         <div
           css={css`
             flex-grow: 1;
+
+            margin-top: 5px;
           `}
         >
           <AfterLoginNav />

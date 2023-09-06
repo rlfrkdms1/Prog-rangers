@@ -4,6 +4,7 @@ import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.member.Member;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,19 +33,23 @@ public class Solution {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "problem_id")
+    @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private boolean isPublic;
 
+    @Column(nullable = false)
     private String code;
 
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,18 +57,23 @@ public class Solution {
     @Nullable
     private Solution scrapSolution;
 
+    @Column(nullable = false)
     private LocalDateTime createdDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private AlgorithmConstant algorithm;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private DataStructureConstant dataStructure;
 
+    @Column(nullable = false)
     private Integer level;
 
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private LanguageConstant language;
 
     public void updateProblem(Problem problem) {
