@@ -45,6 +45,6 @@ public class Review {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
+    @Column(nullable = false,updatable = false)
+    private LocalDateTime createdAt;
 }

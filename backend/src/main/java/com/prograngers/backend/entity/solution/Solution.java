@@ -58,7 +58,7 @@ public class Solution {
     private Solution scrapSolution;
 
     @Column(nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

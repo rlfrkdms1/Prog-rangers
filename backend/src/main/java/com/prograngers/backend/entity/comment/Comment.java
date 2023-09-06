@@ -40,8 +40,8 @@ public class Comment {
     private Solution solution;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
     private Long parentId;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
