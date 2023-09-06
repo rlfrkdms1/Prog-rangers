@@ -42,8 +42,6 @@ public class Review {
 
     private Long parentId;
 
-    private String mention;
-
     @Column(nullable = false)
     private String content;
 
