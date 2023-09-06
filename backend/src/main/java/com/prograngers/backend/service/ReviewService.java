@@ -43,7 +43,7 @@ public class ReviewService {
 
             // codeLineNumber에 해당하는 review들을 찾는다
             List<com.prograngers.backend.entity.Review> reviews = reviewRepository
-                    .findAllByCodeLineNumberOrderByCreatedDateAsc(codeLineNumber);
+                    .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
             log.info("코드라인 : {}", codeLineNumber);
             List<Review> reviewRespons = new ArrayList<>();
 
