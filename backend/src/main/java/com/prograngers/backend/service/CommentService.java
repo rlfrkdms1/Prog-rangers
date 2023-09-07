@@ -45,34 +45,22 @@ public class CommentService {
     // 댓글 작성
     @Transactional
     public void addComment(Long solutionId, CommentRequest commentRequest, Long memberId) {
-
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
-
         Comment comment = commentRequest.toComment(member,solution);
-
-        Comment saved = commentRepository.save(comment);
+        commentRepository.save(comment);
     }
-
-
 
     @Transactional
     public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest, Long memberId) {
         Comment comment = findById(commentId);
-        Long targetMemberId = comment.getMember().getId();
-
+        Long targetCommentMemberId = comment.getMember().getId();
 
         Member member = findMemberById(memberId);
-        if (!targetMemberId.equals(member.getId())){
-            throw new MemberUnAuthorizedException();
-        }
-
+        checkMemberAuthorization(targetCommentMemberId, member);
         comment.update(commentPatchRequest.getContent());
-
-        Comment saved = commentRepository.save(comment);
-
         // 리다이렉트 하기 위해 Solution의 Id 반환
-        return saved.getSolution().getId();
+        return commentRepository.save(comment).getId();
     }
 
     @Transactional
@@ -80,9 +68,7 @@ public class CommentService {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
-        if (!targetCommentMemberId.equals(member.getId())){
-            throw new MemberUnAuthorizedException();
-        }
+        checkMemberAuthorization(targetCommentMemberId, member);
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
@@ -96,5 +82,11 @@ public class CommentService {
 
     private Solution findSolutionById(Long solutionId) {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
+    }
+
+    private static void checkMemberAuthorization(Long targetCommentMemberId, Member member) {
+        if (!targetCommentMemberId.equals(member.getId())){
+            throw new MemberUnAuthorizedException();
+        }
     }
 }
