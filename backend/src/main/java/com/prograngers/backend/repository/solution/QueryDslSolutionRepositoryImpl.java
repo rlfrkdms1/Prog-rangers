@@ -31,30 +31,17 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     public PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
-
-             List<Solution> result = null;
         if (sortBy.equals(NEWEST)){
-            result = getNewestSolutions(pageable, problemId, language, algorithm, dataStructure);
-            Long count = getCount(problemId, language, algorithm, dataStructure);
-            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-            return solutions;
+            return getSolutionsSorByNewest(pageable, problemId, language, algorithm, dataStructure);
         }
         if (sortBy.equals(LIKES)){
-            result = getLikesSolutions(pageable, problemId, language, algorithm, dataStructure);
-            Long count = getCount(problemId, language, algorithm, dataStructure);
-            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-            return solutions;
+            return getSolutionsSortByLikes(pageable, problemId, language, algorithm, dataStructure);
         }
         if (sortBy.equals(SCRAPS)){
-            result = getScrapsSolutions(pageable, problemId, language, algorithm, dataStructure);
-            Long count = getCount(problemId, language, algorithm, dataStructure);
-            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-            return solutions;
+            return getSolutionsSortByScraps(pageable, problemId, language, algorithm, dataStructure);
         }
         return null;
     }
-
-
     @Override
     public List<Solution> findProfileSolutions(Long memberId,Long page) {
         return jpaQueryFactory
@@ -135,5 +122,28 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .fetchOne();
         return count;
+    }
+    private PageImpl<Solution> getSolutionsSortByScraps(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = getScrapsSolutions(pageable, problemId, language, algorithm, dataStructure);
+        Long count = getCount(problemId, language, algorithm, dataStructure);
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
+    }
+
+    private PageImpl<Solution> getSolutionsSortByLikes(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = getLikesSolutions(pageable, problemId, language, algorithm, dataStructure);
+        Long count = getCount(problemId, language, algorithm, dataStructure);
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
+    }
+
+    private PageImpl<Solution> getSolutionsSorByNewest(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = getNewestSolutions(pageable, problemId, language, algorithm, dataStructure);
+        Long count = getCount(problemId, language, algorithm, dataStructure);
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
     }
 }
