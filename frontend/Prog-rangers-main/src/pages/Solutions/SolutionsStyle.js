@@ -29,3 +29,10 @@ export const filterStyle = css`
   justify-content: space-between;
   z-index: 2;
   `;
+
+  export const ojNameTag = css`
+  display: flex;
+  padding: 8px 20px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1)
+  `;
