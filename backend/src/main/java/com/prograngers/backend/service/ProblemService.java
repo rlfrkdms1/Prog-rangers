@@ -34,30 +34,43 @@ public class ProblemService {
             SortConstant sortBy) {
         PageImpl<Problem> pageImpl = problemRepository.findAll(pageable, dataStructure, algorithm, sortBy);
         List<Problem> problems = pageImpl.getContent();
+        List<ProblemListProblem> problemListProblemResponse = makeProblemList(problems);
+        ProblemListResponse response = ProblemListResponse.from(problemListProblemResponse, pageImpl.getTotalPages(),pageable.getPageNumber());
+        return response;
+    }
+
+    private static List<ProblemListProblem> makeProblemList(List<Problem> problems) {
         // 반환할 dto 리스트
         List<ProblemListProblem> problemListProblemResponse = new ArrayList<>();
+
         // 결과를  for문 돌면서 반환 dto를 만든다
         for (Problem problem : problems) {
             ProblemListProblem problemListProblem = ProblemListProblem.from(problem);
             List<Solution> solutions = problem.getSolutions();
-            HashMap<Object, Integer> solutionAlgorithmCountMap = new HashMap<>();
-            for (Solution solution : solutions) {
-                solutionAlgorithmCountMap.put(solution.getAlgorithm(), solutionAlgorithmCountMap.getOrDefault(solution.getAlgorithm(), 1) + 1);
-                solutionAlgorithmCountMap.put(solution.getDataStructure(), solutionAlgorithmCountMap.getOrDefault(solution.getDataStructure(), 1) + 1);
-            }
-            List<Object> keySet = new ArrayList<>(solutionAlgorithmCountMap.keySet());
-            keySet.sort((num1, num2) -> solutionAlgorithmCountMap.get(num2).compareTo(solutionAlgorithmCountMap.get(num1)));
+            HashMap<Object, Integer> tagCountMap = new HashMap<>();
 
-            for (int i = 0; i < keySet.size(); i++) {
-                if (i == 3) break;
-                Object tag = keySet.get(i);
-                if (tag != null) {
-                    problemListProblem.getTags().add(keySet.get(i));
-                }
-            }
+            solutions.stream()
+                    .forEach((solution)->{
+                        tagCountMap.put(solution.getAlgorithm(), tagCountMap.getOrDefault(solution.getAlgorithm(), 1) + 1);
+                        tagCountMap.put(solution.getDataStructure(), tagCountMap.getOrDefault(solution.getDataStructure(), 1) + 1);
+                    });
+
+            List<Object> keySet = new ArrayList<>(tagCountMap.keySet());
+            keySet.sort((num1, num2) -> tagCountMap.get(num2).compareTo(tagCountMap.get(num1)));
+
+            countTag(problemListProblem, keySet);
             problemListProblemResponse.add(problemListProblem);
         }
-        ProblemListResponse response = ProblemListResponse.from(problemListProblemResponse, pageImpl.getTotalPages(),pageable.getPageNumber());
-        return response;
+        return problemListProblemResponse;
+    }
+
+    private static void countTag(ProblemListProblem problemListProblem, List<Object> keySet) {
+        for (int tagCount = 0; tagCount < keySet.size(); tagCount++) {
+            if (tagCount == 3) break;
+            Object tag = keySet.get(tagCount);
+            if (tag != null) {
+                problemListProblem.getTags().add(keySet.get(tagCount));
+            }
+        }
     }
 }
