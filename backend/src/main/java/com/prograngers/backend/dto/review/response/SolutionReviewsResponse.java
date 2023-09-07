@@ -25,9 +25,9 @@ public class SolutionReviewsResponse {
         SolutionReviewsResponse solutionReviewsResponse =
                 new SolutionReviewsResponse(solution.getTitle(), solution.getAlgorithm(),solution.getDataStructure(), new ArrayList<>());
         // 먼저 최종 응답 dto에 각 라인을 넣는다
-        for (int lineNumber = 1; lineNumber <= lines.length-1; lineNumber++) {
+        for (int lineNumber = 0; lineNumber <lines.length; lineNumber++) {
             Line line = Line.builder()
-                    .codeLineNumber(lineNumber )
+                    .codeLineNumber(lineNumber+1)
                     .code(lines[lineNumber])
                     .build();
             solutionReviewsResponse.getLines().add(line);
