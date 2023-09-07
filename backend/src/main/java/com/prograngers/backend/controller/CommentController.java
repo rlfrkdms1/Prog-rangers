@@ -50,11 +50,8 @@ public class CommentController {
     @Login
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
                                            @RequestBody @Valid  CommentPatchRequest commentPatchRequest,
-                                           @LoggedInMember Long memberId
-                                           ){
-
+                                           @LoggedInMember Long memberId){
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
-
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
     }
@@ -63,10 +60,8 @@ public class CommentController {
     @DeleteMapping("/{solutionId}/comments/{commentId}")
     @Login
     public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
-                                           @LoggedInMember Long memberId
-    ) {
+                                           @LoggedInMember Long memberId) {
         commentService.deleteComment(commentId, memberId);
-
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
     }
