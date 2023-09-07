@@ -1,8 +1,8 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.review.response.Line;
-import com.prograngers.backend.dto.review.response.Reply;
-import com.prograngers.backend.dto.review.response.Review;
+import com.prograngers.backend.dto.review.response.SolutionLine;
+import com.prograngers.backend.dto.review.response.SolutionReviewReply;
+import com.prograngers.backend.dto.review.response.SolutionReview;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -24,51 +24,46 @@ public class ReviewService {
     private final SolutionRepository solutionRepository;
 
     public SolutionReviewsResponse getReviewDetail(Long solutionId) {
-
         // solutionId에 해당하는 풀이 찾기
         Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
-
         // 줄 나눠서 배열에 저장
         String[] lines = solution.getCode().split("\n");
-
         // 최종 응답 dto에 풀이 내용을 넣는다
         SolutionReviewsResponse solutionReviewsResponse = SolutionReviewsResponse.from(solution, lines);
-
         // 최종 응답 dto에서 line들을 가져온다
-        List<Line> addedLines = solutionReviewsResponse.getLines();
+        List<SolutionLine> addedSolutionLines = solutionReviewsResponse.getSolutionLines();
+        addReviewAtLine(addedSolutionLines);
+        solutionReviewsResponse.setSolutionLines(addedSolutionLines);
+        return solutionReviewsResponse;
+    }
 
+    private void addReviewAtLine(List<SolutionLine> addedSolutionLines) {
         // 라인들에 대해 for문을 돌면서 리뷰를 추가한다
-        for (Line line : addedLines) {
-            Integer codeLineNumber = line.getCodeLineNumber();
+        for (SolutionLine solutionLine : addedSolutionLines) {
+            Integer codeLineNumber = solutionLine.getCodeLineNumber();
 
             // codeLineNumber에 해당하는 review들을 찾는다
             List<com.prograngers.backend.entity.Review> reviews = reviewRepository
                     .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
-            log.info("코드라인 : {}", codeLineNumber);
-            List<Review> reviewRespons = new ArrayList<>();
+            List<SolutionReview> solutionReviewResponse = new ArrayList<>();
 
             // 해당 라인의 리뷰들에 대해 for문을 돈다
             for (com.prograngers.backend.entity.Review review : reviews) {
-                log.info("리뷰 id {}, 리뷰 내용 : {}, 부모 리뷰 id : {}", review.getId(), review.getContent(), review.getParentId());
-
                 // 부모가 없는 리뷰인 경우 ReviewResponse dto로 만든다
                 if (review.getParentId() == null) {
-                    reviewRespons.add(Review.from(review));
+                    solutionReviewResponse.add(SolutionReview.from(review));
                 }
-
                 // 부모가 있는 리뷰인 경우 Replyresponse dto로 만든다
                 else {
-                    for (Review r : reviewRespons) {
+                    for (SolutionReview r : solutionReviewResponse) {
                         if (r.getId().equals(review.getParentId())) {
-                            r.getReplies().add(Reply.from(review));
+                            r.getReplies().add(SolutionReviewReply.from(review));
                         }
                     }
                 }
             }
-            line.setReviews(reviewRespons);
+            solutionLine.setSolutionReviews(solutionReviewResponse);
         }
-        solutionReviewsResponse.setLines(addedLines);
-        return solutionReviewsResponse;
     }
 
 }
