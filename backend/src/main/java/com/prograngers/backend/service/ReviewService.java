@@ -4,6 +4,7 @@ import com.prograngers.backend.dto.review.response.SolutionLine;
 import com.prograngers.backend.dto.review.response.SolutionReviewReply;
 import com.prograngers.backend.dto.review.response.SolutionReview;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
+import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.repository.review.ReviewRepository;
@@ -48,22 +49,29 @@ public class ReviewService {
             List<SolutionReview> solutionReviewResponse = new ArrayList<>();
 
             // 해당 라인의 리뷰들에 대해 for문을 돈다
-            for (com.prograngers.backend.entity.Review review : reviews) {
+            for (Review review : reviews) {
                 // 부모가 없는 리뷰인 경우 ReviewResponse dto로 만든다
                 if (review.getParentId() == null) {
-                    solutionReviewResponse.add(SolutionReview.from(review));
+                    makeReviewResponse(solutionReviewResponse, review);
                 }
                 // 부모가 있는 리뷰인 경우 Replyresponse dto로 만든다
                 else {
-                    for (SolutionReview r : solutionReviewResponse) {
-                        if (r.getId().equals(review.getParentId())) {
-                            r.getReplies().add(SolutionReviewReply.from(review));
-                        }
-                    }
+                    makeReplyResponse(solutionReviewResponse, review);
                 }
             }
             solutionLine.setSolutionReviews(solutionReviewResponse);
         }
     }
 
+    private static void makeReviewResponse(List<SolutionReview> solutionReviewResponse, Review review) {
+        solutionReviewResponse.add(SolutionReview.from(review));
+    }
+
+    private static void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review) {
+        for (SolutionReview r : solutionReviewResponse) {
+            if (r.getId().equals(review.getParentId())) {
+                r.getReplies().add(SolutionReviewReply.from(review));
+            }
+        }
+    }
 }
