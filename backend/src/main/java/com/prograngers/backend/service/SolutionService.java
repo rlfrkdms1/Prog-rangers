@@ -70,21 +70,17 @@ public class SolutionService {
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
-        if (target.getMember().getId()!=member.getId()){
-            throw new MemberUnAuthorizedException();
-        }
+        checkMemberAuthorization(target, member);
         Solution solution = request.toSolution(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
     }
 
     @Transactional
-    public void delete(Long solutionId, Long memberId) throws SolutionNotFoundException {
+    public void delete(Long solutionId, Long memberId){
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
-        if (target.getMember().getId()!=member.getId()){
-            throw new MemberUnAuthorizedException();
-        }
+        checkMemberAuthorization(target, member);
 
         commentRepository.findAllBySolution(target)
                         .stream()
@@ -98,9 +94,8 @@ public class SolutionService {
     }
 
     public Solution findById(Long solutionId) {
-        return solutionRepository.findById(solutionId).orElseThrow(() -> new SolutionNotFoundException());
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
-
     @Transactional
     public Long saveScrap(Long id, ScarpSolutionPostRequest request, Long memberId) {
         Solution scrap = findById(id);
@@ -114,59 +109,56 @@ public class SolutionService {
 
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findById(solutionId);
-        // 로그인한 멤버랑 작성자랑 일치하지 않을 경우 UnAuthorizationException을 던진다
-        Long targetMemberId = target.getMember().getId();
-        if (targetMemberId != memberId) {
-            throw new MemberUnAuthorizedException();
-        }
-
+        Member member = getMember(memberId);
+        checkMemberAuthorization(target,member);
         SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
         return solutionUpdateFormResponse;
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
-        boolean isMine = false;
-        if (memberId!=null){
-            Member member = getMember(memberId);
-            if (solution.getMember().getId().equals(member.getId())){
-                isMine = true;
-            }
-        }
-        if (!solution.isPublic()&&!isMine){
-            throw new PrivateSolutionException();
-        }
-
-        log.info("target solution id : {}",solution.getId());
-
+        boolean isMine = checkSolutionIsMine(memberId, solution);
+        checkViewPrivateSolution(solution, isMine);
         List<Comment> comments = commentRepository.findAllBySolution(solution);
-
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
-
         List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolution(solution);
         boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
-
-        SolutionDetailResponse solutionDetailResponse =
-                SolutionDetailResponse.from(solution.getProblem(), solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
+        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.from(solution.getProblem(), solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
         return solutionDetailResponse;
     }
 
     public SolutionListResponse getSolutionList(
-            Pageable pageable,
-            Long problemId,
-            LanguageConstant language,
-            AlgorithmConstant algorithm,
-            DataStructureConstant dataStructure,
-            SortConstant sortBy) {
+            Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
-
         return SolutionListResponse.from(solutions,pageable.getPageNumber());
     }
 
 
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private static void checkMemberAuthorization(Solution target, Member member) {
+        if (target.getMember().getId()!= member.getId()){
+            throw new MemberUnAuthorizedException();
+        }
+    }
+
+    private boolean checkSolutionIsMine(Long memberId, Solution solution) {
+        if (memberId !=null){
+            Member member = getMember(memberId);
+            if (solution.getMember().getId().equals(member.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void checkViewPrivateSolution(Solution solution, boolean isMine) {
+        if (!solution.isPublic()&&!isMine){
+            throw new PrivateSolutionException();
+        }
     }
 }
