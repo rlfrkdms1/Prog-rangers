@@ -39,7 +39,7 @@ public class CommentService {
     }
 
     public Comment findById(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException());
+        return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
     // 댓글 작성
