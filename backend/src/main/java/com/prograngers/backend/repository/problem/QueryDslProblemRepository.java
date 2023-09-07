@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 public interface QueryDslProblemRepository {
-    public PageImpl<Problem> findAll(
+    PageImpl<Problem> findAll(
             Pageable pageable, DataStructureConstant dataStructure, AlgorithmConstant algorithm, SortConstant orderBy);
 
 }
