@@ -69,11 +69,15 @@ public class CommentService {
         Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
         checkMemberAuthorization(targetCommentMemberId, member);
+        checkCommentAlreadyDeleted(comment);
+        comment.delete();
+        commentRepository.save(comment);
+    }
+
+    private static void checkCommentAlreadyDeleted(Comment comment) {
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
-        comment.delete();
-        commentRepository.save(comment);
     }
 
     private Member findMemberById(Long memberId) {
