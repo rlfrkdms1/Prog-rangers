@@ -41,8 +41,7 @@ public class CommentController {
 
         commentService.addComment(solutionId, commentRequest, memberId);
 
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
+        return redirect(solutionId);
     }
 
     // 댓글 수정
@@ -53,7 +52,7 @@ public class CommentController {
                                            @LoggedInMember Long memberId){
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
+        return redirect(solutionId);
     }
 
     // 댓글 삭제
@@ -63,6 +62,12 @@ public class CommentController {
                                            @LoggedInMember Long memberId) {
         commentService.deleteComment(commentId, memberId);
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH+"/"+solutionId)).build();
+        return redirect(solutionId);
     }
+
+    private ResponseEntity<Object> redirect(Long solutionId) {
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + solutionId)).build();
+    }
+
 }
