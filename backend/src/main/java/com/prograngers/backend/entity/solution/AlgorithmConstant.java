@@ -22,9 +22,9 @@ public enum AlgorithmConstant {
     private final String stringValue;
 
     @JsonCreator
-    public static AlgorithmConstant from(String krName) {
+    public static AlgorithmConstant from(String value) {
         for (AlgorithmConstant algorithm : AlgorithmConstant.values()) {
-            if (algorithm.getStringValue().equals(krName)) {
+            if (algorithm.getStringValue().equals(value)) {
                 return algorithm;
             }
         }
