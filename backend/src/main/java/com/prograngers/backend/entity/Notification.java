@@ -33,8 +33,8 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "writer_nickname", nullable = false)
+    private String writerNickname;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "type", nullable = false)

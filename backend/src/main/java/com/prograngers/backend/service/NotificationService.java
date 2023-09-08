@@ -25,8 +25,6 @@ import static com.prograngers.backend.entity.NotificationType.REVIEW;
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private static final String REVIEW_NOTIFICATION_FORMAT = "@%s님이 %s에 리뷰를 남겼습니다.";
-    private static final String COMMENT_NOTIFICATION_FORMAT = "@%s님이 %s에 댓글을 남겼습니다.";
     private final NotificationRepository notificationRepository;
     private final SseEmitterRepository sseEmitterRepository;
     private final CachedEventRepository cachedEventRepository;
@@ -36,8 +34,7 @@ public class NotificationService {
      * "이 부분은 ~ 로 고칠 수 있을 것 같아요 ?"
      */
     public void send(Review review, Solution solution, Member writer){
-        String title = String.format(REVIEW_NOTIFICATION_FORMAT, writer.getNickname(), solution.getTitle());
-        Notification notification = createReviewNotification(review, solution, title);
+        Notification notification = createReviewNotification(review, solution, writer);
         NotificationResponse notificationResponse = NotificationResponse.from(notification);
         sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
                 .forEach((emitterId, emitter) -> {
@@ -47,10 +44,10 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    private Notification createReviewNotification(Review review, Solution solution, String title) {
+    private Notification createReviewNotification(Review review, Solution solution, Member writer) {
         Notification notification = Notification.builder()
                 .type(REVIEW)
-                .title(title)
+                .writerNickname(writer.getNickname())
                 .review(review)
                 .solution(solution)
                 .isRead(false)
@@ -60,8 +57,7 @@ public class NotificationService {
     }
 
     public void send(Comment comment, Solution solution, Member writer){
-        String title = String.format(COMMENT_NOTIFICATION_FORMAT, writer.getNickname(), solution.getTitle());
-        Notification notification = createCommentNotification(comment, solution, title);
+        Notification notification = createCommentNotification(comment, solution, writer);
         NotificationResponse notificationResponse = NotificationResponse.from(notification);
         sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
                 .forEach((emitterId, emitter) -> {
@@ -72,10 +68,10 @@ public class NotificationService {
     }
 
 
-    private Notification createCommentNotification(Comment comment, Solution solution, String title) {
+    private Notification createCommentNotification(Comment comment, Solution solution, Member writer) {
         Notification notification = Notification.builder()
                 .type(COMMENT)
-                .title(title)
+                .writerNickname(writer.getNickname())
                 .comment(comment)
                 .solution(solution)
                 .isRead(false)
