@@ -5,6 +5,8 @@ import com.prograngers.backend.entity.member.MemberType;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class MemberAccountInfoResponse {
@@ -19,7 +21,7 @@ public class MemberAccountInfoResponse {
 
     private String introduction;
 
-    private String password;
+    private LocalDate currentModifiedAt;
 
     private String photo;
 
@@ -30,7 +32,7 @@ public class MemberAccountInfoResponse {
                 .email(member.getEmail())
                 .github(member.getGithub())
                 .introduction(member.getIntroduction())
-                .password(member.getPassword())
+                .currentModifiedAt(member.getCurrentModifiedAt())
                 .photo(member.getPhoto())
                 .build();
     }
