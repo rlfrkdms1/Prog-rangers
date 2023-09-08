@@ -23,7 +23,7 @@ public class SolutionDetailResponse {
     private SolutionDetailSolution solution;
     private List<SolutionDetailComment> comments;
 
-    private boolean isMine;
+    private boolean mine;
     private static final String SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
     public static SolutionDetailResponse from(Problem problem, Solution solution, List<Comment> comments,
@@ -33,11 +33,15 @@ public class SolutionDetailResponse {
         SolutionDetailSolution responseSolution = getResponseSolution(solution, scraped, scrapCount, pushedLike, likeCount, scrapLink);
         List<SolutionDetailComment> commentResponseList = new ArrayList<>();
         addCommentsToResponse(comments, commentResponseList);
-        response.comments = commentResponseList;
-        response.solution = responseSolution;
-        response.isMine = isMine;
-        response.problem= SolutionDetailProblem.from(problem);
+        setData(problem, isMine, response, responseSolution, commentResponseList);
         return response;
+    }
+
+    private static void setData(Problem problem, boolean isMine, SolutionDetailResponse response, SolutionDetailSolution responseSolution, List<SolutionDetailComment> commentResponseList) {
+        response.setComments(commentResponseList);
+        response.setSolution(responseSolution);
+        response.setMine(isMine);
+        response.setProblem(SolutionDetailProblem.from(problem));
     }
 
     private static void addCommentsToResponse(List<Comment> comments, List<SolutionDetailComment> commentResponseList) {
