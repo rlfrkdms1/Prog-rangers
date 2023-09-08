@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.response.dashboard.NotificationInfo;
 import com.prograngers.backend.dto.response.notification.NotificationResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.member.Member;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,8 +24,10 @@ public class DashBoardService {
 
     public void createDashBoard(Long memberId) {
         Member member = findMemberById(memberId);
+        //알림
         List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
-
+        List<NotificationInfo> notificationInfoList = notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
+        //최근 풀이
     }
 
     private Member findMemberById(Long memberId){
