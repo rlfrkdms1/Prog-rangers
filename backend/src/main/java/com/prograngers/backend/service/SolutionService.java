@@ -71,7 +71,7 @@ public class SolutionService {
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
         checkMemberAuthorization(target, member);
-        Solution solution = request.toSolution(target);
+        Solution solution = request.updateSolution(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
     }
