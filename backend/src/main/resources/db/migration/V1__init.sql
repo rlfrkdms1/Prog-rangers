@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `comment` (
     `id`           bigint       NOT NULL AUTO_INCREMENT,
-    `created_date`  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
-    `status`         varchar(255),
+    `created_at`   TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    `status`       varchar(255),
     `content`      varchar(255) NOT NULL,
     `mention`      varchar(255),
     `parent_id`    bigint,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `problem` (
 CREATE TABLE IF NOT EXISTS `review` (
     `id`               bigint       NOT NULL AUTO_INCREMENT,
     `code_line_number` int          NOT NULL,
-    `created_date`      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    `created_at`       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     `content`          varchar(255) NOT NULL,
     `mention`          varchar(255),
     `parent_id`        bigint,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `review` (
 
 CREATE TABLE IF NOT EXISTS `solution` (
     `id`                bigint       NOT NULL AUTO_INCREMENT,
-    `created_date`       TIMESTAMP    DEFAULT  CURRENT_TIMESTAMP,
+    `created_at`        TIMESTAMP    DEFAULT  CURRENT_TIMESTAMP,
     `is_public`         TINYINT(1)   NOT NULL,
     `code`              varchar(255) NOT NULL,
     `description`       varchar(255) NOT NULL,
