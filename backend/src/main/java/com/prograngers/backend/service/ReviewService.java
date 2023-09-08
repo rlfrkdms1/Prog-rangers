@@ -33,19 +33,19 @@ public class ReviewService {
         SolutionReviewsResponse solutionReviewsResponse = SolutionReviewsResponse.from(solution, lines);
         // 최종 응답 dto에서 line들을 가져온다
         List<SolutionLine> addedSolutionLines = solutionReviewsResponse.getSolutionLines();
-        addReviewAtLine(addedSolutionLines);
+        addReviewAtLine(solution, addedSolutionLines);
         solutionReviewsResponse.setSolutionLines(addedSolutionLines);
         return solutionReviewsResponse;
     }
 
-    private void addReviewAtLine(List<SolutionLine> addedSolutionLines) {
+    private void addReviewAtLine(Solution solution, List<SolutionLine> addedSolutionLines) {
         // 라인들에 대해 for문을 돌면서 리뷰를 추가한다
         for (SolutionLine solutionLine : addedSolutionLines) {
             Integer codeLineNumber = solutionLine.getCodeLineNumber();
 
             // codeLineNumber에 해당하는 review들을 찾는다
             List<com.prograngers.backend.entity.Review> reviews = reviewRepository
-                    .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
+                    .findAllByCodeLineNumberAndSolutionOrderByCreatedAtAsc(codeLineNumber,solution);
             List<SolutionReview> solutionReviewResponse = new ArrayList<>();
 
             // 해당 라인의 리뷰들에 대해 for문을 돈다

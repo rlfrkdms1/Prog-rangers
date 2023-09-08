@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, QueryDslReviewRepository{
     List<Review> findAllBySolution(Solution solution);
-    List<Review> findAllByCodeLineNumberOrderByCreatedAtAsc(Integer codeLineNumber);
+    List<Review> findAllByCodeLineNumberAndSolutionOrderByCreatedAtAsc(Integer codeLineNumber,Solution solution);
 }
