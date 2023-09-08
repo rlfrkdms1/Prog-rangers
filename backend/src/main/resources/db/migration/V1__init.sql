@@ -24,15 +24,16 @@ CREATE TABLE IF NOT EXISTS `likes` (
   COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS `member` (
-    `id`           bigint       NOT NULL AUTO_INCREMENT,
-    `social_id`    bigint,
-    `email`        varchar(255),
-    `github`       varchar(255),
-    `introduction` varchar(255),
-    `nickname`     varchar(255) NOT NULL, -- unique
-    `password`     varchar(255),
-    `photo`        varchar(255),
-    `type`         varchar(255),
+    `id`                  bigint       NOT NULL AUTO_INCREMENT,
+    `social_id`           bigint,
+    `email`               varchar(255),
+    `github`              varchar(255),
+    `introduction`        varchar(255),
+    `nickname`            varchar(255) NOT NULL, -- unique
+    `password`            varchar(255),
+    `photo`               varchar(255),
+    `type`                varchar(255) NOT NULL,
+    `current_modified_at` date,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
