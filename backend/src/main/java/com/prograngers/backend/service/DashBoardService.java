@@ -43,6 +43,11 @@ public class DashBoardService {
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<BadgeConstant> badgeInfos = badges.stream().map(Badge::getBadgeType).collect(Collectors.toList());
 
+        //팔로우의 최근 풀이
+        List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
+        List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
+
+        return ShowDashBoardResponse.of(notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
     }
 
     private Member findMemberById(Long memberId){
