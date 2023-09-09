@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -14,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Builder
-public class Line {
+public class SolutionLine {
     private Integer codeLineNumber;
     private String code;
-    private List<Review> reviews;
+    private List<SolutionReview> solutionReviews;
 }

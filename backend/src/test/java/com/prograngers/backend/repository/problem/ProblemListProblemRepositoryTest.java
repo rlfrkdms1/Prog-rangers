@@ -24,7 +24,7 @@ import static com.prograngers.backend.entity.solution.AlgorithmConstant.*;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
 import static com.prograngers.backend.entity.solution.LanguageConstant.CPP;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.entity.constants.SortConstant.*;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.entity.solution.LanguageConstant.PYTHON;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;

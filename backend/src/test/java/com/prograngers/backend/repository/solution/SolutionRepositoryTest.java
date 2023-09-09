@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
-import static com.prograngers.backend.entity.constants.SortConstant.SCRAPS;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.NEWEST;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.SCRAPS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;

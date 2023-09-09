@@ -11,13 +11,11 @@ import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class SolutionController {
     // solution 쓰기
     @Login
     @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest) throws URISyntaxException {
+    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest){
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
@@ -39,25 +37,19 @@ public class SolutionController {
         Long saveId = solutionService.save(solutionPostRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return redirect(saveId);
     }
+
 
     // scrap해서 생성
     @Login
     @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request)
-            throws URISyntaxException {
+    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request) {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
 
-        // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + saveId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        return redirect(saveId);
     }
 
     // 수정 폼 반환
@@ -72,31 +64,25 @@ public class SolutionController {
     @Login
     @PatchMapping("/{solutionId}")
     public ResponseEntity<?> update(@PathVariable Long solutionId, @LoggedInMember Long memberId,
-                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest) throws URISyntaxException {
+                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest){
 
         // solutionService로 update한다
         Long updateId = solutionService.update(solutionId, solutionPatchRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH + "/" + updateId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return redirect(updateId);
     }
 
     // 삭제 요청
     @Login
     @DeleteMapping("/{solutionId}")
-    public ResponseEntity<?> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId) throws URISyntaxException {
+    public ResponseEntity<?> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId){
 
         // solutionService로 delete한다
         solutionService.delete(solutionId, memberId);
 
-        // 성공할 시 solution 목록으로 리다이렉트, 상태코드 302
-        URI redirectUri = new URI(REDIRECT_PATH);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(redirectUri);
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+        return redirect(null);
 
     }
 
@@ -105,5 +91,12 @@ public class SolutionController {
     public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId) {
         SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
         return ResponseEntity.ok().body(solutionDetailResponse);
+    }
+
+    private ResponseEntity<Object> redirect(Long saveId) {
+        if (saveId==null){
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH )).build();
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + saveId)).build();
     }
 }

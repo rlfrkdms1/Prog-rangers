@@ -84,7 +84,7 @@ public class SolutionPostRequest {
                 .isPublic(true)
                 .code(code)
                 .description(description)
-                .createdDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .level(level)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
