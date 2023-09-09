@@ -22,9 +22,8 @@ public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "member_id",nullable = false)
-    private Member member;
-    @Column(nullable = false)
-    private Long targetId;
+    @Column(name = "following_id", nullable = false)
+    private Long followingId;
+    @Column(name = "follower_id", nullable = false)
+    private Long followerId;
 }
