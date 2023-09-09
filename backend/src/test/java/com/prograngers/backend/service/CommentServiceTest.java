@@ -6,11 +6,12 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +33,8 @@ import static com.prograngers.backend.support.fixture.CommentFixture.생성된_�
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
-import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -71,13 +73,13 @@ class CommentServiceTest {
         comments.add(comment1);
         comments.add(comment2);
 
-        when(commentRepository.findAllBySolution(any())).thenReturn(comments);
+        when(commentRepository.findAllBySolution(solution)).thenReturn(comments);
 
         // when
         List<Comment> bySolution = commentService.findBySolution(solution);
 
         // then
-        Assertions.assertThat(bySolution.size()).isEqualTo(2);
+        assertThat(bySolution.size()).isEqualTo(2);
     }
 
     @DisplayName("댓글 아이디로 댓글을 찾을 수 있다")
@@ -102,7 +104,7 @@ class CommentServiceTest {
         Comment found = commentService.findById(1L);
 
         // then
-        Assertions.assertThat(found).isEqualTo(saved);
+        assertThat(found).isEqualTo(saved);
     }
 
 
@@ -120,14 +122,14 @@ class CommentServiceTest {
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
         given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
-        CommentPatchRequest request = new CommentPatchRequest("수정내용", null);
+        CommentPatchRequest request = new CommentPatchRequest("수정내용");
 
         // when
         commentService.updateComment(comment.getId(), request, member.getId());
         Comment updated = commentRepository.findById(comment.getId()).orElse(null);
 
         // then
-        Assertions.assertThat(updated.getContent()).isEqualTo("수정내용");
+        assertThat(updated.getContent()).isEqualTo("수정내용");
 
     }
 
@@ -158,16 +160,64 @@ class CommentServiceTest {
         commentService.deleteComment(comment.getId(),member.getId());
 
         // then
-        verify(commentRepository,times(2)).save(comment);
         Comment found = commentRepository.findById(deleted.getId()).orElse(null);
-        Assertions.assertThat(found.getStatus()).isEqualTo(DELETED);
+        assertAll(
+                ()->verify(commentRepository,times(2)).save(comment),
+                ()-> assertThat(found.getStatus()).isEqualTo(DELETED)
+        );
 
     }
 
     @DisplayName("없는 댓글을 조회할 경우 예외 발생")
     @Test
     void 없는_댓글_조회() {
-        org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
+        assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
+    }
+
+    @DisplayName("내 댓글이 아닌 댓글을  수정하려 할 경우 예외 발생")
+    @Test
+    void 내_댓글_아닌_댓글_수정(){
+        // given
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 공개_풀이.아이디_지정_생성(1L,problem,member1, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Comment comment = 생성된_댓글.아이디_지정_생성(1L,member1,solution,LocalDateTime.now());
+
+        CommentPatchRequest request = 댓글_수정_요청_생성("수정 댓글", "수정 멘션");
+
+        when(commentRepository.findById(any())).thenReturn(Optional.of(comment));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
+
+        // when then
+        // member1의 댓글을 member2가 수정하려 한다
+        Assertions.assertThrows(
+                MemberUnAuthorizedException.class,
+                ()->commentService.updateComment(comment.getId(),request,member2.getId())
+        );
+    }
+
+    @DisplayName("내 댓글이 아닌 댓글을  삭제하려 할 경우 예외 발생")
+    @Test
+    void 내_댓글_아닌_댓글_삭제(){
+        // given
+        Member member1 = 장지담.아이디_지정_생성(1L);
+        Member member2 = 장지담.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.기본_정보_생성();
+        Solution solution = 공개_풀이.아이디_지정_생성(1L,problem,member1, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Comment comment = 생성된_댓글.아이디_지정_생성(1L,member1,solution,LocalDateTime.now());
+
+        CommentPatchRequest request = 댓글_수정_요청_생성("수정 댓글", "수정 멘션");
+
+        when(commentRepository.findById(any())).thenReturn(Optional.of(comment));
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member2));
+
+        // when then
+        // member1의 댓글을 member2가 삭제하려 한다
+        Assertions.assertThrows(
+                MemberUnAuthorizedException.class,
+                ()->commentService.deleteComment(comment.getId(),member2.getId())
+        );
     }
 
     Member 저장(Member member) {
@@ -176,5 +226,9 @@ class CommentServiceTest {
 
     Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
+    }
+
+    CommentPatchRequest 댓글_수정_요청_생성(String content, String mention){
+        return new CommentPatchRequest(content);
     }
 }
