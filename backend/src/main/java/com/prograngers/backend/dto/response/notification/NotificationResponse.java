@@ -10,13 +10,13 @@ import lombok.Getter;
 @Builder
 public class NotificationResponse {
 
-    private String title;
+    private String nickname;
     private String content;
     private Long solutionId;
 
     public static NotificationResponse from(Notification notification) {
         return NotificationResponse.builder()
-                .title(notification.getTitle())
+                .nickname(notification.getWriterNickname())
                 .content(getContent(notification))
                 .solutionId(notification.getSolution().getId())
                 .build();
