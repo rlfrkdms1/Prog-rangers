@@ -68,7 +68,6 @@ public class CommentService {
         }
 
         comment.updateContent(commentPatchRequest.getContent());
-        comment.updateMention(commentPatchRequest.getMention());
 
         Comment saved = commentRepository.save(comment);
 

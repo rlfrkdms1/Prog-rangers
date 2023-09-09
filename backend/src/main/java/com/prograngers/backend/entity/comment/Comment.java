@@ -39,7 +39,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id",nullable = false)
     private Solution solution;
-    private String mention;
+
 
     @Column(nullable = false)
     private String content;
@@ -53,12 +53,7 @@ public class Comment {
     @Enumerated(value = EnumType.STRING)
     private CommentStatusConStant status;
 
-    public void updateMention(String mention) {
-        if (mention != null) {
-            this.mention = mention;
-            this.status = FIXED;
-        }
-    }
+
 
     public void updateContent(String content) {
         if (content != null) {
@@ -68,7 +63,6 @@ public class Comment {
     }
 
     public void updateComment(String mention, String content){
-        updateMention(mention);
         updateContent(content);
     }
 
