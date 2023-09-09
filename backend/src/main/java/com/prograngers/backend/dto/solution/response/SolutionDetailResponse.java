@@ -47,20 +47,13 @@ public class SolutionDetailResponse {
     private static void addCommentsToResponse(List<Comment> comments, List<SolutionDetailComment> commentResponseList) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
         comments.stream().filter(comment -> comment.getParentId()==null)
-                .forEach(comment-> commentResponseList.add( new SolutionDetailComment(
-                        comment.getMember().getPhoto(),
-                        comment.getId(),
-                        comment.getMember().getNickname(),
-                        comment.getContent(),
-                        comment.getStatus(),
-                        new ArrayList<>()
-                )));
+                .forEach(comment-> commentResponseList.add( SolutionDetailComment.from(comment)));
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
                     for (SolutionDetailComment parentComment : commentResponseList){
                         if (parentComment.getId().equals(comment.getParentId())){
-                            parentComment.getReplies().add(new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null));
+                            parentComment.getReplies().add(SolutionDetailComment.from(comment));
                         }
                     }
                 });
