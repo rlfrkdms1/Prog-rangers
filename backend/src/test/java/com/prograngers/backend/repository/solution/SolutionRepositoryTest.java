@@ -133,9 +133,9 @@ class SolutionRepositoryTest {
 
         // then
         assertAll(
-                ()-> assertThat(result1).contains(solution3, solution1),
-                ()->assertThat(result2).contains(solution2, solution1),
-                ()-> assertThat(result3).contains(solution1)
+                ()-> assertThat(result1).containsExactly(solution3, solution1),
+                ()->assertThat(result2).containsExactly(solution2, solution1),
+                ()-> assertThat(result3).containsExactly(solution1)
         );
     }
 
@@ -150,9 +150,9 @@ class SolutionRepositoryTest {
 
         // 풀이
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,PYTHON,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -164,9 +164,9 @@ class SolutionRepositoryTest {
 
         // then
         assertAll(
-                ()->assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4),
-                ()-> assertThat(result2).contains(solution3).doesNotContain(solution1, solution2, solution4),
-                ()->assertThat(result3).contains(solution4).doesNotContain(solution1, solution2, solution3)
+                ()->assertThat(result1).containsExactly(solution2, solution1),
+                ()-> assertThat(result2).containsExactly(solution3),
+                ()->assertThat(result3).containsExactly(solution4)
         );
     }
 
@@ -304,7 +304,7 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        assertThat(result).contains(solution1).doesNotContain(solution2);
+        assertThat(result).containsExactly(solution1);
     }
 
     Member 저장(Member member) {
