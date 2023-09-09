@@ -4,6 +4,7 @@ import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, QueryDslR
 
     List<Review> findAllByMemberAndCreatedDateBetween(Member member, LocalDateTime startDate, LocalDateTime endDate);
 
+    @Query("select distinct function('date_format', r.createdDate, '%d') from Review r where r.member.id = :memberId and function('date_format', r.createdDate, '%m') = :month")
+    List<Integer> findAllByMonth(Long memberId, int month);
 }
