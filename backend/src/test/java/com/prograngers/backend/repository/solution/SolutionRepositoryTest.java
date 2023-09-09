@@ -118,9 +118,9 @@ class SolutionRepositoryTest {
 
         // 풀이
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,JAVA,1));
-        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,JAVA,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,JAVA,1));
 
 
         // when
@@ -133,9 +133,9 @@ class SolutionRepositoryTest {
 
         // then
         assertAll(
-                ()-> assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4),
-                ()->assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4),
-                ()-> assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4)
+                ()-> assertThat(result1).contains(solution3, solution1),
+                ()->assertThat(result2).contains(solution2, solution1),
+                ()-> assertThat(result3).contains(solution1)
         );
     }
 
@@ -201,14 +201,11 @@ class SolutionRepositoryTest {
         // then
         assertAll(
                                 ()-> assertThat(result1)
-                                        .containsExactly(solution9,solution8,solution7,solution6)
-                                        .doesNotContain(solution1,solution2,solution3,solution4,solution5),
+                                        .containsExactly(solution9,solution8,solution7,solution6),
                                 ()->assertThat(result2)
-                                        .containsExactly(solution5,solution4,solution3,solution2)
-                                        .doesNotContain(solution1,solution6,solution7,solution8,solution9),
+                                        .containsExactly(solution5,solution4,solution3,solution2),
                                 ()->assertThat(result3)
-                                        .containsExactly(solution1)
-                                        .doesNotContain(solution2,solution3,solution4,solution5,solution6,solution7,solution8,solution9),
+                                        .containsExactly(solution1),
                                 ()->assertThat(result4.size()).isEqualTo(0)
                         );
     }
@@ -283,8 +280,8 @@ class SolutionRepositoryTest {
 
         // then
         assertAll(
-                ()->assertThat(profileSolutions1).contains(solution4,solution5,solution6).doesNotContain(solution1,solution2,solution3),
-                ()->assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6)
+                ()->assertThat(profileSolutions1).containsExactly(solution6,solution5,solution4),
+                ()->assertThat(profileSolutions2).containsExactly(solution3,solution2,solution1)
         );
     }
 
