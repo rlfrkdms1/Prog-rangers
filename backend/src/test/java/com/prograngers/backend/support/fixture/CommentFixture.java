@@ -31,7 +31,7 @@ public enum CommentFixture {
         return 기본_빌더_생성()
                 .member(member)
                 .solution(solution)
-                .createdDate(createdDate)
+                .createdAt(createdDate)
                 .build();
     }
 
@@ -40,7 +40,7 @@ public enum CommentFixture {
                 .id(id)
                 .member(member)
                 .solution(solution)
-                .createdDate(createdDate)
+                .createdAt(createdDate)
                 .build();
     }
 

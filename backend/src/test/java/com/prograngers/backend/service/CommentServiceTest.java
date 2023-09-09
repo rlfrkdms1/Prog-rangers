@@ -122,7 +122,7 @@ class CommentServiceTest {
         given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
         given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
-        CommentPatchRequest request = new CommentPatchRequest("수정내용", null);
+        CommentPatchRequest request = new CommentPatchRequest("수정내용");
 
         // when
         commentService.updateComment(comment.getId(), request, member.getId());
@@ -229,6 +229,6 @@ class CommentServiceTest {
     }
 
     CommentPatchRequest 댓글_수정_요청_생성(String content, String mention){
-        return new CommentPatchRequest(content,mention);
+        return new CommentPatchRequest(content);
     }
 }
