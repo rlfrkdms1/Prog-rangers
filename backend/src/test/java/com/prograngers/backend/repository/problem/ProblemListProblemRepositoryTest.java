@@ -75,11 +75,12 @@ class ProblemListProblemRepositoryTest {
                 PageRequest.of(0, 4), null, null, NEWEST
         ).getContent();
 
-        // then // 현재 id에 의해 정렬함
+        // then
         assertAll(
                 ()->assertThat(result.get(0).getId()).isEqualTo(problem3.getId()),
                 ()-> assertThat(result.get(1).getId()).isEqualTo(problem2.getId()),
                 ()->assertThat(result.get(2).getId()).isEqualTo(problem1.getId())
+              //  ()->assertThat(result).containsExactly(problem3,problem2,problem1)
         );
     }
 
