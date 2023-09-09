@@ -101,10 +101,8 @@ class SolutionRepositoryTest {
 
         // then
         assertAll(
-                ()-> assertThat(result1).contains(solution1),
-                ()-> assertThat(result1).doesNotContain(solution2),
-                ()-> assertThat(result2).contains(solution2),
-                ()->assertThat(result2).doesNotContain(solution1)
+                ()-> assertThat(result1).containsExactly(solution1),
+                ()-> assertThat(result2).containsExactly(solution2)
         );
     }
 
