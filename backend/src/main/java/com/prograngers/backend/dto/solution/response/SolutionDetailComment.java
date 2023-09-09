@@ -20,6 +20,7 @@ public class SolutionDetailComment {
     String nickname;
     String content;
 
+
     CommentStatusConStant status;
 
     List<SolutionDetailComment> replies;
