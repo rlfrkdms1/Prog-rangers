@@ -1,20 +1,15 @@
 package com.prograngers.backend.repository.problem;
 
-import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
-import lombok.extern.slf4j.Slf4j;
+import com.prograngers.backend.support.RepositoryTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,13 +27,8 @@ import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
-@Slf4j
-@Transactional
-@Import(TestConfig.class)
-class ProblemListProblemRepositoryTest {
+@RepositoryTest
+class ProblemRepositoryTest {
     @Autowired
     ProblemRepository problemRepository;
 
@@ -59,6 +49,7 @@ class ProblemListProblemRepositoryTest {
         Problem problem1 = 백준_문제.기본_정보_생성();
         Problem problem2 = 백준_문제.기본_정보_생성();
         Problem problem3 = 백준_문제.기본_정보_생성();
+        Problem problem4 = 백준_문제.기본_정보_생성();
 
         // 풀이  풀이 9 ~ 1 순으로 최신
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
@@ -70,17 +61,16 @@ class ProblemListProblemRepositoryTest {
         Solution solution7 = 저장(공개_풀이.기본_정보_생성(problem3, member1, LocalDateTime.now().plusDays(6), BFS, ARRAY, CPP, 1));
         Solution solution8 = 저장(공개_풀이.기본_정보_생성(problem3, member1, LocalDateTime.now().plusDays(7), DFS, ARRAY, PYTHON, 1));
         Solution solution9 = 저장(공개_풀이.기본_정보_생성(problem3, member1, LocalDateTime.now().plusDays(8), DFS, ARRAY, PYTHON, 1));
+        Solution solution10 = 저장(공개_풀이.기본_정보_생성(problem4, member1, LocalDateTime.now().plusDays(9), BFS, ARRAY, CPP, 1));
+        Solution solution11 = 저장(공개_풀이.기본_정보_생성(problem4, member1, LocalDateTime.now().plusDays(10), DFS, ARRAY, PYTHON, 1));
+        Solution solution12 = 저장(공개_풀이.기본_정보_생성(problem4, member1, LocalDateTime.now().plusDays(11), DFS, ARRAY, PYTHON, 1));
         // when
         List<Problem> result = problemRepository.findAll(
                 PageRequest.of(0, 4), null, null, NEWEST
         ).getContent();
-
         // then
         assertAll(
-                ()->assertThat(result.get(0).getId()).isEqualTo(problem3.getId()),
-                ()-> assertThat(result.get(1).getId()).isEqualTo(problem2.getId()),
-                ()->assertThat(result.get(2).getId()).isEqualTo(problem1.getId())
-              //  ()->assertThat(result).containsExactly(problem3,problem2,problem1)
+                ()->assertThat(result).containsExactly(problem4,problem3,problem2,problem1)
         );
     }
 
@@ -118,12 +108,9 @@ class ProblemListProblemRepositoryTest {
         // then
 
         assertAll(
-                ()->assertThat(result1).contains(problem1, problem3),
-                ()->assertThat(result1).doesNotContain(problem2, problem4),
-                ()-> assertThat(result2).contains(problem2, problem4),
-                ()->assertThat(result2).doesNotContain(problem1, problem3),
-                ()->assertThat(result3).contains(problem1),
-                ()->assertThat(result3).doesNotContain(problem2, problem3, problem4)
+                ()->assertThat(result1).containsExactly(problem3, problem1),
+                ()-> assertThat(result2).containsExactly(problem4, problem2),
+                ()->assertThat(result3).containsExactly(problem1)
         );
     }
 
@@ -163,20 +150,15 @@ class ProblemListProblemRepositoryTest {
 
         // then
         assertAll(
-                ()->assertThat(result1).contains(problem9, problem8, problem7, problem6).doesNotContain(problem1, problem2, problem3, problem4, problem5),
-                ()->assertThat(result2).contains(problem2, problem3, problem4, problem5).doesNotContain(problem1, problem6, problem7, problem8, problem9),
-                ()->assertThat(result3).contains(problem1).doesNotContain(problem2, problem3, problem4, problem5, problem6, problem7, problem8, problem9)
+                ()->assertThat(result1).containsExactly(problem9, problem8, problem7, problem6),
+                ()->assertThat(result2).containsExactly(problem5, problem4, problem3, problem2),
+                ()->assertThat(result3).contains(problem1)
         );
     }
 
     Member 저장(Member member) {
         return memberRepository.save(member);
     }
-
-    Problem 저장(Problem problem) {
-        return problemRepository.save(problem);
-    }
-
     Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
