@@ -7,14 +7,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MyRecentSolutionInfo {
+public class SolutionInfo {
 
     private String title;
     private String ojName;
     private Long solutionId;
 
-    public static MyRecentSolutionInfo of(Solution solution, Problem problem) {
-        return MyRecentSolutionInfo.builder()
+    public static SolutionInfo of(Solution solution, Problem problem) {
+        return SolutionInfo.builder()
                 .title(solution.getTitle())
                 .ojName(problem.getOjName().name())
                 .solutionId(solution.getId())
