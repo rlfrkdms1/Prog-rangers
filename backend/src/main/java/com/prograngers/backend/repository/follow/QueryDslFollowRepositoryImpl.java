@@ -14,24 +14,21 @@ import static com.prograngers.backend.entity.QFollow.*;
 @Repository
 @Slf4j
 public class QueryDslFollowRepositoryImpl implements  QueryDslFollowRepository {
-
     private final JPAQueryFactory jpaQueryFactory;
-
     @Override
     public Long getFollowCount(Member member) {
     return jpaQueryFactory
             .select(follow.count())
             .from(follow)
-            .where(follow.member.eq(member))
+            .where(follow.following.eq(member.getId()))
             .fetchOne();
     }
-
     @Override
     public Long getFollowingCount(Member member) {
         return jpaQueryFactory
                 .select(follow.count())
                 .from(follow)
-                .where(follow.targetId.eq(member.getId()))
+                .where(follow.follower.eq(member.getId()))
                 .fetchOne();
     }
 }

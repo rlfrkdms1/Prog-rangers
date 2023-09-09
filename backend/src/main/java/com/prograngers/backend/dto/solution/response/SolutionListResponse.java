@@ -31,8 +31,23 @@ public class SolutionListResponse {
         if (solutions.size()==0){
             return null;
         }
-        Problem problem = solutions.get(0).getProblem();
+        Problem problem = getProblem(solutions);
+        SolutionListResponse solutionListResponse = addProblemNameAndOjNameAtResponse(pages, problem);
+        addSolutionAtResponse(solutions, solutionListResponse);
+        solutionListResponse.setPage(page);
+        return solutionListResponse;
+    }
 
+    private static void addSolutionAtResponse(List<Solution> solutions, SolutionListResponse solutionListResponse) {
+        solutions.stream()
+                        .forEach((solution -> solutionListResponse.getSolutionListSolutions().add(                    SolutionListSolution.builder()
+                                .solutionName(solution.getTitle())
+                                .algorithm(solution.getAlgorithm())
+                                .dataStructure(solution.getDataStructure())
+                                .build())));
+    }
+
+    private static SolutionListResponse addProblemNameAndOjNameAtResponse(PageImpl<Solution> pages, Problem problem) {
         // 문제이름, 저지명 세팅
         SolutionListResponse solutionListResponse = SolutionListResponse.builder()
                 .problemName(problem.getTitle())
@@ -40,17 +55,11 @@ public class SolutionListResponse {
                 .solutionListSolutions(new ArrayList<>())
                 .totalPages(pages.getTotalPages())
                 .build();
-
-        for (Solution solution : solutions){
-            solutionListResponse.getSolutionListSolutions().add(
-                    SolutionListSolution.builder()
-                            .solutionName(solution.getTitle())
-                            .algorithm(solution.getAlgorithm())
-                            .dataStructure(solution.getDataStructure())
-                            .build()
-            );
-        }
-        solutionListResponse.setPage(page);
         return solutionListResponse;
+    }
+
+    private static Problem getProblem(List<Solution> solutions) {
+        Problem problem = solutions.get(0).getProblem();
+        return problem;
     }
 }

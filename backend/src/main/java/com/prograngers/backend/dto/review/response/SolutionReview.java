@@ -10,22 +10,22 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class Review {
+public class SolutionReview {
     Long id;
     String nickname;
     String photo;
     String content;
-    List<Reply> replies;
+    List<SolutionReviewReply> replies;
 
-    public static Review from(com.prograngers.backend.entity.Review review){
+    public static SolutionReview from(com.prograngers.backend.entity.Review review){
 
-        Review reviewResponse = Review.builder()
+        SolutionReview solutionReviewResponse = SolutionReview.builder()
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())
                 .content(review.getContent())
                 .replies(new ArrayList<>())
                 .build();
-        return reviewResponse;
+        return solutionReviewResponse;
     }
 }

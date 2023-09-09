@@ -33,13 +33,6 @@ export const QSolving = ({data}) => {
                 <div key={index} css={css`${tags}`}>{index}</div>
               ))}
             </div>
-            <div css={css`
-              ${ojNameTag}
-              background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
-              color: white;
-            `}> 
-              {item.ojName}
-            </div>
           </div>
         </div>
       ))}

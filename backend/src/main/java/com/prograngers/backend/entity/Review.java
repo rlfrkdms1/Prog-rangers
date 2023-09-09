@@ -42,24 +42,9 @@ public class Review {
 
     private Long parentId;
 
-    private String mention;
-
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
-
-    public void updateMention(String mention) {
-        if (mention != null) {
-            this.mention = mention;
-        }
-    }
-
-    public void updateContent(String content) {
-        if (content != null) {
-            this.content = content;
-        }
-    }
-
+    @Column(nullable = false,updatable = false)
+    private LocalDateTime createdAt;
 }

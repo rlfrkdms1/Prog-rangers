@@ -5,7 +5,7 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
-import com.prograngers.backend.entity.constants.SortConstant;
+import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.prograngers.backend.entity.QLikes.*;
-import static com.prograngers.backend.entity.constants.SortConstant.*;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.entity.solution.QSolution.*;
 
 @RequiredArgsConstructor
@@ -31,37 +31,24 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     public PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
-
-             List<Solution> result = null;
         if (sortBy.equals(NEWEST)){
-            result = getNewestSolutions(pageable, problemId, language, algorithm, dataStructure);
-            Long count = getCount(problemId, language, algorithm, dataStructure);
-            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-            return solutions;
+            return getSolutionsSorByNewest(pageable, problemId, language, algorithm, dataStructure);
         }
         if (sortBy.equals(LIKES)){
-            result = getLikesSolutions(pageable, problemId, language, algorithm, dataStructure);
-            Long count = getCount(problemId, language, algorithm, dataStructure);
-            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-            return solutions;
+            return getSolutionsSortByLikes(pageable, problemId, language, algorithm, dataStructure);
         }
         if (sortBy.equals(SCRAPS)){
-            result = getScrapsSolutions(pageable, problemId, language, algorithm, dataStructure);
-            Long count = getCount(problemId, language, algorithm, dataStructure);
-            PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
-            return solutions;
+            return getSolutionsSortByScraps(pageable, problemId, language, algorithm, dataStructure);
         }
         return null;
     }
-
-
     @Override
     public List<Solution> findProfileSolutions(Long memberId,Long page) {
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
                 .where(solution.member.id.eq(memberId), solution.id.loe(page))
-                .orderBy(solution.createdDate.desc())
+                .orderBy(solution.createdAt.desc())
                 .limit(3)
                 .fetch();
     }
@@ -94,7 +81,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .rightJoin(subSolution.scrapSolution,solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .groupBy(solution.id)
-                .orderBy(subSolution.count().desc(),solution.createdDate.desc())
+                .orderBy(subSolution.count().desc(),solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -109,7 +96,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .rightJoin(likes.solution, solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .groupBy(solution.id)
-                .orderBy(likes.id.count().desc(),solution.createdDate.desc())
+                .orderBy(likes.id.count().desc(),solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -121,7 +108,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         result = jpaQueryFactory
                 .selectFrom(solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
-                .orderBy(solution.createdDate.desc())
+                .orderBy(solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -135,5 +122,28 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .fetchOne();
         return count;
+    }
+    private PageImpl<Solution> getSolutionsSortByScraps(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = getScrapsSolutions(pageable, problemId, language, algorithm, dataStructure);
+        Long count = getCount(problemId, language, algorithm, dataStructure);
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
+    }
+
+    private PageImpl<Solution> getSolutionsSortByLikes(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = getLikesSolutions(pageable, problemId, language, algorithm, dataStructure);
+        Long count = getCount(problemId, language, algorithm, dataStructure);
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
+    }
+
+    private PageImpl<Solution> getSolutionsSorByNewest(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
+        List<Solution> result;
+        result = getNewestSolutions(pageable, problemId, language, algorithm, dataStructure);
+        Long count = getCount(problemId, language, algorithm, dataStructure);
+        PageImpl<Solution> solutions = new PageImpl<>(result, pageable, count);
+        return solutions;
     }
 }

@@ -12,19 +12,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Builder
-public class Reply {
+public class SolutionReviewReply {
     private Long id;
     private String nickname;
     private String photo;
     private String content;
 
-    public static Reply from(Review review) {
-        Reply reply = Reply.builder()
+    public static SolutionReviewReply from(Review review) {
+        SolutionReviewReply solutionReviewReply = SolutionReviewReply.builder()
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())
                 .content(review.getContent())
                 .build();
-        return reply;
+        return solutionReviewReply;
     }
 }

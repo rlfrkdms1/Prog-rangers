@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 
 import { SideBar } from '../components/SideBar/SideBar';
 
-export const MyPage = () => {
+export const Follow = () => {
   return (
     <div 
       className='container' 
