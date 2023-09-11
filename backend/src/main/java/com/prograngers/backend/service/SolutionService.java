@@ -116,16 +116,27 @@ public class SolutionService {
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
-        Solution solution = findById(solutionId);
-        boolean isMine = checkSolutionIsMine(memberId, solution);
-        checkViewPrivateSolution(solution, isMine);
-        List<Comment> comments = commentRepository.findAllBySolution(solution);
-        List<Likes> likes = likesRepository.findAllBySolution(solution);
-        boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
-        List<Solution> scrapSolutions = solutionRepository.findAllByScrapSolution(solution);
-        boolean scraped = scrapSolutions.stream().map(scrapedSolution -> scrapedSolution.getMember().getId()).anyMatch(id->id==memberId);
-        SolutionDetailResponse solutionDetailResponse = SolutionDetailResponse.from(solution.getProblem(), solution, comments,scraped,scrapSolutions.size(),pushedLike,likes.size(),isMine);
-        return solutionDetailResponse;
+        Solution targetSolution = findById(solutionId);
+
+        // 내 풀이인지 여부
+        boolean isMine = checkSolutionIsMine(memberId, targetSolution);
+
+        // 내 풀이가 아닌 비공개 풀이를 열람하는지 확인
+        checkViewPrivateSolution(targetSolution, isMine);
+
+        List<Comment> comments = commentRepository.findAllBySolution(targetSolution);
+        List<Likes> likes = likesRepository.findAllBySolution(targetSolution);
+
+        // 좋아요 눌렀는지 여부
+        boolean pushedLike = checkPushedLike(memberId, likes);
+
+        // 스크랩 풀이들 가져오기
+        List<Solution> solutionsScrapedTargetSolution = solutionRepository.findAllByScrapSolution(targetSolution);
+
+        // 스크랩 했는지 여부
+        boolean scraped = checkScraped(memberId, solutionsScrapedTargetSolution);
+
+        return SolutionDetailResponse.from(targetSolution, comments,scraped,solutionsScrapedTargetSolution.size(),pushedLike,likes.size(),isMine);
     }
 
     public SolutionListResponse getSolutionList(
@@ -160,5 +171,19 @@ public class SolutionService {
         if (!solution.isPublic()&&!isMine){
             throw new PrivateSolutionException();
         }
+    }
+
+    private static boolean checkScraped(Long memberId, List<Solution> scrapSolutions) {
+        return scrapSolutions
+                .stream()
+                .map(scrapedSolution -> scrapedSolution.getMember().getId())
+                .anyMatch(id -> id == memberId);
+    }
+
+    private static boolean checkPushedLike(Long memberId, List<Likes> likes) {
+        return likes
+                .stream()
+                .map(like -> like.getMember().getId())
+                .anyMatch(id -> id.equals(memberId));
     }
 }
