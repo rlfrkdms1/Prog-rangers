@@ -51,7 +51,7 @@ public class DashBoardService {
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<String> badgeInfos = badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
         //잔디밭
-        List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalander(memberId, month, year);
+        List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalender(memberId, month, year);
         //팔로우의 최근 풀이
         List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
         List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class DashBoardService {
         return ShowDashBoardResponse.of(monthlyStudyCalendar,notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
     }
 
-    private List<IsDayOfStudy> getMonthlyStudyCalander(Long memberId, MonthConstant month, int year) {
+    private List<IsDayOfStudy> getMonthlyStudyCalender(Long memberId, MonthConstant month, int year) {
         List<Integer> monthlySolutions = solutionRepository.findAllByMonth(memberId, month.getMonth());
         List<Integer> monthlyReviews = reviewRepository.findAllByMonth(memberId, month.getMonth());
         List<Integer> monthlyStudy = Stream.concat(monthlySolutions.stream(), monthlyReviews.stream()).distinct().collect(Collectors.toList());
