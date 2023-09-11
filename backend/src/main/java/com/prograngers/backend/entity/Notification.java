@@ -48,7 +48,7 @@ public class Notification {
     private boolean isRead;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "receiver_id", nullable = false)
     private Member receiver;
 
     @ManyToOne(fetch = FetchType.LAZY)
