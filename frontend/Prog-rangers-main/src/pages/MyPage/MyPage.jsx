@@ -16,14 +16,22 @@ import {
 export const MyPage = () => {
 
   // API 가져오기
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(true);
 
-  //   useEffect(() => {
-  //       axios.get('http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023')
-  //           .then(response => {
-  //               setUsers(response.data);
-  //           });
-  //   }, []);
+  useEffect(() => {
+    // const apiUrl = 'http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023';
+
+    axios.get('http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023')
+      .then((response) => {
+        setData(response.data);
+        // setLoading(false);
+      })
+      .catch((error) => {
+        console.error('API 요청 에러:', error);
+        // setLoading(false);
+      });
+  }, []);
 
   // 달력 기록
   const [value, setValue] = useState(new Date());
@@ -34,17 +42,23 @@ export const MyPage = () => {
   const currentMonth = value.toLocaleString('en-US', { month: 'long' }).toUpperCase();
   const currentYear = value.getFullYear();
 
+
   const renderCalendar = () => {
     const calendar = [];
 
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(value.getFullYear(), value.getMonth(), day);
-//      const studied = data.some((item) => item.date === currentDate.toISOString() && item.studied === true);
+
+      const studyData = data.find((item) =>
+      item.day === day
+      );
+      const studied = studyData ? studyData.studied : false;
 
       calendar.push(
         <div key={currentDate.toISOString()}>
           <div css={css`
           ${dateStyle}
+          background-color: ${studied ? '#70A9BC' : '#D9D9D9'};
           `}>
             {currentDate.getDate()}
             </div>
@@ -121,7 +135,6 @@ export const MyPage = () => {
             background-color: ${theme.colors.light4}
             
             }`}>
-              
                 <div css={css`
                 ${[gridStyle, alignCenter]}`}>
                   {renderCalendar()}

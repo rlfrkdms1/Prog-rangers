@@ -26,6 +26,7 @@ export const dateStyle = css`
   background-color: ${theme.colors.light2};
   color: transparent;
   `;
+  
 export const gridStyle = css`
   display: grid;
   grid-template-columns: repeat(13, 25px);
