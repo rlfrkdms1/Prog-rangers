@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { MainBody } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
-import { QuestionForm } from '../../components/Question';
 import { QSolving } from '../../components/Solving';
 import { Pagination } from '../../components/Pagination/Pagination';
 import questions from '../../db/question.json';
@@ -73,6 +72,10 @@ export const Solutions = () => {
     setSolvings(currentSolvings);
   }, [page]);
   
+
+  // 임시 문제 제목 추출
+  const firstItem = questions[0];
+
   return( 
     <div css={css`
           display: flex; 
@@ -93,10 +96,20 @@ export const Solutions = () => {
           </div>
 
           <div css={css`
+          display: flex;
+          margin-top: 53px;`}>
+          <div css={css`  
             ${fontSize24}
-            margin-top: 53px`}> 
-            쿼리의 모음 개수 
-          </div>    
+            margin-right: 20px;
+            `}> {firstItem.title} 
+          </div>
+          <div css={css`
+            ${ojNameTag}
+            background-color: ${firstItem.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
+            color: white;
+          `}> {firstItem.ojName}
+          </div>  
+        </div>   
 
       <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
           <QSolving data={Solvings}/>
