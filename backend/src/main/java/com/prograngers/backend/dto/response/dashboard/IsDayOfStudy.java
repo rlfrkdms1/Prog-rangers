@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class IsDayOfStudy {
     private int day;
-    private boolean isStudied;
+    private boolean studied;
 }
