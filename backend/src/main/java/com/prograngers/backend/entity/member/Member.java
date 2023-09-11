@@ -46,8 +46,8 @@ public class Member {
 
     private String photo;
 
-    @Column(name = "current_modified_at")
-    private LocalDate currentModifiedAt;
+    @Column(name = "currently_modified_at")
+    private LocalDate currentlyModifiedAt;
 
     private void updateNickName(String nickname) {
         if (nickname != null) {
@@ -76,7 +76,7 @@ public class Member {
     private void updatePassword(String password) {
         if (password != null) {
             this.password = Encrypt.encoding(password);
-            this.currentModifiedAt = LocalDate.now();
+            this.currentlyModifiedAt = LocalDate.now();
         }
     }
 

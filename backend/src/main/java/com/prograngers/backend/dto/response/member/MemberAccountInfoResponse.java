@@ -21,7 +21,7 @@ public class MemberAccountInfoResponse {
 
     private String introduction;
 
-    private LocalDate currentModifiedAt;
+    private LocalDate currentlyModifiedAt;
 
     private String photo;
 
@@ -32,7 +32,7 @@ public class MemberAccountInfoResponse {
                 .email(member.getEmail())
                 .github(member.getGithub())
                 .introduction(member.getIntroduction())
-                .currentModifiedAt(member.getCurrentModifiedAt())
+                .currentlyModifiedAt(member.getCurrentlyModifiedAt())
                 .photo(member.getPhoto())
                 .build();
     }
