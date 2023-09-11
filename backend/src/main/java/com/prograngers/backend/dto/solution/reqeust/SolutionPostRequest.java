@@ -60,10 +60,11 @@ public class SolutionPostRequest {
         JudgeConstant judge = checkLink(problemLink);
 
         // 이미 존재하는 문제일 경우
-        Problem problem = problemRepository.findByLink(problemLink);
-        if (problem!=null){
-            return problem;
+        Problem recentProblem = problemRepository.findByLink(problemLink);
+        if (recentProblem!=null){
+            return recentProblem;
         }
+
         // 아닐 경우, 새로 만들어서 problem repository에 저장하고 반환
         Problem newProblem = Problem.builder()
                 .link(problemLink)
