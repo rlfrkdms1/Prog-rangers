@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Builder
 public class MemberProfileResponse {
+    private static int SIZE_PER_SCROLL = 3;
     /**
      * 프로필 사진, 닉네임, 자기소개, 팔로우, 팔로잉, 깃허브
      */
@@ -44,16 +45,11 @@ public class MemberProfileResponse {
         // 무한스크롤 isLast, 커서
         boolean isLast = false;
         Long cursor = -1L;
-        if (solutions.size()<3){
+        if (checkLastScroll(solutions)){
             isLast = true;
         } else {
-            cursor = solutions.get(2).getId();
-            solutions.remove(2);
+            cursor = getCursor(solutions);
         }
-
-        List<BadgeConstant> badgeList = badges.stream().map(badge -> badge.getBadgeType()).toList();
-        List<MemberProfileProblemSolution> problemSolutionList = solutions.stream()
-                .map(solution -> MemberProfileProblemSolution.from(solution)).toList();
 
         return MemberProfileResponse.builder()
                 .photo(member.getPhoto())
@@ -61,10 +57,30 @@ public class MemberProfileResponse {
                 .introduction(member.getIntroduction())
                 .follow(follow)
                 .following(following)
-                .badge(badgeList)
-                .list(problemSolutionList)
+                .badge(getBadgeList(badges))
+                .list(getProblemSolutionList(solutions))
                 .cursor(cursor)
                 .isLast(isLast)
                 .build();
+    }
+
+    private static List<MemberProfileProblemSolution> getProblemSolutionList(List<Solution> solutions) {
+        return solutions.stream()
+                .map(solution -> MemberProfileProblemSolution.from(solution)).toList();
+    }
+
+    private static List<BadgeConstant> getBadgeList(List<Badge> badges) {
+        return badges.stream().map(badge -> badge.getBadgeType()).toList();
+    }
+
+    private static boolean checkLastScroll(List<Solution> solutions) {
+        return solutions.size() < SIZE_PER_SCROLL;
+    }
+
+    private static Long getCursor(List<Solution> solutions) {
+        Long cursor;
+        cursor = solutions.get(SIZE_PER_SCROLL-1).getId();
+        solutions.remove(SIZE_PER_SCROLL-1);
+        return cursor;
     }
 }
