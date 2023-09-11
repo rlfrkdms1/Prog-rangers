@@ -102,6 +102,29 @@ CREATE TABLE IF NOT EXISTS `notification` (
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+CREATE TABLE IF NOT EXISTS `follow` (
+   `id`           bigint NOT NULL AUTO_INCREMENT,
+   `following_id` bigint NOT NULL,
+   `follower_id`  bigint NOT NULL,
+   PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE IF NOT EXISTS `badge` (
+    `id`         bigint NOT NULL AUTO_INCREMENT,
+    `member_id`  bigint NOT NULL,
+    `badge_type` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+
+
 
 
 

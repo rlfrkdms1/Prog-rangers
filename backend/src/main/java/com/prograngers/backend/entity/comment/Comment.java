@@ -35,6 +35,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id",nullable = false)
     private Solution solution;
@@ -43,6 +44,7 @@ public class Comment {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     private Long parentId;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private CommentStatusConStant status;
@@ -59,4 +61,5 @@ public class Comment {
     public void delete(){
         this.status = DELETED;
     }
+
 }
