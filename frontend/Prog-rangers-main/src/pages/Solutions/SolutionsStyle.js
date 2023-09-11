@@ -19,7 +19,6 @@ export const fontSize24 = css`
   color: ${theme.colors.dark1};
 `;
 
-
 export const filterStyle = css`
   margin: 25px 0 0 0;
   height: 50px;
@@ -28,11 +27,4 @@ export const filterStyle = css`
   flex-direction: row;
   justify-content: space-between;
   z-index: 2;
-  `;
-
-  export const ojNameTag = css`
-  display: flex;
-  padding: 8px 20px;
-  border-radius: 20px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1)
   `;

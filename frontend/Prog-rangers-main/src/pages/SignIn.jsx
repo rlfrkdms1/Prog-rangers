@@ -57,9 +57,9 @@ export const SignIn = () => {
             </div>
           </Options>
           <Options>
-            <span css={grayTextStyle}>아이디 찾기</span>
-            <span css={grayTextStyle}>|</span>
-            <span css={grayTextStyle}>비밀번호 찾기</span>
+            {/* <span css={grayTextStyle}>아이디 찾기</span> */}
+            {/* <span css={grayTextStyle}>|</span> */}
+            {/* <span css={grayTextStyle}>비밀번호 찾기</span> */}
           </Options>
         </OptionWrapper>
         <SocialLoginButtons />

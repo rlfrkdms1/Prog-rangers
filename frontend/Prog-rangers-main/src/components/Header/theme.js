@@ -13,6 +13,7 @@ const colors = {
   baekjoon: '#3578BF',
   yellow: '#FFE500', //star
   red: '#FF4545',
+  black: '#000000',
   codeReview: '#CCDEF2',
 };
 
