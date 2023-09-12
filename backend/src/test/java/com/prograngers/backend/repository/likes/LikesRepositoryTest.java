@@ -9,7 +9,6 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,8 @@ import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -64,8 +65,10 @@ class LikesRepositoryTest {
         List<Likes> allBySolution2 = likesRepository.findAllBySolution(solution2);
 
         // then
-        Assertions.assertThat(allBySolution1).contains(like1,like2).doesNotContain(like3,like4);
-        Assertions.assertThat(allBySolution2).contains(like3,like4).doesNotContain(like1,like2);
+        assertAll(
+                ()->assertThat(allBySolution1).contains(like1,like2).doesNotContain(like3,like4),
+                ()->assertThat(allBySolution2).contains(like3,like4).doesNotContain(like1,like2)
+        );
     }
 
     @Test
@@ -88,8 +91,10 @@ class LikesRepositoryTest {
         Likes byMemberAndSolution2 = likesRepository.findByMemberAndSolution(member2, solution2).get();
 
         // then
-        Assertions.assertThat(byMemberAndSolution1).isEqualTo(like1);
-        Assertions.assertThat(byMemberAndSolution2).isEqualTo(like4);
+        assertAll(
+                ()-> assertThat(byMemberAndSolution1).isEqualTo(like1),
+                ()->assertThat(byMemberAndSolution2).isEqualTo(like4)
+        );
     }
 
     private static Likes createLike(Member member2, Solution solution2) {

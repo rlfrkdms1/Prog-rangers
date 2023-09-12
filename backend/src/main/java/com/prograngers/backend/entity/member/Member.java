@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 
 @Entity
@@ -32,20 +33,21 @@ public class Member {
     @Column(nullable = false)
     private MemberType type;
 
-    @Column(nullable = false)
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
     private String email;
 
-    @Nullable
     private String github;
 
-    @Nullable
     private String introduction;
 
     private String password;
 
     private String photo;
+
+    @Column(name = "currently_modified_at")
+    private LocalDate currentlyModifiedAt;
 
     private void updateNickName(String nickname) {
         if (nickname != null) {
@@ -74,6 +76,7 @@ public class Member {
     private void updatePassword(String password) {
         if (password != null) {
             this.password = Encrypt.encoding(password);
+            this.currentlyModifiedAt = LocalDate.now();
         }
     }
 
