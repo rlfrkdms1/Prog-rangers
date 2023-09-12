@@ -2,8 +2,10 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
+import com.prograngers.backend.dto.review.request.ReviewPostRequest;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +36,7 @@ public class ReviewController {
 
     @PostMapping("/reviews")
     @Login
-    public ResponseEntity<?> writeReview(@PathVariable Long solutionId, @RequestBody ReviewPostRequest reviewPostRequest, @LoggedInMember Long memberId){
+    public ResponseEntity<?> writeReview(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPostRequest reviewPostRequest, @LoggedInMember Long memberId){
         reviewService.writeReview(reviewPostRequest,memberId);
         // 풀이 상세보기로 리다이렉트
         return redirect(solutionId);
