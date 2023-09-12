@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -38,25 +39,25 @@ public class DashBoardService {
     private final ReviewRepository reviewRepository;
 
 
-    public ShowDashBoardResponse createDashBoard(Long memberId, MonthConstant month, int year) {
-        if(month == null) month = MonthConstant.getMonthConstant(LocalDate.now().getMonthValue());
+    public ShowDashBoardResponse createDashBoard(Long memberId, YearMonth date) {
+        if (date == null) date = YearMonth.now();
         Member member = findMemberById(memberId);
         //알림
         List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
         List<NotificationInfo> notificationInfoList = notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
         //최근 풀이
-        List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedDateDesc(member);
+        List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
         List<SolutionInfo> myRecentSolutionInfos = myRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
         //뱃지 찾기
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<String> badgeInfos = badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
         //잔디밭
-        List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, month, year);
+        List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, MonthConstant.getMonthConstant(date.getMonthValue()), date.getYear());
         //팔로우의 최근 풀이
         List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
         List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
 
-        return ShowDashBoardResponse.of(monthlyStudyCalendar,notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
+        return ShowDashBoardResponse.of(monthlyStudyCalendar, notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
     }
 
     private List<IsDayOfStudy> getMonthlyStudyCalendar(Long memberId, MonthConstant month, int year) {
