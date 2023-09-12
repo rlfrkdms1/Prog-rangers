@@ -48,7 +48,7 @@ public class ReviewController {
     @Login
     public ResponseEntity<?> updateReview(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPatchRequest reviewPatchRequest,
                                          @LoggedInMember Long memberId,@PathVariable Long reviewId){
-        reviewService.updateReview(reviewPatchRequest,memberId,solutionId,reviewId);
+        reviewService.updateReview(reviewPatchRequest,memberId,reviewId);
         // 풀이 상세보기로 리다이렉트
         return redirect(solutionId);
     }

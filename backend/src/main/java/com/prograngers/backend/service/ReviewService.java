@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
 import com.prograngers.backend.dto.review.request.ReviewPostRequest;
 import com.prograngers.backend.dto.review.response.SolutionLine;
 import com.prograngers.backend.dto.review.response.SolutionReviewReply;
@@ -9,13 +10,18 @@ import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.ReviewNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +29,27 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final SolutionRepository solutionRepository;
 
     private final MemberRepository memberRepository;
+
+    @Transactional
+    public void writeReview(ReviewPostRequest reviewPostRequest, Long memberId,Long solutionId) {
+        Member writer = findMemberById(memberId);
+        Solution solution = findSolutionById(solutionId);
+        reviewRepository.save(reviewPostRequest.toReview(writer,solution));
+    }
+    @Transactional
+    public void updateReview(ReviewPatchRequest reviewPatchRequest, Long memberId, Long reviewId) {
+        Review targetReview = findReviewById(reviewId);
+        Member member = findMemberById(memberId);
+        checkMemberAuthorization(targetReview, member);
+        reviewPatchRequest.updateReview(targetReview);
+    }
 
     public SolutionReviewsResponse getReviewDetail(Long solutionId) {
         // solutionId에 해당하는 풀이 찾기
@@ -86,13 +107,17 @@ public class ReviewService {
         }
     }
 
-    public void writeReview(ReviewPostRequest reviewPostRequest, Long memberId,Long solutionId) {
-        Member writer = findMemberById(memberId);
-        Solution solution = findSolutionById(solutionId);
-        reviewRepository.save(reviewPostRequest.toReview(writer,solution));
-    }
-
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Review findReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+    }
+
+    private static void checkMemberAuthorization(Review targetReview, Member member) {
+        if (!targetReview.getMember().getId().equals(member.getId())){
+            throw new MemberUnAuthorizedException();
+        }
     }
 }

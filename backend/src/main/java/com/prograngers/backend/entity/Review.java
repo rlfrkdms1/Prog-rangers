@@ -47,4 +47,9 @@ public class Review {
 
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
+
+    public Review update(String content){
+        this.content = content;
+        return this;
+    }
 }
