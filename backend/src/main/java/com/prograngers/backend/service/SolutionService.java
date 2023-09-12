@@ -97,8 +97,8 @@ public class SolutionService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
     @Transactional
-    public Long saveScrap(Long id, ScarpSolutionPostRequest request, Long memberId) {
-        Solution scrap = findById(id);
+    public Long saveScrap(Long scrapTargetId, ScarpSolutionPostRequest request, Long memberId) {
+        Solution scrap = findById(scrapTargetId);
         Member member = getMember(memberId);
 
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다

@@ -47,7 +47,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     private List<Problem> getResults(Pageable pageable, DataStructureConstant dataStructure, AlgorithmConstant algorithm, SortConstant orderBy) {
         List<Problem> results = jpaQueryFactory
-                .selectFrom(problem)
+                .selectFrom(problem).distinct()
                 // solution을 조회해서 자료구조, 알고리즘을 알아내야 해서 성능을 위해 패치조인
                 .join(problem.solutions, solution).fetchJoin()
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
@@ -60,10 +60,8 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
         if (orderBy.equals(NEWEST)) {
-            return
-                    solution.createdAt.desc();
+            return solution.createdAt.desc();
         } else if (orderBy.equals(SOLUTIONS)) {
-            log.info("orderBySolutionCount");
             return problem.solutions.size().desc();
         } else throw new SortTypeNotFoundException();
     }
