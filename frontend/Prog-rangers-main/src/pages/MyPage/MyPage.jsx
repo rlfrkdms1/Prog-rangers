@@ -16,49 +16,51 @@ import {
 export const MyPage = () => {
 
   // API 가져오기
-  const [data, setData] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState([]);
+  
+  // MonthlyStudyCalendar
+  const [value, setValue] = useState(new Date());
 
   useEffect(() => {
-    // const apiUrl = 'http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023';
+    const apiUrl = 'http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023';
 
-    axios.get('http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023')
+    axios.get(apiUrl)
       .then((response) => {
-        setData(response.data);
-        // setLoading(false);
+        setMonthlyStudyCalendar(response.data.setMonthlyStudyCalendar);
       })
       .catch((error) => {
         console.error('API 요청 에러:', error);
-        // setLoading(false);
       });
   }, []);
 
-  // 달력 기록
-  const [value, setValue] = useState(new Date());
-
-  const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
-  const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0);
-  const daysInMonth = endOfMonth.getDate();
+  const daysInMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
   const currentMonth = value.toLocaleString('en-US', { month: 'long' }).toUpperCase();
   const currentYear = value.getFullYear();
-
 
   const renderCalendar = () => {
     const calendar = [];
 
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(value.getFullYear(), value.getMonth(), day);
+  
+      // studyData = {"day": date , "studied": T/F }
+      const studyData = monthlyStudyCalendar.find((item) => item.day === day);
+      // 학습여부 T/F 저장
+      const studiedFromMonthlyData = studyData ? studyData.studied : false;
 
-      const studyData = data.find((item) =>
-      item.day === day
-      );
-      const studied = studyData ? studyData.studied : false;
+      // (정상) 캘린더 랜더링한 숫자(날짜)와 API의 day변수가 같다
+      const isCurrentDate = currentDate.getDate() === day; 
+      // isCurrentDate도 true, studied 도 true
+      const StudyTrue = studiedFromMonthlyData && isCurrentDate;
+
+      console.log(`isCurrentDate for day ${day}: ${isCurrentDate}`);
+      console.log(`StudyTrue for day ${day}: ${StudyTrue}`);
 
       calendar.push(
         <div key={currentDate.toISOString()}>
           <div css={css`
           ${dateStyle}
-          background-color: ${studied ? '#70A9BC' : '#D9D9D9'};
+          background-color: ${StudyTrue ? '#70A9BC' : '#D9D9D9'};
           `}>
             {currentDate.getDate()}
             </div>
@@ -66,18 +68,16 @@ export const MyPage = () => {
       );
     }
     return calendar;
-  };
+};
 
   const goToPreviousMonth = () => {
     const previousMonth = new Date(value.getFullYear(), value.getMonth() - 1, 1);
     setValue(previousMonth);
-    renderCalendar();
   };
 
   const goToNextMonth = () => {
     const nextMonth = new Date(value.getFullYear(), value.getMonth() + 1, 1);
     setValue(nextMonth);
-    renderCalendar();
   };
 
   return(
