@@ -24,9 +24,9 @@ public class ReviewPostRequest {
 
     @Nullable
     private Long parentId;
-    @NotNull
+    @NotNull(message = "줄 번호가 없습니다")
     private int codeLineNumber;
-    @NotBlank
+    @NotBlank(message = "내용은 빈칸일 수 없습니다")
     private String content;
 
     public Review toReview(Member member, Solution solution) {
