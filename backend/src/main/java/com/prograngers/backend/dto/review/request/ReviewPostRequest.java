@@ -2,6 +2,7 @@ package com.prograngers.backend.dto.review.request;
 
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.review.ReviewStatusConStant;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+
+import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
 
 @Getter
 @Setter
@@ -28,6 +31,7 @@ public class ReviewPostRequest {
 
     public Review toReview(Member member, Solution solution) {
         return Review.builder()
+                .status(CREATED)
                 .member(member)
                 .solution(solution)
                 .content(content)
