@@ -62,4 +62,8 @@ public class Review {
         this.status = FIXED;
         return this;
     }
+
+    public void delete() {
+        this.status=DELETED;
+    }
 }

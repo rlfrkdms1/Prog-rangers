@@ -49,6 +49,14 @@ public class ReviewService {
         reviewPatchRequest.updateReview(targetReview);
     }
 
+    @Transactional
+    public void deleteReview(Long memberId, Long reviewId) {
+        Review targetReview = findReviewById(reviewId);
+        Member member = findMemberById(memberId);
+        checkMemberAuthorization(targetReview, member);
+        targetReview.delete();
+    }
+
     public SolutionReviewsResponse getReviewDetail(Long solutionId) {
         // solutionId에 해당하는 풀이 찾기
         Solution solution = findSolutionById(solutionId);
@@ -118,4 +126,5 @@ public class ReviewService {
             throw new MemberUnAuthorizedException();
         }
     }
+
 }
