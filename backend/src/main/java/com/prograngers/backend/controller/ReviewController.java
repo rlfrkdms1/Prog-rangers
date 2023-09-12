@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,13 @@ public class ReviewController {
         return redirect(solutionId);
     }
 
+    @DeleteMapping("/reviews/{reviewId}")
+    @Login
+    public ResponseEntity<?> deleteReview(@PathVariable Long solutionId,@LoggedInMember Long memberId,@PathVariable Long reviewId){
+        reviewService.deleteReview(memberId,reviewId);
+        // 풀이 상세보기로 리다이렉트
+        return redirect(solutionId);
+    }
     private ResponseEntity<Object> redirect(Long solutionId) {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + solutionId)).build();
     }
