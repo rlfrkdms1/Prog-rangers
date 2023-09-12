@@ -19,8 +19,8 @@ export const Like = () => {
       <div
         className='content'
         css={css`
-        width: 100%;
-
+        width: 800px;
+        margin: 100px 110px 0;
         `}
         >
         content
