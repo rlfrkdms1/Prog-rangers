@@ -37,7 +37,7 @@ public class ReviewController {
     @PostMapping("/reviews")
     @Login
     public ResponseEntity<?> writeReview(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPostRequest reviewPostRequest, @LoggedInMember Long memberId){
-        reviewService.writeReview(reviewPostRequest,memberId);
+        reviewService.writeReview(reviewPostRequest,memberId,solutionId);
         // 풀이 상세보기로 리다이렉트
         return redirect(solutionId);
     }
