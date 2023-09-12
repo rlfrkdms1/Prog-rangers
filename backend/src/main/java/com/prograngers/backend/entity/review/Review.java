@@ -21,6 +21,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
+
 @Entity
 @Getter
 @Builder
@@ -57,6 +59,7 @@ public class Review {
 
     public Review update(String content){
         this.content = content;
+        this.status = FIXED;
         return this;
     }
 }
