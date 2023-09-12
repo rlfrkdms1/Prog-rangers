@@ -32,3 +32,27 @@ export const gridStyle = css`
   grid-template-columns: repeat(13, 25px);
   gap: 2px;
   `;
+
+export const Divline = css`
+  display: inline-block; 
+  width: 100%; 
+  height: 62px; 
+  border-bottom: 1px solid #959595
+  `;
+
+export const RecentlyTitle = css`
+  height: 29px; 
+  width: 100%; 
+  margin-top: 17px; 
+  padding-left: 20px; 
+  font-weight: bold;
+  font-size: 16px;
+  color: ${theme.colors.dark2};
+`;
+
+export const ojName = css`
+  display: flex;
+  padding: 5px 15px;
+  border-radius: 20px;
+  color: white;
+  `;

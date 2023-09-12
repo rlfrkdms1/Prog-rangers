@@ -9,7 +9,10 @@ import {
   fontSize20,
   alignCenter, 
   dateStyle,
-  gridStyle
+  gridStyle,
+  Divline,
+  ojName,
+  RecentlyTitle
  } from './MypageStyle';
  
 
@@ -17,6 +20,8 @@ export const MyPage = () => {
 
   // API 가져오기
   const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState([]);
+  const [myRecentSolutionInfos, setMyRecentSolutionInfos] = useState([]);
+  const [followingRecentSolutionInfos, setFollowingRecentSolutionInfos] = useState([]);
   
   // MonthlyStudyCalendar
   const [value, setValue] = useState(new Date());
@@ -27,6 +32,14 @@ export const MyPage = () => {
     axios.get(apiUrl)
       .then((response) => {
         setMonthlyStudyCalendar(response.data.setMonthlyStudyCalendar);
+
+        const sortedData = response.data.myRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
+        const top3Data = sortedData.slice(0, 3);
+        setMyRecentSolutionInfos(top3Data);
+
+        const sortedFollowingData = response.data.followingRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
+        const top5Data = sortedFollowingData.slice(0, 5);
+        setFollowingRecentSolutionInfos(top5Data);
       })
       .catch((error) => {
         console.error('API 요청 에러:', error);
@@ -48,13 +61,8 @@ export const MyPage = () => {
       // 학습여부 T/F 저장
       const studiedFromMonthlyData = studyData ? studyData.studied : false;
 
-      // (정상) 캘린더 랜더링한 숫자(날짜)와 API의 day변수가 같다
       const isCurrentDate = currentDate.getDate() === day; 
-      // isCurrentDate도 true, studied 도 true
       const StudyTrue = studiedFromMonthlyData && isCurrentDate;
-
-      console.log(`isCurrentDate for day ${day}: ${isCurrentDate}`);
-      console.log(`StudyTrue for day ${day}: ${StudyTrue}`);
 
       calendar.push(
         <div key={currentDate.toISOString()}>
@@ -79,6 +87,48 @@ export const MyPage = () => {
     const nextMonth = new Date(value.getFullYear(), value.getMonth() + 1, 1);
     setValue(nextMonth);
   };
+
+  // 최근 쓴 풀이 리스트업
+  const listRecently = myRecentSolutionInfos.map((item) => (
+    <div key={item.solutionId} css={`${Divline}`}>
+      <div css={`${RecentlyTitle}`}> {item.title} </div>
+      <div css={css`
+              width: 100%; 
+              height: 39px; 
+              margin-top: 10px;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            `}>
+        <div css={css`
+                  ${ojName} 
+                  background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
+                  {item.ojName}
+                </div>
+              </div>
+            </div>
+  ));
+
+  // 팔로워 최근 풀이 리스트업
+  const listFollwingRecently = followingRecentSolutionInfos.map((item) => (
+    <div key={item.solutionId} css={`${Divline}`}>
+      <div css={`${RecentlyTitle}`}> {item.title} </div>
+      <div css={css`
+              width: 100%; 
+              height: 39px; 
+              margin-top: 10px;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            `}>
+        <div css={css`
+                  ${ojName} 
+                  background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
+                  {item.ojName}
+                </div>
+              </div>
+            </div>
+  ));
 
   return(
     <div 
@@ -154,8 +204,7 @@ export const MyPage = () => {
           margin-top: 10px;
           background-color: ${theme.colors.light4};
           `}>
-            {/* 최근 풀이 3개만 불러오기 */}
-
+          {listRecently}
           </div>
 
           <div css={css`
@@ -170,8 +219,8 @@ export const MyPage = () => {
           margin-top: 10px;
           background-color: ${theme.colors.light4};
           `}>
-            {/* 최근 풀이 5개만 불러오기 */}
-          </div>
+          {listFollwingRecently}
+        </div>
     </div>  
      <div css={css`
       ${RightBody}`}>
