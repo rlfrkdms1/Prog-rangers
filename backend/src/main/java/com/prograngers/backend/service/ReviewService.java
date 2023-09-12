@@ -8,8 +8,10 @@ import com.prograngers.backend.dto.review.response.SolutionReview;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.review.ReviewStatusConStant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.ReviewAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.ReviewNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
 
 @Service
 @Slf4j
@@ -46,6 +50,7 @@ public class ReviewService {
         Review targetReview = findReviewById(reviewId);
         Member member = findMemberById(memberId);
         checkMemberAuthorization(targetReview, member);
+        checkReviewAlreadyDeleted(targetReview);
         reviewPatchRequest.updateReview(targetReview);
     }
 
@@ -54,6 +59,7 @@ public class ReviewService {
         Review targetReview = findReviewById(reviewId);
         Member member = findMemberById(memberId);
         checkMemberAuthorization(targetReview, member);
+        checkReviewAlreadyDeleted(targetReview);
         targetReview.delete();
     }
 
@@ -124,6 +130,12 @@ public class ReviewService {
     private static void checkMemberAuthorization(Review targetReview, Member member) {
         if (!targetReview.getMember().getId().equals(member.getId())){
             throw new MemberUnAuthorizedException();
+        }
+    }
+
+    private static void checkReviewAlreadyDeleted(Review targetReview) {
+        if (targetReview.getStatus().equals(DELETED)){
+            throw new ReviewAlreadyDeletedException();
         }
     }
 
