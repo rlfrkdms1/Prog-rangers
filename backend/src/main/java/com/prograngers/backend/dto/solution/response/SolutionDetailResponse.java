@@ -23,7 +23,7 @@ public class SolutionDetailResponse {
     private SolutionDetailSolution solution;
     private List<SolutionDetailComment> comments;
 
-    private boolean isMine;
+    private boolean mine;
     private static final String SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
     public static SolutionDetailResponse from(Problem problem, Solution solution, List<Comment> comments,
@@ -33,30 +33,27 @@ public class SolutionDetailResponse {
         SolutionDetailSolution responseSolution = getResponseSolution(solution, scraped, scrapCount, pushedLike, likeCount, scrapLink);
         List<SolutionDetailComment> commentResponseList = new ArrayList<>();
         addCommentsToResponse(comments, commentResponseList);
-        response.comments = commentResponseList;
-        response.solution = responseSolution;
-        response.isMine = isMine;
-        response.problem= SolutionDetailProblem.from(problem);
+        setData(problem, isMine, response, responseSolution, commentResponseList);
         return response;
+    }
+
+    private static void setData(Problem problem, boolean isMine, SolutionDetailResponse response, SolutionDetailSolution responseSolution, List<SolutionDetailComment> commentResponseList) {
+        response.setComments(commentResponseList);
+        response.setSolution(responseSolution);
+        response.setMine(isMine);
+        response.setProblem(SolutionDetailProblem.from(problem));
     }
 
     private static void addCommentsToResponse(List<Comment> comments, List<SolutionDetailComment> commentResponseList) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
         comments.stream().filter(comment -> comment.getParentId()==null)
-                .forEach(comment-> commentResponseList.add( new SolutionDetailComment(
-                        comment.getMember().getPhoto(),
-                        comment.getId(),
-                        comment.getMember().getNickname(),
-                        comment.getContent(),
-                        comment.getStatus(),
-                        new ArrayList<>()
-                )));
+                .forEach(comment-> commentResponseList.add( SolutionDetailComment.from(comment)));
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
                     for (SolutionDetailComment parentComment : commentResponseList){
                         if (parentComment.getId().equals(comment.getParentId())){
-                            parentComment.getReplies().add(new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null));
+                            parentComment.getReplies().add(SolutionDetailComment.from(comment));
                         }
                     }
                 });
@@ -70,7 +67,7 @@ public class SolutionDetailResponse {
                 solution.getProblem().getLink(),
                 solution.getAlgorithm(),
                 solution.getDataStructure(),
-                solution.getCode(),
+                solution.getCode().split("\n"),
                 solution.getDescription(),
                 likeCount,
                 scrapCount,
