@@ -1,15 +1,12 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { theme } from '../components/Header/theme';
+import { theme } from '../../components/Header/theme';
 import { Link } from 'react-router-dom';
-import { SideBar } from '../components/SideBar/SideBar';
+import { SideBar } from '../../components/SideBar/SideBar';
+import { Button } from '@mui/material';
+import { profileContentStyle, editBtnStyle, deleteBtnStyle } from './AccountStyle';
 
-const profileContentStyle = css`
-  display: flex;
-  flex-direction: row;
-  gap: 54px;
-  margin-bottom: 30px;
-`;
+
 
 export const Account = () => {
   return (
@@ -17,11 +14,10 @@ export const Account = () => {
       className='container' 
       css={css`
       width: 1200px;
-      height: 89vh;
+      height: 100%;
       display: flex;
       justify-content: space-between;
       margin: 0 auto;
-      overflow: hidden;
     ` }
     >
       <SideBar />
@@ -46,22 +42,15 @@ export const Account = () => {
               flex-direction: column;
               align-items: center;
               `}>
-                <div
-                  className='profileImg' 
+                <img
+                  src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'                  
+                  alt='profileImg'
+                  width='250px'
                   css={css`
-                  width: 250px;
-                  height: 250px;
-                  background: lightgray;
                   border-radius: 50%;
-                  `}></div>
-                  <button css={css`
-                  width: 120px;
-                  height: 50px;
-                  font-size: 18px;
-                  border-radius: 25px;
-                  background: ${theme.colors.main30};
-                  margin-top: 30px;
-                  `}>수정하기</button>
+                  `}></img>
+                  <Link to='/accountChange'
+                  css={editBtnStyle}>수정하기</Link>
               </div>
 
               <div css={css`
@@ -128,21 +117,7 @@ export const Account = () => {
             />
             <button
               type="button"
-              css={css`
-                width: 100px;
-                height: 40px;
-
-                border: 1px solid ${theme.colors.light1};
-                border-radius: 25px;
-
-                color: ${theme.colors.dark1};
-
-                font-size: 14px;
-                font-weight: 700;
-
-                margin-left: 10px;
-              `}
-            >
+              css={deleteBtnStyle}>
               삭제하기
             </button>
           </div>
