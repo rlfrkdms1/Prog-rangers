@@ -70,7 +70,7 @@ public class SolutionDetailResponse {
                 solution.getProblem().getLink(),
                 solution.getAlgorithm(),
                 solution.getDataStructure(),
-                solution.getCode(),
+                solution.getCode().split("\n"),
                 solution.getDescription(),
                 likeCount,
                 scrapCount,
