@@ -11,14 +11,7 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, QueryDslReviewRepository{
     List<Review> findAllBySolution(Solution solution);
-
-    List<Review> findAllByCodeLineNumber(Integer codeLineNumber);
-
-    List<Review> findAllByCodeLineNumberOrderByCreatedDateAsc(Integer codeLineNumber);
-
-    List<Review> findAllByMemberAndCreatedDateBetween(Member member, LocalDateTime startDate, LocalDateTime endDate);
-
-    @Query("select distinct function('date_format', r.createdDate, '%d') from Review r where r.member.id = :memberId and function('date_format', r.createdDate, '%m') = :month")
+    @Query("select distinct function('date_format', r.createdAt, '%d') from Review r where r.member.id = :memberId and function('date_format', r.createdAt, '%m') = :month")
     List<Integer> findAllByMonth(Long memberId, int month);
     List<Review> findAllByCodeLineNumberOrderByCreatedAtAsc(Integer codeLineNumber);
 }
