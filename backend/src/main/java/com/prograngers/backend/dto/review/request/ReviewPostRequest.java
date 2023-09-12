@@ -1,6 +1,6 @@
 package com.prograngers.backend.dto.review.request;
 
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.annotation.Nullable;

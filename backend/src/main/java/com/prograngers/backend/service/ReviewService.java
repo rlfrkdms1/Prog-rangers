@@ -6,20 +6,18 @@ import com.prograngers.backend.dto.review.response.SolutionLine;
 import com.prograngers.backend.dto.review.response.SolutionReviewReply;
 import com.prograngers.backend.dto.review.response.SolutionReview;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ReviewNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
-import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,7 +74,7 @@ public class ReviewService {
             Integer codeLineNumber = solutionLine.getCodeLineNumber();
 
             // codeLineNumber에 해당하는 review들을 찾는다
-            List<com.prograngers.backend.entity.Review> reviews = reviewRepository
+            List<Review> reviews = reviewRepository
                     .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
             List<SolutionReview> solutionReviewResponse = new ArrayList<>();
 

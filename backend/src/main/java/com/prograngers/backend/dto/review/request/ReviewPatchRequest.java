@@ -1,6 +1,6 @@
 package com.prograngers.backend.dto.review.request;
 
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;

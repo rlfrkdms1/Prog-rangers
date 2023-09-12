@@ -1,6 +1,6 @@
 package com.prograngers.backend.dto.review.response;
 
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

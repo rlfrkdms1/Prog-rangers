@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto.review.response;
 
+import com.prograngers.backend.entity.review.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class SolutionReview {
     String content;
     List<SolutionReviewReply> replies;
 
-    public static SolutionReview from(com.prograngers.backend.entity.Review review){
+    public static SolutionReview from(Review review){
 
         SolutionReview solutionReviewResponse = SolutionReview.builder()
                 .id(review.getId())
