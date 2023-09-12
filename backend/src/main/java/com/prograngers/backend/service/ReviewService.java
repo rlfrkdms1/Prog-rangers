@@ -1,12 +1,16 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.review.request.ReviewPostRequest;
 import com.prograngers.backend.dto.review.response.SolutionLine;
 import com.prograngers.backend.dto.review.response.SolutionReviewReply;
 import com.prograngers.backend.dto.review.response.SolutionReview;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +28,11 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final SolutionRepository solutionRepository;
 
+    private final MemberRepository memberRepository;
+
     public SolutionReviewsResponse getReviewDetail(Long solutionId) {
         // solutionId에 해당하는 풀이 찾기
-        Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
+        Solution solution = findSolutionById(solutionId);
         // 줄 나눠서 배열에 저장
         String[] lines = solution.getCode().split("\n");
         // 최종 응답 dto에 풀이 내용을 넣는다
@@ -36,6 +42,11 @@ public class ReviewService {
         addReviewAtLine(addedSolutionLines);
         solutionReviewsResponse.setSolutionLines(addedSolutionLines);
         return solutionReviewsResponse;
+    }
+
+    private Solution findSolutionById(Long solutionId) {
+        Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
+        return solution;
     }
 
     private void addReviewAtLine(List<SolutionLine> addedSolutionLines) {
@@ -73,5 +84,15 @@ public class ReviewService {
                 r.getReplies().add(SolutionReviewReply.from(review));
             }
         }
+    }
+
+    public void writeReview(ReviewPostRequest reviewPostRequest, Long memberId,Long solutionId) {
+        Member writer = findMemberById(memberId);
+        Solution solution = findSolutionById(solutionId);
+        reviewRepository.save(reviewPostRequest.toReview(writer,solution));
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 }
