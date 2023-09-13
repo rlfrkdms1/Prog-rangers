@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -36,16 +37,14 @@ public class SolutionDetailResponse {
     }
 
     private static List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments) {
-        List<SolutionDetailComment> commentResponseList = new ArrayList<>();
         // 먼저 부모가 없는 댓글들을 전부 더한다
-        comments.stream().filter(comment -> comment.getParentId()==null)
-                .forEach(comment-> commentResponseList.add(SolutionDetailComment.from(comment,new ArrayList<>())));
+        List<SolutionDetailComment> commentResponseList = comments.stream().filter(comment -> comment.getParentId()==null)
+                        .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>())).collect(Collectors.toList());
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
                     addReplyComments(commentResponseList, comment);
                 });
-
         return commentResponseList;
     }
 
