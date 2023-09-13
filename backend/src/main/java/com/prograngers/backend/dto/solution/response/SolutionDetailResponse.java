@@ -55,7 +55,7 @@ public class SolutionDetailResponse {
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(SolutionDetailComment.from(comment,null));
+                .add(SolutionDetailComment.from(comment));
     }
 
     private static SolutionDetailSolution makeResponseSolution(Solution solution, boolean scraped, int scrapCount, boolean pushedLike, int likeCount, String scrapLink) {

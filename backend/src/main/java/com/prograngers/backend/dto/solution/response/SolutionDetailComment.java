@@ -26,5 +26,8 @@ public class SolutionDetailComment {
         return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), replies);
     }
 
+    public static SolutionDetailComment from(Comment comment){
+        return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null);
+    }
 
 }
