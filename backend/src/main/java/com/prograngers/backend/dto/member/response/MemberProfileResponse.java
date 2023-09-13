@@ -34,22 +34,14 @@ public class MemberProfileResponse {
     /**
      *  무한스크롤 위한 값들
      */
-    // 다음에 pathvariable을 뭘로 요청해야 하는지 알려주기 위한 값
+    // 다음에 pathvariable을 뭘로 요청해야 하는지 알려주기 위한 값, 커서가 -1L이면 마지막
     private Long cursor;
-
-    // 마지막 페이지인지 알려주기 위한 값
-    private Boolean isLast;
 
     public static MemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions, Long follow, Long following) {
 
         // 무한스크롤 isLast, 커서
-        boolean isLast = false;
         Long cursor = -1L;
-        if (checkLastScroll(solutions)){
-            isLast = true;
-        } else {
-            cursor = getCursor(solutions);
-        }
+        if (!isLastScroll(solutions)) cursor = getCursor(solutions);
 
         return MemberProfileResponse.builder()
                 .photo(member.getPhoto())
@@ -60,7 +52,6 @@ public class MemberProfileResponse {
                 .badge(getBadgeList(badges))
                 .list(getProblemSolutionList(solutions))
                 .cursor(cursor)
-                .isLast(isLast)
                 .build();
     }
 
@@ -73,7 +64,7 @@ public class MemberProfileResponse {
         return badges.stream().map(badge -> badge.getBadgeType()).toList();
     }
 
-    private static boolean checkLastScroll(List<Solution> solutions) {
+    private static boolean isLastScroll(List<Solution> solutions) {
         return solutions.size() < SIZE_PER_SCROLL;
     }
 
