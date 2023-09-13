@@ -39,7 +39,7 @@ public class SolutionDetailResponse {
         List<SolutionDetailComment> commentResponseList = new ArrayList<>();
         // 먼저 부모가 없는 댓글들을 전부 더한다
         comments.stream().filter(comment -> comment.getParentId()==null)
-                .forEach(comment-> commentResponseList.add(new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), new ArrayList<>())));
+                .forEach(comment-> commentResponseList.add(SolutionDetailComment.from(comment,new ArrayList<>())));
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
@@ -55,9 +55,7 @@ public class SolutionDetailResponse {
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(
-                        new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null)
-                );
+                .add(SolutionDetailComment.from(comment,null));
     }
 
     private static SolutionDetailSolution makeResponseSolution(Solution solution, boolean scraped, int scrapCount, boolean pushedLike, int likeCount, String scrapLink) {
