@@ -5,6 +5,8 @@ import { SideBar } from '../../components/SideBar/SideBar';
 import { LeftBody, MainBody, RightBody } from './MainBody';
 import axios from 'axios';
 import { 
+  fontSize12,
+  fontSize14,
   fontSize16,
   fontSize20,
   alignCenter, 
@@ -109,7 +111,7 @@ export const MyPage = () => {
             </div>
   ));
 
-  // 팔로워 최근 풀이 리스트업
+  // 팔로우 최근 풀이 리스트업
   const listFollwingRecently = followingRecentSolutionInfos.map((item) => (
     <div key={item.solutionId} css={`${Divline}`}>
       <div css={`${RecentlyTitle}`}> {item.title} </div>
@@ -247,12 +249,42 @@ export const MyPage = () => {
           `}>
             <div css={css`${fontSize20}`}>알림</div>
             <div css={css`
+            display: flex;
             width: 365px;
             height: 565px;
             border-radius: 5px;
             margin-top: 10px;
             background-color: ${theme.colors.light4}
-            `}></div>
+            `}>
+              <div css={css`
+              width: 345px;
+              height: 80px;
+              margin-top: 25px;
+              margin-left: 10px;
+              background-color: ${theme.colors.light3}`}>
+                <div css={css`
+                display: flex;
+                align-items: center;
+                margin-top: 9px;
+                margin-left: 10px;
+                gap: 4px;
+                ${fontSize12}
+                `}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="12" viewBox="0 0 18 12" fill="none">
+                  <rect width="18" height="12" rx="2" fill="#545454"/>
+                  <path d="M0.75 1.875L9 6.375L17.25 1.875" stroke="white" stroke-linecap="round"/>
+                </svg>
+                  댓글
+                </div>
+                <div css={css`
+                margin-left: 12px;
+                margin-right: 12px;
+                ${fontSize14}
+                `}>
+                  rlfrkdms1님이 my-first풀이에 댓글을 남겼습니다 : 풀이내용
+                </div>
+              </div>
+            </div>
         </div>
 
       </div>

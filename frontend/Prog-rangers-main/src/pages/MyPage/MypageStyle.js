@@ -1,6 +1,18 @@
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 
+export const fontSize12 = css`
+  font-size: 12px;
+  font-weight: 700;
+  color: ${theme.colors.black}
+  `;
+
+export const fontSize14 = css`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${theme.colors.black}
+  `;
+
 export const fontSize16 = css`
   font-size: 16px;
   font-weight: 700;
