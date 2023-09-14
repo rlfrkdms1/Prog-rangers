@@ -19,7 +19,7 @@ public class ReviewController {
 
     // 상세보기 한 줄 리뷰
     @GetMapping("/reviews")
-    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember Long memberId){
+    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId){
         SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
         return ResponseEntity.ok().body(reviewDetail);
     }
