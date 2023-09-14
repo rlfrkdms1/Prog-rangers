@@ -70,14 +70,17 @@ public class MemberService {
             throw new AlreadyExistNicknameException();
     }
 
-    public MemberProfileResponse getMemberProfile(Long memberId,Long page) {
-        Member member = findById(memberId);
+    public MemberProfileResponse getMemberProfile(String memberNickname,Long page) {
+        Member member = findByNickname(memberNickname);
         List<Badge> badges = badgeRepository.findAllByMember(member);
-        List<Solution> solutions = solutionRepository.findProfileSolutions(memberId, page);
+        List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
         Long followCount = followRepository.getFollowCount(member);
         Long followingCount = followRepository.getFollowingCount(member);
 
         return MemberProfileResponse.from(member,badges,solutions,followCount,followingCount);
     }
 
+    private Member findByNickname(String memberNickname) {
+        return memberRepository.findByNickname(memberNickname).orElseThrow(MemberNotFoundException::new);
+    }
 }
