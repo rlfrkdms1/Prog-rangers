@@ -12,13 +12,13 @@ import java.util.List;
 @Getter
 @Setter
 public class SolutionReview {
-    Long id;
-    String nickname;
-    String photo;
-    String content;
-    List<SolutionReviewReply> replies;
-
-    public static SolutionReview from(Review review){
+    private Long id;
+    private String nickname;
+    private String photo;
+    private String content;
+    private List<SolutionReviewReply> replies;
+    private boolean mine;
+    public static SolutionReview from(Review review, Long memberId){
 
         SolutionReview solutionReviewResponse = SolutionReview.builder()
                 .id(review.getId())
@@ -26,7 +26,13 @@ public class SolutionReview {
                 .photo(review.getMember().getPhoto())
                 .content(review.getContent())
                 .replies(new ArrayList<>())
+                .mine(checkReviewIsMine(review,memberId))
                 .build();
         return solutionReviewResponse;
+    }
+
+    private static boolean checkReviewIsMine(Review review, Long memberId) {
+        if (review.getMember().getId().equals(memberId)) return true;
+        return false;
     }
 }

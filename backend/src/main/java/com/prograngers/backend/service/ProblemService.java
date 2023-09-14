@@ -18,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
 public class ProblemService {
+
+    private static final int MAX_TAG_COUNT =3;
 
     private final ProblemRepository problemRepository;
 
@@ -39,38 +42,46 @@ public class ProblemService {
         return response;
     }
 
-    private static List<ProblemListProblem> makeProblemList(List<Problem> problems) {
+    private List<ProblemListProblem> makeProblemList(List<Problem> problems) {
         // 반환할 dto 리스트
         List<ProblemListProblem> problemListProblemResponse = new ArrayList<>();
 
         // 결과를  for문 돌면서 반환 dto를 만든다
-        for (Problem problem : problems) {
-            ProblemListProblem problemListProblem = ProblemListProblem.from(problem);
-            List<Solution> solutions = problem.getSolutions();
-            HashMap<Object, Integer> tagCountMap = new HashMap<>();
+        problems.stream()
+                .forEach(problem ->{
+                    ProblemListProblem problemListProblem = ProblemListProblem.from(problem);
+                    List<Solution> solutions = problem.getSolutions();
 
-            solutions.stream()
-                    .forEach((solution)->{
-                        tagCountMap.put(solution.getAlgorithm(), tagCountMap.getOrDefault(solution.getAlgorithm(), 1) + 1);
-                        tagCountMap.put(solution.getDataStructure(), tagCountMap.getOrDefault(solution.getDataStructure(), 1) + 1);
-                    });
+                    addTagToProblemListProblem(problemListProblem, solutions);
+                    problemListProblemResponse.add(problemListProblem);
+                });
 
-            List<Object> keySet = new ArrayList<>(tagCountMap.keySet());
-            keySet.sort((num1, num2) -> tagCountMap.get(num2).compareTo(tagCountMap.get(num1)));
-
-            countTag(problemListProblem, keySet);
-            problemListProblemResponse.add(problemListProblem);
-        }
         return problemListProblemResponse;
     }
 
-    private static void countTag(ProblemListProblem problemListProblem, List<Object> keySet) {
-        for (int tagCount = 0; tagCount < keySet.size(); tagCount++) {
-            if (tagCount == 3) break;
-            Object tag = keySet.get(tagCount);
-            if (tag != null) {
-                problemListProblem.getTags().add(keySet.get(tagCount));
-            }
+    private void addTagToProblemListProblem(ProblemListProblem problemListProblem, List<Solution> solutions) {
+        HashMap<Object, Integer> tagCountMap = new HashMap<>();
+
+        solutions.stream()
+                .forEach((solution)->{
+                    tagCountMap.put(solution.getAlgorithm(), tagCountMap.getOrDefault(solution.getAlgorithm(), 1) + 1);
+                    tagCountMap.put(solution.getDataStructure(), tagCountMap.getOrDefault(solution.getDataStructure(), 1) + 1);
+                });
+
+        List<Object> tagList = tagCountMap.keySet()
+                .stream()
+                .toList();
+
+        // 태그 개수에 따라 정렬
+        tagList.sort((tag1, tag2) -> tagCountMap.get(tag2).compareTo(tagCountMap.get(tag1)));
+
+        addTag(problemListProblem, tagList);
+    }
+
+    private void addTag(ProblemListProblem problemListProblem, List<Object> tagList) {
+        int tagCount = 0;
+        while(tagCount<MAX_TAG_COUNT){
+            if (tagList.get(tagCount)!=null) problemListProblem.getTags().add(tagList.get(tagCount++));
         }
     }
 }

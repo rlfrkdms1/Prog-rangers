@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,43 +24,44 @@ public class SolutionDetailResponse {
     private SolutionDetailSolution solution;
     private List<SolutionDetailComment> comments;
 
-    private boolean mine;
-    private static final String SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
+    private boolean isMine;
+    private static final String LOCAL_SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
-    public static SolutionDetailResponse from(Problem problem, Solution solution, List<Comment> comments,
-                                                  boolean scraped, int scrapCount, boolean pushedLike, int likeCount, boolean isMine) {
-        SolutionDetailResponse response = new SolutionDetailResponse();
-        String scrapLink = getScrapLink(solution);
-        SolutionDetailSolution responseSolution = getResponseSolution(solution, scraped, scrapCount, pushedLike, likeCount, scrapLink);
-        List<SolutionDetailComment> commentResponseList = new ArrayList<>();
-        addCommentsToResponse(comments, commentResponseList);
-        setData(problem, isMine, response, responseSolution, commentResponseList);
-        return response;
+
+    public static SolutionDetailResponse from(Solution solution, List<Comment> comments,
+                                                  boolean scraped, int scrapCount, boolean pushedLike, int likeCount, boolean isMine, Long memberId) {
+
+        return new SolutionDetailResponse(
+                SolutionDetailProblem.from(solution.getProblem()),
+                makeResponseSolution(solution, scraped, scrapCount, pushedLike, likeCount, getScrapLink(solution)),
+                makeCommentsResponse(comments,memberId),
+                isMine
+        );
     }
 
-    private static void setData(Problem problem, boolean isMine, SolutionDetailResponse response, SolutionDetailSolution responseSolution, List<SolutionDetailComment> commentResponseList) {
-        response.setComments(commentResponseList);
-        response.setSolution(responseSolution);
-        response.setMine(isMine);
-        response.setProblem(SolutionDetailProblem.from(problem));
-    }
-
-    private static void addCommentsToResponse(List<Comment> comments, List<SolutionDetailComment> commentResponseList) {
+    private static List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments, Long memberId) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
-        comments.stream().filter(comment -> comment.getParentId()==null)
-                .forEach(comment-> commentResponseList.add( SolutionDetailComment.from(comment)));
+        List<SolutionDetailComment> commentResponseList = comments.stream().filter(comment -> comment.getParentId()==null)
+                        .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>(),memberId)).collect(Collectors.toList());
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
-                    for (SolutionDetailComment parentComment : commentResponseList){
-                        if (parentComment.getId().equals(comment.getParentId())){
-                            parentComment.getReplies().add(SolutionDetailComment.from(comment));
-                        }
-                    }
+                    addReplyComments(commentResponseList, comment,memberId);
+
                 });
+        return commentResponseList;
     }
 
-    private static SolutionDetailSolution getResponseSolution(Solution solution, boolean scraped, int scrapCount, boolean pushedLike, int likeCount, String scrapLink) {
+    private static void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment,Long memberId) {
+        commentResponseList.stream()
+                .filter(parentComment->parentComment.getId().equals(comment.getParentId()))
+                .findFirst()
+                .get()
+                .getReplies()
+                .add(SolutionDetailComment.from(comment,memberId));
+    }
+
+    private static SolutionDetailSolution makeResponseSolution(Solution solution, boolean scraped, int scrapCount, boolean pushedLike, int likeCount, String scrapLink) {
         SolutionDetailSolution responseSolution = new SolutionDetailSolution(
                 solution.getId(),
                 solution.getMember().getNickname(),
@@ -82,7 +84,7 @@ public class SolutionDetailResponse {
         // 스크랩 한 풀이면 스크랩 한 풀이의 링크 찾기
         String scrapLink = null;
         if (solution.getScrapSolution() != null) {
-            scrapLink = SCRAP_PATH + solution.getScrapSolution().getId();
+            scrapLink = LOCAL_SCRAP_PATH + solution.getScrapSolution().getId();
         }
         return scrapLink;
     }
