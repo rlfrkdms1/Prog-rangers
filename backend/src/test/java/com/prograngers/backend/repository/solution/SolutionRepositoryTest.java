@@ -28,6 +28,7 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRA
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
@@ -303,6 +304,21 @@ class SolutionRepositoryTest {
 
         // then
         assertThat(result).containsExactly(solution1);
+    }
+
+    @Test
+    @DisplayName("풀이들이 주어졌을 때 해당하는 회원이 작성한 최근 풀이 3개를 정렬해서 가져올 수 있다.")
+    void 나의_최근_풀이_조회(){
+        Member member = 저장(길가은.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
+        저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 8, 3, 12, 0), JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 3, 11, 0), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 4, 11, 0), JAVA, 1));
+
+        List<Solution> solutionList = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
+        assertThat(solutionList).containsExactly(solution1, solution2, solution3);
     }
 
     Member 저장(Member member) {
