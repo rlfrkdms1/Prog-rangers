@@ -55,24 +55,16 @@ public class SolutionPostRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Problem toProblem(ProblemRepository problemRepository){
+    public Problem toProblem(){
         // 유효한 문제 링크인지 확인
         JudgeConstant judge = checkLink(problemLink);
 
-        // 이미 존재하는 문제일 경우
-        Problem recentProblem = problemRepository.findByLink(problemLink);
-        if (recentProblem!=null){
-            return recentProblem;
-        }
-
-        // 아닐 경우, 새로 만들어서 problem repository에 저장하고 반환
-        Problem newProblem = Problem.builder()
+        return Problem.builder()
                 .link(problemLink)
                 .ojName(judge)
                 .title(problemTitle)
                 .solutions(new ArrayList<>())
                 .build();
-        return problemRepository.save(newProblem);
     }
 
     public Solution toSolution(Problem problem, Member member) {
@@ -117,4 +109,5 @@ public class SolutionPostRequest {
     private JudgeConstant checkLink(String problemLink) {
         return JudgeConstant.from(problemLink);
     }
+
 }

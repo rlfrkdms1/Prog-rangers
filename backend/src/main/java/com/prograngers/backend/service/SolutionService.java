@@ -8,6 +8,7 @@ import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
+import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
@@ -54,16 +55,10 @@ public class SolutionService {
 
     private final LikesRepository likesRepository;
 
-
-
-
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
-        Member member = getMember(memberId);
-        Problem problem = solutionPostRequest.toProblem(problemRepository);
-        Solution solution = solutionPostRequest.toSolution(problem,member);
-        Solution saved = solutionRepository.save(solution);
-        return saved.getId();
+        Solution solution = solutionPostRequest.toSolution(getProblem(solutionPostRequest),getMember(memberId));
+        return solutionRepository.save(solution).getId();
     }
 
     @Transactional
@@ -167,23 +162,35 @@ public class SolutionService {
         return false;
     }
 
-    private static void checkViewPrivateSolution(Solution solution, boolean isMine) {
+    private void checkViewPrivateSolution(Solution solution, boolean isMine) {
         if (!solution.isPublic()&&!isMine){
             throw new PrivateSolutionException();
         }
     }
 
-    private static boolean checkScraped(Long memberId, List<Solution> scrapSolutions) {
+    private boolean checkScraped(Long memberId, List<Solution> scrapSolutions) {
         return scrapSolutions
                 .stream()
                 .map(scrapedSolution -> scrapedSolution.getMember().getId())
                 .anyMatch(id -> id == memberId);
     }
 
-    private static boolean checkPushedLike(Long memberId, List<Likes> likes) {
+    private boolean checkPushedLike(Long memberId, List<Likes> likes) {
         return likes
                 .stream()
                 .map(like -> like.getMember().getId())
                 .anyMatch(id -> id.equals(memberId));
     }
+
+    public Problem getProblem(SolutionPostRequest solutionPostRequest){
+        // 입력한 문제가 이미 존재하는 문제인지 확인
+        Problem recentProblem = problemRepository.findByLink(solutionPostRequest.getProblemLink());
+        // 존재하는 문제일 경우
+        if (recentProblem!=null){
+            return recentProblem;
+        }
+        // 존재하지 않는 문제일 경우 새로운 문제를 만들어서 반환한다, toProblem 내에서 링크 체크함
+        return solutionPostRequest.toProblem();
+    }
+
 }
