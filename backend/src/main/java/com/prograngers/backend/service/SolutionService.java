@@ -8,7 +8,6 @@ import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
-import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
@@ -64,8 +63,11 @@ public class SolutionService {
     @Transactional
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
-        checkMemberAuthorization(target, getMember(memberId));
-        return request.updateSolution(target).getId();
+        Member member = getMember(memberId);
+        checkMemberAuthorization(target, member);
+        Solution solution = request.updateSolution(target);
+        Solution updated = solutionRepository.save(solution);
+        return updated.getId();
     }
 
     @Transactional

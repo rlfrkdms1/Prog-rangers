@@ -23,11 +23,14 @@ public class SolutionDetailResponse {
     private SolutionDetailProblem problem;
     private SolutionDetailSolution solution;
     private List<SolutionDetailComment> comments;
+
     private boolean isMine;
     private static final String LOCAL_SCRAP_PATH = "http://localhost:8080/prog-rangers/solutions/";
 
+
     public static SolutionDetailResponse from(Solution solution, List<Comment> comments,
                                                   boolean scraped, int scrapCount, boolean pushedLike, int likeCount, boolean isMine) {
+
         return new SolutionDetailResponse(
                 SolutionDetailProblem.from(solution.getProblem()),
                 makeResponseSolution(solution, scraped, scrapCount, pushedLike, likeCount, getScrapLink(solution)),
@@ -44,6 +47,7 @@ public class SolutionDetailResponse {
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
                     addReplyComments(commentResponseList, comment);
+
                 });
         return commentResponseList;
     }
@@ -65,7 +69,7 @@ public class SolutionDetailResponse {
                 solution.getProblem().getLink(),
                 solution.getAlgorithm(),
                 solution.getDataStructure(),
-                solution.getCode(),
+                solution.getCode().split("\n"),
                 solution.getDescription(),
                 likeCount,
                 scrapCount,
