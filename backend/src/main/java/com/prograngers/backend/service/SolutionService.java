@@ -123,7 +123,7 @@ public class SolutionService {
         // 스크랩 했는지 여부
         boolean scraped = checkScraped(memberId, solutionsScrapedTargetSolution);
 
-        return SolutionDetailResponse.from(targetSolution, comments,scraped,solutionsScrapedTargetSolution.size(),pushedLike,likes.size(),isMine);
+        return SolutionDetailResponse.from(targetSolution, comments,scraped,solutionsScrapedTargetSolution.size(),pushedLike,likes.size(),isMine, memberId);
     }
 
     public SolutionListResponse getSolutionList(

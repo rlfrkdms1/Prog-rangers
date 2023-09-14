@@ -22,12 +22,23 @@ public class SolutionDetailComment {
     String content;
     CommentStatusConStant status;
     List<SolutionDetailComment> replies;
-    public static SolutionDetailComment from(Comment comment, ArrayList<SolutionDetailComment> replies){
-        return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), replies);
+
+    boolean mine;
+
+    public static SolutionDetailComment from(Comment comment, ArrayList<SolutionDetailComment> replies,Long memberId){
+
+        return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), replies,
+                checkCommentIsMine(comment.getMember().getId(), memberId));
     }
 
-    public static SolutionDetailComment from(Comment comment){
-        return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null);
+    public static SolutionDetailComment from(Comment comment, Long memberId){
+        return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null
+        ,checkCommentIsMine(comment.getMember().getId(),memberId));
+    }
+
+    private static boolean checkCommentIsMine(Long commentMemberId, Long memberId){
+        if (commentMemberId==memberId) return true;
+        return false;
     }
 
 }

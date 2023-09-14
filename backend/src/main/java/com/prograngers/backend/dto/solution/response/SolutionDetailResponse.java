@@ -29,36 +29,36 @@ public class SolutionDetailResponse {
 
 
     public static SolutionDetailResponse from(Solution solution, List<Comment> comments,
-                                                  boolean scraped, int scrapCount, boolean pushedLike, int likeCount, boolean isMine) {
+                                                  boolean scraped, int scrapCount, boolean pushedLike, int likeCount, boolean isMine, Long memberId) {
 
         return new SolutionDetailResponse(
                 SolutionDetailProblem.from(solution.getProblem()),
                 makeResponseSolution(solution, scraped, scrapCount, pushedLike, likeCount, getScrapLink(solution)),
-                makeCommentsResponse(comments),
+                makeCommentsResponse(comments,memberId),
                 isMine
         );
     }
 
-    private static List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments) {
+    private static List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments, Long memberId) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
         List<SolutionDetailComment> commentResponseList = comments.stream().filter(comment -> comment.getParentId()==null)
-                        .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>())).collect(Collectors.toList());
+                        .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>(),memberId)).collect(Collectors.toList());
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
-                    addReplyComments(commentResponseList, comment);
+                    addReplyComments(commentResponseList, comment,memberId);
 
                 });
         return commentResponseList;
     }
 
-    private static void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment) {
+    private static void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment,Long memberId) {
         commentResponseList.stream()
                 .filter(parentComment->parentComment.getId().equals(comment.getParentId()))
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(SolutionDetailComment.from(comment));
+                .add(SolutionDetailComment.from(comment,memberId));
     }
 
     private static SolutionDetailSolution makeResponseSolution(Solution solution, boolean scraped, int scrapCount, boolean pushedLike, int likeCount, String scrapLink) {
