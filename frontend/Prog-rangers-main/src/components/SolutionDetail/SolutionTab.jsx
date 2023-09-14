@@ -1,53 +1,43 @@
-import { css } from '@emotion/react';
-
 import { useState } from 'react';
-import { selectTabStyle } from './solutionTabStyle';
+import { ViewSolution } from './ViewSolution';
+import { LineReview } from './LineReview';
+import { MAIN_DATA } from './MainData';
+
+// import { css } from '@emotion/react';
+// import { wrapLayout } from './solutionTabStyle';
 
 export const SolutionTab = () => {
-  const [currentTab, setTab] = useState(0);
+  const [active, setActive] = useState('viewSolution');
 
-  const contentArr = [
-    {
-      tab: '풀이보기',
-      code: '본문 내용과 코드를 출력합니다',
-    },
-    {
-      tab: '한줄리뷰',
-      code: '본문 내용과 코드 한줄리뷰를 출력합니다',
-    },
-  ];
+  const handleClickButton = (e) => {
+    const { name } = e.target;
+    setActive(name);
+  };
 
-  const selectTabHandler = (index) => {
-    setTab(index);
+  const selectComponent = {
+    viewSolution: <ViewSolution />,
+    lineReview: <LineReview />,
   };
 
   return (
-    <>
-      <div
-        className="tabArea"
-        css={css`
-          width: 996px;
-          margin: 0 auto;
-        `}
-      >
-        <ul className="tab" css={selectTabStyle}>
-          {contentArr.map((el, index) => (
-            <li
-              className={
-                index === currentTab
-                  ? 'submenu focused'
-                  : 'submenu'
-              }
-              onClick={() => selectTabHandler(index)}
+    <div>
+      {' '}
+      <div className="tabArea">
+        {MAIN_DATA.map((data) => {
+          return (
+            <button
+              onClick={handleClickButton}
+              name={data.name}
+              key={data.id}
             >
-              {el.tab}
-            </li>
-          ))}
-        </ul>
-        <div className="content">
-          <p>{contentArr[currentTab].code}</p>
-        </div>
+              {data.text}
+            </button>
+          );
+        })}
       </div>
-    </>
+      <div>
+        {active && <div>{selectComponent[active]}</div>}
+      </div>
+    </div>
   );
 };
