@@ -25,7 +25,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final SolutionRepository solutionRepository;
 
-    public SolutionReviewsResponse getReviewDetail(Long solutionId) {
+    public SolutionReviewsResponse getReviewDetail(Long solutionId,Long memberId) {
         // solutionId에 해당하는 풀이 찾기
         Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
         // 줄 나눠서 배열에 저장
@@ -34,12 +34,12 @@ public class ReviewService {
         SolutionReviewsResponse solutionReviewsResponse = SolutionReviewsResponse.from(solution, lines);
         // 최종 응답 dto에서 line들을 가져온다
         List<SolutionLine> addedSolutionLines = solutionReviewsResponse.getSolutionLines();
-        addReviewAtLine(solution, addedSolutionLines);
+        addReviewAtLine(solution, addedSolutionLines, memberId);
         solutionReviewsResponse.setSolutionLines(addedSolutionLines);
         return solutionReviewsResponse;
     }
 
-    private void addReviewAtLine(Solution solution, List<SolutionLine> addedSolutionLines) {
+    private void addReviewAtLine(Solution solution, List<SolutionLine> addedSolutionLines,Long memberId) {
         // 라인들에 대해 for문을 돌면서 리뷰를 추가한다
         addedSolutionLines.stream()
                 .forEach(solutionLine -> {
@@ -53,7 +53,7 @@ public class ReviewService {
                     List<SolutionReview> solutionReviewResponse =
                             reviews.stream()
                                     .filter(review -> review.getParentId() == null)
-                                    .map(review -> SolutionReview.from(review))
+                                    .map(review -> SolutionReview.from(review, memberId))
                                     .collect(Collectors.toList());
 
                     // 부모가 있는 리뷰들 (답 리뷰들)

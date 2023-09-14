@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller;
 
+import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ public class ReviewController {
 
     // 상세보기 한 줄 리뷰
     @GetMapping("/reviews")
-    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
-        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId);
+    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember Long memberId){
+        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
         return ResponseEntity.ok().body(reviewDetail);
     }
 }
