@@ -37,6 +37,10 @@ public class LikesController {
         return redirect(solutionId);
     }
     private ResponseEntity<Object> redirect(Long solutionId) {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(ms.getMessage("redirect_path", null, null) + "/solutions/" + solutionId)).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
+    }
+
+    private String getRedirectPath() {
+        return ms.getMessage("redirect_path", null, null) + "/solutions/";
     }
 }
