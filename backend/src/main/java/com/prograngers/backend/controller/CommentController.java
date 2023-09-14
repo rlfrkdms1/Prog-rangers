@@ -63,7 +63,11 @@ public class CommentController {
 
     private ResponseEntity<Object> redirect(Long solutionId) {
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(ms.getMessage("redirect_path", null, null) + "/solutions/" + solutionId)).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
+    }
+
+    private String getRedirectPath() {
+        return ms.getMessage("redirect_path", null, null)+"/solutions/";
     }
 
 }
