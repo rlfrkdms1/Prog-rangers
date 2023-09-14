@@ -58,18 +58,18 @@ public class ReviewService {
 
                     // 부모가 있는 리뷰들 (답 리뷰들)
                     reviews.stream().filter(review -> review.getParentId() != null)
-                            .forEach(review -> makeReplyResponse(solutionReviewResponse, review));
+                            .forEach(review -> makeReplyResponse(solutionReviewResponse, review,memberId));
 
                     solutionLine.setSolutionReviews(solutionReviewResponse);
                 });
     }
 
-    private static void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review) {
+    private static void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review,Long memberId) {
         solutionReviewResponse.stream()
                 .filter(parentReview->parentReview.getId().equals(review.getParentId()))
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(SolutionReviewReply.from(review));
+                .add(SolutionReviewReply.from(review,memberId));
     }
 }
