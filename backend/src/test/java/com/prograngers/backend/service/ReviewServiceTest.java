@@ -58,7 +58,6 @@ class ReviewServiceTest {
     @DisplayName("자신의 리뷰가 아닌 리뷰를 수정, 삭제하려 할 시 예외가 발생한다")
     void 내_리뷰_아닌_리뷰_수정_삭제_시_예외(){
         // given
-        // given
         Member member1 = 장지담.아이디_지정_생성(1L);
         Member member2 = 장지담.아이디_지정_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
@@ -80,7 +79,6 @@ class ReviewServiceTest {
     @Test
     @DisplayName("삭제된 리뷰를 수정, 삭제하려 할 시 예외가 발생한다")
     void 삭제된_리뷰_수정_삭제_시_예외(){
-        // given
         // given
         Member member1 = 장지담.아이디_지정_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
