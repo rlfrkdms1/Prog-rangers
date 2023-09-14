@@ -24,14 +24,16 @@ public class SolutionReviewsResponse {
     public static SolutionReviewsResponse from(Solution solution, String[] lines) {
         SolutionReviewsResponse solutionReviewsResponse =
                 new SolutionReviewsResponse(solution.getTitle(), solution.getAlgorithm(),solution.getDataStructure(), new ArrayList<>());
-        // 먼저 최종 응답 dto에 각 라인을 넣는다
-        for (int lineNumber = 0; lineNumber <lines.length; lineNumber++) {
-            SolutionLine solutionLine = SolutionLine.builder()
-                    .codeLineNumber(lineNumber+1)
-                    .code(lines[lineNumber])
-                    .build();
-            solutionReviewsResponse.getSolutionLines().add(solutionLine);
-        }
+
+        addLinesAtResponseDto(lines, solutionReviewsResponse);
+
         return  solutionReviewsResponse;
+    }
+
+    private static void addLinesAtResponseDto(String[] lines, SolutionReviewsResponse solutionReviewsResponse) {
+        // 먼저 최종 응답 dto에 각 라인을 넣는다
+        for (int lineNumber = 0; lineNumber < lines.length; lineNumber++) {
+            solutionReviewsResponse.getSolutionLines().add(SolutionLine.from(lines[lineNumber],lineNumber+1));
+        }
     }
 }

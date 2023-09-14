@@ -47,9 +47,9 @@ public class MemberController {
      * @param page 최초값 : 9223372036854775807
      * @return
      */
-    @GetMapping("/members/profile/{memberId}")
-    public ResponseEntity<?> memberProfile(@PathVariable Long memberId, @RequestParam(defaultValue = "9223372036854775807") Long page){
-        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberId,page);
+    @GetMapping("/members/profile/{memberNickname}")
+    public ResponseEntity<?> memberProfile(@PathVariable String memberNickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
+        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberNickname,page);
         return ResponseEntity.ok().body(memberProfileResponse);
     }
 

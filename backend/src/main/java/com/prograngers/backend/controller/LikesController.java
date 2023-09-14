@@ -5,6 +5,7 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,8 @@ import java.net.URI;
 @RequestMapping("/prog-rangers")
 public class LikesController {
 
+    private final MessageSource ms;
     private final LikesService likesService;
-
-    private final String SOLUTION_DETAIL_REDIRECT_URI = "/prog-rangers/solutions/";
 
     @Login
     @GetMapping("/{solutionId}/likes/push")
@@ -37,6 +37,10 @@ public class LikesController {
         return redirect(solutionId);
     }
     private ResponseEntity<Object> redirect(Long solutionId) {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(SOLUTION_DETAIL_REDIRECT_URI + solutionId)).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
+    }
+
+    private String getRedirectPath() {
+        return ms.getMessage("redirect_path", null, null) + "/solutions/";
     }
 }

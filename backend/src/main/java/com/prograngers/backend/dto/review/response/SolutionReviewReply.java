@@ -18,13 +18,21 @@ public class SolutionReviewReply {
     private String photo;
     private String content;
 
-    public static SolutionReviewReply from(Review review) {
+    private boolean mine;
+
+    public static SolutionReviewReply from(Review review, Long memberId) {
         SolutionReviewReply solutionReviewReply = SolutionReviewReply.builder()
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())
                 .content(review.getContent())
+                .mine(checkReviewIsMine(review,memberId))
                 .build();
         return solutionReviewReply;
+    }
+
+    private static boolean checkReviewIsMine(Review review, Long memberId) {
+        if (review.getMember().getId().equals(memberId)) return true;
+        return false;
     }
 }
