@@ -71,8 +71,7 @@ public class SolutionService {
     @Transactional
     public void delete(Long solutionId, Long memberId){
         Solution target = findById(solutionId);
-        Member member = getMember(memberId);
-        checkMemberAuthorization(target, member);
+        checkMemberAuthorization(target, getMember(memberId));
 
         commentRepository.findAllBySolution(target)
                         .stream()
