@@ -6,6 +6,7 @@ import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
+import com.prograngers.backend.support.RepositoryTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,8 @@ import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
 @Slf4j
-@Transactional
-@Import(TestConfig.class)
+@RepositoryTest
 class SolutionRepositoryTest {
 
     @Autowired
