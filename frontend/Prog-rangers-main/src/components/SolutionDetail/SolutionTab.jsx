@@ -3,8 +3,9 @@ import { ViewSolution } from './ViewSolution';
 import { LineReview } from './LineReview';
 import { MAIN_DATA } from './MainData';
 
-// import { css } from '@emotion/react';
-// import { wrapLayout } from './solutionTabStyle';
+import { css } from '@emotion/react';
+import { btnStyle, tapLayout } from './solutionTabStyle';
+import { theme } from '../Header/theme';
 
 export const SolutionTab = () => {
   const [active, setActive] = useState('viewSolution');
@@ -14,21 +15,34 @@ export const SolutionTab = () => {
     setActive(name);
   };
 
+  // const [color, setColor] = useState('');
+
+  // const toggleActive = (e) => {
+  //   setColor((prev) => {
+  //     return e.target.value;
+  //   });
+  // };
+
   const selectComponent = {
     viewSolution: <ViewSolution />,
     lineReview: <LineReview />,
   };
 
   return (
-    <div>
-      {' '}
-      <div className="tabArea">
+    <div css={tapLayout}>
+      <div
+        className="tabArea"
+        css={css`
+          border-bottom: 1px solid ${theme.colors.light3};
+        `}
+      >
         {MAIN_DATA.map((data) => {
           return (
             <button
               onClick={handleClickButton}
               name={data.name}
               key={data.id}
+              css={btnStyle}
             >
               {data.text}
             </button>

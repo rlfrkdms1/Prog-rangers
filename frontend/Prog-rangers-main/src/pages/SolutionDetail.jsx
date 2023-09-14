@@ -1,9 +1,13 @@
 import React from 'react';
-import { SolutionTab } from '../components/SolutionDetail';
+import {
+  SolutionDetailHeader,
+  SolutionTab,
+} from '../components/SolutionDetail';
 
 export const SolutionDetail = () => {
   return (
     <div>
+      <SolutionDetailHeader />
       <SolutionTab />
     </div>
   );
