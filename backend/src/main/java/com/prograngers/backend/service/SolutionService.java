@@ -89,13 +89,9 @@ public class SolutionService {
     }
     @Transactional
     public Long saveScrap(Long scrapTargetId, ScarpSolutionPostRequest request, Long memberId) {
-        Solution scrap = findById(scrapTargetId);
-        Member member = getMember(memberId);
-
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
-        Solution solution = request.toSolution(scrap,member);
-        Solution saved = solutionRepository.save(solution);
-        return saved.getId();
+        Solution solution = request.toSolution(findById(scrapTargetId),getMember(memberId));
+        return solutionRepository.save(solution).getId();
     }
 
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
