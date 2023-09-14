@@ -42,7 +42,7 @@ public class ProblemService {
         return response;
     }
 
-    private static List<ProblemListProblem> makeProblemList(List<Problem> problems) {
+    private List<ProblemListProblem> makeProblemList(List<Problem> problems) {
         // 반환할 dto 리스트
         List<ProblemListProblem> problemListProblemResponse = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class ProblemService {
         return problemListProblemResponse;
     }
 
-    private static void addTagToProblemListProblem(ProblemListProblem problemListProblem, List<Solution> solutions) {
+    private void addTagToProblemListProblem(ProblemListProblem problemListProblem, List<Solution> solutions) {
         HashMap<Object, Integer> tagCountMap = new HashMap<>();
 
         solutions.stream()
@@ -78,7 +78,7 @@ public class ProblemService {
         addTag(problemListProblem, tagList);
     }
 
-    private static void addTag(ProblemListProblem problemListProblem, List<Object> tagList) {
+    private void addTag(ProblemListProblem problemListProblem, List<Object> tagList) {
         int tagCount = 0;
         while(tagCount<MAX_TAG_COUNT){
             if (tagList.get(tagCount)!=null) problemListProblem.getTags().add(tagList.get(tagCount++));
