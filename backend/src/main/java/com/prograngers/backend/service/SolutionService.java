@@ -96,10 +96,8 @@ public class SolutionService {
 
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findById(solutionId);
-        Member member = getMember(memberId);
-        checkMemberAuthorization(target,member);
-        SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
-        return solutionUpdateFormResponse;
+        checkMemberAuthorization(target, getMember(memberId));
+        return SolutionUpdateFormResponse.toDto(target);
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
