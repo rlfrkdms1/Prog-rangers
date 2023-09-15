@@ -19,6 +19,7 @@ import {
   Profile,
   MyPage,
 } from './pages';
+import { KakaoReirect } from './components/SignUp/KakaoRedirect';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
       { path: 'signIn', element: <SignIn /> },
+      // { path: 'login/kakao', element: <KakaoRedirect/>},
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',

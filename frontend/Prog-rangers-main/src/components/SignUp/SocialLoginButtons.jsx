@@ -3,7 +3,7 @@ import React from 'react';
 import Kakao from '../../assets/icons/signin-kakao-logo.svg';
 import Naver from '../../assets/icons/signin-naver-logo.svg';
 import Google from '../../assets/icons/signin-google-logo.svg';
-import { KAKAO_AUTH_URL, Link } from './OAuth';
+import { KAKAO_AUTH_URL } from './OAuth';
 
 const Wrapper = css`
   display: flex;
