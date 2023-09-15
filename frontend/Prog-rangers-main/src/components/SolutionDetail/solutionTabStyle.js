@@ -16,7 +16,7 @@ export const btnStyle = css`
   margin-right: 5px;
 `;
 
-//viewSolution
+//viewSolution & lineReview
 
 export const contentLayout = css`
   padding: 30px 20px 50px;

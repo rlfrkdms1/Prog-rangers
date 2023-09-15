@@ -1,5 +1,3 @@
-import { SolutionDetailHeader } from './SolutionDetailHeader';
-
 export { SolutionTab } from './SolutionTab';
 
 export { ViewSolution } from './ViewSolution';
