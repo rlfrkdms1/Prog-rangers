@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Indicators,
   SolutionDetailHeader,
   SolutionTab,
 } from '../components/SolutionDetail';
@@ -9,6 +10,7 @@ export const SolutionDetail = () => {
     <div>
       <SolutionDetailHeader />
       <SolutionTab />
+      <Indicators />
     </div>
   );
 };

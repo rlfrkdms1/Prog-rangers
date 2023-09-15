@@ -6,3 +6,5 @@ export { LineReview } from './LineReview';
 export { MAIN_DATA } from './MainData';
 
 export { SolutionDetailHeader } from './SolutionDetailHeader';
+
+export { Indicators } from './Indicators';
