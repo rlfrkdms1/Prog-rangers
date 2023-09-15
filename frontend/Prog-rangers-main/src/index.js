@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
       { path: 'signIn', element: <SignIn /> },
-      // { path: 'login/kakao', element: <KakaoRedirect/>},
+      { path: 'signIn/kakao', element: <KakaoReirect/> },
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',
