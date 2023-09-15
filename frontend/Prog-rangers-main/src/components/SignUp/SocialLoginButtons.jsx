@@ -3,7 +3,7 @@ import React from 'react';
 import Kakao from '../../assets/icons/signin-kakao-logo.svg';
 import Naver from '../../assets/icons/signin-naver-logo.svg';
 import Google from '../../assets/icons/signin-google-logo.svg';
-import { KAKAO_AUTH_URL } from './OAuth';
+import { KAKAO_AUTH_URL, Link } from './OAuth';
 
 const Wrapper = css`
   display: flex;
@@ -20,7 +20,12 @@ const Wrapper = css`
   }
 `;
 
-export const SocialLoginButtons = () => {
+export const SocialLoginButtons = () => {  
+  const onClickKakao = () => {
+    window.location.href = KAKAO_AUTH_URL;
+    console.log(KAKAO_AUTH_URL);
+  }
+
   return (
   <div css={css`
     margin-top: 98px; 
@@ -39,7 +44,7 @@ export const SocialLoginButtons = () => {
     `}>소셜 로그인
     </div>
     <div css={css`display: flex; flex-direction: column; justify-content: space-between; height: 200px;`}>
-      <div css={css`${Wrapper} background-color: #FAE100;`} href={KAKAO_AUTH_LOGIN}>
+      <div css={css`${Wrapper} background-color: #FAE100;`} onClick={onClickKakao}>
         <img src={Kakao} alt="kakao_logo" css={css`margin-left: 100px;`}/>
         <div css={css` text-align: center; margin-left: 73px; color: #391E1F;`}>카카오톡으로 로그인</div>
       </div>
