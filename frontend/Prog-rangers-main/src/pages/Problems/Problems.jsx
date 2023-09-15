@@ -78,11 +78,11 @@ export const Problems = () => {
             margin-left: 4px;
           `}
         >
-          원하는 조건으로 풀이를 찾아보세요
+          원하는 조건으로 문제를 찾아보세요
         </div>
         <div
           css={css`
-            margin: 25px 0 0 4px;
+            margin-top: 25px;
             height: 50px;
             width: 742px;
             display: flex;

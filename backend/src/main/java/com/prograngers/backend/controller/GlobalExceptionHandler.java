@@ -29,14 +29,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception) {
         List<ErrorResponse> errorList = new ArrayList<>();
-        List<ObjectError> errors = exception.getBindingResult().getAllErrors();
-        for (ObjectError error : errors) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .errorCode(INVALID_REQUEST_BODY)
-                    .description(error.getDefaultMessage())
-                    .build();
-            errorList.add(errorResponse);
-        }
+        exception.getBindingResult().getAllErrors().stream()
+                .map((error)->ErrorResponse.builder().errorCode(INVALID_REQUEST_BODY).description(error.getDefaultMessage()).build())
+                .forEach((errorResponse)->errorList.add(errorResponse));
         return new ResponseEntity(errorList, HttpStatus.BAD_REQUEST);
     }
 

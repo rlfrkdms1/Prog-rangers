@@ -18,20 +18,20 @@ public class QueryDslFollowRepositoryImpl implements  QueryDslFollowRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Long getFollow(Member member) {
+    public Long getFollowCount(Member member) {
     return jpaQueryFactory
             .select(follow.count())
             .from(follow)
-            .where(follow.member.eq(member))
+            .where(follow.followerId.eq(member.getId()))
             .fetchOne();
     }
 
     @Override
-    public Long getFollowing(Member member) {
+    public Long getFollowingCount(Member member) {
         return jpaQueryFactory
                 .select(follow.count())
                 .from(follow)
-                .where(follow.targetId.eq(member.getId()))
+                .where(follow.followingId.eq(member.getId()))
                 .fetchOne();
     }
 }

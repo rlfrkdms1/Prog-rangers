@@ -18,7 +18,7 @@ public class SolutionUpdateFormResponse {
     private String link;
     private AlgorithmConstant algorithmName;
     private DataStructureConstant dataStructureName;
-    private String code;
+    private String[] code;
     private String description;
     private int  level;
 
@@ -29,7 +29,7 @@ public class SolutionUpdateFormResponse {
                         .getLink())
                 .algorithmName(target.getAlgorithm())
                 .dataStructureName(target.getDataStructure())
-                .code(target.getCode())
+                .code(target.getCode().split("\n"))
                 .level(target.getLevel())
                 .description(target.getDescription()).build();
     }

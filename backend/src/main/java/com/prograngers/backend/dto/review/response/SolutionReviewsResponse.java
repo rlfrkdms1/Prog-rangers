@@ -19,23 +19,21 @@ public class SolutionReviewsResponse {
     private String title;
     private AlgorithmConstant algorithm;
     private DataStructureConstant dataStructure;
-    private String solution;
-    private List<Line> lines = new ArrayList<>();
+    private List<SolutionLine> solutionLines;
 
     public static SolutionReviewsResponse from(Solution solution, String[] lines) {
-        SolutionReviewsResponse solutionReviewsResponse = new SolutionReviewsResponse();
-        solutionReviewsResponse.title = solution.getTitle();
-        solutionReviewsResponse.algorithm = solution.getAlgorithm();
-        solutionReviewsResponse.dataStructure = solution.getDataStructure();
-        // 먼저 최종 응답 dto에 각 라인을 넣는다
-        for (int i = 0; i < lines.length; i++) {
-            Line line = Line.builder()
-                    .codeLineNumber(i + 1)
-                    .code(lines[i])
-                    .build();
-            solutionReviewsResponse.getLines().add(line);
-        }
+        SolutionReviewsResponse solutionReviewsResponse =
+                new SolutionReviewsResponse(solution.getTitle(), solution.getAlgorithm(),solution.getDataStructure(), new ArrayList<>());
+
+        addLinesAtResponseDto(lines, solutionReviewsResponse);
+
         return  solutionReviewsResponse;
     }
 
+    private static void addLinesAtResponseDto(String[] lines, SolutionReviewsResponse solutionReviewsResponse) {
+        // 먼저 최종 응답 dto에 각 라인을 넣는다
+        for (int lineNumber = 0; lineNumber < lines.length; lineNumber++) {
+            solutionReviewsResponse.getSolutionLines().add(SolutionLine.from(lines[lineNumber],lineNumber+1));
+        }
+    }
 }

@@ -30,13 +30,8 @@ public class SolutionPatchRequest {
     @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
     private int level;
 
-    public Solution toSolution(Solution target) {
-        target.updateTitle(title);
-        target.updateAlgorithm(algorithmName);
-        target.updateDataStructure(dataStructureName);
-        target.updateLevel(level);
-        target.updateCode(code);
-        target.updateDescription(description);
+    public Solution updateSolution(Solution target) {
+        target.update(title,algorithmName,dataStructureName,level,code,description);
         return target;
     }
 }

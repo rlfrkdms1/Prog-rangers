@@ -4,7 +4,7 @@ import com.prograngers.backend.entity.member.Member;
 
 public interface QueryDslFollowRepository {
 
-    Long getFollow(Member member);
+    Long getFollowCount(Member member);
 
-    Long getFollowing(Member member);
+    Long getFollowingCount(Member member);
 }
