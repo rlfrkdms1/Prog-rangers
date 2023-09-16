@@ -40,22 +40,38 @@ public class DashBoardService {
     public ShowDashBoardResponse createDashBoard(Long memberId, YearMonth date) {
         if (date == null) date = YearMonth.now();
         Member member = findMemberById(memberId);
-        //알림
-        List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
-        List<NotificationInfo> notificationInfoList = notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
-        //최근 풀이
-        List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
-        List<SolutionInfo> myRecentSolutionInfos = myRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
-        //뱃지 찾기
-        List<Badge> badges = badgeRepository.findAllByMember(member);
-        List<String> badgeInfos = badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
-        //잔디밭
+
+        List<NotificationInfo> notificationInfoList = getNotificationInfos(member);
+        List<SolutionInfo> myRecentSolutionInfos = getMyRecentSolutionInfos(member);
+        List<String> badgeInfos = getBadgeInfos(member);
         List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, date);
-        //팔로우의 최근 풀이
-        List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
-        List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
+        List<SolutionInfo> followingRecentSolutionInfos = getFollowingRecentSolutionInfos(memberId);
 
         return ShowDashBoardResponse.of(monthlyStudyCalendar, notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
+    }
+
+    private List<NotificationInfo> getNotificationInfos(Member member) {
+        List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
+        List<NotificationInfo> notificationInfoList = notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
+        return notificationInfoList;
+    }
+
+    private List<SolutionInfo> getMyRecentSolutionInfos(Member member) {
+        List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
+        List<SolutionInfo> myRecentSolutionInfos = myRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
+        return myRecentSolutionInfos;
+    }
+
+    private List<String> getBadgeInfos(Member member) {
+        List<Badge> badges = badgeRepository.findAllByMember(member);
+        List<String> badgeInfos = badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
+        return badgeInfos;
+    }
+
+    private List<SolutionInfo> getFollowingRecentSolutionInfos(Long memberId) {
+        List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
+        List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
+        return followingRecentSolutionInfos;
     }
 
     private List<IsDayOfStudy> getMonthlyStudyCalendar(Long memberId, YearMonth date) {
