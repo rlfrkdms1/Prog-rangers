@@ -58,14 +58,18 @@ public class DashBoardService {
         return ShowDashBoardResponse.of(monthlyStudyCalendar, notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
     }
 
-    private List<IsDayOfStudy> getMonthlyStudyCalendar(Long memberId, MonthConstant month, int year) {
-        List<Integer> monthlySolutions = solutionRepository.findAllByMonth(memberId, month.getMonth());
-        List<Integer> monthlyReviews = reviewRepository.findAllByMonth(memberId, month.getMonth());
-        List<Integer> monthlyStudy = Stream.concat(monthlySolutions.stream(), monthlyReviews.stream()).distinct().collect(Collectors.toList());
-        Map<Integer, Boolean> monthlyStudyMap = IntStream.rangeClosed(1, month.getLastDayOfMonth(year)).boxed().collect(Collectors.toMap(Function.identity(), i -> Boolean.FALSE));
+    private List<IsDayOfStudy> getMonthlyStudyCalendar(Long memberId, YearMonth date) {
+        int month = date.getMonthValue();
+        List<Integer> monthlyStudy = getMonthlyStudy(memberId, month);
+        Map<Integer, Boolean> monthlyStudyMap = IntStream.rangeClosed(1, YearMonth.of(date.getYear(), month).lengthOfMonth()).boxed().collect(Collectors.toMap(Function.identity(), i -> Boolean.FALSE));
         monthlyStudy.stream().forEach(i -> monthlyStudyMap.put(i, true));
-        List<IsDayOfStudy> monthlyStudyCalendar = monthlyStudyMap.entrySet().stream().map(entry -> new IsDayOfStudy(entry.getKey(), entry.getValue())).collect(Collectors.toList());
-        return monthlyStudyCalendar;
+        return monthlyStudyMap.entrySet().stream().map(entry -> new IsDayOfStudy(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+    }
+
+    private List<Integer> getMonthlyStudy(Long memberId, int month) {
+        List<Integer> monthlySolutions = solutionRepository.findAllByMonth(memberId, month);
+        List<Integer> monthlyReviews = reviewRepository.findAllByMonth(memberId, month);
+        return Stream.concat(monthlySolutions.stream(), monthlyReviews.stream()).distinct().collect(Collectors.toList());
     }
 
     private Member findMemberById(Long memberId){
