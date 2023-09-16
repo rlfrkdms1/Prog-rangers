@@ -9,7 +9,7 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
-import com.prograngers.backend.repository.NotificationRepository;
+import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
