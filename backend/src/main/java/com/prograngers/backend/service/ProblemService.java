@@ -39,7 +39,7 @@ public class ProblemService {
         return response;
     }
 
-    private static List<ProblemListProblem> makeProblemList(List<Problem> problems) {
+    private List<ProblemListProblem> makeProblemList(List<Problem> problems) {
         // 반환할 dto 리스트
         List<ProblemListProblem> problemListProblemResponse = new ArrayList<>();
 
@@ -64,7 +64,7 @@ public class ProblemService {
         return problemListProblemResponse;
     }
 
-    private static void countTag(ProblemListProblem problemListProblem, List<Object> keySet) {
+    private void countTag(ProblemListProblem problemListProblem, List<Object> keySet) {
         for (int tagCount = 0; tagCount < keySet.size(); tagCount++) {
             if (tagCount == 3) break;
             Object tag = keySet.get(tagCount);

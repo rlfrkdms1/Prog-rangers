@@ -140,7 +140,7 @@ public class SolutionService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
-    private static void validMemberAuthorization(Solution target, Member member) {
+    private void validMemberAuthorization(Solution target, Member member) {
         if (target.getMember().getId()!= member.getId()){
             throw new MemberUnAuthorizedException();
         }
@@ -156,7 +156,7 @@ public class SolutionService {
         return false;
     }
 
-    private static void validViewPrivateSolution(Solution solution, boolean isMine) {
+    private void validViewPrivateSolution(Solution solution, boolean isMine) {
         if (!solution.isPublic()&&!isMine){
             throw new PrivateSolutionException();
         }

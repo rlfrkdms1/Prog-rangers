@@ -74,7 +74,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    private static void validCommentAlreadyDeleted(Comment comment) {
+    private void validCommentAlreadyDeleted(Comment comment) {
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
@@ -88,7 +88,7 @@ public class CommentService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private static void validMemberAuthorization(Long targetCommentMemberId, Member member) {
+    private void validMemberAuthorization(Long targetCommentMemberId, Member member) {
         if (!targetCommentMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }

@@ -45,7 +45,7 @@ public class LikesService {
         likesRepository.delete(targetLikes);
     }
 
-    private static void validMemberAuthorization(Member targetMember, Likes targetLikes) {
+    private void validMemberAuthorization(Member targetMember, Likes targetLikes) {
         if (targetLikes.getMember().getId()!= targetMember.getId()){
             throw new MemberUnAuthorizedException();
         }

@@ -126,13 +126,13 @@ public class ReviewService {
         return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
     }
 
-    private static void validMemberAuthorization(Review targetReview, Member member) {
+    private void validMemberAuthorization(Review targetReview, Member member) {
         if (!targetReview.getMember().getId().equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }
     }
 
-    private static void validReviewAlreadyDeleted(Review targetReview) {
+    private void validReviewAlreadyDeleted(Review targetReview) {
         if (targetReview.getStatus().equals(DELETED)){
             throw new ReviewAlreadyDeletedException();
         }
