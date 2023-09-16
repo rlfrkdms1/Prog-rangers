@@ -11,6 +11,7 @@ import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,7 @@ import java.net.URI;
 public class SolutionController {
     private final SolutionService solutionService;
     private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
-    private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
-
+    private final MessageSource ms;
     // solution 쓰기
     @Login
     @PostMapping("/new-form")
@@ -93,10 +93,14 @@ public class SolutionController {
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
 
-    private ResponseEntity<Object> redirect(Long saveId) {
-        if (saveId==null){
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH )).build();
+    private ResponseEntity<Object> redirect(Long solutionId) {
+        if (solutionId==null){
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath())).build();
         }
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + saveId)).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + "/" + solutionId)).build();
+    }
+
+    private String getRedirectPath() {
+        return ms.getMessage("redirect_path", null, null)+"/solutions";
     }
 }

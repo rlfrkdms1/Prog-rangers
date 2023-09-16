@@ -1,6 +1,7 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
+
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
 import com.prograngers.backend.dto.review.request.ReviewPostRequest;
@@ -32,8 +33,8 @@ public class ReviewController {
 
     // 상세보기 한 줄 리뷰
     @GetMapping("/reviews")
-    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId){
-        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId);
+    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId){
+        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
         return ResponseEntity.ok().body(reviewDetail);
     }
 

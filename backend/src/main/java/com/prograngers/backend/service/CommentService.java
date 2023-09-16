@@ -60,7 +60,7 @@ public class CommentService {
         checkMemberAuthorization(targetCommentMemberId, member);
         comment.update(commentPatchRequest.getContent());
         // 리다이렉트 하기 위해 Solution의 Id 반환
-        return commentRepository.save(comment).getId();
+        return commentRepository.save(comment).getSolution().getId();
     }
 
     @Transactional

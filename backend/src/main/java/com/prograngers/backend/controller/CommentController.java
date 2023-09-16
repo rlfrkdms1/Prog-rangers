@@ -8,6 +8,7 @@ import com.prograngers.backend.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,20 +28,15 @@ import java.net.URISyntaxException;
 @RequestMapping("prog-rangers/solutions")
 @RequiredArgsConstructor
 public class CommentController {
-
+    private final MessageSource ms;
     private final CommentService commentService;
-
-    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
-    private final String REAL_PATH = "http://13.125.42.167:8080/solutions";
 
     // 댓글 작성
     @PostMapping("/{solutionId}/comments")
     @Login
     public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
                                         @LoggedInMember Long memberId) {
-
         commentService.addComment(solutionId, commentRequest, memberId);
-
         return redirect(solutionId);
     }
 
@@ -48,8 +44,8 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     @Login
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @RequestBody @Valid  CommentPatchRequest commentPatchRequest,
-                                           @LoggedInMember Long memberId){
+                                           @RequestBody @Valid CommentPatchRequest commentPatchRequest,
+                                           @LoggedInMember Long memberId) {
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return redirect(solutionId);
@@ -67,7 +63,11 @@ public class CommentController {
 
     private ResponseEntity<Object> redirect(Long solutionId) {
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + solutionId)).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
+    }
+
+    private String getRedirectPath() {
+        return ms.getMessage("redirect_path", null, null)+"/solutions/";
     }
 
 }
