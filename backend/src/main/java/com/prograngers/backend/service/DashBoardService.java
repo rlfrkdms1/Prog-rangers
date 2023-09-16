@@ -41,13 +41,13 @@ public class DashBoardService {
         if (date == null) date = YearMonth.now();
         Member member = findMemberById(memberId);
 
-        List<NotificationInfo> notificationInfoList = getNotificationInfos(member);
+        List<NotificationInfo> notificationInfos = getNotificationInfos(member);
         List<SolutionInfo> myRecentSolutionInfos = getMyRecentSolutionInfos(member);
         List<String> badgeInfos = getBadgeInfos(member);
         List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, date);
         List<SolutionInfo> followingRecentSolutionInfos = getFollowingRecentSolutionInfos(memberId);
 
-        return ShowDashBoardResponse.of(monthlyStudyCalendar, notificationInfoList, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
+        return ShowDashBoardResponse.of(monthlyStudyCalendar, notificationInfos, myRecentSolutionInfos, badgeInfos, followingRecentSolutionInfos);
     }
 
     private List<NotificationInfo> getNotificationInfos(Member member) {
