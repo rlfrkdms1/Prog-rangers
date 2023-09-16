@@ -96,7 +96,7 @@ class ReviewServiceTest {
                 ()->assertThrows(ReviewAlreadyDeletedException.class,()->reviewService.deleteReview(1L,1L))
         );
     }
-    ReviewPatchRequest 리뷰_수정_요청_생성(){
+    private ReviewPatchRequest 리뷰_수정_요청_생성(){
         return new ReviewPatchRequest("수정 내용");
     }
 
