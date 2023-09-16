@@ -22,6 +22,8 @@ public class SolutionReview {
     private String content;
     private List<SolutionReviewReply> replies;
     private boolean mine;
+
+    private ReviewStatusConStant status;
     public static SolutionReview from(Review review, Long memberId){
 
 

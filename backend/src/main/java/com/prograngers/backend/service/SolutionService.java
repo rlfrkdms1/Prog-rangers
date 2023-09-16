@@ -64,7 +64,7 @@ public class SolutionService {
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
-        checkMemberAuthorization(target, member);
+        validMemberAuthorization(target, member);
         Solution solution = request.updateSolution(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
@@ -73,7 +73,7 @@ public class SolutionService {
     @Transactional
     public void delete(Long solutionId, Long memberId){
         Solution target = findById(solutionId);
-        checkMemberAuthorization(target, getMember(memberId));
+        validMemberAuthorization(target, getMember(memberId));
 
         commentRepository.findAllBySolution(target)
                         .stream()
@@ -98,7 +98,7 @@ public class SolutionService {
 
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findById(solutionId);
-        checkMemberAuthorization(target, getMember(memberId));
+        validMemberAuthorization(target, getMember(memberId));
         return SolutionUpdateFormResponse.toDto(target);
     }
 
@@ -106,22 +106,22 @@ public class SolutionService {
         Solution targetSolution = findById(solutionId);
 
         // 내 풀이인지 여부
-        boolean isMine = checkSolutionIsMine(memberId, targetSolution);
+        boolean isMine = validSolutionIsMine(memberId, targetSolution);
 
         // 내 풀이가 아닌 비공개 풀이를 열람하는지 확인
-        checkViewPrivateSolution(targetSolution, isMine);
+        validViewPrivateSolution(targetSolution, isMine);
 
         List<Comment> comments = commentRepository.findAllBySolution(targetSolution);
         List<Likes> likes = likesRepository.findAllBySolution(targetSolution);
 
         // 좋아요 눌렀는지 여부
-        boolean pushedLike = checkPushedLike(memberId, likes);
+        boolean pushedLike = validPushedLike(memberId, likes);
 
         // 스크랩 풀이들 가져오기
         List<Solution> solutionsScrapedTargetSolution = solutionRepository.findAllByScrapSolution(targetSolution);
 
         // 스크랩 했는지 여부
-        boolean scraped = checkScraped(memberId, solutionsScrapedTargetSolution);
+        boolean scraped = validScraped(memberId, solutionsScrapedTargetSolution);
 
         return SolutionDetailResponse.from(targetSolution, comments,scraped,solutionsScrapedTargetSolution.size(),pushedLike,likes.size(),isMine, memberId);
     }
@@ -138,13 +138,13 @@ public class SolutionService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
-    private static void checkMemberAuthorization(Solution target, Member member) {
+    private static void validMemberAuthorization(Solution target, Member member) {
         if (target.getMember().getId()!= member.getId()){
             throw new MemberUnAuthorizedException();
         }
     }
 
-    private boolean checkSolutionIsMine(Long memberId, Solution solution) {
+    private boolean validSolutionIsMine(Long memberId, Solution solution) {
         if (memberId !=null){
             Member member = getMember(memberId);
             if (solution.getMember().getId().equals(member.getId())){
@@ -154,20 +154,20 @@ public class SolutionService {
         return false;
     }
 
-    private void checkViewPrivateSolution(Solution solution, boolean isMine) {
+    private void validViewPrivateSolution(Solution solution, boolean isMine) {
         if (!solution.isPublic()&&!isMine){
             throw new PrivateSolutionException();
         }
     }
 
-    private boolean checkScraped(Long memberId, List<Solution> scrapSolutions) {
+    private boolean validScraped(Long memberId, List<Solution> scrapSolutions) {
         return scrapSolutions
                 .stream()
                 .map(scrapedSolution -> scrapedSolution.getMember().getId())
                 .anyMatch(id -> id == memberId);
     }
 
-    private boolean checkPushedLike(Long memberId, List<Likes> likes) {
+    private boolean validPushedLike(Long memberId, List<Likes> likes) {
         return likes
                 .stream()
                 .map(like -> like.getMember().getId())

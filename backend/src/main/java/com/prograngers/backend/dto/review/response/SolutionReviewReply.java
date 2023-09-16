@@ -19,6 +19,8 @@ public class SolutionReviewReply {
     private String photo;
     private String content;
 
+    private ReviewStatusConStant status;
+
 
     private boolean mine;
 

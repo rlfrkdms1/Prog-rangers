@@ -8,7 +8,6 @@ import com.prograngers.backend.dto.review.response.SolutionReview;
 import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.review.ReviewStatusConStant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ReviewAlreadyDeletedException;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
 
@@ -37,7 +35,6 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final SolutionRepository solutionRepository;
-
 
     private final MemberRepository memberRepository;
 
@@ -65,8 +62,7 @@ public class ReviewService {
         review.delete();
     }
 
-    public SolutionReviewsResponse getReviewDetail(Long solutionId) {
-
+    public SolutionReviewsResponse getReviewDetail(Long solutionId,Long memberId) {
         // solutionId에 해당하는 풀이 찾기
         Solution solution = findSolutionById(solutionId);
         // 줄 나눠서 배열에 저장
@@ -75,7 +71,7 @@ public class ReviewService {
         SolutionReviewsResponse solutionReviewsResponse = SolutionReviewsResponse.from(solution, lines);
         // 최종 응답 dto에서 line들을 가져온다
         List<SolutionLine> addedSolutionLines = solutionReviewsResponse.getSolutionLines();
-        addReviewAtLine(solution, addedSolutionLines, memberId);
+        addReviewAtLine(addedSolutionLines, memberId);
         solutionReviewsResponse.setSolutionLines(addedSolutionLines);
         return solutionReviewsResponse;
     }
@@ -84,38 +80,41 @@ public class ReviewService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private void addReviewAtLine(List<SolutionLine> addedSolutionLines) {
-
+    private void addReviewAtLine(List<SolutionLine> addedSolutionLines, Long memberId) {
         // 라인들에 대해 for문을 돌면서 리뷰를 추가한다
-        addedSolutionLines.stream()
-                .forEach(solutionLine -> {
-                    Integer codeLineNumber = solutionLine.getCodeLineNumber();
+        for (SolutionLine solutionLine : addedSolutionLines) {
+            Integer codeLineNumber = solutionLine.getCodeLineNumber();
 
-                    // codeLineNumber에 해당하는 review들을 찾는다
-                    List<Review> reviews = reviewRepository
-                            .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
+            // codeLineNumber에 해당하는 review들을 찾는다
+            List<Review> reviews = reviewRepository
+                    .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
+            List<SolutionReview> solutionReviewResponse = new ArrayList<>();
 
-                    List<SolutionReview> solutionReviewResponse =
-                            reviews.stream()
-                                    .filter(review -> review.getParentId() == null)
-                                    .map(review -> SolutionReview.from(review, memberId))
-                                    .collect(Collectors.toList());
-
-                    // 부모가 있는 리뷰들 (답 리뷰들)
-                    reviews.stream().filter(review -> review.getParentId() != null)
-                            .forEach(review -> makeReplyResponse(solutionReviewResponse, review,memberId));
-
-                    solutionLine.setSolutionReviews(solutionReviewResponse);
-                });
+            // 해당 라인의 리뷰들에 대해 for문을 돈다
+            for (Review review : reviews) {
+                // 부모가 없는 리뷰인 경우 ReviewResponse dto로 만든다
+                if (review.getParentId() == null) {
+                    makeReviewResponse(solutionReviewResponse, review, memberId);
+                }
+                // 부모가 있는 리뷰인 경우 Replyresponse dto로 만든다
+                else {
+                    makeReplyResponse(solutionReviewResponse, review, memberId);
+                }
+            }
+            solutionLine.setSolutionReviews(solutionReviewResponse);
+        }
     }
 
-    private static void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review,Long memberId) {
-        solutionReviewResponse.stream()
-                .filter(parentReview->parentReview.getId().equals(review.getParentId()))
-                .findFirst()
-                .get()
-                .getReplies()
-                .add(SolutionReviewReply.from(review,memberId));
+    private static void makeReviewResponse(List<SolutionReview> solutionReviewResponse, Review review, Long memberId) {
+        solutionReviewResponse.add(SolutionReview.from(review, memberId));
+    }
+
+    private static void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review, Long memberId) {
+        for (SolutionReview r : solutionReviewResponse) {
+            if (r.getId().equals(review.getParentId())) {
+                r.getReplies().add(SolutionReviewReply.from(review,memberId));
+            }
+        }
     }
 
     private Member findMemberById(Long memberId) {
