@@ -6,7 +6,6 @@ import com.prograngers.backend.dto.response.dashboard.ShowDashBoardResponse;
 import com.prograngers.backend.dto.response.dashboard.SolutionInfo;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.badge.Badge;
-import com.prograngers.backend.entity.dashboard.MonthConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -18,7 +17,6 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +50,7 @@ public class DashBoardService {
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<String> badgeInfos = badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
         //잔디밭
-        List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, MonthConstant.getMonthConstant(date.getMonthValue()), date.getYear());
+        List<IsDayOfStudy> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, date);
         //팔로우의 최근 풀이
         List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
         List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
