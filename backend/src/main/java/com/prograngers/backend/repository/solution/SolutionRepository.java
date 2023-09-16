@@ -20,5 +20,5 @@ public interface SolutionRepository extends JpaRepository<Solution, Long>, Query
     List<Solution> findFollowingsRecentSolutions(@Param("memberId") Long memberId);
 
     @Query("select distinct function('date_format', s.createdAt, '%d') from Solution s where s.member.id = :memberId and function('date_format', s.createdAt, '%m') = :month")
-    List<Integer> findAllByMonth(Long memberId, int month);
+    List<Integer> findAllByMonth(@Param("memberId") Long memberId, @Param("month") int month);
 }
