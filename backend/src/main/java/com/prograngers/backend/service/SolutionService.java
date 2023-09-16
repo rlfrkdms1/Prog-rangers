@@ -70,7 +70,7 @@ public class SolutionService {
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
-        checkMemberAuthorization(target, member);
+        validMemberAuthorization(target, member);
         Solution solution = request.toSolution(target);
         Solution updated = solutionRepository.save(solution);
         return updated.getId();
@@ -80,7 +80,7 @@ public class SolutionService {
     public void delete(Long solutionId, Long memberId){
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
-        checkMemberAuthorization(target, member);
+        validMemberAuthorization(target, member);
 
         commentRepository.findAllBySolution(target)
                         .stream()
@@ -110,15 +110,15 @@ public class SolutionService {
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findById(solutionId);
         Member member = getMember(memberId);
-        checkMemberAuthorization(target,member);
+        validMemberAuthorization(target,member);
         SolutionUpdateFormResponse solutionUpdateFormResponse = SolutionUpdateFormResponse.toDto(target);
         return solutionUpdateFormResponse;
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findById(solutionId);
-        boolean isMine = checkSolutionIsMine(memberId, solution);
-        checkViewPrivateSolution(solution, isMine);
+        boolean isMine = validSolutionIsMine(memberId, solution);
+        validViewPrivateSolution(solution, isMine);
         List<Comment> comments = commentRepository.findAllBySolution(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         boolean pushedLike = likes.stream().map(like -> like.getMember().getId()).anyMatch(id -> id == memberId);
@@ -140,13 +140,13 @@ public class SolutionService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
-    private static void checkMemberAuthorization(Solution target, Member member) {
+    private static void validMemberAuthorization(Solution target, Member member) {
         if (target.getMember().getId()!= member.getId()){
             throw new MemberUnAuthorizedException();
         }
     }
 
-    private boolean checkSolutionIsMine(Long memberId, Solution solution) {
+    private boolean validSolutionIsMine(Long memberId, Solution solution) {
         if (memberId !=null){
             Member member = getMember(memberId);
             if (solution.getMember().getId().equals(member.getId())){
@@ -156,7 +156,7 @@ public class SolutionService {
         return false;
     }
 
-    private static void checkViewPrivateSolution(Solution solution, boolean isMine) {
+    private static void validViewPrivateSolution(Solution solution, boolean isMine) {
         if (!solution.isPublic()&&!isMine){
             throw new PrivateSolutionException();
         }

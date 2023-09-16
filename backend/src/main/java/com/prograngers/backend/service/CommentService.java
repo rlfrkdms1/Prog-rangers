@@ -57,7 +57,7 @@ public class CommentService {
         Long targetCommentMemberId = comment.getMember().getId();
 
         Member member = findMemberById(memberId);
-        checkMemberAuthorization(targetCommentMemberId, member);
+        validMemberAuthorization(targetCommentMemberId, member);
         comment.update(commentPatchRequest.getContent());
         // 리다이렉트 하기 위해 Solution의 Id 반환
         return commentRepository.save(comment).getId();
@@ -68,13 +68,13 @@ public class CommentService {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
-        checkMemberAuthorization(targetCommentMemberId, member);
-        checkCommentAlreadyDeleted(comment);
+        validMemberAuthorization(targetCommentMemberId, member);
+        validCommentAlreadyDeleted(comment);
         comment.delete();
         commentRepository.save(comment);
     }
 
-    private static void checkCommentAlreadyDeleted(Comment comment) {
+    private static void validCommentAlreadyDeleted(Comment comment) {
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
@@ -88,7 +88,7 @@ public class CommentService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private static void checkMemberAuthorization(Long targetCommentMemberId, Member member) {
+    private static void validMemberAuthorization(Long targetCommentMemberId, Member member) {
         if (!targetCommentMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }

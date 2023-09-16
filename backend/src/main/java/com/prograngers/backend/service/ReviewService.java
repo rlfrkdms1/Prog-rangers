@@ -49,8 +49,8 @@ public class ReviewService {
     public void updateReview(ReviewPatchRequest reviewPatchRequest, Long memberId, Long reviewId) {
         Review targetReview = findReviewById(reviewId);
         Member member = findMemberById(memberId);
-        checkMemberAuthorization(targetReview, member);
-        checkReviewAlreadyDeleted(targetReview);
+        validMemberAuthorization(targetReview, member);
+        validReviewAlreadyDeleted(targetReview);
         reviewPatchRequest.updateReview(targetReview);
     }
 
@@ -58,8 +58,8 @@ public class ReviewService {
     public void deleteReview(Long memberId, Long reviewId) {
         Review targetReview = findReviewById(reviewId);
         Member member = findMemberById(memberId);
-        checkMemberAuthorization(targetReview, member);
-        checkReviewAlreadyDeleted(targetReview);
+        validMemberAuthorization(targetReview, member);
+        validReviewAlreadyDeleted(targetReview);
         targetReview.delete();
     }
 
@@ -126,13 +126,13 @@ public class ReviewService {
         return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
     }
 
-    private static void checkMemberAuthorization(Review targetReview, Member member) {
+    private static void validMemberAuthorization(Review targetReview, Member member) {
         if (!targetReview.getMember().getId().equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }
     }
 
-    private static void checkReviewAlreadyDeleted(Review targetReview) {
+    private static void validReviewAlreadyDeleted(Review targetReview) {
         if (targetReview.getStatus().equals(DELETED)){
             throw new ReviewAlreadyDeletedException();
         }
