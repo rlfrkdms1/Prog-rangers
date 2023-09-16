@@ -1,9 +1,11 @@
 package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.TestConfig;
+import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.support.RepositoryTest;
@@ -29,6 +31,7 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
+import static com.prograngers.backend.support.fixture.MemberFixture.이수빈;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
@@ -49,6 +52,9 @@ class SolutionRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @DisplayName("멤버 이름으로 풀이를 전부 찾을 수 있다")
     @Test
@@ -321,6 +327,29 @@ class SolutionRepositoryTest {
         assertThat(solutionList).containsExactly(solution1, solution2, solution3);
     }
 
+    @Test
+    @DisplayName("팔로우의 최근 풀이를 5개 조회할 수 있다.")
+    void 팔로우의_최근_풀이() {
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(이수빈.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        저장(팔로우_생성(member1, member2));
+        저장(팔로우_생성(member1, member3));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 2, 12, 0), JAVA, 1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 8, 2, 12, 0), JAVA, 1));
+        저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 7, 2, 12, 0), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 5, 12, 0), JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member3, LocalDateTime.of(2023, 9, 4, 12, 0), JAVA, 1));
+        List<Solution> solutionList = solutionRepository.findFollowingsRecentSolutions(member1.getId());
+        assertThat(solutionList).containsExactly(solution1, solution2, solution3, solution4, solution5);
+    }
+
+    private Follow 팔로우_생성(Member member1, Member member2) {
+        return Follow.builder().followerId(member1.getId()).followingId(member2.getId()).build();
+    }
+
     Member 저장(Member member) {
         return memberRepository.save(member);
     }
@@ -332,5 +361,8 @@ class SolutionRepositoryTest {
     Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
+
+    Follow 저장(Follow follow) {return followRepository.save(follow);}
+
 
 }
