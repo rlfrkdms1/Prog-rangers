@@ -1,6 +1,5 @@
 package com.prograngers.backend.repository.solution;
 
-import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
@@ -13,11 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -345,6 +340,28 @@ class SolutionRepositoryTest {
         List<Solution> solutionList = solutionRepository.findFollowingsRecentSolutions(member1.getId());
         assertThat(solutionList).containsExactly(solution1, solution2, solution3, solution4, solution5);
     }
+
+    @Test
+    @DisplayName("회원이 주어졌을 때 해당 회원이 작성한 주어진 달의 풀이들을 조회할 수 있다.")
+    void 월별_풀이_조회(){
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        Integer solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 5, 12, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution3 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 11, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution4 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 8, 4, 11, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution5 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 10, 11, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+
+        List<Integer> dayOfWriteSolution1 = solutionRepository.findAllByMonth(member1.getId(), 9);
+        List<Integer> dayOfWriteSolution2 = solutionRepository.findAllByMonth(member2.getId(), 9);
+        assertAll(
+                () -> assertThat(dayOfWriteSolution1).contains(solution1, solution2, solution3).doesNotContain(solution4, solution5),
+                () -> assertThat(dayOfWriteSolution2).contains(solution5).doesNotContain(solution1, solution2, solution3, solution4)
+        );
+    }
+
 
     private Follow 팔로우_생성(Member member1, Member member2) {
         return Follow.builder().followerId(member1.getId()).followingId(member2.getId()).build();
