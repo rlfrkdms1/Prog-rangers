@@ -21,7 +21,7 @@ public class MemberProfileProblemSolution {
 
     private String description;
 
-    private String code;
+    private String[] code;
 
     public static MemberProfileProblemSolution from(Solution solution){
         return MemberProfileProblemSolution.builder()
@@ -30,7 +30,7 @@ public class MemberProfileProblemSolution {
                 .algorithm(solution.getAlgorithm())
                 .ojName(solution.getProblem().getOjName())
                 .description(solution.getDescription())
-                .code(solution.getCode())
+                .code(solution.getCode().split("\n"))
                 .build();
     }
 
