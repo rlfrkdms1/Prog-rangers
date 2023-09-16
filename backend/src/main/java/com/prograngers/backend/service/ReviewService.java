@@ -78,8 +78,7 @@ public class ReviewService {
     }
 
     private Solution findSolutionById(Long solutionId) {
-        Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
-        return solution;
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
     private void addReviewAtLine(List<SolutionLine> addedSolutionLines) {
