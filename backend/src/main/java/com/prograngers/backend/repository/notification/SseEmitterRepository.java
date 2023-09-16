@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.notification;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

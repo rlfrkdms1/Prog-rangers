@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.notification;
 
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.member.Member;
