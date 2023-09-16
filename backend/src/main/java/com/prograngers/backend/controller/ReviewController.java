@@ -61,7 +61,7 @@ public class ReviewController {
         // 풀이 상세보기로 리다이렉트
         return redirect(solutionId);
     }
-    private ResponseEntity<Object> redirect(Long solutionId) {
+    private ResponseEntity redirect(Long solutionId) {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + solutionId)).build();
     }
 

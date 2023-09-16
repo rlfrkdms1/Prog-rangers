@@ -93,7 +93,7 @@ public class SolutionController {
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
 
-    private ResponseEntity<Object> redirect(Long saveId) {
+    private ResponseEntity redirect(Long saveId) {
         if (saveId==null){
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH )).build();
         }

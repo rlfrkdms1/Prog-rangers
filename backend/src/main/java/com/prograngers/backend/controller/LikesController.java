@@ -36,7 +36,7 @@ public class LikesController {
         likesService.cancelLike(memberId,solutionId);
         return redirect(solutionId);
     }
-    private ResponseEntity<Object> redirect(Long solutionId) {
+    private ResponseEntity redirect(Long solutionId) {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(SOLUTION_DETAIL_REDIRECT_URI + solutionId)).build();
     }
 }
