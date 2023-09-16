@@ -47,20 +47,20 @@ public class ReviewService {
     }
     @Transactional
     public void updateReview(ReviewPatchRequest reviewPatchRequest, Long memberId, Long reviewId) {
-        Review targetReview = findReviewById(reviewId);
+        Review review = findReviewById(reviewId);
         Member member = findMemberById(memberId);
-        validMemberAuthorization(targetReview, member);
-        validReviewAlreadyDeleted(targetReview);
-        reviewPatchRequest.updateReview(targetReview);
+        validMemberAuthorization(review, member);
+        validReviewAlreadyDeleted(review);
+        reviewPatchRequest.updateReview(review);
     }
 
     @Transactional
     public void deleteReview(Long memberId, Long reviewId) {
-        Review targetReview = findReviewById(reviewId);
+        Review review = findReviewById(reviewId);
         Member member = findMemberById(memberId);
-        validMemberAuthorization(targetReview, member);
-        validReviewAlreadyDeleted(targetReview);
-        targetReview.delete();
+        validMemberAuthorization(review, member);
+        validReviewAlreadyDeleted(review);
+        review.delete();
     }
 
     public SolutionReviewsResponse getReviewDetail(Long solutionId) {
