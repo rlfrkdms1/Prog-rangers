@@ -18,14 +18,12 @@ export const KakaoReirect = () => {
   //   try{
   //     fetch("http://localhost:3000/prog-rangers/login/kakao",{
   //       method: "POST",
-  //       // headers: {
-  //       //   "Content-Type": "application/x-www-form-urlencoded;",
-  //       // },
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded;",
+  //       },
   //       body : JSON.stringify(access_token)
   //     })
-  //       // .then((res) => res.json())
-
-  //       navigate("/");
+  //     navigate("/");
   //     // window.Kakao.init(KAKAO_CLIENT_ID);
   //     // window.Kakao.Auth.setAccessToken(res.data.access_token);
   //   } catch(err){
@@ -34,7 +32,20 @@ export const KakaoReirect = () => {
   // };
 
   const getToken = async() => {
-    const Toss = await axios.get(`http://localhost:3000/prog-rangers/login/kakao`)
+    const Toss = await axios.get(`http://13.124.131.171:8080/prog-rangers/login/kakao`, {
+      params: { code: KAKAO_CODE },
+    }, {
+      withCredentials : true 
+    })
+      .then((res) => {
+        console.log(res.data);
+      })
+    // console.log(Toss.data);
+    if(!Toss){
+      alert("존재하지 않는 회원입니다.");
+    } else{
+      navigate(`/`);
+    }
   }
 
   useEffect(() => {
