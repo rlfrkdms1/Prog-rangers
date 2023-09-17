@@ -33,10 +33,10 @@ public enum NotificationFixture {
                 .solution(solution)
                 .createdAt(createdAt);
     }
-    public Notification 리뷰_알림_생성(String writerNickname, boolean isRead, Member receiver, Solution solution, LocalDateTime createdAt, Review review) {
-        return 기본_빌더_생성(writerNickname, isRead, receiver, solution, createdAt).review(review).build();
+    public Notification 생성_안읽음(Member receiver, Solution solution, Review review) {
+        return 기본_빌더_생성(review.getMember().getNickname(), false, receiver, solution, review.getCreatedAt()).review(review).build();
     }
-    public Notification 댓글_알림_생성(String writerNickname, boolean isRead, Member receiver, Solution solution, LocalDateTime createdAt, Comment comment) {
-        return 기본_빌더_생성(writerNickname, isRead, receiver, solution, createdAt).comment(comment).build();
+    public Notification 생성_안읽음(Member receiver, Solution solution, Comment comment) {
+        return 기본_빌더_생성(comment.getMember().getNickname(), false, receiver, solution, comment.getCreatedAt()).comment(comment).build();
     }
 }
