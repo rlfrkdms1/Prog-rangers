@@ -1,11 +1,9 @@
 package com.prograngers.backend.repository.problem;
 
 import com.prograngers.backend.entity.problem.Problem;
-import com.prograngers.backend.entity.problem.QProblem;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
-import com.prograngers.backend.entity.constants.SortConstant;
-import com.prograngers.backend.entity.solution.QSolution;
+import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.prograngers.backend.entity.constants.SortConstant.*;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.entity.problem.QProblem.*;
 import static com.prograngers.backend.entity.solution.QSolution.*;
 
@@ -31,11 +29,25 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
 
     public PageImpl<Problem> findAll(
             Pageable pageable, DataStructureConstant dataStructure, AlgorithmConstant algorithm, SortConstant orderBy) {
-        log.info("### problemRepository findAll 호출 ###");
 
-        // 양방향 연관관계로 변경
-        List<Problem> results = jpaQueryFactory
+        List<Problem> results = getResults(pageable, dataStructure, algorithm, orderBy);
+        long size = getSize(dataStructure, algorithm);
+        return new PageImpl<>(results, pageable, size);
+    }
+
+    private long getSize(DataStructureConstant dataStructure, AlgorithmConstant algorithm) {
+        long size = jpaQueryFactory
                 .selectFrom(problem)
+                .join(problem.solutions, solution)
+                .groupBy(problem)
+                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
+                .fetchCount();
+        return size;
+    }
+
+    private List<Problem> getResults(Pageable pageable, DataStructureConstant dataStructure, AlgorithmConstant algorithm, SortConstant orderBy) {
+        List<Problem> results = jpaQueryFactory
+                .selectFrom(problem).distinct()
                 // solution을 조회해서 자료구조, 알고리즘을 알아내야 해서 성능을 위해 패치조인
                 .join(problem.solutions, solution).fetchJoin()
                 .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
@@ -43,27 +55,13 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        // int size = results.size();
-        long size = jpaQueryFactory
-                .selectFrom(problem)
-                .join(problem.solutions, solution)
-                .groupBy(problem)
-                .where(dataStructureEq(dataStructure), algorithmEq(algorithm))
-                .fetchCount();
-
-
-        log.info("size : {}", size);
-
-        return new PageImpl<>(results, pageable, size);
+        return results;
     }
 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
         if (orderBy.equals(NEWEST)) {
-            return
-                    solution.createdDate.desc();
+            return solution.createdAt.desc();
         } else if (orderBy.equals(SOLUTIONS)) {
-            log.info("orderBySolutionCount");
             return problem.solutions.size().desc();
         } else throw new SortTypeNotFoundException();
     }

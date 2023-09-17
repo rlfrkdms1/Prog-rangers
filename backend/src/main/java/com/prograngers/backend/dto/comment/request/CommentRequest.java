@@ -18,22 +18,16 @@ import static com.prograngers.backend.entity.comment.CommentStatusConStant.CREAT
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentRequest {
-
     @NotBlank(message = "댓글 내용을 입력해주세요")
     String content;
-
-    String mention;
-
     Long parentId;
-
     public Comment toComment(Member member, Solution solution){
         return Comment
                 .builder()
                 .member(member)
                 .solution(solution)
-                .mention(mention)
                 .content(content)
-                .createdDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .parentId(parentId)
                 .status(CREATED)
                 .build();

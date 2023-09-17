@@ -18,6 +18,11 @@ import {
   RegisterReview,
   Profile,
   MyPage,
+  Account,
+  MySolution,
+  MyComment,
+  Like,
+  Follow
 } from './pages';
 import { KakaoReirect } from './components/SignUp/KakaoRedirect';
 
@@ -46,6 +51,11 @@ const router = createBrowserRouter([
       },
       { path: 'profile/:userId', element: <Profile /> },
       { path: 'myPage', element: <MyPage /> },
+      { path: 'account', element: <Account /> },
+      { path: 'mySolution', element: <MySolution /> },
+      { path: 'myComment', element: <MyComment /> },
+      { path: 'like', element: <Like /> },
+      { path: 'follow', element: <Follow /> },
     ],
   },
 ]);

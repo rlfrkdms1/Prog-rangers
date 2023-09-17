@@ -18,7 +18,7 @@ public class SolutionDetailSolution {
     String link;
     AlgorithmConstant algorithmName;
     DataStructureConstant dataStructureName;
-    String code;
+    String[] code;
     String description;
     Integer likes;
     Integer scraps;

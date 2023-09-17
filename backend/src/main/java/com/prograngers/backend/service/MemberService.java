@@ -16,11 +16,13 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -37,6 +39,7 @@ public class MemberService {
     }
 
 
+    @Transactional
     public void updateMemberAccountInfo(Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         Member member = findById(memberId);
         validMemberAccountInfo(updateMemberAccountInfoRequest, member);
@@ -67,14 +70,17 @@ public class MemberService {
             throw new AlreadyExistNicknameException();
     }
 
-    public MemberProfileResponse getMemberProfile(Long memberId,Long page) {
-        Member member = findById(memberId);
+    public MemberProfileResponse getMemberProfile(String memberNickname,Long page) {
+        Member member = findByNickname(memberNickname);
         List<Badge> badges = badgeRepository.findAllByMember(member);
-        List<Solution> solutions = solutionRepository.findProfileSolutions(memberId, page);
-        Long followCount = followRepository.getFollow(member);
-        Long followingCount = followRepository.getFollowing(member);
+        List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
+        Long followCount = followRepository.getFollowCount(member);
+        Long followingCount = followRepository.getFollowingCount(member);
 
         return MemberProfileResponse.from(member,badges,solutions,followCount,followingCount);
     }
 
+    private Member findByNickname(String memberNickname) {
+        return memberRepository.findByNickname(memberNickname).orElseThrow(MemberNotFoundException::new);
+    }
 }

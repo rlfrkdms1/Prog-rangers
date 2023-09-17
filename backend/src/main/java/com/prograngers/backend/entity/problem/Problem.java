@@ -42,21 +42,5 @@ public class Problem {
     @OneToMany(mappedBy = "problem")
     List<Solution> solutions = new ArrayList<>();
 
-    public void updateTitle(String title) {
-        if (title != null) {
-            this.title = title;
-        }
-    }
 
-    public void updateLink(String link) {
-        if (link != null) {
-            this.link = link;
-        }
-    }
-
-    public void updateOjName(JudgeConstant ojName) {
-        if (ojName != null) {
-            this.ojName = ojName;
-        }
-    }
 }

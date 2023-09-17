@@ -7,4 +7,9 @@ export { SignUp } from './Auth';
 export { Solutions } from './Solutions';
 export { SolutionDetail } from './SolutionDetail';
 export { MyPage } from './MyPage';
-export { RegisterReview } from './RegisterReview';
+export { RegisterReview } from './RegisterReview'
+export { Account } from './Account'
+export { MySolution } from './MySolution'
+export { MyComment } from './MyComment'
+export { Like } from './Like'
+export { Follow } from './Follow'

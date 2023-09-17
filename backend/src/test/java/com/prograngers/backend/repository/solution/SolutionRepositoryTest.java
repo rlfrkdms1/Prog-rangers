@@ -7,7 +7,6 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.prograngers.backend.entity.constants.SortConstant.NEWEST;
-import static com.prograngers.backend.entity.constants.SortConstant.SCRAPS;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.NEWEST;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.SCRAPS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
@@ -34,6 +33,7 @@ import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀
 
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
@@ -72,8 +72,10 @@ class SolutionRepositoryTest {
         List<Solution> result = solutionRepository.findAllByMember(member1);
 
         // then
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result).contains(solution1,solution2).doesNotContain(solution3);
+        assertAll(
+                ()-> assertThat(result.size()).isEqualTo(2),
+                ()->assertThat(result).contains(solution1,solution2).doesNotContain(solution3)
+        );
     }
 
     @DisplayName("문제 id로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -98,10 +100,10 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem2.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        assertThat(result1).contains(solution1);
-        assertThat(result1).doesNotContain(solution2);
-        assertThat(result2).contains(solution2);
-        assertThat(result2).doesNotContain(solution1);
+        assertAll(
+                ()-> assertThat(result1).containsExactly(solution1),
+                ()-> assertThat(result2).containsExactly(solution2)
+        );
     }
 
     @DisplayName("자료구조, 알고리즘으로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -116,9 +118,9 @@ class SolutionRepositoryTest {
 
         // 풀이
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,JAVA,1));
-        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,JAVA,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,JAVA,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,JAVA,1));
 
 
         // when
@@ -130,9 +132,11 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, BFS, QUEUE, NEWEST).getContent();
 
         // then
-        assertThat(result1).contains(solution1, solution3).doesNotContain(solution2, solution4);
-        assertThat(result2).contains(solution1, solution2).doesNotContain(solution3, solution4);
-        assertThat(result3).contains(solution1).doesNotContain(solution2, solution3, solution4);
+        assertAll(
+                ()-> assertThat(result1).containsExactly(solution3, solution1),
+                ()->assertThat(result2).containsExactly(solution2, solution1),
+                ()-> assertThat(result3).containsExactly(solution1)
+        );
     }
 
     @DisplayName("언어로 풀이 목록을 필터링해서 가져올 수 있다")
@@ -146,9 +150,9 @@ class SolutionRepositoryTest {
 
         // 풀이
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, QUEUE,JAVA,1));
-        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),DFS, ARRAY,PYTHON,1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -159,9 +163,11 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), PYTHON, null, null, NEWEST).getContent();
 
         // then
-        assertThat(result1).contains(solution1, solution2).doesNotContain(solution3, solution4);
-        assertThat(result2).contains(solution3).doesNotContain(solution1, solution2, solution4);
-        assertThat(result3).contains(solution4).doesNotContain(solution1, solution2, solution3);
+        assertAll(
+                ()->assertThat(result1).containsExactly(solution2, solution1),
+                ()-> assertThat(result2).containsExactly(solution3),
+                ()->assertThat(result3).containsExactly(solution4)
+        );
     }
 
     @DisplayName("페이지에 맞게 문제 목록을 조회할 수 있다")
@@ -193,17 +199,13 @@ class SolutionRepositoryTest {
         List<Solution> result4 = solutionRepository.getSolutionList(PageRequest.of(3, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        org.junit.jupiter.api.Assertions
-                        .assertAll(
+        assertAll(
                                 ()-> assertThat(result1)
-                                        .containsExactly(solution9,solution8,solution7,solution6)
-                                        .doesNotContain(solution1,solution2,solution3,solution4,solution5),
+                                        .containsExactly(solution9,solution8,solution7,solution6),
                                 ()->assertThat(result2)
-                                        .containsExactly(solution5,solution4,solution3,solution2)
-                                        .doesNotContain(solution1,solution6,solution7,solution8,solution9),
+                                        .containsExactly(solution5,solution4,solution3,solution2),
                                 ()->assertThat(result3)
-                                        .containsExactly(solution1)
-                                        .doesNotContain(solution2,solution3,solution4,solution5,solution6,solution7,solution8,solution9),
+                                        .containsExactly(solution1),
                                 ()->assertThat(result4.size()).isEqualTo(0)
                         );
     }
@@ -228,12 +230,12 @@ class SolutionRepositoryTest {
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now(),BFS, QUEUE,JAVA,1));
         Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(1),DFS, QUEUE,JAVA,1));
         Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1,member1,LocalDateTime.now().plusDays(2),BFS, ARRAY,CPP,1));
-        Solution solution4 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(3),DFS, ARRAY,PYTHON,1,solution1));
-        Solution solution5 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(4),BFS, QUEUE,JAVA,1,solution2));
-        Solution solution6 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(5),DFS, QUEUE,JAVA,1,solution2));
-        Solution solution7 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(6),BFS, ARRAY,CPP,1,solution3));
-        Solution solution8 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(7),DFS, ARRAY,PYTHON,1,solution3));
-        Solution solution9 = 저장(공개_풀이.스크랩_생성(problem1,member1,LocalDateTime.now().plusDays(8),DFS, ARRAY,PYTHON,1,solution3));
+        Solution solution4 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(3),1,solution1));
+        Solution solution5 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(4),1,solution2));
+        Solution solution6 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(5),1,solution2));
+        Solution solution7 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(6),1,solution3));
+        Solution solution8 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(7),1,solution3));
+        Solution solution9 = 저장(공개_풀이.스크랩_생성(member1,LocalDateTime.now().plusDays(8),1,solution3));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -247,9 +249,11 @@ class SolutionRepositoryTest {
                 .getContent();
 
         // then
-        Assertions.assertThat(result1).containsExactly(solution3,solution2,solution1,solution9);
-        Assertions.assertThat(result2).containsExactly(solution8,solution7,solution6,solution5);
-        Assertions.assertThat(result3).containsExactly(solution4);
+        assertAll(
+                ()->assertThat(result1).containsExactly(solution3,solution2,solution1,solution9),
+                ()-> assertThat(result2).containsExactly(solution8,solution7,solution6,solution5),
+                ()->assertThat(result3).containsExactly(solution4)
+        );
     }
 
     @DisplayName("프로필 풀이 찾을 수 있다 (무한스크롤)")
@@ -275,8 +279,10 @@ class SolutionRepositoryTest {
         List<Solution> profileSolutions2 = solutionRepository.findProfileSolutions(member1.getId(), solution3.getId());
 
         // then
-        Assertions.assertThat(profileSolutions1).contains(solution4,solution5,solution6).doesNotContain(solution1,solution2,solution3);
-        Assertions.assertThat(profileSolutions2).contains(solution1,solution2,solution3).doesNotContain(solution4,solution5,solution6);
+        assertAll(
+                ()->assertThat(profileSolutions1).containsExactly(solution6,solution5,solution4),
+                ()->assertThat(profileSolutions2).containsExactly(solution3,solution2,solution1)
+        );
     }
 
     @DisplayName("풀이 목록 조회 시 공개 풀이만 보인다")
@@ -298,7 +304,7 @@ class SolutionRepositoryTest {
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
 
         // then
-        Assertions.assertThat(result).contains(solution1).doesNotContain(solution2);
+        assertThat(result).containsExactly(solution1);
     }
 
     Member 저장(Member member) {
