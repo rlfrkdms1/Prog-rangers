@@ -30,6 +30,8 @@ import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
 @NoArgsConstructor
 public class Review {
 
+    private static final String DELETED_CONTENT = "삭제된 리뷰입니다";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -64,6 +66,7 @@ public class Review {
     }
 
     public void delete() {
+        this.content = DELETED_CONTENT;
         this.status=DELETED;
     }
 }
