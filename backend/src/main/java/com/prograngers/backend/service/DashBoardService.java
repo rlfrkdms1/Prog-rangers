@@ -52,26 +52,22 @@ public class DashBoardService {
 
     private List<NotificationInfo> getNotificationInfos(Member member) {
         List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
-        List<NotificationInfo> notificationInfoList = notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
-        return notificationInfoList;
+        return notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
     }
 
     private List<SolutionInfo> getMyRecentSolutionInfos(Member member) {
         List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
-        List<SolutionInfo> myRecentSolutionInfos = myRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
-        return myRecentSolutionInfos;
+        return myRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
     }
 
     private List<String> getBadgeInfos(Member member) {
         List<Badge> badges = badgeRepository.findAllByMember(member);
-        List<String> badgeInfos = badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
-        return badgeInfos;
+        return badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
     }
 
     private List<SolutionInfo> getFollowingRecentSolutionInfos(Long memberId) {
         List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
-        List<SolutionInfo> followingRecentSolutionInfos = followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
-        return followingRecentSolutionInfos;
+        return followingsRecentSolutions.stream().map(solution -> SolutionInfo.of(solution, solution.getProblem())).collect(Collectors.toList());
     }
 
     private List<IsDayOfStudy> getMonthlyStudyCalendar(Long memberId, YearMonth date) {
