@@ -46,6 +46,18 @@ public enum SolutionFixture {
                 .build();
     }
 
+    public Solution 기본_정보_생성(
+            Problem problem, Member member, LocalDateTime createdDate,
+            LanguageConstant language, Integer level){
+        return 기본_정보_빌더_생성()
+                .problem(problem)
+                .member(member)
+                .createdAt(createdDate)
+                .language(language)
+                .level(level)
+                .build();
+    }
+
     public Solution 스크랩_생성(Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
         return 기본_정보_빌더_생성()
                 .problem(scrapSolution.getProblem())

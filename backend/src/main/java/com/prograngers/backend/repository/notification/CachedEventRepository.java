@@ -1,4 +1,4 @@
-package com.prograngers.backend.repository;
+package com.prograngers.backend.repository.notification;
 
 import com.prograngers.backend.dto.response.notification.NotificationResponse;
 import org.springframework.stereotype.Repository;
