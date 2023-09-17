@@ -24,7 +24,7 @@ public class SolutionReview {
     private boolean mine;
 
     private ReviewStatusConStant status;
-    public static SolutionReview from(Review review, Long memberId){
+    public static SolutionReview from(Review review, boolean reviewIsMine){
 
 
         SolutionReview solutionReviewResponse = SolutionReview.builder()
@@ -34,13 +34,9 @@ public class SolutionReview {
                 .content(review.getContent())
                 .status(review.getStatus())
                 .replies(new ArrayList<>())
-                .mine(checkReviewIsMine(review,memberId))
+                .mine(reviewIsMine)
                 .build();
         return solutionReviewResponse;
     }
 
-    private static boolean checkReviewIsMine(Review review, Long memberId) {
-        if (review.getMember().getId().equals(memberId)) return true;
-        return false;
-    }
 }
