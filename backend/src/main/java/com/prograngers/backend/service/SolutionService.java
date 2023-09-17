@@ -8,6 +8,7 @@ import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
+import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
@@ -181,8 +182,15 @@ public class SolutionService {
         if (recentProblem!=null){
             return recentProblem;
         }
-        // 존재하지 않는 문제일 경우 새로운 문제를 만들어서 반환한다, toProblem 내에서 링크 체크함
-        return solutionPostRequest.toProblem();
+        // 존재하지 않는 문제일 경우 새로운 문제를 만들어서 반환한다
+        // 링크 검증
+        JudgeConstant judgeName = validLink(solutionPostRequest.getProblemLink());
+
+        return solutionPostRequest.toProblem(judgeName);
+    }
+
+    private JudgeConstant validLink(String problemLink) {
+        return JudgeConstant.from(problemLink);
     }
 
 }
