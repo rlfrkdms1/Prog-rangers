@@ -29,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReviewRepositoryTest {
 
     @Autowired
-    ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     @Autowired
-    ProblemRepository problemRepository;
+    private ProblemRepository problemRepository;
     @Autowired
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
 
     @Test
     @DisplayName("회원이 주어졌을 때 해당 회원이 작성한 주어진 달의 리뷰들을 조회할 수 있다.")
@@ -60,18 +60,18 @@ class ReviewRepositoryTest {
         );
     }
 
-    Member 저장(Member member) {
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Problem 저장(Problem problem) {
+    private Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    Solution 저장(Solution solution) {
+    private Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
-    Review 저장(Review review) {
+    private Review 저장(Review review) {
         return reviewRepository.save(review);
     }
 

@@ -367,19 +367,19 @@ class SolutionRepositoryTest {
         return Follow.builder().followerId(member1.getId()).followingId(member2.getId()).build();
     }
 
-    Member 저장(Member member) {
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Problem 저장(Problem problem) {
+    private Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    Solution 저장(Solution solution) {
+    private Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
 
-    Follow 저장(Follow follow) {return followRepository.save(follow);}
+    private Follow 저장(Follow follow) {return followRepository.save(follow);}
 
 
 }

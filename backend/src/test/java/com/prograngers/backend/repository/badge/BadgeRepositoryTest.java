@@ -41,11 +41,11 @@ class BadgeRepositoryTest{
         );
     }
 
-    Member 저장(Member member) {
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Badge 뱃지_저장(Member member, BadgeConstant badge) {
+    private Badge 뱃지_저장(Member member, BadgeConstant badge) {
         return badgeRepository.save(Badge.builder()
                 .member(member)
                 .badgeType(badge).build());
