@@ -106,18 +106,18 @@ public class ReviewService {
     }
 
     private void makeReviewResponse(List<SolutionReview> solutionReviewResponse, Review review, Long memberId) {
-        solutionReviewResponse.add(SolutionReview.from(review, checkReviewIsMine(review,memberId)));
+        solutionReviewResponse.add(SolutionReview.from(review, validReviewIsMine(review,memberId)));
     }
 
     private void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review, Long memberId) {
         for (SolutionReview r : solutionReviewResponse) {
             if (r.getId().equals(review.getParentId())) {
-                r.getReplies().add(SolutionReviewReply.from(review,checkReviewIsMine(review,memberId)));
+                r.getReplies().add(SolutionReviewReply.from(review,validReviewIsMine(review,memberId)));
             }
         }
     }
 
-    private boolean checkReviewIsMine(Review review, Long memberId) {
+    private boolean validReviewIsMine(Review review, Long memberId) {
         if (review.getMember().getId().equals(memberId)) return true;
         return false;
     }
