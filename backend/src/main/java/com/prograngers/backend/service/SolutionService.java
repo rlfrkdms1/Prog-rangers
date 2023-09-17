@@ -1,5 +1,8 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.solution.response.SolutionDetailComment;
+import com.prograngers.backend.dto.solution.response.SolutionDetailProblem;
+import com.prograngers.backend.dto.solution.response.SolutionDetailSolution;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
@@ -29,13 +32,15 @@ import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -43,6 +48,8 @@ import java.util.List;
 @Slf4j
 @Transactional(readOnly = true)
 public class SolutionService {
+
+    private final MessageSource ms;
 
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
@@ -57,14 +64,14 @@ public class SolutionService {
 
     @Transactional
     public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
-        Solution solution = solutionPostRequest.toSolution(getProblem(solutionPostRequest),getMember(memberId));
+        Solution solution = solutionPostRequest.toSolution(getProblem(solutionPostRequest),findMemberById(memberId));
         return solutionRepository.save(solution).getId();
     }
 
     @Transactional
     public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
-        Solution target = findById(solutionId);
-        Member member = getMember(memberId);
+        Solution target = findSolutionById(solutionId);
+        Member member = findMemberById(memberId);
         validMemberAuthorization(target, member);
         Solution solution = request.updateSolution(target);
         Solution updated = solutionRepository.save(solution);
@@ -73,8 +80,8 @@ public class SolutionService {
 
     @Transactional
     public void delete(Long solutionId, Long memberId){
-        Solution target = findById(solutionId);
-        validMemberAuthorization(target, getMember(memberId));
+        Solution target = findSolutionById(solutionId);
+        validMemberAuthorization(target, findMemberById(memberId));
 
         commentRepository.findAllBySolution(target)
                         .stream()
@@ -87,44 +94,101 @@ public class SolutionService {
         solutionRepository.delete(target);
     }
 
-    public Solution findById(Long solutionId) {
+    public Solution findSolutionById(Long solutionId) {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
     @Transactional
     public Long saveScrap(Long scrapTargetId, ScarpSolutionPostRequest request, Long memberId) {
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
-        Solution solution = request.toSolution(findById(scrapTargetId),getMember(memberId));
+        Solution solution = request.toSolution(findSolutionById(scrapTargetId),findMemberById(memberId));
         return solutionRepository.save(solution).getId();
     }
 
     public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
-        Solution target = findById(solutionId);
-        validMemberAuthorization(target, getMember(memberId));
+        Solution target = findSolutionById(solutionId);
+        validMemberAuthorization(target, findMemberById(memberId));
         return SolutionUpdateFormResponse.toDto(target);
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
-        Solution targetSolution = findById(solutionId);
+        // 풀이, 문제, 회원 가져오기
+        Solution solution = findSolutionById(solutionId);
+        Problem problem = solution.getProblem();
+        Member member = findMemberById(memberId);
+
+        // 댓글 목록, 좋아요 목록 가져오기
+        List<Comment> comments = commentRepository.findAllBySolution(solution);
+        List<Likes> likes = likesRepository.findAllBySolution(solution);
+
+        // 이 풀이를 스크랩한 풀이들을 가져오기
+        List<Solution> scrapedSolutions = solutionRepository.findAllByScrapSolution(solution);
 
         // 내 풀이인지 여부
-        boolean isMine = validSolutionIsMine(memberId, targetSolution);
+        boolean mine = validSolutionIsMine(memberId, solution);
 
         // 내 풀이가 아닌 비공개 풀이를 열람하는지 확인
-        validViewPrivateSolution(targetSolution, isMine);
+        validViewPrivateSolution(solution, mine);
 
-        List<Comment> comments = commentRepository.findAllBySolution(targetSolution);
-        List<Likes> likes = likesRepository.findAllBySolution(targetSolution);
-
-        // 좋아요 눌렀는지 여부
+        // 내가 이 풀이를 좋아요 눌렀는지 여부
         boolean pushedLike = validPushedLike(memberId, likes);
 
-        // 스크랩 풀이들 가져오기
-        List<Solution> solutionsScrapedTargetSolution = solutionRepository.findAllByScrapSolution(targetSolution);
+        // 내가 이 풀이를 스크랩 했는지 여부
+        boolean scraped = validScraped(memberId, scrapedSolutions);
 
-        // 스크랩 했는지 여부
-        boolean scraped = validScraped(memberId, solutionsScrapedTargetSolution);
+        // 문제 response 만들기
+        SolutionDetailProblem solutionDetailProblem = SolutionDetailProblem.from(problem);
 
-        return SolutionDetailResponse.from(targetSolution, comments,scraped,solutionsScrapedTargetSolution.size(),pushedLike,likes.size(),isMine, memberId);
+        // 풀이 response 만들기
+        SolutionDetailSolution solutionDetailSolution = SolutionDetailSolution.from(solution,member.getNickname(),problem.getLink(),
+                likes.size(),scrapedSolutions.size(),pushedLike,scraped,mine,getScrapSolutionLink(solution));
+
+        // 댓글 response 만들기
+        List<SolutionDetailComment> solutionDetailComments = makeCommentsResponse(comments);
+
+        // 댓글 response에서 내 댓글인지 확인해서 mine 값 설정 (닉네임 활용)
+        setCommentMine(member, solutionDetailComments);
+
+        return SolutionDetailResponse.from(solutionDetailProblem,solutionDetailSolution,solutionDetailComments);
+    }
+
+    private void setCommentMine(Member member, List<SolutionDetailComment> solutionDetailComments) {
+        for (SolutionDetailComment commentResponse : solutionDetailComments){
+            if (commentResponse.getNickname().equals(member.getNickname())) commentResponse.setMine(true);
+            List<SolutionDetailComment> replies = commentResponse.getReplies();
+            if (replies!=null){
+                for (SolutionDetailComment commentReplyResponse : replies){
+                    if (commentReplyResponse.getNickname().equals(member.getNickname())) commentReplyResponse.setMine(true);
+                }
+            }
+        }
+    }
+
+    private String getScrapSolutionLink(Solution solution){
+        if (solution.getScrapSolution()!=null){
+            return ms.getMessage("redirect_path", null, null)+"/solutions"+solution.getScrapSolution().getId();
+        }
+        return null;
+    }
+
+    private List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments) {
+        // 먼저 부모가 없는 댓글들을 전부 더한다
+        List<SolutionDetailComment> commentResponseList = comments.stream().filter(comment -> comment.getParentId()==null)
+                .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>())).collect(Collectors.toList());
+        // 부모가 있는 댓글들을 더한다
+        comments.stream().filter((comment)->comment.getParentId()!=null)
+                .forEach((comment)->{
+                    addReplyComments(commentResponseList, comment);
+                });
+        return commentResponseList;
+    }
+
+    private void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment) {
+        commentResponseList.stream()
+                .filter(parentComment->parentComment.getId().equals(comment.getParentId()))
+                .findFirst()
+                .get()
+                .getReplies()
+                .add(SolutionDetailComment.from(comment));
     }
 
     public SolutionListResponse getSolutionList(
@@ -135,7 +199,7 @@ public class SolutionService {
     }
 
 
-    private Member getMember(Long memberId) {
+    private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
@@ -147,7 +211,7 @@ public class SolutionService {
 
     private boolean validSolutionIsMine(Long memberId, Solution solution) {
         if (memberId !=null){
-            Member member = getMember(memberId);
+            Member member = findMemberById(memberId);
             if (solution.getMember().getId().equals(member.getId())){
                 return true;
             }
