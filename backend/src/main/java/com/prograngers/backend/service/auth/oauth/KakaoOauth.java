@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import lombok.extern.slf4j.Slf4j;
 
 import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.convertToMultiValueMap;
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
