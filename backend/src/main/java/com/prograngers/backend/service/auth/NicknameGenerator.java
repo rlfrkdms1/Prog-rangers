@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class NicknameGenerator {
 
     private final WebClient webClient;
-    private static final String NICKNAME_GENERATOR_URI = "https://nickname.hwanmoo.kr/?format=1";
+    private static final String NICKNAME_GENERATOR_URI = "https://nickname.hwanmoo.kr/?format=json";
 
     public GenerateNicknameResponse getRandomNickname() {
         return webClient.get()
