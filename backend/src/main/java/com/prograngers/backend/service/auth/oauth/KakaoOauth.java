@@ -12,6 +12,7 @@ import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
+@Slf4j
 public class KakaoOauth {
 
     private final static String TOKEN_URI = "https://kauth.kakao.com/oauth/token";
@@ -41,6 +42,9 @@ public class KakaoOauth {
                 .bodyValue(convertToMultiValueMap(grantType, clientId, redirectUri, code, clientSecret))
                 .retrieve()
                 .bodyToMono(KakaoTokenResponse.class)
+                .doOnError(e -> {
+                    log.info("Error occurred: ", e);
+                })
                 .block();
     }
 
