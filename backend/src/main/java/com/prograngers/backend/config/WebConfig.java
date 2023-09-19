@@ -20,6 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
     private final LoggedInArgumentResolver loggedInArgumentResolver;
     private static final String FRONTEND_DOMAIN = "http://ec2-13-124-131-171.ap-northeast-2.compute.amazonaws.com:3000";
+    private static final String CORS_ALLOWED_METHODS = "GET,POST,HEAD,PUT,PATCH,DELETE,TRACE,OPTIONS";
 
 
     @Override
@@ -35,10 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods(HttpMethod.GET.name(),
-                                HttpMethod.PATCH.name(),
-                        HttpMethod.DELETE.name(),
-                        HttpMethod.POST.name())
+                .allowedMethods(CORS_ALLOWED_METHODS.split(","))
                 .allowedOrigins(FRONTEND_DOMAIN)
                 .exposedHeaders(HttpHeaders.SET_COOKIE, HttpHeaders.LOCATION)
                 .allowCredentials(true);
