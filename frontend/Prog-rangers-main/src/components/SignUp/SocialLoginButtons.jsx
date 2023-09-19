@@ -21,9 +21,9 @@ const Wrapper = css`
 `;
 
 export const SocialLoginButtons = () => {  
+  
   const onClickKakao = () => {
     window.location.href = KAKAO_AUTH_URL;
-    console.log(KAKAO_AUTH_URL);
   }
 
   return (

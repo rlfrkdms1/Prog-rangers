@@ -1,8 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { KAKAO_CLIENT_ID, KAKAO_REDIRECT_URI, KAKAO_AUTH_URL } from "./OAuth";
 import axios from "axios";
-import qs from "qs";
 
 export const KakaoReirect = () => {
   const location = useLocation();
@@ -29,7 +27,6 @@ export const KakaoReirect = () => {
       })
 
   }, []);
-
 
   return(
     <>
