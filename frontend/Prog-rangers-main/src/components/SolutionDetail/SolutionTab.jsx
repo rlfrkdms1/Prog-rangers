@@ -18,14 +18,6 @@ export const SolutionTab = () => {
     setActive(name);
   };
 
-  // const [color, setColor] = useState('');
-
-  // const toggleActive = (e) => {
-  //   setColor((prev) => {
-  //     return e.target.value;
-  //   });
-  // };
-
   const selectComponent = {
     viewSolution: <ViewSolution />,
     lineReview: <LineReview />,

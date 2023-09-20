@@ -52,7 +52,7 @@ export const SolutionDetailHeader = () => {
               color: ${theme.colors.light1};
             `}
           >
-            writer_email@gmail.com
+            nickname
           </span>
         </div>
         <div
