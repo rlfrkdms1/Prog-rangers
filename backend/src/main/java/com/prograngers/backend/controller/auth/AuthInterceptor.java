@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.util.Date;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor

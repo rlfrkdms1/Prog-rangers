@@ -3,6 +3,7 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.dto.error.ErrorResponse;
 import com.prograngers.backend.exception.ErrorCode;
 import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
+import com.prograngers.backend.exception.badrequest.InvalidValueException;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
@@ -28,14 +29,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception) {
         List<ErrorResponse> errorList = new ArrayList<>();
-        List<ObjectError> errors = exception.getBindingResult().getAllErrors();
-        for (ObjectError error : errors) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .errorCode(INVALID_REQUEST_BODY)
-                    .description(error.getDefaultMessage())
-                    .build();
-            errorList.add(errorResponse);
-        }
+        exception.getBindingResult().getAllErrors().stream()
+                .map((error)->ErrorResponse.builder().errorCode(INVALID_REQUEST_BODY).description(error.getDefaultMessage()).build())
+                .forEach((errorResponse)->errorList.add(errorResponse));
         return new ResponseEntity(errorList, HttpStatus.BAD_REQUEST);
     }
 
@@ -69,6 +65,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> alreadyExistsException(AlreadyExistsException exception) {
+        String message = exception.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidValueException.class)
+    public ResponseEntity<ErrorResponse> invalidValueException(InvalidValueException exception) {
         String message = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);

@@ -2,6 +2,7 @@ package com.prograngers.backend.entity.member;
 
 import com.prograngers.backend.support.Encrypt;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 
 @Entity
@@ -28,21 +30,24 @@ public class Member {
     private Long socialId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MemberType type;
 
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
     private String email;
 
-    @Nullable
     private String github;
 
-    @Nullable
     private String introduction;
 
     private String password;
 
     private String photo;
+
+    @Column(name = "currently_modified_at")
+    private LocalDate currentlyModifiedAt;
 
     private void updateNickName(String nickname) {
         if (nickname != null) {
@@ -71,6 +76,7 @@ public class Member {
     private void updatePassword(String password) {
         if (password != null) {
             this.password = Encrypt.encoding(password);
+            this.currentlyModifiedAt = LocalDate.now();
         }
     }
 

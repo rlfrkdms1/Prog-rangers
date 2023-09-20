@@ -7,6 +7,7 @@ import com.prograngers.backend.exception.badrequest.LikesAlreadyExistsException;
 import com.prograngers.backend.exception.notfound.LikesNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -29,21 +30,25 @@ public class LikesService {
     public void pushLike(Long memberId, Long solutionId) {
         Solution targetSolution = getTargetSolution(solutionId);
         Member targetMember = getTargetMember(memberId);
-        if (getTargetLikes(targetSolution, targetMember).isPresent()){
-            throw new LikesAlreadyExistsException();
-        }
+        checkLikeAlreadyExists(targetSolution, targetMember);
         Likes likes = Likes.builder()
                 .solution(targetSolution)
                 .member(targetMember)
                 .build();
         likesRepository.save(likes);
     }
-
     public void cancelLike(Long memberId, Long solutionId) {
         Solution targetSolution = getTargetSolution(solutionId);
         Member targetMember = getTargetMember(memberId);
         Likes targetLikes = getLikesBySolutionAndMember(targetSolution, targetMember);
+        checkMemberAuthorization(targetMember, targetLikes);
         likesRepository.delete(targetLikes);
+    }
+
+    private static void checkMemberAuthorization(Member targetMember, Likes targetLikes) {
+        if (targetLikes.getMember().getId()!= targetMember.getId()){
+            throw new MemberUnAuthorizedException();
+        }
     }
 
     private Likes getLikesBySolutionAndMember(Solution targetSolution, Member targetMember) {
@@ -60,6 +65,12 @@ public class LikesService {
 
     private Optional<Likes> getTargetLikes(Solution targetSolution, Member targetMember) {
         return likesRepository.findByMemberAndSolution(targetMember, targetSolution);
+    }
+
+    private void checkLikeAlreadyExists(Solution targetSolution, Member targetMember) {
+        if (getTargetLikes(targetSolution, targetMember).isPresent()){
+            throw new LikesAlreadyExistsException();
+        }
     }
 
 

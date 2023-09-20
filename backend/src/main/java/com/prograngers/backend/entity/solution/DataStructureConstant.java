@@ -16,9 +16,9 @@ public enum DataStructureConstant {
     private final String stringValue;
 
     @JsonCreator
-    public static DataStructureConstant from(String krName) {
+    public static DataStructureConstant from(String value) {
         for (DataStructureConstant dataStructure : DataStructureConstant.values()) {
-            if (dataStructure.getStringValue().equals(krName)) {
+            if (dataStructure.getStringValue().equals(value)) {
                 return dataStructure;
             }
         }

@@ -39,60 +39,58 @@ public class CommentService {
     }
 
     public Comment findById(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException());
+        return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
     // 댓글 작성
     @Transactional
     public void addComment(Long solutionId, CommentRequest commentRequest, Long memberId) {
-
-        Solution solution = solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-
-        Comment comment = Comment.builder().
-                member(member).
-                solution(solution).
-                mention(commentRequest.getMention()).
-                content(commentRequest.getContent()).
-                createdDate(LocalDateTime.now()).parentId(commentRequest.getParentId())
-                .status(CREATED)
-                .build();
-
-        Comment saved = commentRepository.save(comment);
+        Solution solution = findSolutionById(solutionId);
+        Member member = findMemberById(memberId);
+        Comment comment = commentRequest.toComment(member,solution);
+        commentRepository.save(comment);
     }
+
     @Transactional
     public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest, Long memberId) {
         Comment comment = findById(commentId);
-        Long targetMemberId = comment.getMember().getId();
+        Long targetCommentMemberId = comment.getMember().getId();
 
-
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        log.info("targetMemberId = {} , member.getId = {}",targetMemberId,member.getId());
-        if (!targetMemberId.equals(member.getId())){
-            throw new MemberUnAuthorizedException();
-        }
-
-        comment.updateContent(commentPatchRequest.getContent());
-        comment.updateMention(commentPatchRequest.getMention());
-
-        Comment saved = commentRepository.save(comment);
-
+        Member member = findMemberById(memberId);
+        checkMemberAuthorization(targetCommentMemberId, member);
+        comment.update(commentPatchRequest.getContent());
         // 리다이렉트 하기 위해 Solution의 Id 반환
-        return saved.getSolution().getId();
+        return commentRepository.save(comment).getSolution().getId();
     }
 
     @Transactional
     public void deleteComment(Long commentId,Long memberId) {
         Comment comment = findById(commentId);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
-        if (!targetCommentMemberId.equals(member.getId())){
-            throw new MemberUnAuthorizedException();
-        }
+        checkMemberAuthorization(targetCommentMemberId, member);
+        checkCommentAlreadyDeleted(comment);
+        comment.delete();
+        commentRepository.save(comment);
+    }
+
+    private static void checkCommentAlreadyDeleted(Comment comment) {
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
-        comment.deleteComment();
-        commentRepository.save(comment);
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    private Solution findSolutionById(Long solutionId) {
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
+    }
+
+    private static void checkMemberAuthorization(Long targetCommentMemberId, Member member) {
+        if (!targetCommentMemberId.equals(member.getId())){
+            throw new MemberUnAuthorizedException();
+        }
     }
 }

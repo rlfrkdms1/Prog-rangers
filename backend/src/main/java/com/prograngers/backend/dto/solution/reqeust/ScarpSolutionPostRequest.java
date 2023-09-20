@@ -1,5 +1,6 @@
 package com.prograngers.backend.dto.solution.reqeust;
 
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -27,23 +28,22 @@ public class ScarpSolutionPostRequest {
     @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
     private Integer level;
 
-    public Solution toSolution(Solution scrap){
-        Solution solution = Solution.builder().
-                id(null)
+    public Solution toSolution(Solution scrap, Member member){
+        return Solution.builder()
                 .level(level).
                 description(description).
                 title(title)
                 // 위 내용까지 스크랩 한 사용자가 수정할 수 있는 내용
-                .isPublic(true) //스크랩한 풀이이기 때문에 무조건 공개한다
+                .isPublic(false) //스크랩한 풀이이기 때문에 무조건 비공개한다
                 .problem(scrap.getProblem())
-                .createdDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .code(scrap.getCode()).
                 scrapSolution(scrap).
                 algorithm(scrap.getAlgorithm()).
                 dataStructure(scrap.getDataStructure())
                 .language(scrap.getLanguage())
+                .member(member)
                 .build();
-        return solution;
     }
 
 }
