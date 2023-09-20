@@ -7,6 +7,9 @@ import { css } from '@emotion/react';
 import { btnStyle, tapLayout } from './solutionTabStyle';
 import { theme } from '../Header/theme';
 
+import beforeClick from './tabIcons/beforeC.svg';
+import afterClick from './tabIcons/afterC.svg';
+
 export const SolutionTab = () => {
   const [active, setActive] = useState('viewSolution');
 
@@ -42,8 +45,13 @@ export const SolutionTab = () => {
               onClick={handleClickButton}
               name={data.name}
               key={data.id}
-              css={btnStyle}
             >
+              <img
+                src={beforeClick}
+                css={css`
+                  position: relative;
+                `}
+              />
               {data.text}
             </button>
           );
