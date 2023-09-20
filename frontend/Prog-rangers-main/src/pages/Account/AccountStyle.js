@@ -4,9 +4,28 @@ import { theme } from '../../components/Header/theme';
 export const profileContentStyle = css`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     gap: 54px;
     margin-bottom: 30px;
+`;
+
+export const profileContentInputStyle = css`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+`;
+
+export const inputBoxStyle = css`
+    height: 40px;
+    padding: 0 10px 0 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1px solid ${theme.colors.light1};
+    border-radius: 30px;
 `;
 
 export const editBtnStyle = css`
@@ -66,4 +85,5 @@ export const blueBtn = css`
 export const alertStyle = css`
     font-size:12px; 
     color:${theme.colors.main};
+    margin-left: 20px;
 `

@@ -1,21 +1,92 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { checkNickname, inquireProfile, settingProfile } from './ProfileApi';
 import { css } from '@emotion/react';
-import { theme } from '../../components/Header/theme';
 import { SideBar } from '../../components/SideBar/SideBar';
-import { profileContentStyle, editBtnStyle, blueBtn, grayBtn, alertStyle } from './AccountStyle';
+import { profileContentStyle, profileContentInputStyle, inputBoxStyle, editBtnStyle, blueBtn, grayBtn, alertStyle } from './AccountStyle';
+import { Link } from 'react-router-dom';
+import eyeOpen from '../../assets/icons/mypage-eye-open.svg';
+import eyeClosed from '../../assets/icons/mypage-eye-closed.svg';
 
 export const AccountChange = () => {
-  const [imgFile, setImgFile] = useState("");
+  const [photo, setPhoto] = useState("");
   const imgRef = useRef();
 
-  const saveImgFile = () => {
+  const savephoto = () => {
     const file = imgRef.current.files[0];
     const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-          setImgFile(reader.result);
+          setPhoto(reader.result);
       };
   };
+
+  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [github, setGithub] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2);
+  };
+  const [changePassword, setChangePassword] = useState('');
+  const [checkPassword, setCheckPassword] = useState('');
+
+  useEffect(() => {
+    inquireProfile()
+      .then((data) => {
+        nickname(data);
+        email(data);
+        email(data);
+        github(data);
+        introduction(data);
+        password(data);
+      })
+      .catch((error) => {
+        console.error('API 호출 중 오류 발생:', error);
+      })
+  }, []);
+
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false); // 사용 가능 여부 상태
+
+  const nicknameDuplicationCheck = () => {
+    checkNickname(nickname)
+    .then((response) => {
+      if (response.available) {
+        setIsNicknameAvailable(true);
+      } else {
+        setIsNicknameAvailable(false);
+      }
+    })
+    .catch((error) => {
+      console.error('닉네임 중복 확인 중 오류 발생:', error);
+      setIsNicknameAvailable(false);
+    });
+  }
+
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [isPwCorrect, setIsPwCorrect] = useState('false');
+
+  const pwCheck = () => {
+    if (currentPassword !== password ) {
+      setIsPwCorrect(false);
+    } else {
+      setIsPwCorrect(true);
+  }
+}
+
+const changeProfile = () => {
+  if ( isNicknameAvailable == true && isPwCorrect == true && changePassword == checkPassword) {
+    settingProfile()
+  }
+
+}
+
+
 
   return (
     <div 
@@ -52,7 +123,7 @@ export const AccountChange = () => {
               align-items: center;
               `}> 
                 <img
-                src={imgFile ? imgFile : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                  
+                src={photo ? photo : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                  
                 alt='profileImg'
                 css={css`
                 height: 250px;
@@ -60,207 +131,178 @@ export const AccountChange = () => {
                 object-fit: cover;
                 `}></img>
                 <label htmlFor='uploadProfileImg' css={editBtnStyle}>사진선택</label>
-                <input type='file' accept='image/*' id='uploadProfileImg' onChange={saveImgFile} ref={imgRef}
+                <input type='file' accept='image/*' id='uploadProfileImg' onChange={savephoto} ref={imgRef}
                 css={css`display: none;`}></input>
               </div>
 
               <div  className='contentEdit'
               css={css`
               width: 500px;
-              font-size: 18px
+              font-size: 18px;
               `}>
                 <div className='nickname' css={profileContentStyle}>
                   <div css={css`width: 72px`}>닉네임</div>
-                  <div>rlfrkdms1</div>
-                </div>
-                <div css={css`
-                  margin: -20px 0 0 126px; 
-                  display: flex;
-                  flex-direction: row;`}>
-                  <div css={css`
-                    height: 40px;
-                    padding: 0 10px 0 30px;
 
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center; 
-
-                    border: 1px solid ${theme.colors.light1};
-                    border-radius: 30px;
-                    `}
-                  >
-                    <input
-                      type="text"
-                      placeholder="rlfrkdms1"
-                      css={css`
-                        width: 100%;
-                        font-size: 16px;
-                        outline: none;
-                        border: none;
-                      `}
-                    />
+                  <div css={profileContentInputStyle}>
+                    <div>rlfrkdms1</div>
+                    <div css={css`
+                      display: flex;
+                      flex-direction: row;`}>
+                      <div css={inputBoxStyle}>
+                        <input
+                          type="text"
+                          value={nickname}
+                          onChange={(e) => setNickname(e.target.value)}
+                          placeholder={nickname}
+                          css={css`
+                            width: 100%;
+                            font-size: 16px;
+                            outline: none;
+                            border: none;
+                          `}
+                        />
+                      </div>
+                    <button type="button" onClick={nicknameDuplicationCheck} css={grayBtn}> 중복확인 </button>
+                    </div>
+                    <div id='usableNicknameAlert' css={{display: isNicknameAvailable ? 'block' : 'none'}}>
+                      <div css={alertStyle}>*사용 가능한 닉네임입니다.</div> 
+                    </div>  
                   </div>
-                <button
-                  type="button"
-                  css={grayBtn}>
-                  중복확인
-                </button>
-               </div>
-               <div css={css` margin: 10px 0 10px 146px; `}>
-               <div css={alertStyle}>*사용 가능한 닉네임입니다.</div>   
-               </div>
+                </div>
                 
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>rlfrkdms1@hotmail.com</div>
+                  <div>rlfrkdms1@gmail.com</div>
                 </div>
 
                 <div className='github' css={profileContentStyle}>
                  <div css={css`width: 72px`}>깃허브</div>
-                 <div>https://github.com/rlfrkdms1</div>
-                </div>
-                <div css={css`
-                    height: 40px;
-                    padding: 0 10px 0 30px;
-                    margin: -20px 0 30px 126px;
 
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center; 
-
-                    border: 1px solid ${theme.colors.light1};
-                    border-radius: 30px;
-                    `}
-                  >
-                    <input
-                      type="text"
-                      placeholder="https://github.com/rlfrkdms1"
-                      css={css`
-                        width: 100%;
-                        font-size: 16px;
-                        outline: none;
-                        border: none;
-                      `}
-                    />
+                 <div css={profileContentInputStyle}>
+                  <div>https://github.com/rlfrkdms1</div>
+                  
+                  <div css={css`width: 374px;`}>
+                    <div css={inputBoxStyle}>
+                      <input
+                        type="text"
+                        value={github}
+                        onChange={(e) => setGithub(e.target.value)}
+                        placeholder="https://github.com/rlfrkdms1"
+                        css={css`
+                          width: 100%;
+                          font-size: 16px;
+                          background: none;
+                          outline: none;
+                          border: none;
+                        `}
+                      />
+                    </div>
                   </div>
+                 </div>
+                </div>
 
-                <div className='introduce' css={profileContentStyle}>
+                <div className='introduction' css={profileContentStyle}>
                  <div css={css`width: 72px`}>소개</div>
-                 <div>가은이의 풀이노트</div>
-                </div>
-                <div css={css`
-                    height: 40px;
-                    padding: 0 10px 0 30px;
-                    margin: -20px 0 30px 126px;
 
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center; 
-
-                    border: 1px solid ${theme.colors.light1};
-                    border-radius: 30px;
-                    `}
-                  >
-                    <input
-                      type="text"
-                      placeholder="풀이노트 겸 오답노트"
-                      css={css`
-                        width: 100%;
-                        font-size: 16px;
-                        outline: none;
-                        border: none;
-                      `}
-                    />
+                 <div css={profileContentInputStyle}>
+                  <div>가은이의 풀이노트</div>
+                
+                  <div css={css`width: 374px;`}>                
+                    <div css={inputBoxStyle}>
+                        <input
+                          type="text"
+                          value={introduction}
+                          onChange={(e) => setIntroduction(e.target.value)}
+                          placeholder="풀이노트 겸 오답노트"
+                          css={css`
+                            width: 100%;
+                            font-size: 16px;
+                            outline: none;
+                            border: none;
+                          `}
+                        />
+                      </div>
                   </div>
+                 </div>
+                </div>
 
                 <div className='pw' css={profileContentStyle}>
                  <div css={css`width: 72px`}>비밀번호</div>
-                 <div css={css `gap: 20px; display: flex; align-items: center;`}>
-                  <div>기존 비밀번호</div>
-                  <div css={css`
-                      height: 40px;
-                      padding: 0 10px 0 30px;
 
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: center; 
-
-                      border: 1px solid ${theme.colors.light1};
-                      border-radius: 30px;
-                      `}
-                    >
-                      <input
-                        type="text"
-                        placeholder="rkdms123"
-                        css={css`
-                          width: 100%;
-                          font-size: 16px;
-                          outline: none;
-                          border: none;
-                        `}
-                      />
+                 <div css={profileContentInputStyle}>
+                  <div css={css `gap: 20px; display: flex; align-items: center;`}>
+                    <div>기존 비밀번호</div>
+                    <div css={css`width: 239px`}>
+                      <div css={inputBoxStyle}>
+                          <input
+                            type="text"
+                            placeholder="rkdms123"
+                            css={css`
+                              width: 100%;
+                              font-size: 16px;
+                              outline: none;
+                              border: none;
+                            `}
+                          />
+                        </div>
+                      </div>
                     </div>
+                  <div id='uncorrectPwAlert' css={{display: isPwCorrect ? 'none' : 'block', marginLeft: 150}}>
+                  <div css={alertStyle}>*기존 비밀번호가 틀립니다.</div> 
                   </div>
-                </div>
-                <div css={css` margin: -20px 0 10px 280px; `}>
-                 <div css={alertStyle}>*기존 비밀번호가 틀립니다.</div> 
-                </div>
-                  <div css={css `gap: 20px; display: flex; align-items: center; align-items: center; margin-left: 126px;`}>
-                  <div>변경 비밀번호</div>
-                  <div css={css`
-                      height: 40px;
-                      padding: 0 10px 0 30px;
-                      margin: 0 0 10px 0;
 
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: center; 
-
-                      border: 1px solid ${theme.colors.light1};
-                      border-radius: 30px;
-                      `}
-                    >
-                      <input
-                        type="text"
-                        placeholder="rkdms123@"
-                        css={css`
-                          width: 100%;
-                          font-size: 16px;
-                          outline: none;
-                          border: none;
-                        `}
-                      />
+                  <div css={css `gap: 20px; display: flex; align-items: center; align-items: center;`}>
+                    <div>변경 비밀번호</div>
+                    <div css={css`width: 239px`}>
+                      <div css={inputBoxStyle}>
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="rkdms123@"
+                          css={css`
+                            width: 100%;
+                            font-size: 16px;
+                            outline: none;
+                            border: none;
+                          `}
+                        />
+                        <img
+                          src={showPassword ? eyeOpen : eyeClosed}
+                          alt={showPassword ? '눈이 떠있는' : '눈이 감겨있는'}
+                          onClick={togglePasswordVisibility}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </div>
                     </div>
                   </div>  
 
-                  <div css={css `gap: 20px; display: flex; align-items: center; margin-left: 126px;`}>
-                  <div>비밀번호 확인</div>
-                  <div css={css`
-                      height: 40px;
-                      padding: 0 10px 0 30px;
-
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: center; 
-
-                      border: 1px solid ${theme.colors.light1};
-                      border-radius: 30px;
-                      `}
-                    >
-                      <input
-                        type="password"
-                        placeholder="*********"
-                        css={css`
-                          width: 100%;
-                          font-size: 16px;
-                          outline: none;
-                          border: none;
-                        `}
-                      />
+                  <div css={css `gap: 20px; display: flex; align-items: center;`}>
+                    <div>비밀번호 확인</div>
+                    <div css={css`width: 239px`}>
+                      <div css={inputBoxStyle}>
+                        <input
+                          type={showPassword2 ? 'text' : 'password'}
+                          placeholder="*********"
+                          css={css`
+                            width: 100%;
+                            font-size: 16px;
+                            outline: none;
+                            border: none;
+                          `}
+                        />
+                        <img
+                          src={showPassword2 ? eyeOpen : eyeClosed}
+                          alt={showPassword2 ? '눈이 떠있는' : '눈이 감겨있는'}
+                          onClick={togglePasswordVisibility2}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </div>
                     </div>
                   </div>
+                </div>
               </div>
-            
+            </div>
           </div>
 
           <div 
@@ -279,16 +321,19 @@ export const AccountChange = () => {
             `}>계정 정보 수정을 완료하셨나요?</div>
 
             <div className='btnContainer' css={css`display: flex; flex-direction: row; `}>
-              <button
+              <Link
+                to='/account'
                 type="button"
                 css={grayBtn}>
                 취소하기
-              </button>
-              <button
+              </Link>
+              <Link
+                to='/account'
                 type="button"
+                onClick={settingProfile}
                 css={blueBtn}>
                 수정하기
-              </button>
+              </Link>
             </div>
           </div>
         </div>    
