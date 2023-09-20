@@ -143,10 +143,7 @@ public class SolutionService {
                 likes.size(),scrapedSolutions.size(),pushedLike,scraped,mine,getScrapSolutionLink(solution));
 
         // 댓글 response 만들기
-        List<SolutionDetailComment> solutionDetailComments = makeCommentsResponse(comments);
-
-        // 댓글 response에서 내 댓글인지 확인해서 mine 값 설정 (닉네임 활용)
-        setCommentMine(member, solutionDetailComments);
+        List<SolutionDetailComment> solutionDetailComments = makeCommentsResponse(comments, member);
 
         return SolutionDetailResponse.from(solutionDetailProblem,solutionDetailSolution,solutionDetailComments);
     }
@@ -170,7 +167,7 @@ public class SolutionService {
         return null;
     }
 
-    private List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments) {
+    private List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments, Member member) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
         List<SolutionDetailComment> commentResponseList = comments.stream().filter(comment -> comment.getParentId()==null)
                 .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>())).collect(Collectors.toList());
@@ -179,6 +176,9 @@ public class SolutionService {
                 .forEach((comment)->{
                     addReplyComments(commentResponseList, comment);
                 });
+
+        setCommentMine(member,commentResponseList);
+
         return commentResponseList;
     }
 
