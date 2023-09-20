@@ -1,1 +1,0 @@
-export { ScrollDownArrow } from './ScrollDownArrow';
