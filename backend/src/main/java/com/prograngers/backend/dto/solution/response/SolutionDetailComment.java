@@ -25,15 +25,15 @@ public class SolutionDetailComment {
 
     boolean mine;
 
-    public static SolutionDetailComment from(Comment comment, ArrayList<SolutionDetailComment> replies){
+    public static SolutionDetailComment from(Comment comment, ArrayList<SolutionDetailComment> replies, boolean isMine){
 
         return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), replies,
-                false);
+               isMine);
     }
 
-    public static SolutionDetailComment from(Comment comment){
+    public static SolutionDetailComment from(Comment comment, boolean isMine){
         return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null
-        ,false);
+        ,isMine);
     }
 
 }

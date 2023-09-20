@@ -114,7 +114,6 @@ public class SolutionService {
         // 풀이, 문제, 회원 가져오기
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
-        Member member = findMemberById(memberId);
 
         // 댓글 목록, 좋아요 목록 가져오기
         List<Comment> comments = commentRepository.findAllBySolution(solution);
@@ -139,11 +138,11 @@ public class SolutionService {
         SolutionDetailProblem solutionDetailProblem = SolutionDetailProblem.from(problem);
 
         // 풀이 response 만들기
-        SolutionDetailSolution solutionDetailSolution = SolutionDetailSolution.from(solution,member.getNickname(),problem.getLink(),
+        SolutionDetailSolution solutionDetailSolution = SolutionDetailSolution.from(solution,solution.getMember().getNickname(),problem.getLink(),
                 likes.size(),scrapedSolutions.size(),pushedLike,scraped,mine,getScrapSolutionLink(solution));
 
         // 댓글 response 만들기
-        List<SolutionDetailComment> solutionDetailComments = makeCommentsResponse(comments, member);
+        List<SolutionDetailComment> solutionDetailComments = makeCommentsResponse(comments, memberId);
 
         return SolutionDetailResponse.from(solutionDetailProblem,solutionDetailSolution,solutionDetailComments);
     }
@@ -167,28 +166,43 @@ public class SolutionService {
         return null;
     }
 
-    private List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments, Member member) {
+    private List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments, Long memberId) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
-        List<SolutionDetailComment> commentResponseList = comments.stream().filter(comment -> comment.getParentId()==null)
-                .map((comment)->SolutionDetailComment.from(comment,new ArrayList<>())).collect(Collectors.toList());
+        List<SolutionDetailComment> commentResponseList = new ArrayList<>();
+
+                comments.stream().filter(comment -> comment.getParentId()==null)
+                                .forEach(comment -> {
+                                    addComments(commentResponseList, comment,memberId);
+                                });
+
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
-                    addReplyComments(commentResponseList, comment);
+                    addReplyComments(commentResponseList, comment, memberId);
                 });
-
-        setCommentMine(member,commentResponseList);
 
         return commentResponseList;
     }
 
-    private void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment) {
+    private void addComments(List<SolutionDetailComment> commentResponseList, Comment comment,Long memberId) {
+        if (validCommentIsMine(memberId, comment)){
+            commentResponseList.add(SolutionDetailComment.from(comment, new ArrayList<>(), true));
+            return;
+        }
+            commentResponseList.add(SolutionDetailComment.from(comment, new ArrayList<>(), false));
+    }
+
+    private boolean validCommentIsMine(Long memberId, Comment comment) {
+        return comment.getMember().getId().equals(memberId);
+    }
+
+    private void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment, Long memberId) {
         commentResponseList.stream()
                 .filter(parentComment->parentComment.getId().equals(comment.getParentId()))
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(SolutionDetailComment.from(comment));
+                .add(SolutionDetailComment.from(comment, validCommentIsMine(memberId,comment)));
     }
 
     public SolutionListResponse getSolutionList(
@@ -203,7 +217,7 @@ public class SolutionService {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
-    private static void validMemberAuthorization(Solution target, Member member) {
+    private void validMemberAuthorization(Solution target, Member member) {
         if (target.getMember().getId()!= member.getId()){
             throw new MemberUnAuthorizedException();
         }
