@@ -33,7 +33,7 @@ export const MyPage = () => {
   const [value, setValue] = useState(new Date());
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023';
+    const apiUrl = 'http://13.124.131.171:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023';
 
     axios.get(apiUrl)
       .then((response) => {
