@@ -147,18 +147,6 @@ public class SolutionService {
         return SolutionDetailResponse.from(solutionDetailProblem,solutionDetailSolution,solutionDetailComments);
     }
 
-    private void setCommentMine(Member member, List<SolutionDetailComment> solutionDetailComments) {
-        for (SolutionDetailComment commentResponse : solutionDetailComments){
-            if (commentResponse.getNickname().equals(member.getNickname())) commentResponse.setMine(true);
-            List<SolutionDetailComment> replies = commentResponse.getReplies();
-            if (replies!=null){
-                for (SolutionDetailComment commentReplyResponse : replies){
-                    if (commentReplyResponse.getNickname().equals(member.getNickname())) commentReplyResponse.setMine(true);
-                }
-            }
-        }
-    }
-
     private String getScrapSolutionLink(Solution solution){
         if (solution.getScrapSolution()!=null){
             return ms.getMessage("redirect_path", null, null)+"/solutions"+solution.getScrapSolution().getId();
@@ -172,7 +160,7 @@ public class SolutionService {
 
                 comments.stream().filter(comment -> comment.getParentId()==null)
                                 .forEach(comment -> {
-                                    addComments(commentResponseList, comment,memberId);
+                                    commentResponseList.add(SolutionDetailComment.from(comment,new ArrayList<>(), checkCommentIsMine(memberId,comment)));
                                 });
 
         // 부모가 있는 댓글들을 더한다
@@ -184,15 +172,7 @@ public class SolutionService {
         return commentResponseList;
     }
 
-    private void addComments(List<SolutionDetailComment> commentResponseList, Comment comment,Long memberId) {
-        if (validCommentIsMine(memberId, comment)){
-            commentResponseList.add(SolutionDetailComment.from(comment, new ArrayList<>(), true));
-            return;
-        }
-            commentResponseList.add(SolutionDetailComment.from(comment, new ArrayList<>(), false));
-    }
-
-    private boolean validCommentIsMine(Long memberId, Comment comment) {
+    private boolean checkCommentIsMine(Long memberId, Comment comment) {
         return comment.getMember().getId().equals(memberId);
     }
 
@@ -202,7 +182,7 @@ public class SolutionService {
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(SolutionDetailComment.from(comment, validCommentIsMine(memberId,comment)));
+                .add(SolutionDetailComment.from(comment, checkCommentIsMine(memberId,comment)));
     }
 
     public SolutionListResponse getSolutionList(
