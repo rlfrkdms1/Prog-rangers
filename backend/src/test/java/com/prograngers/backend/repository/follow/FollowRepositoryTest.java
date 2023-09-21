@@ -56,7 +56,7 @@ class FollowRepositoryTest {
     }
 
     private static Follow createFollow(Member member1, Member member2) {
-        return Follow.builder().following(member1.getId()).follower(member2.getId()).build();
+        return Follow.builder().followingId(member1.getId()).followerId(member2.getId()).build();
     }
 
 
