@@ -96,8 +96,8 @@ public class SolutionController {
 
     @Login
     @GetMapping("/mypage/solution")
-    public ResponseEntity<?> mySolutionDetail(@LoggedInMember Long memberId){
-        MySolutionDetailResponse mySolutionDetailResponse = solutionService.getMySolutionDetail(memberId);
+    public ResponseEntity<?> mySolutionDetail(@LoggedInMember Long memberId, @RequestParam(required = false, defaultValue = "0") int solutionIndex){
+        MySolutionDetailResponse mySolutionDetailResponse = solutionService.getMySolutionDetail(memberId,solutionIndex);
         return ResponseEntity.ok().body(mySolutionDetailResponse);
     }
 
