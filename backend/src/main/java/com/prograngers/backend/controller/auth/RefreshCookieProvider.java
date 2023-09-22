@@ -1,5 +1,6 @@
 package com.prograngers.backend.controller.auth;
 
+import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseCookie.ResponseCookieBuilder;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,8 @@ public class RefreshCookieProvider {
         return ResponseCookie.from(REFRESH_TOKEN, cookieValue)
                 .httpOnly(true)
                 .secure(true)
-                .path("/");
+                .path("/")
+                .sameSite(SameSite.NONE.attributeValue());
     }
     public ResponseCookie createLogoutCookie() {
         return createBaseCookie("")
