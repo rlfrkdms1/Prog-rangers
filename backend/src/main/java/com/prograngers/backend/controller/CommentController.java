@@ -22,49 +22,44 @@ import java.net.URI;
 
 @RestController
 @Slf4j
-@RequestMapping("prog-rangers/solutions")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class CommentController {
-    private final MessageSource ms;
+    private final MessageSource messageSource;
     private final CommentService commentService;
 
-    // 댓글 작성
-    @PostMapping("/{solutionId}/comments")
+
     @Login
-    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
+    @PostMapping("/solutions/{solutionId}/comments")
+    public ResponseEntity<Void> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
                                         @LoggedInMember Long memberId) {
         commentService.addComment(solutionId, commentRequest, memberId);
         return redirect(solutionId);
     }
 
-    // 댓글 수정
-    @PatchMapping("/comments/{commentId}")
     @Login
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId,
+    @PatchMapping("/comments/{commentId}")
+    public ResponseEntity<Void> updateComment(@PathVariable Long commentId,
                                            @RequestBody @Valid CommentPatchRequest commentPatchRequest,
                                            @LoggedInMember Long memberId) {
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return redirect(solutionId);
     }
 
-    // 댓글 삭제
-    @DeleteMapping("/{solutionId}/comments/{commentId}")
     @Login
-    public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
+    @DeleteMapping("/solutions/{solutionId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
                                            @LoggedInMember Long memberId) {
         commentService.deleteComment(commentId, memberId);
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return redirect(solutionId);
     }
 
-    private ResponseEntity redirect(Long solutionId) {
-        // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
+    private ResponseEntity<Void> redirect(Long solutionId) {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
     }
 
     private String getRedirectPath() {
-        return ms.getMessage("redirect_path", null, null)+"/solutions/";
+        return messageSource.getMessage("redirect_path", null, null)+"/solutions/";
     }
 
 }
