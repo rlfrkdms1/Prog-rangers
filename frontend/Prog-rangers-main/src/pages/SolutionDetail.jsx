@@ -3,6 +3,7 @@ import {
   Indicators,
   SolutionDetailHeader,
   SolutionTab,
+  Comments,
 } from '../components/SolutionDetail';
 
 export const SolutionDetail = () => {
@@ -11,6 +12,7 @@ export const SolutionDetail = () => {
       <SolutionDetailHeader />
       <SolutionTab />
       <Indicators />
+      <Comments />
     </div>
   );
 };

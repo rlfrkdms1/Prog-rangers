@@ -8,3 +8,5 @@ export { MAIN_DATA } from './MainData';
 export { SolutionDetailHeader } from './SolutionDetailHeader';
 
 export { Indicators } from './Indicators';
+
+export { Comments } from './Comments';
