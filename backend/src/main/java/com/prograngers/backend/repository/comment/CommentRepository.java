@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>  {
 
     List<Comment> findAllBySolution(Solution solution);
 
-    @Query("select c from Comment c join fetch c.member join fetch c.solution where c.member.id = :memberId ")
-    Slice<Comment> findPageByMemberId(Pageable pageable, @Param("memberId") Long memberId);
+    @Query("select c from Comment c join fetch c.member join fetch c.solution s join fetch s.problem join fetch s.member where c.member.id = :memberId ")
+    Slice<Comment> findMyPageByMemberId(Pageable pageable, @Param("memberId") Long memberId);
 
 }
