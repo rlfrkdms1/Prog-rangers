@@ -34,13 +34,10 @@ public class CommentService {
 
     private final MemberRepository memberRepository;
 
-    public List<Comment> findBySolution(Solution solution) {
-        return commentRepository.findAllBySolution(solution);
-    }
-
-    public Comment findById(Long id) {
+    private Comment findById(Long id) {
         return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
+
 
     // 댓글 작성
     @Transactional
