@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { MainBody } from '../Problems/MainBody';
 import { FilterBar } from '../../components/FilterBar';
-import { QuestionForm } from '../../components/Question';
 import { QSolving } from '../../components/Solving';
 import { Pagination } from '../../components/Pagination/Pagination';
 import questions from '../../db/question.json';

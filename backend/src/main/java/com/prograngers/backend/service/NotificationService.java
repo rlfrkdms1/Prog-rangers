@@ -2,7 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.response.notification.NotificationResponse;
 import com.prograngers.backend.entity.Notification;
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;

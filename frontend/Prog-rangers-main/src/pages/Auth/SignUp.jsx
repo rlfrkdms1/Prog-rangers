@@ -1,10 +1,10 @@
 import React from 'react';
-import { SignUpForm } from '../components/SignUp/SignUpForm';
+import { SignUpForm } from '../../components/SignUp/SignUpForm';
 import {
   pageStyle,
   innerPageStyle,
   headingStyle,
-} from '../components/SignUp/signUpPage';
+} from '../../components/SignUp/signUpPage';
 
 export const SignUp = () => {
   return (

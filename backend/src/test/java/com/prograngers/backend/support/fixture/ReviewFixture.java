@@ -34,4 +34,5 @@ public enum ReviewFixture {
     public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdAt) {
         return 기본_정보_빌더_생성(member, solution, createdAt).build();
     }
+
 }
