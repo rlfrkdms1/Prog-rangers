@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { Link } from 'react-router-dom';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { Button } from '@mui/material';
 import { profileContentStyle, editBtnStyle, deleteBtnStyle } from './AccountStyle';
-
-
+import axios from 'axios';
 
 export const Account = () => {
+  const [userData, setUserData] = useState({
+    nickname: '',
+    email: '',
+    github: '',
+    introduction: '',
+    currentModifiedAt: '',
+    photo: '',
+  });
+
+  useEffect(() => {
+    const apiUrl = 'http://{{HOST}}:8080/prog-rangers/mypage/account-settings';
+
+    axios.get(apiUrl)
+      .then(response => {
+        const data = response.data;
+        setUserData(data);
+      })
+      .catch(error => {
+        console.error('사용자 정보를 가져오는 중 오류 발생:', error);
+      });
+  }, []);
+
   return (
     <div 
       className='container' 
@@ -43,7 +64,7 @@ export const Account = () => {
               align-items: center;
               `}>
                 <img
-                  src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'                  
+                  src={userData.photo ? userData.photo : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                  
                   alt='profileImg'
                   width='250px'
                   css={css`
@@ -59,23 +80,23 @@ export const Account = () => {
               `}>
                 <div className='nickname' css={profileContentStyle}>
                   <div css={css`width: 72px`}>닉네임</div>
-                  <div>rlfrkdms1</div>
+                  <div>{userData.nickname}rlfrkdms1_API1</div>
                 </div>
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>rlfrkdms1@hotmail.com</div>
+                  <div>{userData.email}rlfrkdms1@hotmail.com_API2</div>
                 </div>
                 <div className='github' css={profileContentStyle}>
                  <div css={css`width: 72px`}>깃허브</div>
-                 <div>https://github.com/rlfrkdms1</div>
+                 <div>{userData.github}https://github.com/rlfrkdms1_API3</div>
                 </div>
                 <div className='introduce' css={profileContentStyle}>
                  <div css={css`width: 72px`}>소개</div>
-                 <div>가은이의 풀이노트</div>
+                 <div>{userData.introduction}가은이의 풀이노트_API4</div>
                 </div>
                 <div className='pw' css={profileContentStyle}>
                  <div css={css`width: 72px`}>비밀번호</div>
-                 <div>최근 변경일: 2023년 1월 1일</div>
+                 <div>최근 변경일: {userData.currentModifiedAt}2023년 1월 1일_API5</div>
                 </div>
               </div>
             

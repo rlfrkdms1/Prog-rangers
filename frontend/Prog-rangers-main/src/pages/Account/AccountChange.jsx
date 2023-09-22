@@ -6,8 +6,31 @@ import { profileContentStyle, profileContentInputStyle, inputBoxStyle, editBtnSt
 import { Link } from 'react-router-dom';
 import eyeOpen from '../../assets/icons/mypage-eye-open.svg';
 import eyeClosed from '../../assets/icons/mypage-eye-closed.svg';
+import axios from 'axios';
 
 export const AccountChange = () => {
+  const [userData, setUserData] = useState({
+    nickname: '',
+    email: '',
+    github: '',
+    introduction: '',
+    currentModifiedAt: '',
+    photo: '',
+  });
+
+  useEffect(() => {
+    const apiUrl = 'http://{{HOST}}:8080/prog-rangers/mypage/account-settings';
+
+    axios.get(apiUrl)
+      .then(response => {
+        const data = response.data;
+        setUserData(data);
+      })
+      .catch(error => {
+        console.error('사용자 정보를 가져오는 중 오류 발생:', error);
+      });
+  }, []);
+  
   const [photo, setPhoto] = useState("");
   const imgRef = useRef();
 
@@ -36,22 +59,7 @@ export const AccountChange = () => {
   const [changePassword, setChangePassword] = useState('');
   const [checkPassword, setCheckPassword] = useState('');
 
-  useEffect(() => {
-    inquireProfile()
-      .then((data) => {
-        nickname(data);
-        email(data);
-        email(data);
-        github(data);
-        introduction(data);
-        password(data);
-      })
-      .catch((error) => {
-        console.error('API 호출 중 오류 발생:', error);
-      })
-  }, []);
-
-  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false); // 사용 가능 여부 상태
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
 
   const nicknameDuplicationCheck = () => {
     checkNickname(nickname)
@@ -83,10 +91,7 @@ const changeProfile = () => {
   if ( isNicknameAvailable == true && isPwCorrect == true && changePassword == checkPassword) {
     settingProfile()
   }
-
 }
-
-
 
   return (
     <div 
@@ -144,7 +149,7 @@ const changeProfile = () => {
                   <div css={css`width: 72px`}>닉네임</div>
 
                   <div css={profileContentInputStyle}>
-                    <div>rlfrkdms1</div>
+                    <div>{userData.nickname}rlfrkdms1_API1</div>
                     <div css={css`
                       display: flex;
                       flex-direction: row;`}>
@@ -153,7 +158,7 @@ const changeProfile = () => {
                           type="text"
                           value={nickname}
                           onChange={(e) => setNickname(e.target.value)}
-                          placeholder={nickname}
+                          placeholder={userData.nickname}
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -172,14 +177,14 @@ const changeProfile = () => {
                 
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>rlfrkdms1@gmail.com</div>
+                  <div>{userData.email}rlfrkdms1@gmail.com_API2</div>
                 </div>
 
                 <div className='github' css={profileContentStyle}>
                  <div css={css`width: 72px`}>깃허브</div>
 
                  <div css={profileContentInputStyle}>
-                  <div>https://github.com/rlfrkdms1</div>
+                  <div>{userData.github}https://github.com/rlfrkdms1_API3</div>
                   
                   <div css={css`width: 374px;`}>
                     <div css={inputBoxStyle}>
@@ -205,7 +210,7 @@ const changeProfile = () => {
                  <div css={css`width: 72px`}>소개</div>
 
                  <div css={profileContentInputStyle}>
-                  <div>가은이의 풀이노트</div>
+                  <div>{userData.introduction}가은이의 풀이노트_API4</div>
                 
                   <div css={css`width: 374px;`}>                
                     <div css={inputBoxStyle}>
@@ -259,7 +264,7 @@ const changeProfile = () => {
                           type={showPassword ? 'text' : 'password'}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          placeholder="rkdms123@"
+                          // placeholder="rkdms123@"
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -283,7 +288,7 @@ const changeProfile = () => {
                       <div css={inputBoxStyle}>
                         <input
                           type={showPassword2 ? 'text' : 'password'}
-                          placeholder="*********"
+                          // placeholder="*********"
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -330,7 +335,7 @@ const changeProfile = () => {
               <Link
                 to='/account'
                 type="button"
-                onClick={settingProfile}
+                onClick={changeProfile}
                 css={blueBtn}>
                 수정하기
               </Link>
