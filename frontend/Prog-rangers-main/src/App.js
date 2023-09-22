@@ -6,10 +6,12 @@ import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <Header />
-      <Outlet />
-    </AuthProvider>
+    <div>
+      <AuthProvider>
+        <Header />
+        <Outlet />
+      </AuthProvider>
+    </div>
   );
 }
 

@@ -55,13 +55,11 @@ public class SolutionPostRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Problem toProblem(){
-        // 유효한 문제 링크인지 확인
-        JudgeConstant judge = checkLink(problemLink);
+    public Problem toProblem(JudgeConstant judgeName){
 
         return Problem.builder()
                 .link(problemLink)
-                .ojName(judge)
+                .ojName(judgeName)
                 .title(problemTitle)
                 .solutions(new ArrayList<>())
                 .build();
@@ -105,9 +103,4 @@ public class SolutionPostRequest {
                 .solutionTitle(solution.getTitle())
                 .build();
     }
-
-    private JudgeConstant checkLink(String problemLink) {
-        return JudgeConstant.from(problemLink);
-    }
-
 }
