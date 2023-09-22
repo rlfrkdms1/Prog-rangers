@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.response.comment.ShowMyCommentsResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
@@ -15,11 +16,10 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
 
@@ -38,6 +38,10 @@ public class CommentService {
         return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
+    public ShowMyCommentsResponse showMyComments(Long memberId, Pageable pageable) {
+        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(pageable, memberId);
+        return ShowMyCommentsResponse.from(commentPage);
+    }
 
     // 댓글 작성
     @Transactional

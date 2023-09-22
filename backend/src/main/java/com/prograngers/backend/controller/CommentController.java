@@ -4,14 +4,17 @@ import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
 import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.response.comment.ShowMyCommentsResponse;
 import com.prograngers.backend.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,11 +31,16 @@ public class CommentController {
     private final MessageSource messageSource;
     private final CommentService commentService;
 
+    @Login
+    @GetMapping("/mypage/comments")
+    public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId, Pageable pageable) {
+        return commentService.showMyComments(memberId, pageable);
+    }
 
     @Login
     @PostMapping("/solutions/{solutionId}/comments")
     public ResponseEntity<Void> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
-                                        @LoggedInMember Long memberId) {
+                                           @LoggedInMember Long memberId) {
         commentService.addComment(solutionId, commentRequest, memberId);
         return redirect(solutionId);
     }
