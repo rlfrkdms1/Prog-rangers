@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MySolutionDetailSolution {
-    private String title;
+public class MySolutionRecommendedSolution {
     private Long id;
+    private String solutionName;
 }
