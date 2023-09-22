@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto.request.auth;
 
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.member.MemberType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class SignUpRequest {
                 .email(email)
                 .password(password)
                 .nickname(nickname)
+                .type(MemberType.BASIC)
                 .build();
     }
 
