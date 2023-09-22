@@ -1,48 +1,38 @@
 package com.prograngers.backend.support.fixture;
 
+import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.Review.ReviewBuilder;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.review.Review;
-import com.prograngers.backend.entity.review.ReviewStatusConStant;
 import com.prograngers.backend.entity.solution.Solution;
-import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.review.Review.*;
-import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
 
-
-@AllArgsConstructor
 public enum ReviewFixture {
 
-    생성된_리뷰("리뷰내용", CREATED),
-    수정된_리뷰("리뷰내용", FIXED),
-    삭제된_리뷰("리뷰내용", DELETED);
+    FIRST_LINE_REVIEW(1, "첫번째 줄 리뷰"),
+    SECOND_LINE_REVIEW(2, "두번째 줄 리뷰"),
+    THIRD_LINE_REVIEW(3, "세번째 줄 리뷰");
 
+    private final int codeLineNumber;
     private final String content;
-    private final ReviewStatusConStant status;
 
-    public ReviewBuilder 기본_빌더_생성(){
-        return builder()
-                .content(content)
-                .status(status);
+    ReviewFixture(int codeLineNumber, String content) {
+        this.codeLineNumber = codeLineNumber;
+        this.content = content;
     }
 
-    public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdDate){
-        return 기본_빌더_생성()
+    public ReviewBuilder 기본_정보_빌더_생성(Member member, Solution solution, LocalDateTime createdAt) {
+        return Review.builder()
+                .content(this.content)
+                .codeLineNumber(this.codeLineNumber)
                 .member(member)
                 .solution(solution)
-                .createdAt(createdDate)
-                .build();
+                .createdAt(createdAt);
     }
 
-    public Review 아이디_지정_생성(Long id,Member member, Solution solution, LocalDateTime createdDate){
-        return 기본_빌더_생성()
-                .id(id)
-                .member(member)
-                .solution(solution)
-                .createdAt(createdDate)
-                .build();
+    public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdAt) {
+        return 기본_정보_빌더_생성(member, solution, createdAt).build();
     }
 
 }

@@ -7,12 +7,16 @@ import com.prograngers.backend.entity.member.MemberType;
 import lombok.AllArgsConstructor;
 
 import static com.prograngers.backend.entity.member.Member.*;
+import static com.prograngers.backend.entity.member.MemberType.*;
+import static com.prograngers.backend.entity.member.MemberType.GOOGLE;
 
 @AllArgsConstructor
 public enum MemberFixture {
 
-    장지담("jidam99", MemberType.NAVER),
-    길가은("rlfrkdms1", MemberType.BASIC);
+    장지담("jidam99", NAVER),
+    길가은("rlfrkdms1", BASIC),
+    이수빈("bingbing", GOOGLE);
+
     private final String nickname;
     private final MemberType type;
 

@@ -2,6 +2,7 @@ package com.prograngers.backend.dto.response.member;
 
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
+import com.prograngers.backend.support.Encrypt;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,6 +24,8 @@ public class MemberAccountInfoResponse {
 
     private LocalDate currentlyModifiedAt;
 
+    private String password;
+
     private String photo;
 
     public static MemberAccountInfoResponse from(Member member) {
@@ -33,6 +36,7 @@ public class MemberAccountInfoResponse {
                 .github(member.getGithub())
                 .introduction(member.getIntroduction())
                 .currentlyModifiedAt(member.getCurrentlyModifiedAt())
+                .password(Encrypt.decoding(member.getPassword()))
                 .photo(member.getPhoto())
                 .build();
     }
