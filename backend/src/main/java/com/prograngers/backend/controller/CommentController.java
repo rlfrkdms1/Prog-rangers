@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
@@ -31,10 +32,14 @@ public class CommentController {
     private final MessageSource messageSource;
     private final CommentService commentService;
 
+    private static final String PAGE_NUMBER_DEFAULT = "1";
+
+
+
     @Login
     @GetMapping("/mypage/comments")
-    public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId, Pageable pageable) {
-        return commentService.showMyComments(memberId, pageable);
+    public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId, @RequestParam(defaultValue = PAGE_NUMBER_DEFAULT) Integer pageNumber) {
+        return commentService.showMyComments(memberId, pageNumber);
     }
 
     @Login
@@ -48,8 +53,8 @@ public class CommentController {
     @Login
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<Void> updateComment(@PathVariable Long commentId,
-                                           @RequestBody @Valid CommentPatchRequest commentPatchRequest,
-                                           @LoggedInMember Long memberId) {
+                                              @RequestBody @Valid CommentPatchRequest commentPatchRequest,
+                                              @LoggedInMember Long memberId) {
         Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
         return redirect(solutionId);
     }
@@ -57,7 +62,7 @@ public class CommentController {
     @Login
     @DeleteMapping("/solutions/{solutionId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
-                                           @LoggedInMember Long memberId) {
+                                              @LoggedInMember Long memberId) {
         commentService.deleteComment(commentId, memberId);
         return redirect(solutionId);
     }
@@ -67,7 +72,7 @@ public class CommentController {
     }
 
     private String getRedirectPath() {
-        return messageSource.getMessage("redirect_path", null, null)+"/solutions/";
+        return messageSource.getMessage("redirect_path", null, null) + "/solutions/";
     }
 
 }
