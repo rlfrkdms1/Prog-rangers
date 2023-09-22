@@ -24,11 +24,10 @@ import java.net.URI;
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;
-    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
     private final MessageSource ms;
     // solution 쓰기
     @Login
-    @PostMapping("/new-form")
+    @PostMapping
     public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest){
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
@@ -43,7 +42,7 @@ public class SolutionController {
 
     // scrap해서 생성
     @Login
-    @PostMapping("/new-form/{scrapId}")
+    @PostMapping("/{scrapId}")
     public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request) {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
