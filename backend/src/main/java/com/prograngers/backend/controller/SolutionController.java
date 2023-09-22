@@ -3,6 +3,7 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.MySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
@@ -91,6 +92,16 @@ public class SolutionController {
         SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
+
+
+    @Login
+    @GetMapping("/mypage/solution")
+    public ResponseEntity<?> mySolutionDetail(@LoggedInMember Long memberId){
+        MySolutionDetailResponse mySolutionDetailResponse = solutionService.getMySolutionDetail(memberId);
+        return ResponseEntity.ok().body(mySolutionDetailResponse);
+    }
+
+
 
     private ResponseEntity redirect(Long solutionId) {
         if (solutionId==null){
