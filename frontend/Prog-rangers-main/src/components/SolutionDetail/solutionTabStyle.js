@@ -8,14 +8,6 @@ export const tapLayout = css`
   margin: 50px auto 0;
 `;
 
-export const btnStyle = css`
-  width: 125px;
-  height: 40px;
-  background-color: ${theme.colors.light3};
-  border-radius: 20px 20px 0 0;
-  margin-right: 5px;
-`;
-
 //viewSolution & lineReview
 
 export const contentLayout = css`

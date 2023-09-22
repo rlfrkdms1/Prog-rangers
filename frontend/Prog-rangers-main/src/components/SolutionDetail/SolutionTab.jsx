@@ -4,18 +4,20 @@ import { LineReview } from './LineReview';
 import { MAIN_DATA } from './MainData';
 
 import { css } from '@emotion/react';
-import { btnStyle, tapLayout } from './solutionTabStyle';
+import { tapLayout } from './solutionTabStyle';
 import { theme } from '../Header/theme';
 
 import beforeClick from './tabIcons/beforeC.svg';
 import afterClick from './tabIcons/afterC.svg';
 
 export const SolutionTab = () => {
-  const [active, setActive] = useState('viewSolution');
+  const [active, setActive] = useState('viewSolution'); //content 내용 변경
+  const [isActive, setIsActive] = useState('viewSolution'); //background-image 변경
 
   const handleClickButton = (e) => {
-    const { name } = e.target;
+    const name = e.target.name;
     setActive(name);
+    setIsActive(name);
   };
 
   const selectComponent = {
@@ -34,16 +36,24 @@ export const SolutionTab = () => {
         {MAIN_DATA.map((data) => {
           return (
             <button
-              onClick={handleClickButton}
               name={data.name}
               key={data.id}
+              css={css`
+                background-image: ${isActive === data.name
+                  ? `url(${afterClick})`
+                  : `url(${beforeClick})`};
+                background-repeat: no-repeat;
+                width: 125px;
+                height: 40px;
+
+                margin-right: 5px;
+                padding-left: 30px;
+
+                text-align: left;
+                line-height: 40px;
+              `}
+              onClick={handleClickButton}
             >
-              <img
-                src={beforeClick}
-                css={css`
-                  position: relative;
-                `}
-              />
               {data.text}
             </button>
           );
