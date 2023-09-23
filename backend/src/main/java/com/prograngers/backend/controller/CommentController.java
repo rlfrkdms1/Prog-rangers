@@ -34,7 +34,7 @@ public class CommentController {
     // 댓글 작성
     @PostMapping("/{solutionId}/comments")
     @Login
-    public ResponseEntity<?> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
+    public ResponseEntity<?> writeComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
                                         @LoggedInMember Long memberId) {
         commentService.addComment(solutionId, commentRequest, memberId);
         return redirect(solutionId);
