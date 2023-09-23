@@ -9,8 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
-
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.이수빈;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
@@ -68,6 +66,25 @@ class FollowRepositoryTest {
         assertAll(
                 () -> assertThat(followRecord1).isEqualTo(follow1),
                 () -> assertThat(followRecord2).isEqualTo(follow2)
+        );
+    }
+
+    @Test
+    @DisplayName("팔로워, 팔로잉 아이디가 주어졌을 때 팔로우 내역이 존재하는지 알 수 있다.")
+    void 팔로우_내역_존재성_확인(){
+
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(이수빈.기본_정보_생성());
+
+        저장(팔로우_생성(member1, member2));
+
+        boolean followRecord1 = followRepository.existsByFollowerIdAndFollowingId(member1.getId(), member2.getId());
+        boolean followRecord2 = followRepository.existsByFollowerIdAndFollowingId(member1.getId(), member3.getId());
+
+        assertAll(
+                () -> assertThat(followRecord1).isTrue(),
+                () -> assertThat(followRecord2).isFalse()
         );
     }
 
