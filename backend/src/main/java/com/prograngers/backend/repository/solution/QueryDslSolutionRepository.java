@@ -16,4 +16,6 @@ public interface QueryDslSolutionRepository {
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm,
             DataStructureConstant dataStructure, SortConstant sortBy);
     List<Solution> findProfileSolutions(Long memberId,Long page);
+
+    List<Solution> findAllSolutionOfNewestProblem(Long memberId);
 }

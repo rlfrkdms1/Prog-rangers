@@ -22,6 +22,4 @@ public interface SolutionRepository extends JpaRepository<Solution, Long>, Query
     @Query("select distinct function('date_format', s.createdAt, '%d') from Solution s where s.member.id = :memberId and function('date_format', s.createdAt, '%m') = :month")
     List<Integer> findAllByMonth(@Param("memberId") Long memberId, @Param("month") int month);
 
-    @Query("select s from Solution s where s.problem.id in (select s.problem.id from Solution s where s.member.id =:memberId limit 1) order by  s.createdAt desc")
-    List<Solution> findAllSolutionOfNewestProblem(@Param("memberId") Long memberId);
 }

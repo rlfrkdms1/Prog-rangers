@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,24 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .where(solution.member.id.eq(memberId), solution.id.loe(page))
                 .orderBy(solution.createdAt.desc())
                 .limit(3)
+                .fetch();
+    }
+
+    @Override
+    public List<Solution> findAllSolutionOfNewestProblem(Long memberId){
+        QSolution subSolution = new QSolution("subSolution");
+        return jpaQueryFactory
+                .select(solution)
+                .from(solution)
+                .where(solution.problem.id.in(
+                        JPAExpressions
+                                .select(subSolution.problem.id)
+                                .from(subSolution)
+                                .where(subSolution.member.id.eq(memberId))
+                                .orderBy(subSolution.createdAt.desc())
+                                .limit(1)
+                ))
+                .orderBy(solution.createdAt.desc())
                 .fetch();
     }
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
