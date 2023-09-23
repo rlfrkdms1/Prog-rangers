@@ -78,4 +78,18 @@ class FollowServiceTest {
                 () -> verify(memberRepository).existsById(followerId)
         );
     }
+
+    @Test
+    @DisplayName("팔로잉이 존재하지 않을 경우 예외가 발생한다.")
+    void 팔로잉이_존재하지_않을_때(){
+        Long followerId = 1L;
+        Long followingId = 2L;
+        given(memberRepository.existsById(followerId)).willReturn(true);
+        given(memberRepository.existsById(followingId)).willReturn(false);
+        assertAll(
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(MemberNotFoundException.class),
+                () -> verify(memberRepository).existsById(followerId),
+                () -> verify(memberRepository).existsById(followingId)
+        );
+    }
 }
