@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.exception.badrequest.AlreadyFollowException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -63,6 +64,18 @@ class FollowServiceTest {
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId),
                 () -> verify(followRepository).save(follow)
+        );
+    }
+
+    @Test
+    @DisplayName("팔로워가 존재하지 않을 경우 예외가 발생한다.")
+    void 팔로워가_존재_하지_않을_떄() {
+        Long followerId = 1L;
+        Long followingId = 2L;
+        given(memberRepository.existsById(followerId)).willReturn(false);
+        assertAll(
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(MemberNotFoundException.class),
+                () -> verify(memberRepository).existsById(followerId)
         );
     }
 }
