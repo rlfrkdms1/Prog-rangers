@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.exception.badrequest.AlreadyFollowException;
+import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -34,5 +35,6 @@ public class FollowService {
         if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
             throw new MemberNotFoundException();
         }
+        followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
     }
 }
