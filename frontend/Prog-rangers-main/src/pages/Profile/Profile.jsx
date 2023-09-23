@@ -25,7 +25,7 @@ export const Profile = () => {
 
     axios.get(apiUrl)
       .then((response) => {
-        setData(response.data.list);
+        setData(response.data);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
@@ -38,28 +38,31 @@ export const Profile = () => {
 
       <div css={css`
       ${LeftBody}`}>
-        
-        <div
+        {data.length > 0 && data.map((item, index) => (
+        <div key={index}
           css={css`
           width: 250px;
           height: 250px;
           border-radius: 250px;
           object-fit: cover;
           border: 1px solid black;
-          `}> API 1 </div>
+          `}> API 1 {item.photo}
+          {/* {item.photo} */} </div> 
+          ))}
+          
 
           <div css={css`
           ${fontSize20}
           ${alignCenter}
           margin-top: 8px;`}>
-          API 2 nickname
+          API 2 {/* {item.nickname} */}
           </div>
 
           <div css={css`
           ${fontSize14}
           ${alignCenter}
           margin-top: 7px;`}>
-            API 3 소개
+            API 3 {/* {item.introduction} */}
           </div>
 
           <button css={css`
@@ -80,12 +83,12 @@ export const Profile = () => {
           `}>
             <div css={css`
             ${fontSizebold16}`}> 팔로우 </div>
-            <div> API 4 </div>
+            <div> API 4 {/* {item.follow} */} </div>
 
             <div css={css`
             ${fontSizebold16}
             margin-left: 15px;`}> 팔로잉 </div>
-            <div> API 5 </div>
+            <div> API 5 {/* {item.following} */} </div>
           </div>
 
           <div css={css`
@@ -107,7 +110,7 @@ export const Profile = () => {
               font-weight: 400;
               color: ${theme.colors.light1};
               `}> 
-              API 6 깃허브 링크
+              API 6 {/* {item.github} */}
             </div>
           </div>
 
@@ -129,8 +132,9 @@ export const Profile = () => {
             </div>
             달성
           </div>
-
+        
       </div>
+
  
       <div css={css`
       ${RightBody}`}>

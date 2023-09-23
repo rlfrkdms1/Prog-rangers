@@ -33,7 +33,7 @@ export const SolvingList = () => {
         height: 660px;        
         margin-top: 50px;
         `}>
-      {/* {data.list.map((item, index) => (
+      {/* {data.list.length > 0 && data.list.map((item, index) => (
         <div key={index} css={css` */}
         <div css={css`}
         width: 835px;
