@@ -41,7 +41,11 @@ public class FollowService {
     @Transactional
     public void unfollow(Long followerId, Long followingId) {
         validFollowerAndFollowingExist(followerId, followingId);
-        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
+        Follow follow = findFollowRecord(followerId, followingId);
         followRepository.delete(follow);
+    }
+
+    private Follow findFollowRecord(Long followerId, Long followingId) {
+        return followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
     }
 }
