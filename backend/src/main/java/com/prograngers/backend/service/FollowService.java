@@ -20,9 +20,7 @@ public class FollowService {
 
     @Transactional
     public void follow(Long followerId, Long followingId) {
-        if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
-            throw new MemberNotFoundException();
-        }
+        validFollowerAndFollowingExist(followerId, followingId);
         if (followRepository.findByFollowerIdAndFollowingId(followerId, followingId).isPresent()) {
             throw new AlreadyFollowException();
         }
@@ -30,11 +28,15 @@ public class FollowService {
         followRepository.save(follow);
     }
 
-    @Transactional
-    public void unfollow(Long followerId, Long followingId) {
+    private void validFollowerAndFollowingExist(Long followerId, Long followingId) {
         if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
             throw new MemberNotFoundException();
         }
+    }
+
+    @Transactional
+    public void unfollow(Long followerId, Long followingId) {
+        validFollowerAndFollowingExist(followerId, followingId);
         Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
         followRepository.delete(follow);
     }
