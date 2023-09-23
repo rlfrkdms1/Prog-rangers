@@ -35,6 +35,7 @@ public class FollowService {
         if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
             throw new MemberNotFoundException();
         }
-        followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
+        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
+        followRepository.delete(follow);
     }
 }
