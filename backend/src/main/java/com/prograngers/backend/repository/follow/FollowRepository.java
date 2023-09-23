@@ -11,4 +11,6 @@ public interface FollowRepository extends JpaRepository<Follow,Long>,  QueryDslF
 
     Optional<Follow> findByFollowerIdAndFollowingId(Long followerId, Long followingId);
 
+    boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
+
 }
