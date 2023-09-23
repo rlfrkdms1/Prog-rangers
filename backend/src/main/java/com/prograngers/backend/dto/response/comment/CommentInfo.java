@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentInfo {
 
+    private String status;
     private String content;
     private String authorImageUrl;
     private String authorNickname;
 
     public static CommentInfo from(Comment comment) {
         Member member = comment.getMember();
-        return new CommentInfo(comment.getContent(), member.getPhoto(), member.getNickname());
+        return new CommentInfo(comment.getStatus().name(), comment.getContent(), member.getPhoto(), member.getNickname());
     }
 
 }
