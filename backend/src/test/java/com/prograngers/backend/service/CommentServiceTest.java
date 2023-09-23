@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConStant.DELETED;
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
