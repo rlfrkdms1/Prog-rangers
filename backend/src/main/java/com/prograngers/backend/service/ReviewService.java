@@ -50,7 +50,7 @@ public class ReviewService {
         Member member = findMemberById(memberId);
         validMemberAuthorization(review, member);
         validReviewAlreadyDeleted(review);
-        reviewPatchRequest.updateReview(review);
+        review.update(reviewPatchRequest.getContent());
     }
 
     @Transactional

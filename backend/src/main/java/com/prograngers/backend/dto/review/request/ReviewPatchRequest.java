@@ -13,7 +13,4 @@ public class ReviewPatchRequest {
     @NotBlank(message = "내용은 빈칸일 수 없습니다")
     String  content;
 
-    public Review updateReview(Review targetReview) {
-        return targetReview.update(content);
-    }
 }
