@@ -51,14 +51,11 @@ public class Comment {
     @Enumerated(value = EnumType.STRING)
     private CommentStatusConStant status;
 
-    private void updateContent(String content) {
+    public void update(String content) {
         if (content != null) {
             this.content = content;
             this.status = FIXED;
         }
-    }
-    public void update(String content){
-        updateContent(content);
     }
     public void delete(){
         this.content = DELETED_CONTENT;
