@@ -2,6 +2,8 @@ import { css } from "@emotion/react";
 import questions from '../../db/question.json';
 import { ojNameTag, tags } from "./tagsform";
 import { useNavigate } from 'react-router-dom';
+import forTags from './fortagsort.json';
+import { useEffect } from "react";
 
 export const QuestionForm = ({data}) => {
   const navigate = useNavigate();
@@ -9,11 +11,21 @@ export const QuestionForm = ({data}) => {
     navigate(`/solutions/${index}`);
   }
 
+
+  const getRightName = (targetValue) => {
+    const condition = (element) => element.value === targetValue;
+    const foundIndex = forTags.findIndex(condition) ;
+    const foundElement = forTags[foundIndex];
+    return foundElement?.name;
+  }
+
   return(
     <>
       {data.map((item,index) => (
-        <div key={index} onClick={(e) => onClickSols(index)} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
-          <div css={css`
+        <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
+          <div
+          onClick={(e) => onClickSols(index)}
+          css={css`
             height: 29px; 
             width: 100%; 
             margin-top: 30px; 
@@ -25,9 +37,7 @@ export const QuestionForm = ({data}) => {
               cursor: pointer;
               text-decoration: underline;
             }
-            `
-          }            
-          >
+          `}>
             {item.title}
           </div>
           <div css={css`
@@ -40,7 +50,9 @@ export const QuestionForm = ({data}) => {
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
               {item.tags.map((index) => (
-                <div key={index} css={css`${tags}`}>{index}</div>
+                <div key={index} css={css`${tags}`}> 
+                  {getRightName(index)}
+                </div>
               ))}
             </div>
             <div css={css`
