@@ -1,6 +1,5 @@
 package com.prograngers.backend.entity.review;
 
-import com.prograngers.backend.entity.comment.CommentStatusConStant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.CascadeType;
@@ -18,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
@@ -52,7 +50,7 @@ public class Review {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false,updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
@@ -67,6 +65,6 @@ public class Review {
 
     public void delete() {
         this.content = DELETED_CONTENT;
-        this.status=DELETED;
+        this.status = DELETED;
     }
 }
