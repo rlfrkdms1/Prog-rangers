@@ -21,12 +21,12 @@ public class FollowService {
     @Transactional
     public void follow(Long followerId, Long followingId) {
         validFollowerAndFollowingExist(followerId, followingId);
-        validAlreadyFollow(followerId, followingId);
+        validNotFollow(followerId, followingId);
         Follow follow = Follow.builder().followingId(followingId).followerId(followerId).build();
         followRepository.save(follow);
     }
 
-    private void validAlreadyFollow(Long followerId, Long followingId) {
+    private void validNotFollow(Long followerId, Long followingId) {
         if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             throw new AlreadyFollowException();
         }
