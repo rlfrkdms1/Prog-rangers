@@ -2,8 +2,12 @@ package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.problem.JudgeConstant;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
+@Getter
+@Setter
 public class MySolutionDetailProblem {
     private String problemTitle;
     private JudgeConstant ojName;

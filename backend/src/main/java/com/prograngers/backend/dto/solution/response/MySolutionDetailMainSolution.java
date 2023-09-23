@@ -1,10 +1,14 @@
 package com.prograngers.backend.dto.solution.response;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Builder
+@Getter
+@Setter
 public class MySolutionDetailMainSolution {
     private List<Object> tags;
     private String description;
