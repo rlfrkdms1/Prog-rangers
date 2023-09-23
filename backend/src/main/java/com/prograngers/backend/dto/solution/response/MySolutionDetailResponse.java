@@ -17,32 +17,23 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class MySolutionDetailResponse {
-
     // 문제
     private MySolutionDetailProblem problem;
     // 풀이
-    private String description;
-    private String[] code;
-    private int likes;
-    private int  scraps;
+    private MySolutionDetailMainSolution solution;
     // 댓글
     private List<SolutionDetailComment> comments;
-
     // 추천 풀이
     private List<MySolutionRecommendedSolution> recommendedSolutionTitle;
-
     // 사이드바 이 문제에 대한 풀이 3가지, 스크랩한 풀이 3가지
     private List<MySolutionDetailSolution> mySolutionList;
     private List<MySolutionDetailSolution> myScrapSolutionList;
     public static MySolutionDetailResponse from(
-            MySolutionDetailProblem problem, Solution solution, List<SolutionDetailComment> comments, int likeCount, int scrapCount,
+            MySolutionDetailProblem problem, MySolutionDetailMainSolution solution, List<SolutionDetailComment> comments,
             List<MySolutionDetailSolution> solutions, List<MySolutionDetailSolution> scraps){
         return MySolutionDetailResponse.builder()
                 .problem(problem)
-                .description(solution.getDescription())
-                .code(solution.getCode().split("\n"))
-                .likes(likeCount)
-                .scraps(scrapCount)
+                .solution(solution)
                 .comments(comments)
                 .mySolutionList(solutions)
                 .myScrapSolutionList(scraps)
