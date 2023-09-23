@@ -7,39 +7,9 @@ import { FilterBar } from '../../components/FilterBar';
 import { QuestionForm } from '../../components/Question';
 import { Pagination } from '../../components/Pagination/Pagination';
 import questions from '../../db/question.json';
+import sort from '../../db/autocomplete.json';
 import { Provider, atom, useAtom } from 'jotai';
 import axios from 'axios';
-
-const ALGORITHMS = [
-  { value: "ALL", name: "알고리즘" },
-  { value: "BUBBLE_SORT", name: "버블정렬" },
-  { value: "SELECTION_SORT", name: "선택정렬" },
-  { value: "INSERTION_SORT", name: "삽입정렬" },
-  { value: "HEAP_SORT", name: "힙정렬" },
-  { value: "MERGE_SORT", name: "합병정렬" },
-  { value: "QUICK_SORT", name: "퀵정렬" },
-  { value: "LINEAR_SEARCH", name: "선형탐색" },
-  { value: "BINARY_SEARCH", name: "이진탐색" },
-  { value: "BFS", name: "너비우선탐색" },
-  { value: "DFS", name: "깊이우선탐색" },
-  { value: "DIJKSTRA", name: "데이크스트라"}
-];
-
-const DATASTRUCTURE = [
-  { value: "ALL", name: "자료구조" },
-  { value: "LIST", name: "리스트" },
-  { value: "ARRAY", name: "배열" },
-  { value: "STACK", name: "스택" },
-  { value: "QUEUE", name: "큐" },
-  { value: "MAP", name: "맵" },
-  { value: "HEAP", name: "힙" }
-];
-
-const LEVEL = [
-  { value: "LATEST", name: "최신순"},
-  { value: "LIKES", name: "관심순" },
-  { value: "VIEWS", name: "조회순" }
-];
 
 const questionAtom = atom(questions);
 
@@ -91,9 +61,9 @@ export const Problems = () => {
             justify-content: space-between;
             z-index: 2;
         `}>
-          <FilterBar options={ALGORITHMS}/>
-          <FilterBar options={DATASTRUCTURE}/>
-          <FilterBar options={LEVEL}/>
+          <FilterBar options={sort.ALGORITHM}/>
+          <FilterBar options={sort.DATASTRUCTURE}/>
+          <FilterBar options={sort.LEVEL}/>
         </div>
         <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
           <QuestionForm data={Questions}/>
