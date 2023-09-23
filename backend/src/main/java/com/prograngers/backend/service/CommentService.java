@@ -21,7 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
+
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
 
 @RequiredArgsConstructor
 @Service
