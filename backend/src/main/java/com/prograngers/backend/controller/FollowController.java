@@ -5,6 +5,7 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,4 +26,11 @@ public class FollowController {
         return ResponseEntity.noContent().build();
     }
 
+    @Login
+    @DeleteMapping("/members/{memberId}/following")
+    public ResponseEntity<Void> unfollow(@LoggedInMember Long followerId,
+                                         @PathVariable("memberId") Long followingId) {
+        followService.unfollow(followerId, followingId);
+        return ResponseEntity.noContent().build();
+    }
 }
