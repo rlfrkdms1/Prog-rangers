@@ -21,4 +21,5 @@ public class ShowMyCommentsResponse {
         return new ShowMyCommentsResponse(commentPage.hasNext(),
                 commentPage.stream().map(comment -> CommentWithSolutionInfo.from(comment)).collect(Collectors.toList()));
     }
+
 }
