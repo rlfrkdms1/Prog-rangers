@@ -8,6 +8,7 @@ import { QuestionForm } from '../../components/Question';
 import { Pagination } from '../../components/Pagination/Pagination';
 import questions from '../../db/question.json';
 import { Provider, atom, useAtom } from 'jotai';
+import axios from 'axios';
 
 const ALGORITHMS = [
   { value: "ALL", name: "알고리즘" },
@@ -45,20 +46,20 @@ const questionAtom = atom(questions);
 export const Problems = () => {
   const [ page, setPage ] = useState(1);
   const [ Questions, setQuestions ] = useAtom(questionAtom);
-  const itemsPerPage = 5;
-  // const LAST_PAGE = Questions.length % 5 === 0 ? parseInt(Questions.length / 5) : parseInt(Questions.length / 5) + 1;
-  const totalQuestions = questions.length;
-  const totalPages = Math.ceil(totalQuestions / itemsPerPage);
+  const [ totalPages, setTotalPages ] = useState(1);
+
+  const AllQuestions = async() => {
+    const response = await axios.get(`http://13.124.131.171:8080/prog-rangers/problems?page=${page-1}`);
+    setQuestions(response.data.problems);
+    setTotalPages(response.data.totalCount);
+  }
 
   const handlePageChange = (e, page) => {
     setPage(page);
   };
 
   useEffect(() => {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentQuestions = questions.slice(startIndex, endIndex);
-    setQuestions(currentQuestions);
+    AllQuestions();
   }, [page]);
 
   return (

@@ -15,7 +15,12 @@ export const QuestionForm = ({data}) => {
             padding-left: 8px; 
             font-weight: bold;
             font-size: 20px;
-            color: #303030;`
+            color: #303030;
+            &:hover{
+              cursor: pointer;
+              text-decoration: underline;
+            }
+            `
           }            
           >
             {item.title}
