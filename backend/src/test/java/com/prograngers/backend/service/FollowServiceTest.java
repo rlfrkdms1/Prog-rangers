@@ -32,24 +32,6 @@ class FollowServiceTest {
     private FollowService followService;
 
     @Test
-    @DisplayName("이미 팔로우 내역이 있는 회원을 팔로우 했을 때 예외가 터진다.")
-    void 중복_팔로우() {
-        Long followerId = 1L;
-        Long followingId = 2L;
-
-        given(memberRepository.existsById(followerId)).willReturn(true);
-        given(memberRepository.existsById(followingId)).willReturn(true);
-        given(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)).willReturn(true);
-
-        assertAll(
-                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(AlreadyFollowException.class),
-                () -> verify(memberRepository).existsById(followerId),
-                () -> verify(memberRepository).existsById(followingId),
-                () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId)
-        );
-    }
-
-    @Test
     @DisplayName("팔로우와 팔로워가 주어지면 팔로우를 할 수 있다.")
     void 팔로우_하기() {
         Long followerId = 1L;
@@ -68,6 +50,28 @@ class FollowServiceTest {
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId),
                 () -> verify(followRepository).save(follow)
+        );
+    }
+
+    @Test
+    @DisplayName("팔로우를 끊을 수 있다.")
+    void 팔로우_끊기() {
+        Long followerId = 1L;
+        Long followingId = 2L;
+        Follow follow = Follow.builder().followerId(followerId).followingId(followingId).build();
+
+        given(memberRepository.existsById(followerId)).willReturn(true);
+        given(memberRepository.existsById(followingId)).willReturn(true);
+        given(followRepository.findByFollowerIdAndFollowingId(followerId, followingId)).willReturn(Optional.of(follow));
+        willDoNothing().given(followRepository).delete(follow);
+
+        followService.unfollow(followerId, followingId);
+
+        assertAll(
+                () -> verify(memberRepository).existsById(followerId),
+                () -> verify(memberRepository).existsById(followingId),
+                () -> verify(followRepository).findByFollowerIdAndFollowingId(followerId, followingId),
+                () -> verify(followRepository).delete(follow)
         );
     }
 
@@ -98,6 +102,24 @@ class FollowServiceTest {
     }
 
     @Test
+    @DisplayName("이미 팔로우 내역이 있는 회원을 팔로우 했을 때 예외가 터진다.")
+    void 중복_팔로우() {
+        Long followerId = 1L;
+        Long followingId = 2L;
+
+        given(memberRepository.existsById(followerId)).willReturn(true);
+        given(memberRepository.existsById(followingId)).willReturn(true);
+        given(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)).willReturn(true);
+
+        assertAll(
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(AlreadyFollowException.class),
+                () -> verify(memberRepository).existsById(followerId),
+                () -> verify(memberRepository).existsById(followingId),
+                () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId)
+        );
+    }
+
+    @Test
     @DisplayName("팔로우 되어있지 않은 경우 팔로우를 끊으려 하면 예외가 터진다.")
     void 팔로우_내역이_없는데_언팔할_경우() {
 
@@ -115,26 +137,5 @@ class FollowServiceTest {
         );
     }
 
-    @Test
-    @DisplayName("팔로우를 끊을 수 있다.")
-    void 팔로우_끊기() {
-        Long followerId = 1L;
-        Long followingId = 2L;
-        Follow follow = Follow.builder().followerId(followerId).followingId(followingId).build();
-
-        given(memberRepository.existsById(followerId)).willReturn(true);
-        given(memberRepository.existsById(followingId)).willReturn(true);
-        given(followRepository.findByFollowerIdAndFollowingId(followerId, followingId)).willReturn(Optional.of(follow));
-        willDoNothing().given(followRepository).delete(follow);
-
-        followService.unfollow(followerId, followingId);
-
-        assertAll(
-                () -> verify(memberRepository).existsById(followerId),
-                () -> verify(memberRepository).existsById(followingId),
-                () -> verify(followRepository).findByFollowerIdAndFollowingId(followerId, followingId),
-                () -> verify(followRepository).delete(follow)
-        );
-    }
 
 }
