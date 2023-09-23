@@ -1,6 +1,9 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.solution.response.MySolutionDetailMainSolution;
+import com.prograngers.backend.dto.solution.response.MySolutionDetailProblem;
 import com.prograngers.backend.dto.solution.response.MySolutionDetailResponse;
+import com.prograngers.backend.dto.solution.response.MySolutionDetailSolution;
 import com.prograngers.backend.dto.solution.response.SolutionDetailComment;
 import com.prograngers.backend.dto.solution.response.SolutionDetailProblem;
 import com.prograngers.backend.dto.solution.response.SolutionDetailSolution;
@@ -40,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -194,22 +198,62 @@ public class SolutionService {
     }
 
     public MySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
+        Member member = findMemberById(memberId);
 
-        // dto에서 쿼리가 나가지 않게 서비스에서 쿼리는 다 나가고 dto에서는 생성만. 지연로딩
+        // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
+        List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
+        // 화면의 메인에 보여질 풀이
+        Solution mainSolution = chooseMainSolution(solutionId, solutionList);
+        // 문제
+        Problem problem = mainSolution.getProblem();
+        // 메인 풀이 좋아요 수
+        int likes = likesRepository.findAllBySolution(mainSolution).size();
+        // 메인 풀이 스크랩 수
+        int scraps = solutionRepository.findAllByScrapSolution(mainSolution).size();
 
-        // 내가 가장 최근에 푼 풀이 3개
-        List<Solution> solutionList = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(findMemberById(memberId));
+        //문제
+        MySolutionDetailProblem problemResponse = MySolutionDetailProblem.from(problem.getTitle(), problem.getOjName());
+        //메인 풀이
+        MySolutionDetailMainSolution mainSolutionResponse = MySolutionDetailMainSolution.from(
+                Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()),
+                mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
 
-        // solutionList.get(0).getProblem();
+        //메인 풀이의 댓글 엔티티 리스트
+        List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
+        //부모가 없는 댓글들 더하기
+        List<SolutionDetailComment> mainSolutionCommentsResponse = mainSolutionComments.stream().filter((comment -> comment.getParentId().equals(null)))
+                .map(comment -> SolutionDetailComment.from(comment, new ArrayList<>(),checkCommentIsMine(memberId, comment)))
+                .collect(Collectors.toList());
+        // 부모가 있는 댓글들 더하기
+        mainSolutionComments.stream().filter(comment -> !comment.getParentId().equals(null))
+                .forEach(comment -> addReplyComments(mainSolutionCommentsResponse,comment,memberId));
 
-        // dto이름 dto = dto(problem.getTitle(), problem.get
+        // 사이드에 있는 풀이 목록
+        List<MySolutionDetailSolution> sideSolutions = solutionList.stream()
+                .map(solution -> MySolutionDetailSolution.from(solution.getTitle(), solution.getId()))
+                .collect(Collectors.toList());
+
+        // 스크랩한 풀이 목록
+        /**
+         *  일단 보류 !!
+         */
 
 
+        return MySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,sideSolutions,null);
+    }
 
+    private Solution chooseMainSolution(Long solutionId, List<Solution> solutionList) {
+        if (solutionId.equals(null)){
+            return solutionList.get(0);
+        }
 
+        for (Solution solution : solutionList){
+            if (solution.getId().equals(solutionId)){
+                return solution;
+            }
+        }
 
-
-
+        throw new SolutionNotFoundException();
     }
 
 
