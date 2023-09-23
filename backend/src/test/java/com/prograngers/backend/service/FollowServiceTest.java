@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.exception.badrequest.AlreadyFollowException;
+import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,6 +93,24 @@ class FollowServiceTest {
                 () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(MemberNotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId)
+        );
+    }
+
+    @Test
+    @DisplayName("팔로우 되어있지 않은 경우 팔로우를 끊으려 하면 예외가 터진다.")
+    void 팔로우_내역이_없는데_언팔할_경우() {
+
+        Long followerId = 1L;
+        Long followingId = 2L;
+        given(memberRepository.existsById(followerId)).willReturn(true);
+        given(memberRepository.existsById(followingId)).willReturn(true);
+        given(followRepository.findByFollowerIdAndFollowingId(followerId, followingId)).willReturn(Optional.empty());
+
+        assertAll(
+                () -> assertThatThrownBy(() -> followService.unfollow(followerId, followingId)).isExactlyInstanceOf(FollowNotFoundException.class),
+                () -> verify(memberRepository).existsById(followerId),
+                () -> verify(memberRepository).existsById(followingId),
+                () -> verify(followRepository).findByFollowerIdAndFollowingId(followerId, followingId)
         );
     }
 }
