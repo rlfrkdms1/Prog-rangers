@@ -28,4 +28,11 @@ public class FollowService {
         Follow follow = Follow.builder().followingId(followingId).followerId(followerId).build();
         followRepository.save(follow);
     }
+
+    @Transactional
+    public void unfollow(Long followerId, Long followingId) {
+        if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
+            throw new MemberNotFoundException();
+        }
+    }
 }
