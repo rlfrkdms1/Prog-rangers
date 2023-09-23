@@ -17,20 +17,20 @@ import {
 
 export const Profile = () => {
 
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const apiUrl = 'http://localhost:8080/prog-rangers/members/profile/7';
+  //   const apiUrl = 'http://localhost:8080/prog-rangers/members/profile/7';
 
-    axios.get(apiUrl)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, []);
+  //   axios.get(apiUrl)
+  //     .then((response) => {
+  //       setData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('API 요청 오류:', error);
+  //     });
+  // }, []);
 
     return (
     <div css={css`
@@ -38,17 +38,18 @@ export const Profile = () => {
 
       <div css={css`
       ${LeftBody}`}>
-        {data.length > 0 && data.map((item, index) => (
-        <div key={index}
+        {/* {data.length > 0 && data.map((item, index) => (
+        <div key={index} */}
+        <div
           css={css`
           width: 250px;
           height: 250px;
           border-radius: 250px;
           object-fit: cover;
           border: 1px solid black;
-          `}> API 1 {item.photo}
+          `}> API 1
           {/* {item.photo} */} </div> 
-          ))}
+          {/* ))} */}
           
 
           <div css={css`
