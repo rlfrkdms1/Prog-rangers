@@ -86,7 +86,7 @@ export const Solutions = () => {
         <div css={css`${fontSize24}`}>
           원하는 조건으로 풀이를 찾아보세요
           </div>
-          <div classname="filter"
+          <div className="filter"
             css={css`${filterStyle}`}>
                 <FilterBar options={LANGUAGE}/>
                 <FilterBar options={ALGORITHMS}/>

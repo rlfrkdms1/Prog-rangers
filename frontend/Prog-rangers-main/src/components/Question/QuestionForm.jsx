@@ -1,13 +1,18 @@
 import { css } from "@emotion/react";
 import questions from '../../db/question.json';
 import { ojNameTag, tags } from "./tagsform";
+import { useNavigate } from 'react-router-dom';
 
 export const QuestionForm = ({data}) => {
-  
+  const navigate = useNavigate();
+  const onClickSols = (index) => {
+    navigate(`/solutions/${index}`);
+  }
+
   return(
     <>
       {data.map((item,index) => (
-        <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
+        <div key={index} onClick={(e) => onClickSols(index)} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
           <div css={css`
             height: 29px; 
             width: 100%; 
