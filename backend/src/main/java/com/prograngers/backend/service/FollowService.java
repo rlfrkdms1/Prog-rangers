@@ -27,7 +27,7 @@ public class FollowService {
     }
 
     private void validAlreadyFollow(Long followerId, Long followingId) {
-        if (followRepository.findByFollowerIdAndFollowingId(followerId, followingId).isPresent()) {
+        if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             throw new AlreadyFollowException();
         }
     }
