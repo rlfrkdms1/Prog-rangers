@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.solution.response.MySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionDetailComment;
 import com.prograngers.backend.dto.solution.response.SolutionDetailProblem;
 import com.prograngers.backend.dto.solution.response.SolutionDetailSolution;
@@ -190,6 +191,25 @@ public class SolutionService {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
         return SolutionListResponse.from(solutions,pageable.getPageNumber());
+    }
+
+    public MySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
+
+        // dto에서 쿼리가 나가지 않게 서비스에서 쿼리는 다 나가고 dto에서는 생성만. 지연로딩
+
+        // 내가 가장 최근에 푼 풀이 3개
+        List<Solution> solutionList = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(findMemberById(memberId));
+
+        // solutionList.get(0).getProblem();
+
+        // dto이름 dto = dto(problem.getTitle(), problem.get
+
+
+
+
+
+
+
     }
 
 
