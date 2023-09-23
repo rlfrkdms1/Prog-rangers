@@ -1,6 +1,6 @@
 package com.prograngers.backend.repository.review;
 
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
