@@ -4,6 +4,7 @@ import com.prograngers.backend.TestConfig;
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.support.RepositoryTest;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +20,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
+@RepositoryTest
 @Slf4j
-@Transactional
-@Import(TestConfig.class)
 class FollowRepositoryTest {
+
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -55,7 +54,7 @@ class FollowRepositoryTest {
         );
     }
 
-    private static Follow createFollow(Member member1, Member member2) {
+    private Follow createFollow(Member member1, Member member2) {
         return Follow.builder().followerId(member1.getId()).followingId(member2.getId()).build();
     }
 
