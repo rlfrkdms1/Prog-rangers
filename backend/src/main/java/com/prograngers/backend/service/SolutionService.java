@@ -4,6 +4,7 @@ import com.prograngers.backend.dto.solution.response.MySolutionDetailMainSolutio
 import com.prograngers.backend.dto.solution.response.MySolutionDetailProblem;
 import com.prograngers.backend.dto.solution.response.MySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.MySolutionDetailSolution;
+import com.prograngers.backend.dto.solution.response.MySolutionRecommendedSolution;
 import com.prograngers.backend.dto.solution.response.SolutionDetailComment;
 import com.prograngers.backend.dto.solution.response.SolutionDetailProblem;
 import com.prograngers.backend.dto.solution.response.SolutionDetailSolution;
@@ -198,7 +199,10 @@ public class SolutionService {
     }
 
     public MySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
-        Member member = findMemberById(memberId);
+        // member 검증
+        findMemberById(memberId);
+        // solution 검증
+        if (solutionId!=null) findSolutionById(solutionId);
 
         // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
         List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
@@ -236,13 +240,20 @@ public class SolutionService {
                 .map(solution -> MySolutionDetailSolution.from(solution.getTitle(), solution.getId()))
                 .collect(Collectors.toList());
 
+        // 추천 풀이 : 일단 제목주기, 좋아요 기준으로 가져옴
+        List<Solution> recommendedSolutions = solutionRepository.findTop3SolutionOfProblemOrderByLikesDesc(problem.getId());
+        List<MySolutionRecommendedSolution> recommendedSolutionList = recommendedSolutions.stream()
+                .map(solution -> MySolutionRecommendedSolution.from(solution.getId(), solution.getTitle()))
+                .collect(Collectors.toList());
+
+
         // 스크랩한 풀이 목록
         /**
          *  일단 보류 !!
          */
 
 
-        return MySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,sideSolutions,null);
+        return MySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,recommendedSolutionList,sideSolutions,null);
     }
 
     private Solution chooseMainSolution(Long solutionId, List<Solution> solutionList) {
