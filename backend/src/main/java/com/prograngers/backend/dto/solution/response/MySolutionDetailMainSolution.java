@@ -10,14 +10,16 @@ import java.util.List;
 @Getter
 @Setter
 public class MySolutionDetailMainSolution {
+    private String title;
     private List<Object> tags;
     private String description;
     private String[] code;
     private int likes;
     private int  scraps;
 
-    public static MySolutionDetailMainSolution from(List<Object> tags, String description, String[] code, int likes, int scraps){
+    public static MySolutionDetailMainSolution from(String title, List<Object> tags, String description, String[] code, int likes, int scraps){
         return MySolutionDetailMainSolution.builder()
+                .title(title)
                 .tags(tags)
                 .description(description)
                 .code(code)

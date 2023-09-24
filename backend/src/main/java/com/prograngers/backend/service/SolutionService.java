@@ -218,7 +218,7 @@ public class SolutionService {
 
         //메인 풀이
         MySolutionDetailMainSolution mainSolutionResponse = MySolutionDetailMainSolution.from(
-                Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()),
+                mainSolution.getTitle(),Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()),
                 mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
 
         //메인 풀이의 댓글 엔티티 리스트
