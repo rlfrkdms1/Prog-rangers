@@ -14,4 +14,11 @@ import lombok.Setter;
 public class MySolutionRecommendedSolution {
     private Long id;
     private String solutionName;
+
+    public static MySolutionRecommendedSolution from(Long id, String solutionName){
+        return MySolutionRecommendedSolution.builder()
+                .id(id)
+                .solutionName(solutionName)
+                .build();
+    }
 }

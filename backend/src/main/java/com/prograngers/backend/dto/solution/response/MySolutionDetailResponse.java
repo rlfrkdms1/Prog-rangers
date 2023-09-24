@@ -24,12 +24,13 @@ public class MySolutionDetailResponse {
     // 댓글
     private List<SolutionDetailComment> comments;
     // 추천 풀이
-    private List<MySolutionRecommendedSolution> recommendedSolutionTitle;
+    private List<MySolutionRecommendedSolution> recommendedSolutions;
     // 사이드바 이 문제에 대한 풀이 3가지, 스크랩한 풀이 3가지
     private List<MySolutionDetailSolution> mySolutionList;
     private List<MySolutionDetailSolution> myScrapSolutionList;
     public static MySolutionDetailResponse from(
             MySolutionDetailProblem problem, MySolutionDetailMainSolution solution, List<SolutionDetailComment> comments,
+            List<MySolutionRecommendedSolution> recommendedSolutions,
             List<MySolutionDetailSolution> solutions, List<MySolutionDetailSolution> scraps){
         return MySolutionDetailResponse.builder()
                 .problem(problem)
@@ -37,6 +38,7 @@ public class MySolutionDetailResponse {
                 .comments(comments)
                 .mySolutionList(solutions)
                 .myScrapSolutionList(scraps)
+                .recommendedSolutions(recommendedSolutions)
                 .build();
     }
 }
