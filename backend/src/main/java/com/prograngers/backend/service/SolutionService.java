@@ -202,6 +202,8 @@ public class SolutionService {
 
         // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
         List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
+        log.info("solutionList size : {}",solutionList.size());
+
         // 화면의 메인에 보여질 풀이
         Solution mainSolution = chooseMainSolution(solutionId, solutionList);
         // 문제
@@ -213,6 +215,7 @@ public class SolutionService {
 
         //문제
         MySolutionDetailProblem problemResponse = MySolutionDetailProblem.from(problem.getTitle(), problem.getOjName());
+
         //메인 풀이
         MySolutionDetailMainSolution mainSolutionResponse = MySolutionDetailMainSolution.from(
                 Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()),
@@ -221,11 +224,11 @@ public class SolutionService {
         //메인 풀이의 댓글 엔티티 리스트
         List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
         //부모가 없는 댓글들 더하기
-        List<SolutionDetailComment> mainSolutionCommentsResponse = mainSolutionComments.stream().filter((comment -> comment.getParentId().equals(null)))
+        List<SolutionDetailComment> mainSolutionCommentsResponse = mainSolutionComments.stream().filter((comment -> comment.getParentId()==null))
                 .map(comment -> SolutionDetailComment.from(comment, new ArrayList<>(),checkCommentIsMine(memberId, comment)))
                 .collect(Collectors.toList());
         // 부모가 있는 댓글들 더하기
-        mainSolutionComments.stream().filter(comment -> !comment.getParentId().equals(null))
+        mainSolutionComments.stream().filter(comment -> comment.getParentId()!=null)
                 .forEach(comment -> addReplyComments(mainSolutionCommentsResponse,comment,memberId));
 
         // 사이드에 있는 풀이 목록
@@ -243,16 +246,17 @@ public class SolutionService {
     }
 
     private Solution chooseMainSolution(Long solutionId, List<Solution> solutionList) {
-        if (solutionId.equals(null)){
+        if (solutionList==null){
+            return null;
+        }
+        if (solutionId==null){
             return solutionList.get(0);
         }
-
         for (Solution solution : solutionList){
             if (solution.getId().equals(solutionId)){
                 return solution;
             }
         }
-
         throw new SolutionNotFoundException();
     }
 

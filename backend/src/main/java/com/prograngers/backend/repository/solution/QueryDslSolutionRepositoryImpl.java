@@ -56,18 +56,19 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
 
     @Override
     public List<Solution> findAllSolutionOfNewestProblem(Long memberId){
-        QSolution subSolution = new QSolution("subSolution");
+       //  QSolution subSolution = new QSolution("subSolution");
+
+        Long recentProblemId = jpaQueryFactory
+                .select(solution.problem.id)
+                .from(solution)
+                .orderBy(solution.createdAt.desc())
+                .limit(1)
+                .fetchOne();
+
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
-                .where(solution.problem.id.in(
-                        JPAExpressions
-                                .select(subSolution.problem.id)
-                                .from(subSolution)
-                                .where(subSolution.member.id.eq(memberId))
-                                .orderBy(subSolution.createdAt.desc())
-                                .limit(1)
-                ))
+                .where(solution.problem.id.eq(recentProblemId))
                 .orderBy(solution.createdAt.desc())
                 .fetch();
     }
