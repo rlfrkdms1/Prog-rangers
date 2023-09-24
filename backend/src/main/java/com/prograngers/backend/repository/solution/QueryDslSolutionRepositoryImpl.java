@@ -72,6 +72,18 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .orderBy(solution.createdAt.desc())
                 .fetch();
     }
+
+    public List<Solution> findTop3SolutionOfProblemOrderByLikesDesc(Long problemId){
+        return jpaQueryFactory
+                .select(solution)
+                .from(likes)
+                .rightJoin(likes.solution,solution)
+                .groupBy(solution)
+                .where(solution.problem.id.eq(problemId))
+                .orderBy(likes.count().desc(),solution.createdAt.desc())
+                .limit(3)
+                .fetch();
+    }
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
         return dataStructure != null ? solution.dataStructure.eq(dataStructure) : null;
     }

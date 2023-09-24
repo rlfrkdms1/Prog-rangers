@@ -16,6 +16,7 @@ public interface SolutionRepository extends JpaRepository<Solution, Long>, Query
     List<Solution> findAllByScrapSolution(Solution solution);
     List<Solution> findTop3ByMemberOrderByCreatedAtDesc(Member member);
 
+
     @Query("select s from Solution s join Follow f on s.member.id = f.followingId where f.followerId = :memberId order by s.createdAt desc limit 5")
     List<Solution> findFollowingsRecentSolutions(@Param("memberId") Long memberId);
 
