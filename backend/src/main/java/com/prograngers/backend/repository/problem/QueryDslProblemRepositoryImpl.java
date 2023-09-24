@@ -61,9 +61,11 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
     private OrderSpecifier<?> orderCondition(SortConstant orderBy) {
         if (orderBy.equals(NEWEST)) {
             return solution.createdAt.desc();
-        } else if (orderBy.equals(SOLUTIONS)) {
+        }
+        if (orderBy.equals(SOLUTIONS)) {
             return problem.solutions.size().desc();
-        } else throw new SortTypeNotFoundException();
+        }
+        throw new SortTypeNotFoundException();
     }
 
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {

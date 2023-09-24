@@ -98,7 +98,7 @@ public class AuthService {
         return issueToken(memberId);
     }
 
-    public RefreshToken validRefreshToken(String refreshToken) {
+    private RefreshToken validRefreshToken(String refreshToken) {
         return refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(RefreshTokenNotFoundException::new);
     }

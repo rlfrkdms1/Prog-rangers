@@ -3,7 +3,7 @@ package com.prograngers.backend.support.fixture;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.Notification.NotificationBuilder;
 import com.prograngers.backend.entity.NotificationType;
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
