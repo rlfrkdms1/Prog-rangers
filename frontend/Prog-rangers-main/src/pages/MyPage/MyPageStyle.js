@@ -54,16 +54,16 @@ export const Divline = css`
 
 export const RecentlyTitle = css`
   height: 29px; 
-  width: 100%; 
-  margin-top: 17px; 
-  padding-left: 20px; 
+  width: 100%;  
   font-weight: bold;
   font-size: 16px;
   color: ${theme.colors.dark2};
 `;
 
 export const ojName = css`
-  display: flex;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   padding: 5px 15px;
   border-radius: 20px;
   color: white;

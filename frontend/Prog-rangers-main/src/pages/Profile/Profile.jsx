@@ -17,20 +17,20 @@ import {
 
 export const Profile = () => {
 
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   const apiUrl = 'http://localhost:8080/prog-rangers/members/profile/7';
+    const apiUrl = 'http://13.124.131.171:8080/prog-rangers/members/profile/test';
 
-  //   axios.get(apiUrl)
-  //     .then((response) => {
-  //       setData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('API 요청 오류:', error);
-  //     });
-  // }, []);
+    axios.get(apiUrl)
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error('API 요청 오류:', error);
+      });
+  }, []);
 
     return (
     <div css={css`
@@ -38,32 +38,28 @@ export const Profile = () => {
 
       <div css={css`
       ${LeftBody}`}>
-        {/* {data.length > 0 && data.map((item, index) => (
-        <div key={index} */}
-        <div
-          css={css`
+        <div css={css`
           width: 250px;
           height: 250px;
           border-radius: 250px;
           object-fit: cover;
           border: 1px solid black;
-          `}> API 1
-          {/* {item.photo} */} </div> 
-          {/* ))} */}
+          `}>
+          {data.photo} 
+          </div> 
           
-
-          <div css={css`
+        <div css={css`
           ${fontSize20}
           ${alignCenter}
           margin-top: 8px;`}>
-          API 2 {/* {item.nickname} */}
+          {data.nickname}
           </div>
 
           <div css={css`
           ${fontSize14}
           ${alignCenter}
           margin-top: 7px;`}>
-            API 3 {/* {item.introduction} */}
+          {data.introduction}
           </div>
 
           <button css={css`
@@ -76,20 +72,20 @@ export const Profile = () => {
           background-color: ${theme.colors.main30}
           `}>팔로우</button>
 
-          <div css={css`
+        <div css={css`
           display: flex;
           margin-top: 10px;
-          margin-left: 10px;
+          justify-content: center;
           gap: 10px;
           `}>
             <div css={css`
             ${fontSizebold16}`}> 팔로우 </div>
-            <div> API 4 {/* {item.follow} */} </div>
+            <div> {data.follow} </div>
 
             <div css={css`
             ${fontSizebold16}
             margin-left: 15px;`}> 팔로잉 </div>
-            <div> API 5 {/* {item.following} */} </div>
+            <div> {data.following} </div>
           </div>
 
           <div css={css`
@@ -105,13 +101,12 @@ export const Profile = () => {
               <img src={github} alt="GitHub Logo" />
             </div>
 
-            <div 
-              css={css`
+            <div css={css`
               font-size: 16px;
               font-weight: 400;
               color: ${theme.colors.light1};
               `}> 
-              API 6 {/* {item.github} */}
+              {data.github}
             </div>
           </div>
 
@@ -132,8 +127,7 @@ export const Profile = () => {
             <img src={achievemark} alt="achieve_mark"/>
             </div>
             달성
-          </div>
-        
+          </div>  
       </div>
 
  
@@ -145,8 +139,7 @@ export const Profile = () => {
         `}>풀이</div>
         
         <SolvingList/>
-         
-    </div>
+      </div>
   </div>
   )
 }

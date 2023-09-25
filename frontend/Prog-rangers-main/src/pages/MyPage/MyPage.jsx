@@ -4,7 +4,6 @@ import { theme } from '../../components/Header/theme';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { LeftBody, MainBody, RightBody } from './MainBody';
 import axios from 'axios';
-import { atom, useAtom } from 'jotai';
 import { 
   fontSize12,
   fontSize14,
@@ -17,43 +16,55 @@ import {
   ojName,
   RecentlyTitle
  } from './MyPageStyle';
- 
-const studyAtom= atom([])
-const myRecentAtom = atom([])
-const followingAtom = atom([])
 
 export const MyPage = () => {
 
   // API 가져오기
-  const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useAtom(studyAtom);
-  const [myRecentSolutionInfos, setMyRecentSolutionInfos] = useAtom(myRecentAtom);
-  const [followingRecentSolutionInfos, setFollowingRecentSolutionInfos] = useAtom(followingAtom);
-  
+  const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState({
+    day: [],
+    studied: []
+  });
+  const [myRecentSolutionInfos, setMyRecentSolutionInfos] = useState([]);
+  const [followingRecentSolutionInfos, setFollowingRecentSolutionInfos] = useState([]);
+  const [notificationInfoList, setNotificationInfoList] = useState([]);
+
   // MonthlyStudyCalendar
   const [value, setValue] = useState(new Date());
-
+  
   useEffect(() => {
-    const apiUrl = 'http://13.124.131.171:8080/prog-rangers/mypage/dashboard?month=SEP&year=2023';
+    
+    const token = 'eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk1NTY4MDU0LCJpYXQiOjE2OTU1MzIwNTQsImlzcyI6IlByb2dyYW5nZXJzIn0.HMVpVlOM5NNNnnuKcB0VOr4415zsElzsu1r8t4jAjyUFroZJ71Gn5VwH0mIbkgQssJw2m3KyIzMtDf7IGSV1lQ';
+    
+    fetch("http://13.124.131.171:8080/prog-rangers/mypage/dashboard?date=2023-09", 
+    {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`},
+    })
+    .then((response) => response.json())
+    .then((json) => {
 
-    axios.get(apiUrl)
-      .then((response) => {
-        setMonthlyStudyCalendar(response.data.setMonthlyStudyCalendar);
-
-        const sortedData = response.data.myRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
-        const top3Data = sortedData.slice(0, 3);
-        setMyRecentSolutionInfos(top3Data);
-
-        const sortedFollowingData = response.data.followingRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
-        const top5Data = sortedFollowingData.slice(0, 5);
-        setFollowingRecentSolutionInfos(top5Data);
-
-        const notificationInfoList = response.data.notificationInfoList;
-        setFollowingRecentSolutionInfos(notificationInfoList);
-      })
-      .catch((error) => {
-        console.error('API 요청 에러:', error);
-      });
+         // API 응답이 정상적일 때 데이터를 설정
+        setMonthlyStudyCalendar(json.monthlyStudyCalendar);
+        setMyRecentSolutionInfos(json.myRecentSolutionInfos || []);
+        setFollowingRecentSolutionInfos(json.followingRecentSolutionInfos || []);
+        setNotificationInfoList(json.notificationInfoList || []);
+        setValue(new Date());
+        
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+    
   }, []);
+
+  // const monthlyStudyCalendarData = monthlyStudyCalendar.data.setMonthlyStudyCalendar;
+  // const monthlyStudyCalendarArray = Array.from(monthlyStudyCalendarData);
+
+  const sortedData = myRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
+  const top3Data = sortedData.slice(0, 3);
+
+  const sortedFollowingData = followingRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
+  const top5Data = sortedFollowingData.slice(0, 5);
 
   const daysInMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
   const currentMonth = value.toLocaleString('en-US', { month: 'long' }).toUpperCase();
@@ -65,19 +76,18 @@ export const MyPage = () => {
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(value.getFullYear(), value.getMonth(), day);
   
-      // studyData = {"day": date , "studied": T/F }
-      const studyData = monthlyStudyCalendar.find((item) => item.day === day);
-      // 학습여부 T/F 저장
+      const studyData = Array.isArray(monthlyStudyCalendar.day) && monthlyStudyCalendar.day.includes(day);
+  
       const studiedFromMonthlyData = studyData ? studyData.studied : false;
-
-      const isCurrentDate = currentDate.getDate() === day; 
-      const StudyTrue = studiedFromMonthlyData && isCurrentDate;
+  
+      const isCurrentDate = currentDate.getDate() === day;
+      const studyTrue = studiedFromMonthlyData && isCurrentDate;
 
       calendar.push(
         <div key={currentDate.toISOString()}>
           <div css={css`
           ${dateStyle}
-          background-color: ${ StudyTrue ? '#70A9BC' : '#D9D9D9'};
+          background-color: ${ studyTrue ? '#70A9BC' : '#D9D9D9'};
           `}>
             {currentDate.getDate()}
             </div>
@@ -98,11 +108,36 @@ export const MyPage = () => {
   };
 
   // 최근 쓴 풀이 리스트업
-  const listRecently = myRecentSolutionInfos.map((item) => (
+   const listRecently = top3Data.map((item) => (
+    <div key={item.solutionId}>
+      <div css={css`${Divline} display: flex; align-items: center;  gap: 30px;`}>
+      <div css={`${RecentlyTitle} 
+      `}> {item.title} </div>
+      <div css={css`
+              height: 39px;; 
+              margin-top: 10px;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+            `}>
+        <div css={css`
+                  font-size: 12px;          
+                  ${ojName} 
+                  background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
+                  {item.ojName}
+                </div>
+              </div>
+            </div>
+            </div>
+   ));
+  
+
+  // 팔로우 최근 풀이 리스트업
+  const listFollwingRecently = top5Data.map((item) => (
     <div key={item.solutionId} css={`${Divline}`}>
+      <div css={css` display: flex; align-items: center;  gap: 30px;`}>
       <div css={`${RecentlyTitle}`}> {item.title} </div>
       <div css={css`
-              width: 100%; 
               height: 39px; 
               margin-top: 10px;
               display: flex;
@@ -111,32 +146,47 @@ export const MyPage = () => {
             `}>
         <div css={css`
                   ${ojName} 
+                  font-size : 12px;
+                  float: right;
                   background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
                   {item.ojName}
                 </div>
               </div>
+            </div>
             </div>
   ));
 
-  // 팔로우 최근 풀이 리스트업
-  const listFollwingRecently = followingRecentSolutionInfos.map((item) => (
-    <div key={item.solutionId} css={`${Divline}`}>
-      <div css={`${RecentlyTitle}`}> {item.title} </div>
+  const infoList = notificationInfoList.map((info) => (
+    <div key={info.solutionId}>
       <div css={css`
-              width: 100%; 
-              height: 39px; 
-              margin-top: 10px;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-            `}>
+              width: 345px;
+              height: 80px;
+              margin-top: 25px;
+              margin-left: 10px;
+              background-color: ${theme.colors.light3}`}>
         <div css={css`
-                  ${ojName} 
-                  background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
-                  {item.ojName}
-                </div>
-              </div>
-            </div>
+            display: flex;
+            align-items: center;
+            margin-top: 9px;
+            margin-left: 10px;
+            gap: 4px;
+            ${fontSize12}
+            `}>
+              {info.type}
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="12" viewBox="0 0 18 12" fill="none">
+              <rect width="18" height="12" rx="2" fill="#545454"/>
+              <path d="M0.75 1.875L9 6.375L17.25 1.875" stroke="white" strokeLinecap="round"/>
+            </svg>
+        </div>
+        <div css={css`
+            margin-left: 12px;
+            margin-right: 12px;
+            ${fontSize14}
+            `}>
+              {info.nickname}님이 {info.solutionTitle}풀이에 {info.type}을 남겼습니다: {info.content}
+        </div>
+      </div>
+    </div>
   ));
 
   return(
@@ -263,47 +313,11 @@ export const MyPage = () => {
             margin-top: 10px;
             background-color: ${theme.colors.light4}
             `}>
-              <div css={css`
-              width: 345px;
-              height: 80px;
-              margin-top: 25px;
-              margin-left: 10px;
-              background-color: ${theme.colors.light3}`}>
-                <div css={css`
-                display: flex;
-                align-items: center;
-                margin-top: 9px;
-                margin-left: 10px;
-                gap: 4px;
-                ${fontSize12}
-                `}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="12" viewBox="0 0 18 12" fill="none">
-                  <rect width="18" height="12" rx="2" fill="#545454"/>
-                  <path d="M0.75 1.875L9 6.375L17.25 1.875" stroke="white" strokeLinecap="round"/>
-                </svg>
-                  {/* {followingRecentSolutionInfos.map((info) => (
-                  <div key={info.solutionId}>
-                  {info.type} 
-                  </div>
-                  ))} */}
-                  댓글
-                </div>
-                <div css={css`
-                margin-left: 12px;
-                margin-right: 12px;
-                ${fontSize14}
-                `}>
-                  {followingRecentSolutionInfos.map((info) => (
-                  <div key={info.solutionId}>
-                  {info.nickname}님이 {info.solutionTitle}풀이에 {info.type}을 남겼습니다: {info.content}
-                  </div>
-                ))}
-              </div>
+            {infoList}
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   )
 }
