@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from "axios";
 
 export const KakaoReirect = () => {
   const location = useLocation();
