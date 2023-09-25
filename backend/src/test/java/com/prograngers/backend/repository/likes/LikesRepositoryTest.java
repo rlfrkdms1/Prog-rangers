@@ -38,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class LikesRepositoryTest {
 
     @Autowired
-    LikesRepository likesRepository;
+    private LikesRepository likesRepository;
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     @Autowired
-    ProblemRepository problemRepository;
+    private ProblemRepository problemRepository;
     @Autowired
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
 
     @Test
     @DisplayName("풀이로 좋아요를 조회한다")
@@ -102,19 +102,19 @@ class LikesRepositoryTest {
     }
 
 
-    Member 저장(Member member) {
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Problem 저장(Problem problem) {
+    private Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    Solution 저장(Solution solution) {
+    private Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
 
-    Likes 저장(Likes like) {return likesRepository.save(like);}
+    private Likes 저장(Likes like) {return likesRepository.save(like);}
 
 
 }

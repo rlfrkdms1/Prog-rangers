@@ -55,8 +55,9 @@ public class AuthController {
                 .body(LoginResponse.from(authResult));
     }
 
-    @GetMapping("/login/kakao")
+    @PostMapping("/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String code) {
+        log.info("kakao's authorization code is {}", code);
         AuthResult authResult = authService.kakaoLogin(code);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
@@ -64,7 +65,7 @@ public class AuthController {
                 .body(LoginResponse.from(authResult));
     }
 
-    @GetMapping("/login/google")
+    @PostMapping("/login/google")
     public ResponseEntity<LoginResponse> googleLogin(@RequestParam String code) {
         AuthResult authResult = authService.googleLogin(code);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
@@ -73,7 +74,7 @@ public class AuthController {
                 .body(LoginResponse.from(authResult));
     }
 
-    @GetMapping("/login/naver")
+    @PostMapping("/login/naver")
     public ResponseEntity<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state) {
         AuthResult authResult = authService.naverLogin(code, state);
         ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());

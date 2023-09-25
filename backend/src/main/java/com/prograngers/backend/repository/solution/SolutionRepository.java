@@ -2,9 +2,9 @@ package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +20,5 @@ public interface SolutionRepository extends JpaRepository<Solution, Long>, Query
     List<Solution> findFollowingsRecentSolutions(@Param("memberId") Long memberId);
 
     @Query("select distinct function('date_format', s.createdAt, '%d') from Solution s where s.member.id = :memberId and function('date_format', s.createdAt, '%m') = :month")
-    List<Integer> findAllByMonth(Long memberId, int month);
+    List<Integer> findAllByMonth(@Param("memberId") Long memberId, @Param("month") int month);
 }

@@ -2,14 +2,14 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.response.notification.NotificationResponse;
 import com.prograngers.backend.entity.Notification;
-import com.prograngers.backend.entity.Review;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
-import com.prograngers.backend.repository.CachedEventRepository;
-import com.prograngers.backend.repository.NotificationRepository;
-import com.prograngers.backend.repository.SseEmitterRepository;
+import com.prograngers.backend.repository.notification.CachedEventRepository;
+import com.prograngers.backend.repository.notification.NotificationRepository;
+import com.prograngers.backend.repository.notification.SseEmitterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
