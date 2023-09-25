@@ -2,7 +2,6 @@ package com.prograngers.backend.dto.review.request;
 
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.review.ReviewStatusConStant;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Getter
 @Setter

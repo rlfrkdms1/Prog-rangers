@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Entity
 @Getter
@@ -53,9 +53,9 @@ public class Review {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "status")
     @Enumerated(value = EnumType.STRING)
-    private ReviewStatusConStant status;
+    private ReviewStatusConstant status;
 
     public Review update(String content){
         this.content = content;
