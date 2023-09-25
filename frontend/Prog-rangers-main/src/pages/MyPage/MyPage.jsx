@@ -57,9 +57,6 @@ export const MyPage = () => {
     
   }, []);
 
-  // const monthlyStudyCalendarData = monthlyStudyCalendar.data.setMonthlyStudyCalendar;
-  // const monthlyStudyCalendarArray = Array.from(monthlyStudyCalendarData);
-
   const sortedData = myRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
   const top3Data = sortedData.slice(0, 3);
 
