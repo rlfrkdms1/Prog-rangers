@@ -44,7 +44,7 @@ export const MyPage = () => {
     .then((json) => {
 
          // API 응답이 정상적일 때 데이터를 설정
-        setMonthlyStudyCalendar(json.monthlyStudyCalendar);
+        setMonthlyStudyCalendar(json.monthlyStudyCalendar || []);
         setMyRecentSolutionInfos(json.myRecentSolutionInfos || []);
         setFollowingRecentSolutionInfos(json.followingRecentSolutionInfos || []);
         setNotificationInfoList(json.notificationInfoList || []);
@@ -75,11 +75,11 @@ export const MyPage = () => {
 
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(value.getFullYear(), value.getMonth(), day);
-  
-      const studyData = Array.isArray(monthlyStudyCalendar.day) && monthlyStudyCalendar.day.includes(day);
-  
-      const studiedFromMonthlyData = studyData ? studyData.studied : false;
-  
+      
+      const studyData = Array.isArray(monthlyStudyCalendar.day) ? monthlyStudyCalendar.day : [];
+      
+      const studiedFromMonthlyData = studyData.includes(day);
+
       const isCurrentDate = currentDate.getDate() === day;
       const studyTrue = studiedFromMonthlyData && isCurrentDate;
 
