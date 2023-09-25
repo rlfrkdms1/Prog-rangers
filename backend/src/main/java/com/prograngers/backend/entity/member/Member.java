@@ -1,26 +1,29 @@
 package com.prograngers.backend.entity.member;
 
 import com.prograngers.backend.support.Encrypt;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
@@ -46,8 +49,37 @@ public class Member {
 
     private String photo;
 
-    @Column(name = "currently_modified_at")
-    private LocalDate currentlyModifiedAt;
+    @CreatedDate
+    @Column(name = "password_modified_at")
+    private LocalDateTime passwordModifiedAt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(id, member.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Builder
+    public Member(Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt) {
+        this.socialId = socialId;
+        this.type = type;
+        this.nickname = nickname;
+        this.email = email;
+        this.github = github;
+        this.introduction = introduction;
+        this.password = password;
+        this.photo = photo;
+        this.passwordModifiedAt = passwordModifiedAt;
+    }
+
+
 
     private void updateNickName(String nickname) {
         if (nickname != null) {
@@ -76,7 +108,7 @@ public class Member {
     private void updatePassword(String password) {
         if (password != null) {
             this.password = Encrypt.encoding(password);
-            this.currentlyModifiedAt = LocalDate.now();
+            this.passwordModifiedAt = LocalDateTime.now();
         }
     }
 
