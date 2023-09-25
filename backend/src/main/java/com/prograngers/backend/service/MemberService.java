@@ -34,7 +34,7 @@ public class MemberService {
         return MemberAccountInfoResponse.from(findById(memberId));
     }
 
-    private Member findById(Long memberId) {
+    public Member findById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 

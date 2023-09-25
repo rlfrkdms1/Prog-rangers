@@ -95,7 +95,7 @@ class SolutionServiceTest {
     void 없는_풀이_조회() {
         // then
         assertThrows(SolutionNotFoundException.class
-            , () -> solutionService.findSolutionById(1L)
+            , () -> solutionService.findById(1L)
         );
     }
 

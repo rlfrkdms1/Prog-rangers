@@ -18,4 +18,5 @@ public class SolutionDetailProblem {
     public static SolutionDetailProblem from(Problem problem){
         return new SolutionDetailProblem(problem.getTitle(),problem.getOjName());
     }
+
 }

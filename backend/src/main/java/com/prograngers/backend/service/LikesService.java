@@ -30,7 +30,7 @@ public class LikesService {
     public void pushLike(Long memberId, Long solutionId) {
         Solution targetSolution = getTargetSolution(solutionId);
         Member targetMember = getTargetMember(memberId);
-        validLikeAlreadyExists(targetSolution, targetMember);
+        checkLikeAlreadyExists(targetSolution, targetMember);
         Likes likes = Likes.builder()
                 .solution(targetSolution)
                 .member(targetMember)
@@ -41,11 +41,11 @@ public class LikesService {
         Solution targetSolution = getTargetSolution(solutionId);
         Member targetMember = getTargetMember(memberId);
         Likes targetLikes = getLikesBySolutionAndMember(targetSolution, targetMember);
-        validMemberAuthorization(targetMember, targetLikes);
+        checkMemberAuthorization(targetMember, targetLikes);
         likesRepository.delete(targetLikes);
     }
 
-    private void validMemberAuthorization(Member targetMember, Likes targetLikes) {
+    private static void checkMemberAuthorization(Member targetMember, Likes targetLikes) {
         if (targetLikes.getMember().getId()!= targetMember.getId()){
             throw new MemberUnAuthorizedException();
         }
@@ -67,7 +67,7 @@ public class LikesService {
         return likesRepository.findByMemberAndSolution(targetMember, targetSolution);
     }
 
-    private void validLikeAlreadyExists(Solution targetSolution, Member targetMember) {
+    private void checkLikeAlreadyExists(Solution targetSolution, Member targetMember) {
         if (getTargetLikes(targetSolution, targetMember).isPresent()){
             throw new LikesAlreadyExistsException();
         }

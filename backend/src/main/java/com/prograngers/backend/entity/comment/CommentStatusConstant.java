@@ -1,6 +1,6 @@
 package com.prograngers.backend.entity.comment;
 
-public enum CommentStatusConstant {
+public enum CommentStatusConStant {
     CREATED,
     FIXED,
     DELETED

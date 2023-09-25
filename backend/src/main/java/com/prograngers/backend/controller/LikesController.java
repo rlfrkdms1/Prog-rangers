@@ -8,10 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,18 +25,18 @@ public class LikesController {
     private final LikesService likesService;
 
     @Login
-    @PostMapping("/{solutionId}/likes/push")
+    @GetMapping("/{solutionId}/likes/push")
     public ResponseEntity<?> pushLike(@LoggedInMember Long memberId, @PathVariable Long solutionId){
         likesService.pushLike(memberId,solutionId);
         return redirect(solutionId);
     }
     @Login
-    @DeleteMapping("/{solutionId}/likes/cancel")
+    @GetMapping("/{solutionId}/likes/cancel")
     public ResponseEntity<?> cancelLike(@LoggedInMember Long memberId, @PathVariable Long solutionId){
         likesService.cancelLike(memberId,solutionId);
         return redirect(solutionId);
     }
-    private ResponseEntity redirect(Long solutionId) {
+    private ResponseEntity<Object> redirect(Long solutionId) {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
     }
 

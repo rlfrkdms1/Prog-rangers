@@ -1,7 +1,7 @@
 package com.prograngers.backend.support.fixture;
 
 import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.comment.CommentStatusConstant;
+import com.prograngers.backend.entity.comment.CommentStatusConStant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 
 import static com.prograngers.backend.entity.comment.Comment.*;
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
+import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
 
 @AllArgsConstructor
 public enum CommentFixture {
@@ -19,7 +19,7 @@ public enum CommentFixture {
     삭제된_댓글("댓글내용", DELETED);
 
     private final String content;
-    private final CommentStatusConstant status;
+    private final CommentStatusConStant status;
 
     public CommentBuilder 기본_빌더_생성(){
         return Comment.builder()

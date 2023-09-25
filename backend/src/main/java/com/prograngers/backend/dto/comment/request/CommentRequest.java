@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREATED;
+import static com.prograngers.backend.entity.comment.CommentStatusConStant.CREATED;
 
 @Getter
 @Setter

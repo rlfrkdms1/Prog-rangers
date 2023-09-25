@@ -7,13 +7,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import lombok.extern.slf4j.Slf4j;
 
 import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.convertToMultiValueMap;
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
-@Slf4j
 public class KakaoOauth {
 
     private final static String TOKEN_URI = "https://kauth.kakao.com/oauth/token";
@@ -43,9 +41,6 @@ public class KakaoOauth {
                 .bodyValue(convertToMultiValueMap(grantType, clientId, redirectUri, code, clientSecret))
                 .retrieve()
                 .bodyToMono(KakaoTokenResponse.class)
-                .doOnError(e -> {
-                    log.info("Error occurred: ", e);
-                })
                 .block();
     }
 

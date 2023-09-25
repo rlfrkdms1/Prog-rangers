@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,10 +68,9 @@ public class ProblemService {
                     tagCountMap.put(solution.getDataStructure(), tagCountMap.getOrDefault(solution.getDataStructure(), 1) + 1);
                 });
 
-        ArrayList<Object> tagList = new ArrayList<>();
-        tagCountMap.keySet()
+        List<Object> tagList = tagCountMap.keySet()
                 .stream()
-                        .forEach((tag)->tagList.add(tag));
+                .toList();
 
         // 태그 개수에 따라 정렬
         tagList.sort((tag1, tag2) -> tagCountMap.get(tag2).compareTo(tagCountMap.get(tag1)));
@@ -83,8 +81,7 @@ public class ProblemService {
     private void addTag(ProblemListProblem problemListProblem, List<Object> tagList) {
         int tagCount = 0;
         while(tagCount<MAX_TAG_COUNT){
-            if (tagList.size()>tagCount) problemListProblem.getTags().add(tagList.get(tagCount));
-            tagCount+=1;
+            if (tagList.get(tagCount)!=null) problemListProblem.getTags().add(tagList.get(tagCount++));
         }
     }
 }

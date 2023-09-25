@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(TestConfig.class)
 class FollowRepositoryTest {
     @Autowired
-    private MemberRepository memberRepository;
+    MemberRepository memberRepository;
     @Autowired
-    private FollowRepository followRepository;
+    FollowRepository followRepository;
 
     @DisplayName("회원으로 팔로우, 팔로잉 찾기")
     @Test
@@ -56,13 +56,13 @@ class FollowRepositoryTest {
     }
 
     private static Follow createFollow(Member member1, Member member2) {
-        return Follow.builder().followerId(member1.getId()).followingId(member2.getId()).build();
+        return Follow.builder().following(member1.getId()).follower(member2.getId()).build();
     }
 
 
-    private Member 저장(Member member) {
+    Member 저장(Member member) {
         return memberRepository.save(member);
     }
-    private Follow 저장(Follow follow) {return followRepository.save(follow);}
+    Follow 저장(Follow follow) {return followRepository.save(follow);}
 
 }
