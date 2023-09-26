@@ -14,20 +14,20 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class SolutionReview {
+public class ReviewWithRepliesResponse {
 
     private Long id;
     private String nickname;
     private String photo;
     private String content;
-    private List<SolutionReviewReply> replies;
+    private List<ReplyResponse> replies;
     private boolean mine;
 
     private ReviewStatusConStant status;
-    public static SolutionReview from(Review review, boolean reviewIsMine){
+    public static ReviewWithRepliesResponse from(Review review, boolean reviewIsMine){
 
 
-        SolutionReview solutionReviewResponse = SolutionReview.builder()
+        ReviewWithRepliesResponse reviewResponseWithRepliesResponse = ReviewWithRepliesResponse.builder()
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())
@@ -36,7 +36,7 @@ public class SolutionReview {
                 .replies(new ArrayList<>())
                 .mine(reviewIsMine)
                 .build();
-        return solutionReviewResponse;
+        return reviewResponseWithRepliesResponse;
     }
 
 }

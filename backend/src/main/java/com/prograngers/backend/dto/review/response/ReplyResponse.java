@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Builder
-public class SolutionReviewReply {
+public class ReplyResponse {
     private Long id;
     private String nickname;
     private String photo;
@@ -24,9 +24,9 @@ public class SolutionReviewReply {
 
     private boolean mine;
 
-    public static SolutionReviewReply from(Review review, boolean reviewIsMine) {
+    public static ReplyResponse from(Review review, boolean reviewIsMine) {
 
-        SolutionReviewReply solutionReviewReply = SolutionReviewReply.builder()
+        ReplyResponse replyResponse = ReplyResponse.builder()
                 .status(review.getStatus())
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
@@ -34,6 +34,6 @@ public class SolutionReviewReply {
                 .content(review.getContent())
                 .mine(reviewIsMine)
                 .build();
-        return solutionReviewReply;
+        return replyResponse;
     }
 }

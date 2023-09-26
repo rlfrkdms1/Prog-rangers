@@ -11,12 +11,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MySolutionRecommendedSolution {
+public class RecommendedSolutionResponse {
     private Long id;
     private String solutionName;
 
-    public static MySolutionRecommendedSolution from(Long id, String solutionName){
-        return MySolutionRecommendedSolution.builder()
+    public static RecommendedSolutionResponse from(Long id, String solutionName){
+        return RecommendedSolutionResponse.builder()
                 .id(id)
                 .solutionName(solutionName)
                 .build();

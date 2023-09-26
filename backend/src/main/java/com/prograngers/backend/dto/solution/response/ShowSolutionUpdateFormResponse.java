@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SolutionUpdateFormResponse {
+public class ShowSolutionUpdateFormResponse {
 
     private String title;
     private String link;
@@ -22,8 +22,8 @@ public class SolutionUpdateFormResponse {
     private String description;
     private int  level;
 
-    public static SolutionUpdateFormResponse toDto(Solution target) {
-        return SolutionUpdateFormResponse.builder()
+    public static ShowSolutionUpdateFormResponse toDto(Solution target) {
+        return ShowSolutionUpdateFormResponse.builder()
                 .title(target.getTitle())
                 .link(target.getProblem()
                         .getLink())

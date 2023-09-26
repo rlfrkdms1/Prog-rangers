@@ -7,12 +7,12 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class MySolutionDetailSolution {
+public class SolutionTitleAndIdResponse {
     private String title;
     private Long id;
 
-    public static MySolutionDetailSolution from(String title, Long id) {
-        return MySolutionDetailSolution.builder()
+    public static SolutionTitleAndIdResponse from(String title, Long id) {
+        return SolutionTitleAndIdResponse.builder()
                 .title(title)
                 .id(id)
                 .build();

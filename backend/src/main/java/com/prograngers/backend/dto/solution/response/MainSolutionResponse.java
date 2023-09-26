@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class MySolutionDetailMainSolution {
+public class MainSolutionResponse {
     private String title;
     private List<Object> tags;
     private String description;
@@ -17,8 +17,8 @@ public class MySolutionDetailMainSolution {
     private int likes;
     private int  scraps;
 
-    public static MySolutionDetailMainSolution from(String title, List<Object> tags, String description, String[] code, int likes, int scraps){
-        return MySolutionDetailMainSolution.builder()
+    public static MainSolutionResponse from(String title, List<Object> tags, String description, String[] code, int likes, int scraps){
+        return MainSolutionResponse.builder()
                 .title(title)
                 .tags(tags)
                 .description(description)

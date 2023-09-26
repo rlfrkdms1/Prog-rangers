@@ -8,11 +8,11 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class MySolutionDetailProblem {
+public class ProblemResponse {
     private String problemTitle;
     private JudgeConstant ojName;
-    public static MySolutionDetailProblem from(String problemTitle, JudgeConstant ojName){
-        return MySolutionDetailProblem.builder()
+    public static ProblemResponse from(String problemTitle, JudgeConstant ojName){
+        return ProblemResponse.builder()
                 .problemTitle(problemTitle)
                 .ojName(ojName)
                 .build();

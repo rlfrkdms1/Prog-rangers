@@ -15,25 +15,25 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Setter
-public class SolutionReviewsResponse {
+public class ShowReviewsResponse {
     private String title;
     private AlgorithmConstant algorithm;
     private DataStructureConstant dataStructure;
-    private List<SolutionLine> solutionLines;
+    private List<CodeLineWithReviewsResponse> codeLineWithReviewsRespons;
 
-    public static SolutionReviewsResponse from(Solution solution, String[] lines) {
-        SolutionReviewsResponse solutionReviewsResponse =
-                new SolutionReviewsResponse(solution.getTitle(), solution.getAlgorithm(),solution.getDataStructure(), new ArrayList<>());
+    public static ShowReviewsResponse from(Solution solution, String[] lines) {
+        ShowReviewsResponse showReviewsResponse =
+                new ShowReviewsResponse(solution.getTitle(), solution.getAlgorithm(),solution.getDataStructure(), new ArrayList<>());
 
-        addLinesAtResponseDto(lines, solutionReviewsResponse);
+        addLinesAtResponseDto(lines, showReviewsResponse);
 
-        return  solutionReviewsResponse;
+        return showReviewsResponse;
     }
 
-    private static void addLinesAtResponseDto(String[] lines, SolutionReviewsResponse solutionReviewsResponse) {
+    private static void addLinesAtResponseDto(String[] lines, ShowReviewsResponse showReviewsResponse) {
         // 먼저 최종 응답 dto에 각 라인을 넣는다
         for (int lineNumber = 0; lineNumber < lines.length; lineNumber++) {
-            solutionReviewsResponse.getSolutionLines().add(SolutionLine.from(lines[lineNumber],lineNumber+1));
+            showReviewsResponse.getCodeLineWithReviewsRespons().add(CodeLineWithReviewsResponse.from(lines[lineNumber],lineNumber+1));
         }
     }
 }

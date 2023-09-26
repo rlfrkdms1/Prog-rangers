@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberProfileProblemSolution {
+public class SolutionWithProblemResponse {
     /**
      * 문제제목, 풀이알고리즘, 풀이 자료구조, 저지명
      * 풀이설명, 소스코드
@@ -23,8 +23,8 @@ public class MemberProfileProblemSolution {
 
     private String[] code;
 
-    public static MemberProfileProblemSolution from(Solution solution){
-        return MemberProfileProblemSolution.builder()
+    public static SolutionWithProblemResponse from(Solution solution){
+        return SolutionWithProblemResponse.builder()
                 .problemName(solution.getProblem().getTitle())
                 .dataStructure(solution.getDataStructure())
                 .algorithm(solution.getAlgorithm())

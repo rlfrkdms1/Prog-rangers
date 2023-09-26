@@ -2,7 +2,6 @@ package com.prograngers.backend.dto.review.request;
 
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.review.ReviewStatusConStant;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +19,7 @@ import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewPostRequest {
+public class WriteReviewRequest {
 
     @Nullable
     private Long parentId;
