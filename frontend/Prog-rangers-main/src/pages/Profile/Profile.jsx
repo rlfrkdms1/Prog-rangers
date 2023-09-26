@@ -19,6 +19,14 @@ export const Profile = () => {
 
   const [data, setData] = useState([]);
 
+  //팔로우 버튼
+  const [isFollowing, setIsFollowing] = useState(false);
+  const buttonColor = isFollowing ? theme.colors.light3 : theme.colors.main30;
+
+  const handleFollowClick = () => {
+    setIsFollowing(!isFollowing); 
+  };
+
   useEffect(() => {
 
     const apiUrl = 'http://13.124.131.171:8080/prog-rangers/members/profile/test';
@@ -62,15 +70,19 @@ export const Profile = () => {
           {data.introduction}
           </div>
 
-          <button css={css`
+          <button 
+          onClick={handleFollowClick}
+          css={css`
           width: 245px;
           height: 40px;
           border-radius: 25px;
           margin-top: 10px;
           ${fontSize20}
           ${alignCenter}
-          background-color: ${theme.colors.main30}
-          `}>팔로우</button>
+          background-color: ${buttonColor}
+          `}>
+            {isFollowing ? '팔로잉' : '팔로우'}
+          </button>
 
         <div css={css`
           display: flex;
