@@ -19,6 +19,8 @@ public class ShowMySolutionDetailResponse {
     private MainSolutionResponse solution;
     // 댓글
     private List<CommentWithRepliesResponse> comments;
+    //리뷰
+    private List<ReviewWIthRepliesResponse> reviews;
     // 추천 풀이
     private List<RecommendedSolutionResponse> recommendedSolutions;
     // 사이드바 이 문제에 대한 풀이 3가지, 스크랩한 풀이 3가지

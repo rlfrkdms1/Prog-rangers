@@ -2,7 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
 import com.prograngers.backend.dto.review.request.WriteReviewRequest;
-import com.prograngers.backend.dto.review.response.CodeLineWithReviewsResponse;
+import com.prograngers.backend.dto.review.response.ReviewWithCodeResponse;
 import com.prograngers.backend.dto.review.response.ReplyResponse;
 import com.prograngers.backend.dto.review.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
@@ -70,9 +70,9 @@ public class ReviewService {
         // 최종 응답 dto에 풀이 내용을 넣는다
         ShowReviewsResponse showReviewsResponse = ShowReviewsResponse.from(solution, lines);
         // 최종 응답 dto에서 line들을 가져온다
-        List<CodeLineWithReviewsResponse> addedCodeLineResponsWithReviews = showReviewsResponse.getCodeLineWithReviewsRespons();
+        List<ReviewWithCodeResponse> addedCodeLineResponsWithReviews = showReviewsResponse.getReviewWithCodeResponse();
         addReviewAtLine(addedCodeLineResponsWithReviews, memberId);
-        showReviewsResponse.setCodeLineWithReviewsRespons(addedCodeLineResponsWithReviews);
+        showReviewsResponse.setReviewWithCodeResponse(addedCodeLineResponsWithReviews);
         return showReviewsResponse;
     }
 
@@ -80,10 +80,10 @@ public class ReviewService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private void addReviewAtLine(List<CodeLineWithReviewsResponse> addedCodeLineResponsWithReviews, Long memberId) {
+    private void addReviewAtLine(List<ReviewWithCodeResponse> addedCodeLineResponsWithReviews, Long memberId) {
         // 라인들에 대해 for문을 돌면서 리뷰를 추가한다
-        for (CodeLineWithReviewsResponse codeLineWithReviewsResponse : addedCodeLineResponsWithReviews) {
-            Integer codeLineNumber = codeLineWithReviewsResponse.getCodeLineNumber();
+        for (ReviewWithCodeResponse reviewWithCodeResponse : addedCodeLineResponsWithReviews) {
+            Integer codeLineNumber = reviewWithCodeResponse.getCodeLineNumber();
 
             // codeLineNumber에 해당하는 review들을 찾는다
             List<Review> reviews = reviewRepository
@@ -101,7 +101,7 @@ public class ReviewService {
                     makeReplyResponse(reviewResponseWithRepliesResponse, review, memberId);
                 }
             }
-            codeLineWithReviewsResponse.setReviewWithRepliesRespons(reviewResponseWithRepliesResponse);
+            reviewWithCodeResponse.setReviewWithRepliesResponse(reviewResponseWithRepliesResponse);
         }
     }
 
