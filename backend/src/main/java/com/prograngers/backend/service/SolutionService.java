@@ -258,7 +258,7 @@ public class SolutionService {
                 .collect(Collectors.toList());
 
         // 추천 풀이 : 일단 제목주기, 좋아요 기준으로 가져옴
-        List<Solution> recommendedSolutions = solutionRepository.findTop3SolutionOfProblemOrderByLikesDesc(problem.getId());
+        List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
         List<RecommendedSolutionResponse> recommendedSolutionList = recommendedSolutions.stream()
                 .map(solution -> RecommendedSolutionResponse.from(solution.getId(), solution.getTitle()))
                 .collect(Collectors.toList());

@@ -73,7 +73,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .fetch();
     }
 
-    public List<Solution> findTop3SolutionOfProblemOrderByLikesDesc(Long problemId){
+    public List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Long problemId){
         return jpaQueryFactory
                 .select(solution)
                 .from(likes)
@@ -81,7 +81,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .groupBy(solution)
                 .where(solution.problem.id.eq(problemId))
                 .orderBy(likes.count().desc(),solution.createdAt.desc())
-                .limit(3)
+                .limit(6)
                 .fetch();
     }
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
