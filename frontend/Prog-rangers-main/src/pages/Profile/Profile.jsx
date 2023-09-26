@@ -80,12 +80,12 @@ export const Profile = () => {
           `}>
             <div css={css`
             ${fontSizebold16}`}> 팔로우 </div>
-            <div> {data.follow} </div>
+            <div css={css `font-weight: 700;`}> {data.follow} </div>
 
             <div css={css`
             ${fontSizebold16}
             margin-left: 15px;`}> 팔로잉 </div>
-            <div> {data.following} </div>
+            <div css={css `font-weight: 700;`}> {data.following} </div>
           </div>
 
           <div css={css`
@@ -137,8 +137,9 @@ export const Profile = () => {
         <div css={css`
         ${fontSize24}
         `}>풀이</div>
-        
+      
         <SolvingList/>
+        
       </div>
   </div>
   )

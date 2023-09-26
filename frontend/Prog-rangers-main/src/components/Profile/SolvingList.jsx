@@ -8,7 +8,9 @@ import {
     fontSizewhite16,
     fontSize18,
     fontSizedark20,
-    boxStyle } from '../../pages/Profile/ProfileStyle';
+    boxStyle, 
+    fontSize14} from '../../pages/Profile/ProfileStyle';
+import { CodeWindow } from './CodeWindow';
 
 export const SolvingList = () => {
     const [data, setData] = useState({ list: [] });
@@ -93,9 +95,37 @@ export const SolvingList = () => {
         color: #FFFFFF;
         background-color: #2A3746;
         `}>
-        {item.code}
+          <div css={css`
+          padding: 20px;
+          font-weight: 700;`}>
+          {item.problemName + index}
+          </div>
+
+          <div css={css`
+          width: 100%;
+          border-bottom: 1px solid #1A2333;
+          `}></div>
+          <div css={css`
+          margin-top: 3px;
+          width: 100%;
+          border-bottom: 1px solid #1A2333;
+          `}></div>
+        
+          <div css={css`
+          ${fontSize14}
+          padding: 20px;
+          `}>
+            <CodeWindow/>
+          </div>
+          
         </div>
-    </div>
+        
+        <div css={css`
+        margin-top: 50px;
+        width: 100%;
+        border-bottom: 1px solid #959595;
+        `}></div>
+      </div>
     </div>
     ))}
     </>
