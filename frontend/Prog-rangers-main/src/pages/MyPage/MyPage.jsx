@@ -20,10 +20,7 @@ import {
 export const MyPage = () => {
 
   // API 가져오기
-  const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState({
-    day: [],
-    studied: []
-  });
+  const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState([]);
   const [myRecentSolutionInfos, setMyRecentSolutionInfos] = useState([]);
   const [followingRecentSolutionInfos, setFollowingRecentSolutionInfos] = useState([]);
   const [notificationInfoList, setNotificationInfoList] = useState([]);
@@ -73,12 +70,10 @@ export const MyPage = () => {
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(value.getFullYear(), value.getMonth(), day);
       
-      const studyData = Array.isArray(monthlyStudyCalendar.day) ? monthlyStudyCalendar.day : [];
-      
-      const studiedFromMonthlyData = studyData.includes(day);
-
       const isCurrentDate = currentDate.getDate() === day;
-      const studyTrue = studiedFromMonthlyData && isCurrentDate;
+      const studiedData = monthlyStudyCalendar.find(item => item.day === day);
+
+      const studyTrue = studiedData && studiedData.studied !== undefined && studiedData.studied;
 
       calendar.push(
         <div key={currentDate.toISOString()}>
@@ -105,7 +100,7 @@ export const MyPage = () => {
   };
 
   // 최근 쓴 풀이 리스트업
-  const listRecently = top3Data.map((item) => (
+ const listRecently = top3Data.map((item) => (
   <div key={item.solutionId}>
     <div css={css`${Divline} 
               display: flex; 
@@ -121,7 +116,7 @@ export const MyPage = () => {
       </div>
     </div>
   </div>
-));
+ ));
   
 
   // 팔로우 최근 풀이 리스트업
@@ -141,7 +136,7 @@ export const MyPage = () => {
                 </div>
               </div>
             </div>
-  ));
+   ));
 
   const infoList = notificationInfoList.map((info) => (
     <div key={info.solutionId}>
