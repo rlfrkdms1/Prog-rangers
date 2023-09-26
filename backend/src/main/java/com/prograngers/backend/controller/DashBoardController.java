@@ -14,7 +14,7 @@ import java.time.YearMonth;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class DashBoardController {
 
     private final DashBoardService dashBoardService;

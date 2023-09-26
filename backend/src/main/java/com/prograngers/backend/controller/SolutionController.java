@@ -20,7 +20,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("prog-rangers/solutions")
+@RequestMapping("api/v1/solutions")
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;

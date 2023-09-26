@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-@RequestMapping("prog-rangers/solutions/{solutionId}")
+@RequestMapping("api/v1/solutions/{solutionId}")
 @RequiredArgsConstructor
 public class ReviewController {
 

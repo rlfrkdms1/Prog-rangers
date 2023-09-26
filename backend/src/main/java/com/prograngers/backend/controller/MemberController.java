@@ -22,7 +22,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class MemberController {
 
     private final MemberService memberService;
