@@ -11,7 +11,6 @@ export const QuestionForm = ({data}) => {
     navigate(`/solutions/${index}`);
   }
 
-
   const getRightName = (targetValue) => {
     const condition = (element) => element.value === targetValue;
     const foundIndex = forTags.findIndex(condition) ;
