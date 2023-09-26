@@ -13,12 +13,15 @@ import lombok.Setter;
 @Builder
 public class RecommendedSolutionResponse {
     private Long id;
+    private int likes;
     private String solutionName;
-
-    public static RecommendedSolutionResponse from(Long id, String solutionName){
+    private String nickname;
+    public static RecommendedSolutionResponse from(Long id, int likes, String solutionName, String nickname){
         return RecommendedSolutionResponse.builder()
                 .id(id)
+                .likes(likes)
                 .solutionName(solutionName)
+                .nickname(nickname)
                 .build();
     }
 }
