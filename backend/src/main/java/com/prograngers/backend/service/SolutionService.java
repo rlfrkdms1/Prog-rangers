@@ -260,17 +260,21 @@ public class SolutionService {
         // 추천 풀이 : 일단 제목주기, 좋아요 기준으로 가져옴
         List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
         List<RecommendedSolutionResponse> recommendedSolutionList = recommendedSolutions.stream()
-                .map(solution -> RecommendedSolutionResponse.from(solution.getId(), solution.getTitle()))
+                .map(solution -> makeRecommendedSolutionList(solution))
+                .collect(Collectors.toList());
+
+        // 이 문제에 대해 내가 스크랩 한 다른사람의 풀이 목록
+        List<SolutionTitleAndIdResponse> sideScrapSolutions  = solutionRepository.findAllByProblem(problem)
+                .stream().filter(solution -> solution.getScrapSolution() != null)
+                .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(), solution.getScrapSolution().getId()))
                 .collect(Collectors.toList());
 
 
-        // 스크랩한 풀이 목록
-        /**
-         *  일단 보류 !!
-         */
+        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,mainSolutionReviewResponse,recommendedSolutionList,sideSolutions,sideScrapSolutions);
+    }
 
-
-        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,mainSolutionReviewResponse,recommendedSolutionList,sideSolutions,null);
+    private RecommendedSolutionResponse makeRecommendedSolutionList(Solution solution) {
+        return RecommendedSolutionResponse.from(solution.getId(),likesRepository.findAllBySolution(solution).size(),solution.getTitle(),solution.getMember().getNickname());
     }
 
     private void addReplyReviews(List<ReviewWIthRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
