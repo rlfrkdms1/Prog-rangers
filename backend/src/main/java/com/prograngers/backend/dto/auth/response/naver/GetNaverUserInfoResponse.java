@@ -5,13 +5,13 @@ import com.prograngers.backend.entity.member.MemberType;
 import lombok.Data;
 
 @Data
-public class NaverUserInfoResponse {
+public class GetNaverUserInfoResponse {
 
-    private Response response;
+    private NaverSocialIdResponse naverSocialIdResponse;
 
     public Member toMember(){
         return Member.builder()
-                .socialId(Long.valueOf(response.getId().hashCode()))
+                .socialId(Long.valueOf(naverSocialIdResponse.getId().hashCode()))
                 .type(MemberType.NAVER)
                 .build();
     }

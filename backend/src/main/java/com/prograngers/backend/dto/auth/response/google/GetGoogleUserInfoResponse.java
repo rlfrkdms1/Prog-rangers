@@ -5,7 +5,7 @@ import com.prograngers.backend.entity.member.MemberType;
 import lombok.Data;
 
 @Data
-public class GoogleUserInfoResponse {
+public class GetGoogleUserInfoResponse {
 
     private String id;
 
