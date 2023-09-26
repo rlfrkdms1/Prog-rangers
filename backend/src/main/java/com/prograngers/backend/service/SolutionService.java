@@ -1,7 +1,9 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.review.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.MainSolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
+import com.prograngers.backend.dto.solution.response.ReviewWIthRepliesResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionTitleAndIdResponse;
 import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse;
@@ -17,6 +19,7 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -197,6 +200,7 @@ public class SolutionService {
         return SolutionListResponse.from(solutions,pageable.getPageNumber());
     }
 
+    // 내 풀이 보여주기
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
         // member 검증
         findMemberById(memberId);
@@ -205,7 +209,6 @@ public class SolutionService {
 
         // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
         List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
-        log.info("solutionList size : {}",solutionList.size());
 
         // 화면의 메인에 보여질 풀이
         Solution mainSolution = chooseMainSolution(solutionId, solutionList);
@@ -234,6 +237,21 @@ public class SolutionService {
         mainSolutionComments.stream().filter(comment -> comment.getParentId()!=null)
                 .forEach(comment -> addReplyComments(mainSolutionCommentsResponse,comment,memberId));
 
+        //메인 풀이의 리뷰 엔티티 리스트
+        List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
+        //부모가 없는 리뷰들 더하기
+        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
+                .filter(review -> review.getParentId() == null)
+                .map(review -> ReviewWIthRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
+                .collect(Collectors.toList());
+
+        //부모가 있는 리뷰를 더하기
+        mainSolutionReviews.stream()
+                .filter(review -> review.getParentId()!=null)
+                .forEach(review -> addReplyReviews(mainSolutionReviewResponse, review, memberId));
+
+
+
         // 사이드에 있는 풀이 목록
         List<SolutionTitleAndIdResponse> sideSolutions = solutionList.stream()
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getTitle(), solution.getId()))
@@ -252,7 +270,20 @@ public class SolutionService {
          */
 
 
-        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,recommendedSolutionList,sideSolutions,null);
+        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,mainSolutionReviewResponse,recommendedSolutionList,sideSolutions,null);
+    }
+
+    private void addReplyReviews(List<ReviewWIthRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
+        mainSolutionReviewResponse.stream()
+                .filter(parentReview->parentReview.getId().equals(review.getParentId()))
+                .findFirst()
+                .get()
+                .getReplies()
+                .add(ReviewWIthRepliesResponse.from(review, checkReviewIsMine(memberId,review)));
+    }
+
+    private boolean checkReviewIsMine(Long memberId, Review review) {
+        return review.getMember().getId().equals(memberId);
     }
 
     private Solution chooseMainSolution(Long solutionId, List<Solution> solutionList) {

@@ -27,13 +27,14 @@ public class ShowMySolutionDetailResponse {
     private List<SolutionTitleAndIdResponse> mySolutionList;
     private List<SolutionTitleAndIdResponse> myScrapSolutionList;
     public static ShowMySolutionDetailResponse from(
-            ProblemResponse problem, MainSolutionResponse solution, List<CommentWithRepliesResponse> comments,
+            ProblemResponse problem, MainSolutionResponse solution, List<CommentWithRepliesResponse> comments,List<ReviewWIthRepliesResponse> reviews,
             List<RecommendedSolutionResponse> recommendedSolutions,
             List<SolutionTitleAndIdResponse> solutions, List<SolutionTitleAndIdResponse> scraps){
         return ShowMySolutionDetailResponse.builder()
                 .problem(problem)
                 .solution(solution)
                 .comments(comments)
+                .reviews(reviews)
                 .mySolutionList(solutions)
                 .myScrapSolutionList(scraps)
                 .recommendedSolutions(recommendedSolutions)
