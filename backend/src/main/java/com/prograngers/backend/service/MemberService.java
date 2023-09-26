@@ -1,8 +1,8 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.member.response.MemberProfileResponse;
-import com.prograngers.backend.dto.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.response.member.MemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
+import com.prograngers.backend.dto.member.response.MemberAccountInfoResponse;
 import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;

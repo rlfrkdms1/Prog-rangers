@@ -1,6 +1,6 @@
 package com.prograngers.backend.repository.notification;
 
-import com.prograngers.backend.dto.response.notification.NotificationResponse;
+import com.prograngers.backend.dto.notification.response.NotificationResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;

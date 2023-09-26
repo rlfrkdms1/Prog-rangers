@@ -1,13 +1,11 @@
 package com.prograngers.backend.service.auth.oauth;
 
-import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
-import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
+import com.prograngers.backend.dto.auth.response.naver.NaverTokenResponse;
+import com.prograngers.backend.dto.auth.response.naver.NaverUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.net.URI;
 
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 

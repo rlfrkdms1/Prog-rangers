@@ -1,9 +1,9 @@
 package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.dto.response.auth.LoginResponse;
-import com.prograngers.backend.dto.result.AuthResult;
-import com.prograngers.backend.dto.request.auth.LoginRequest;
-import com.prograngers.backend.dto.request.auth.SignUpRequest;
+import com.prograngers.backend.dto.auth.response.LoginResponse;
+import com.prograngers.backend.dto.auth.result.AuthResult;
+import com.prograngers.backend.dto.auth.request.LoginRequest;
+import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.exception.unauthorization.NotExistRefreshTokenException;
 import com.prograngers.backend.service.auth.AuthService;
 import jakarta.validation.Valid;

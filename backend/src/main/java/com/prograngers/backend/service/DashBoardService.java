@@ -1,9 +1,9 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.response.dashboard.IsDayOfStudy;
-import com.prograngers.backend.dto.response.dashboard.NotificationInfo;
-import com.prograngers.backend.dto.response.dashboard.ShowDashBoardResponse;
-import com.prograngers.backend.dto.response.dashboard.SolutionInfo;
+import com.prograngers.backend.dto.dashboard.response.IsDayOfStudy;
+import com.prograngers.backend.dto.dashboard.response.NotificationInfo;
+import com.prograngers.backend.dto.dashboard.response.ShowDashBoardResponse;
+import com.prograngers.backend.dto.dashboard.response.SolutionInfo;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.Member;
