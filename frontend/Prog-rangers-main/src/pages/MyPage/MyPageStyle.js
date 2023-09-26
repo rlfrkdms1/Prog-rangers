@@ -1,15 +1,15 @@
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 
-export const fontSize12 = css`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${theme.colors.black}
-  `;
-
 export const fontSize14 = css`
   font-size: 14px;
   font-weight: 400;
+  color: ${theme.colors.black}
+  `;
+
+export const fontSizeBold14 = css`
+  font-size: 14px;
+  font-weight: 700;
   color: ${theme.colors.black}
   `;
 
@@ -47,24 +47,23 @@ export const gridStyle = css`
 
 export const Divline = css`
   display: inline-block; 
+  height: 60px;
   width: 100%; 
-  height: 62px; 
   border-bottom: 1px solid #959595
   `;
 
 export const RecentlyTitle = css`
-  height: 29px; 
-  width: 100%;  
+  height: 30px; 
+  width: 60%;  
+  margin-left: 10px;
+  padding-top: 3px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 16px;  
   color: ${theme.colors.dark2};
 `;
 
 export const ojName = css`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 15px;
+  padding: 10px 15px ;
   border-radius: 20px;
   color: white;
   `;

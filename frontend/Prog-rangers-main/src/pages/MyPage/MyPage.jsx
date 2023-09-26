@@ -5,8 +5,8 @@ import { SideBar } from '../../components/SideBar/SideBar';
 import { LeftBody, MainBody, RightBody } from './MainBody';
 import axios from 'axios';
 import { 
-  fontSize12,
   fontSize14,
+  fontSizeBold14,
   fontSize16,
   fontSize20,
   alignCenter, 
@@ -33,7 +33,7 @@ export const MyPage = () => {
   
   useEffect(() => {
     
-    const token = 'eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk1NTY4MDU0LCJpYXQiOjE2OTU1MzIwNTQsImlzcyI6IlByb2dyYW5nZXJzIn0.HMVpVlOM5NNNnnuKcB0VOr4415zsElzsu1r8t4jAjyUFroZJ71Gn5VwH0mIbkgQssJw2m3KyIzMtDf7IGSV1lQ';
+    const token = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk1Nzc5Njc4LCJpYXQiOjE2OTU3NDM2NzgsImlzcyI6IlByb2dyYW5nZXJzIn0.hc1mO0uoOc0Vr9_OuKYSHxCGBMIFflHT_4WLunwGAomEds4r5bp_LfNlilVWZCQQsU9y0rRGToHNi5RHlmhVlQ";
     
     fetch("http://13.124.131.171:8080/prog-rangers/mypage/dashboard?date=2023-09", 
     {
@@ -105,51 +105,41 @@ export const MyPage = () => {
   };
 
   // 최근 쓴 풀이 리스트업
-   const listRecently = top3Data.map((item) => (
-    <div key={item.solutionId}>
-      <div css={css`${Divline} display: flex; align-items: center;  gap: 30px;`}>
-      <div css={`${RecentlyTitle} 
-      `}> {item.title} </div>
+  const listRecently = top3Data.map((item) => (
+  <div key={item.solutionId}>
+    <div css={css`${Divline} 
+              display: flex; 
+              align-items: center; 
+              justify-content: space-between;`}>
+      <div css={css`${RecentlyTitle}`}> {item.title} </div>
       <div css={css`
-              height: 39px;; 
-              margin-top: 10px;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-            `}>
-        <div css={css`
-                  font-size: 12px;          
-                  ${ojName} 
-                  background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
-                  {item.ojName}
-                </div>
-              </div>
-            </div>
-            </div>
-   ));
+                ${ojName}
+                font-size: 12px;
+                margin-right: 10px;
+                background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
+                {item.ojName}
+      </div>
+    </div>
+  </div>
+));
   
 
   // 팔로우 최근 풀이 리스트업
   const listFollwingRecently = top5Data.map((item) => (
-    <div key={item.solutionId} css={`${Divline}`}>
-      <div css={css` display: flex; align-items: center;  gap: 30px;`}>
-      <div css={`${RecentlyTitle}`}> {item.title} </div>
-      <div css={css`
-              height: 39px; 
-              margin-top: 10px;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-            `}>
+    <div key={item.solutionId}>
+      <div css={css` ${Divline} 
+                display: flex; 
+                align-items: center;
+                justify-content: space-between;`}>
+        <div css={css `${RecentlyTitle}`}> {item.title} </div>
         <div css={css`
                   ${ojName} 
                   font-size : 12px;
-                  float: right;
+                  margin-right: 10px;
                   background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
                   {item.ojName}
                 </div>
               </div>
-            </div>
             </div>
   ));
 
@@ -166,24 +156,31 @@ export const MyPage = () => {
             align-items: center;
             margin-top: 9px;
             margin-left: 10px;
+            padding-top: 10px;
             gap: 4px;
-            ${fontSize12}
+            ${fontSizeBold14}
             `}>
-              {info.type}
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="12" viewBox="0 0 18 12" fill="none">
               <rect width="18" height="12" rx="2" fill="#545454"/>
               <path d="M0.75 1.875L9 6.375L17.25 1.875" stroke="white" strokeLinecap="round"/>
             </svg>
+            {info.type}
         </div>
         <div css={css`
             margin-left: 12px;
             margin-right: 12px;
+            margin-top: 5px;
             ${fontSize14}
             `}>
-              {info.nickname}님이 {info.solutionTitle}풀이에 {info.type}을 남겼습니다: {info.content}
-        </div>
+              <span css={css`font-weight: 700;`}>
+                {info.nickname} </span>
+                님이 {' '}
+              <span css={css` font-weight: 700;`}>
+                {info.solutionTitle} </span>
+                풀이에 {info.type}을 남겼습니다 : {info.content}
+                </div>
+            </div>
       </div>
-    </div>
   ));
 
   return(
@@ -255,7 +252,7 @@ export const MyPage = () => {
 
           <div css={css`
           width: 365px;
-          height: 181px;
+          height: 180px;
           border-radius: 5px;
           margin-top: 10px;
           background-color: ${theme.colors.light4};
@@ -270,7 +267,7 @@ export const MyPage = () => {
 
           <div css={css`
           width: 365px;
-          height: 295px;
+          height: 300px;
           border-radius: 5px;
           margin-top: 10px;
           background-color: ${theme.colors.light4};
