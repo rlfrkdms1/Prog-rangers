@@ -13,13 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Builder
-public class ReviewWithCodeResponse {
+public class CodeWithCodeLineNumberAndReviewResponse {
     private Integer codeLineNumber;
     private String code;
     private List<ReviewWithRepliesResponse> reviewWithRepliesResponse;
 
-    public static ReviewWithCodeResponse from(String line, int lineNumber){
-        return ReviewWithCodeResponse.builder()
+    public static CodeWithCodeLineNumberAndReviewResponse from(String line, int lineNumber){
+        return CodeWithCodeLineNumberAndReviewResponse.builder()
                 .codeLineNumber(lineNumber)
                 .code(line)
                 .build();
