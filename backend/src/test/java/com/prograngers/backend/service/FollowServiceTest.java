@@ -1,7 +1,7 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Follow;
-import com.prograngers.backend.exception.badrequest.AlreadyFollowException;
+import com.prograngers.backend.exception.badrequest.AlreadyFollowingException;
 import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
@@ -112,7 +112,7 @@ class FollowServiceTest {
         given(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)).willReturn(true);
 
         assertAll(
-                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(AlreadyFollowException.class),
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(AlreadyFollowingException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId)

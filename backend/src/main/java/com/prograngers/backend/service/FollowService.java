@@ -1,7 +1,7 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Follow;
-import com.prograngers.backend.exception.badrequest.AlreadyFollowException;
+import com.prograngers.backend.exception.badrequest.AlreadyFollowingException;
 import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
@@ -28,7 +28,7 @@ public class FollowService {
 
     private void validNotFollow(Long followerId, Long followingId) {
         if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
-            throw new AlreadyFollowException();
+            throw new AlreadyFollowingException();
         }
     }
 
