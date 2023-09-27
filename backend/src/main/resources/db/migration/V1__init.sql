@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `member` (
     `password`            varchar(255),
     `photo`               varchar(255),
     `type`                varchar(255) NOT NULL,
-    `current_modified_at` date,
+    `currently_modified_at` date,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
