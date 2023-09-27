@@ -9,14 +9,14 @@ import static com.prograngers.backend.entity.NotificationType.*;
 
 @Getter
 @Builder
-public class NotificationResponse {
+public class ShowNotificationResponse {
 
     private String nickname;
     private String content;
     private Long solutionId;
 
-    public static NotificationResponse from(Notification notification) {
-        return NotificationResponse.builder()
+    public static ShowNotificationResponse from(Notification notification) {
+        return ShowNotificationResponse.builder()
                 .nickname(notification.getWriterNickname())
                 .content(getContent(notification))
                 .solutionId(notification.getSolution().getId())

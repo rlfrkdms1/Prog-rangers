@@ -14,7 +14,7 @@ public class UpdateMemberAccountInfoRequest {
 
     private String oldPassword;
 
-    private String password;
+    private String newPassword;
 
     private String photo;
 
@@ -23,7 +23,7 @@ public class UpdateMemberAccountInfoRequest {
                 .nickname(this.nickname)
                 .github(this.github)
                 .introduction(this.introduction)
-                .password(this.password)
+                .password(this.newPassword)
                 .photo(this.photo)
                 .build();
 

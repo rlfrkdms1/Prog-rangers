@@ -88,7 +88,7 @@ class AuthServiceTest {
         String password = "test";
         String encodedPassword = "encodedPassword";
         SignUpRequest signUpRequest = 길가은.회원_가입_요청_생성(email, password);
-        Member member = 길가은.일반_회원_생성(1L, email, encodedPassword);
+        Member member = 길가은.일반_회원_생성(email, encodedPassword);
         RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).refreshToken(UUID.randomUUID().toString()).build();
 
 

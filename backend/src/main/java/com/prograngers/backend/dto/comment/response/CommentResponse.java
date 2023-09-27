@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommentInfo {
+public class CommentResponse {
 
     private String status;
     private String content;
     private String authorImageUrl;
     private String authorNickname;
 
-    public static CommentInfo from(Comment comment) {
+    public static CommentResponse from(Comment comment) {
         Member member = comment.getMember();
-        return new CommentInfo(comment.getStatus().name(), comment.getContent(), member.getPhoto(), member.getNickname());
+        return new CommentResponse(comment.getStatus().name(), comment.getContent(), member.getPhoto(), member.getNickname());
     }
 
 }

@@ -2,7 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.member.response.MemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.member.response.MemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
@@ -30,8 +30,8 @@ public class MemberService {
     private final SolutionRepository solutionRepository;
     private final FollowRepository followRepository;
 
-    public MemberAccountInfoResponse getMemberAccount(Long memberId){
-        return MemberAccountInfoResponse.from(findById(memberId));
+    public ShowMemberAccountInfoResponse getMemberAccount(Long memberId){
+        return ShowMemberAccountInfoResponse.from(findById(memberId));
     }
 
     private Member findById(Long memberId) {

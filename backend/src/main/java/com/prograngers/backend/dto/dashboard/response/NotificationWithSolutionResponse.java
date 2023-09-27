@@ -12,7 +12,7 @@ import static com.prograngers.backend.entity.NotificationType.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NotificationInfo {
+public class NotificationWithSolutionResponse {
 
     private String type;
     private String nickname;
@@ -21,7 +21,7 @@ public class NotificationInfo {
     private Long solutionId;
 
     @Builder
-    public NotificationInfo(String type, String nickname, String solutionTitle, String content, Long solutionId) {
+    public NotificationWithSolutionResponse(String type, String nickname, String solutionTitle, String content, Long solutionId) {
         this.type = type;
         this.nickname = nickname;
         this.solutionTitle = solutionTitle;
@@ -29,8 +29,8 @@ public class NotificationInfo {
         this.solutionId = solutionId;
     }
 
-    public static NotificationInfo of(Notification notification, Solution solution) {
-        return NotificationInfo.builder()
+    public static NotificationWithSolutionResponse of(Notification notification, Solution solution) {
+        return NotificationWithSolutionResponse.builder()
                 .type(notification.getType().name())
                 .nickname(notification.getWriterNickname())
                 .solutionTitle(solution.getTitle())

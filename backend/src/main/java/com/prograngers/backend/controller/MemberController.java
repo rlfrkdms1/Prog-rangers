@@ -4,7 +4,7 @@ import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.member.response.MemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.member.response.MemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class MemberController {
 
     @Login
     @GetMapping("/mypage/account-settings")
-    public MemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
+    public ShowMemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 

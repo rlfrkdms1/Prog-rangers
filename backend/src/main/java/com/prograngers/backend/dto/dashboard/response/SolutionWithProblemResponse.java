@@ -9,21 +9,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SolutionInfo {
+public class SolutionWithProblemResponse {
 
     private String title;
     private String ojName;
     private Long solutionId;
 
     @Builder
-    public SolutionInfo(String title, String ojName, Long solutionId) {
+    public SolutionWithProblemResponse(String title, String ojName, Long solutionId) {
         this.title = title;
         this.ojName = ojName;
         this.solutionId = solutionId;
     }
 
-    public static SolutionInfo of(Solution solution, Problem problem) {
-        return SolutionInfo.builder()
+    public static SolutionWithProblemResponse of(Solution solution, Problem problem) {
+        return SolutionWithProblemResponse.builder()
                 .title(solution.getTitle())
                 .ojName(problem.getOjName().name())
                 .solutionId(solution.getId())

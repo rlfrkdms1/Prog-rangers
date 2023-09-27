@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SolutionWithProblemInfo {
+public class SolutionWithProblemResponse {
 
     private Long solutionId;
     private String solutionTitle;
@@ -22,10 +22,10 @@ public class SolutionWithProblemInfo {
     private String authorImageUrl;
     private String authorNickname;
 
-    public static SolutionWithProblemInfo from(Solution solution) {
+    public static SolutionWithProblemResponse from(Solution solution) {
         Problem problem = solution.getProblem();
         Member author = solution.getMember();
-        return new SolutionWithProblemInfo(solution.getId(), solution.getTitle(), solution.getAlgorithm().getStringValue(), solution.getDataStructure().getStringValue(),
+        return new SolutionWithProblemResponse(solution.getId(), solution.getTitle(), solution.getAlgorithm().getStringValue(), solution.getDataStructure().getStringValue(),
                 problem.getTitle(), problem.getOjName().name(), author.getPhoto(), author.getNickname());
     }
 }

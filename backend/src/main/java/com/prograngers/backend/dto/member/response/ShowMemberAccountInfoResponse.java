@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class MemberAccountInfoResponse {
+public class ShowMemberAccountInfoResponse {
 
     private MemberType type;
 
@@ -27,8 +27,8 @@ public class MemberAccountInfoResponse {
 
     private String photo;
 
-    public static MemberAccountInfoResponse from(Member member) {
-        return MemberAccountInfoResponse.builder()
+    public static ShowMemberAccountInfoResponse from(Member member) {
+        return ShowMemberAccountInfoResponse.builder()
                 .type(member.getType())
                 .nickname(member.getNickname())
                 .email(member.getEmail())

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IsDayOfStudy {
+public class IsDayOfStudyResponse {
     private int day;
     private boolean studied;
 }

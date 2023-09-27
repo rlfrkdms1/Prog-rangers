@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 public class ShowMyCommentsResponse {
 
     private boolean hasNext;
-    private List<CommentWithSolutionInfo> contents;
+    private List<CommentWithSolutionResponse> contents;
 
     public static ShowMyCommentsResponse from(Slice<Comment> commentPage) {
         return new ShowMyCommentsResponse(commentPage.hasNext(),
-                commentPage.stream().map(comment -> CommentWithSolutionInfo.from(comment)).collect(Collectors.toList()));
+                commentPage.stream().map(comment -> CommentWithSolutionResponse.from(comment)).collect(Collectors.toList()));
     }
 
 }
