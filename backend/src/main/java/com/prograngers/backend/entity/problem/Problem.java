@@ -40,7 +40,7 @@ public class Problem {
     private JudgeConstant ojName;
 
     @OneToMany(mappedBy = "problem")
-    List<Solution> solutions = new ArrayList<>();
+    private List<Solution> solutions = new ArrayList<>();
 
 
 }
