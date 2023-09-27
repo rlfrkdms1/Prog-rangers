@@ -204,14 +204,13 @@ public class SolutionService {
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
         // member 검증
         findMemberById(memberId);
-        // solution 검증
-        if (solutionId!=null) findSolutionById(solutionId);
+        // solution 검증, 화면의 메인에 보여질 풀이
+        Solution mainSolution = findSolutionById(solutionId);
 
         // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
-        List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
+        // List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
+        List<Solution> solutionList = solutionRepository.findAllByProblem(mainSolution.getProblem());
 
-        // 화면의 메인에 보여질 풀이
-        Solution mainSolution = chooseMainSolution(solutionId, solutionList);
         // 문제
         Problem problem = mainSolution.getProblem();
         // 메인 풀이 좋아요 수
