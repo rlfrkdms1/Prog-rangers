@@ -289,22 +289,6 @@ public class SolutionService {
         return review.getMember().getId().equals(memberId);
     }
 
-    private Solution chooseMainSolution(Long solutionId, List<Solution> solutionList) {
-        if (solutionList==null){
-            return null;
-        }
-        if (solutionId==null){
-            return solutionList.get(0);
-        }
-        for (Solution solution : solutionList){
-            if (solution.getId().equals(solutionId)){
-                return solution;
-            }
-        }
-        throw new SolutionNotFoundException();
-    }
-
-
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
