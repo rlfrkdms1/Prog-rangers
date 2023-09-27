@@ -39,6 +39,7 @@ public class Problem {
     @Column(nullable = false)
     private JudgeConstant ojName;
 
+    @Builder.Default
     @OneToMany(mappedBy = "problem")
     private List<Solution> solutions = new ArrayList<>();
 
