@@ -2,11 +2,12 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
-import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
-import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
+import com.prograngers.backend.dto.solution.response.ShowSolutionDetailWithProblemAndCommentsResponse;
+import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
+import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +25,16 @@ import java.net.URI;
 @Slf4j
 public class SolutionController {
     private final SolutionService solutionService;
-    private final String REDIRECT_PATH = "http://localhost:8080/prog-rangers/solutions";
     private final MessageSource ms;
     // solution 쓰기
     @Login
-    @PostMapping("/new-form")
-    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest){
+    @PostMapping
+    public ResponseEntity<?> newForm(@LoggedInMember Long memberId, @RequestBody @Valid WriteSolutionRequest writeSolutionRequest){
 
         // Valid 확인 -> 검증 실패할 경우 MethodArgumentNotValidException
 
         // 리포지토리 활용해 저장
-        Long saveId = solutionService.save(solutionPostRequest, memberId);
+        Long saveId = solutionService.save(writeSolutionRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return redirect(saveId);
@@ -43,8 +43,8 @@ public class SolutionController {
 
     // scrap해서 생성
     @Login
-    @PostMapping("/new-form/{scrapId}")
-    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionPostRequest request) {
+    @PostMapping("/{scrapId}")
+    public ResponseEntity<?> scrapForm(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid ScarpSolutionRequest request) {
         // 입력 폼과 스크랩 id로 새로운 Solution 생성
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
 
@@ -56,7 +56,7 @@ public class SolutionController {
     @Login
     @GetMapping("/{solutionId}/update-form")
     public ResponseEntity<?> updateForm(@PathVariable Long solutionId, @LoggedInMember Long memberId) {
-        SolutionUpdateFormResponse updateForm = solutionService.getUpdateForm(solutionId, memberId);
+        ShowSolutionUpdateFormResponse updateForm = solutionService.getUpdateForm(solutionId, memberId);
         return ResponseEntity.ok().body(updateForm);
     }
 
@@ -64,10 +64,10 @@ public class SolutionController {
     @Login
     @PatchMapping("/{solutionId}")
     public ResponseEntity<?> update(@PathVariable Long solutionId, @LoggedInMember Long memberId,
-                                    @RequestBody @Valid SolutionPatchRequest solutionPatchRequest){
+                                    @RequestBody @Valid UpdateSolutionRequest updateSolutionRequest){
 
         // solutionService로 update한다
-        Long updateId = solutionService.update(solutionId, solutionPatchRequest, memberId);
+        Long updateId = solutionService.update(solutionId, updateSolutionRequest, memberId);
 
         // 성공할 시 solutiuonId에 해당하는 URI로 리다이렉트, 상태코드 302
         return redirect(updateId);
@@ -89,9 +89,19 @@ public class SolutionController {
     // Solution 상세보기 요청
     @GetMapping("/{solutionId}")
     public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId) {
-        SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
-        return ResponseEntity.ok().body(solutionDetailResponse);
+        ShowSolutionDetailWithProblemAndCommentsResponse showSolutionDetailWithProblemAndCommentsResponse = solutionService.getSolutionDetail(solutionId, memberId);
+        return ResponseEntity.ok().body(showSolutionDetailWithProblemAndCommentsResponse);
     }
+
+
+    @Login
+    @GetMapping("/mypage/solution")
+    public ResponseEntity<?> mySolutionDetail(@LoggedInMember Long memberId, @RequestParam(required = false) Long solutionId){
+        ShowMySolutionDetailResponse showMySolutionDetailResponse = solutionService.getMySolutionDetail(memberId,solutionId);
+        return ResponseEntity.ok().body(showMySolutionDetailResponse);
+    }
+
+
 
     private ResponseEntity redirect(Long solutionId) {
         if (solutionId==null){

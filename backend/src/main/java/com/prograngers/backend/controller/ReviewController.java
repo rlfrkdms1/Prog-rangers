@@ -3,9 +3,9 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
-import com.prograngers.backend.dto.review.request.ReviewPostRequest;
-import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
+import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
+import com.prograngers.backend.dto.review.request.WriteReviewRequest;
+import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,23 +34,23 @@ public class ReviewController {
     // 상세보기 한 줄 리뷰
     @GetMapping("/reviews")
     public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId){
-        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
+        ShowReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
         return ResponseEntity.ok().body(reviewDetail);
     }
 
     @PostMapping("/reviews")
     @Login
-    public ResponseEntity<?> writeReview(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPostRequest reviewPostRequest, @LoggedInMember Long memberId){
-        reviewService.writeReview(reviewPostRequest,memberId,solutionId);
+    public ResponseEntity<?> writeReview(@PathVariable Long solutionId, @Valid  @RequestBody WriteReviewRequest writeReviewRequest, @LoggedInMember Long memberId){
+        reviewService.writeReview(writeReviewRequest,memberId,solutionId);
         // 풀이 상세보기로 리다이렉트
         return redirect(solutionId);
     }
 
     @PatchMapping("/reviews/{reviewId}")
     @Login
-    public ResponseEntity<?> updateReview(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPatchRequest reviewPatchRequest,
+    public ResponseEntity<?> updateReview(@PathVariable Long solutionId, @Valid  @RequestBody UpdateReviewRequest updateReviewRequest,
                                          @LoggedInMember Long memberId,@PathVariable Long reviewId){
-        reviewService.updateReview(reviewPatchRequest,memberId,reviewId);
+        reviewService.updateReview(updateReviewRequest,memberId,reviewId);
         // 풀이 상세보기로 리다이렉트
         return redirect(solutionId);
     }

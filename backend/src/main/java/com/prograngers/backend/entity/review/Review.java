@@ -59,10 +59,9 @@ public class Review {
     @Enumerated(value = EnumType.STRING)
     private ReviewStatusConStant status;
 
-    public Review update(String content){
+    public void update(String content){
         this.content = content;
         this.status = FIXED;
-        return this;
     }
 
     public void delete() {

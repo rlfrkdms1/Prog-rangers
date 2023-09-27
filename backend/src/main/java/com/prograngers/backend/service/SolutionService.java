@@ -1,18 +1,25 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.solution.response.SolutionDetailComment;
-import com.prograngers.backend.dto.solution.response.SolutionDetailProblem;
-import com.prograngers.backend.dto.solution.response.SolutionDetailSolution;
+import com.prograngers.backend.dto.review.response.ReviewWithRepliesResponse;
+import com.prograngers.backend.dto.solution.response.MainSolutionResponse;
+import com.prograngers.backend.dto.solution.response.ProblemResponse;
+import com.prograngers.backend.dto.solution.response.ReviewWIthRepliesResponse;
+import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
+import com.prograngers.backend.dto.solution.response.SolutionTitleAndIdResponse;
+import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse;
+import com.prograngers.backend.dto.solution.response.CommentWithRepliesResponse;
+import com.prograngers.backend.dto.solution.response.SolutionResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
-import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
-import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.response.ShowSolutionDetailWithProblemAndCommentsResponse;
+import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
+import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -39,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,13 +71,13 @@ public class SolutionService {
     private final LikesRepository likesRepository;
 
     @Transactional
-    public Long save(SolutionPostRequest solutionPostRequest, Long memberId) {
-        Solution solution = solutionPostRequest.toSolution(getProblem(solutionPostRequest),findMemberById(memberId));
+    public Long save(WriteSolutionRequest writeSolutionRequest, Long memberId) {
+        Solution solution = writeSolutionRequest.toSolution(getProblem(writeSolutionRequest),findMemberById(memberId));
         return solutionRepository.save(solution).getId();
     }
 
     @Transactional
-    public Long update(Long solutionId, SolutionPatchRequest request, Long memberId) {
+    public Long update(Long solutionId, UpdateSolutionRequest request, Long memberId) {
         Solution target = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
         validMemberAuthorization(target, member);
@@ -98,19 +106,19 @@ public class SolutionService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
     @Transactional
-    public Long saveScrap(Long scrapTargetId, ScarpSolutionPostRequest request, Long memberId) {
+    public Long saveScrap(Long scrapTargetId, ScarpSolutionRequest request, Long memberId) {
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
         Solution solution = request.toSolution(findSolutionById(scrapTargetId),findMemberById(memberId));
         return solutionRepository.save(solution).getId();
     }
 
-    public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
+    public ShowSolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
         Solution target = findSolutionById(solutionId);
         validMemberAuthorization(target, findMemberById(memberId));
-        return SolutionUpdateFormResponse.toDto(target);
+        return ShowSolutionUpdateFormResponse.toDto(target);
     }
 
-    public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
+    public ShowSolutionDetailWithProblemAndCommentsResponse getSolutionDetail(Long solutionId, Long memberId) {
         // 풀이, 문제, 회원 가져오기
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
@@ -135,16 +143,16 @@ public class SolutionService {
         boolean scraped = validScraped(memberId, scrapedSolutions);
 
         // 문제 response 만들기
-        SolutionDetailProblem solutionDetailProblem = SolutionDetailProblem.from(problem);
+         ProblemResponse solutionDetailProblem = ProblemResponse.from(problem.getTitle(),problem.getOjName());
 
         // 풀이 response 만들기
-        SolutionDetailSolution solutionDetailSolution = SolutionDetailSolution.from(solution,solution.getMember().getNickname(),problem.getLink(),
+        SolutionResponse solutionResponse = SolutionResponse.from(solution,solution.getMember().getNickname(),problem.getLink(),
                 likes.size(),scrapedSolutions.size(),pushedLike,scraped,mine,getScrapSolutionLink(solution));
 
         // 댓글 response 만들기
-        List<SolutionDetailComment> solutionDetailComments = makeCommentsResponse(comments, memberId);
+        List<CommentWithRepliesResponse> commentWithRepliesRespons = makeCommentsResponse(comments, memberId);
 
-        return SolutionDetailResponse.from(solutionDetailProblem,solutionDetailSolution,solutionDetailComments);
+        return ShowSolutionDetailWithProblemAndCommentsResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesRespons);
     }
 
     private String getScrapSolutionLink(Solution solution){
@@ -154,35 +162,35 @@ public class SolutionService {
         return null;
     }
 
-    private List<SolutionDetailComment> makeCommentsResponse(List<Comment> comments, Long memberId) {
+    private List<CommentWithRepliesResponse> makeCommentsResponse(List<Comment> comments, Long memberId) {
         // 먼저 부모가 없는 댓글들을 전부 더한다
-        List<SolutionDetailComment> commentResponseList = new ArrayList<>();
+        List<CommentWithRepliesResponse> commentWithRepliesResponseList = new ArrayList<>();
 
                 comments.stream().filter(comment -> comment.getParentId()==null)
                                 .forEach(comment -> {
-                                    commentResponseList.add(SolutionDetailComment.from(comment,new ArrayList<>(), checkCommentIsMine(memberId,comment)));
+                                    commentWithRepliesResponseList.add(CommentWithRepliesResponse.from(comment,new ArrayList<>(), checkCommentIsMine(memberId,comment)));
                                 });
 
         // 부모가 있는 댓글들을 더한다
         comments.stream().filter((comment)->comment.getParentId()!=null)
                 .forEach((comment)->{
-                    addReplyComments(commentResponseList, comment, memberId);
+                    addReplyComments(commentWithRepliesResponseList, comment, memberId);
                 });
 
-        return commentResponseList;
+        return commentWithRepliesResponseList;
     }
 
     private boolean checkCommentIsMine(Long memberId, Comment comment) {
         return comment.getMember().getId().equals(memberId);
     }
 
-    private void addReplyComments(List<SolutionDetailComment> commentResponseList, Comment comment, Long memberId) {
-        commentResponseList.stream()
+    private void addReplyComments(List<CommentWithRepliesResponse> commentWithRepliesResponseList, Comment comment, Long memberId) {
+        commentWithRepliesResponseList.stream()
                 .filter(parentComment->parentComment.getId().equals(comment.getParentId()))
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(SolutionDetailComment.from(comment, checkCommentIsMine(memberId,comment)));
+                .add(CommentWithRepliesResponse.from(comment, checkCommentIsMine(memberId,comment)));
     }
 
     public SolutionListResponse getSolutionList(
@@ -190,6 +198,111 @@ public class SolutionService {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
         return SolutionListResponse.from(solutions,pageable.getPageNumber());
+    }
+
+    // 내 풀이 보여주기
+    public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
+        // member 검증
+        findMemberById(memberId);
+        // solution 검증
+        if (solutionId!=null) findSolutionById(solutionId);
+
+        // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
+        List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
+
+        // 화면의 메인에 보여질 풀이
+        Solution mainSolution = chooseMainSolution(solutionId, solutionList);
+        // 문제
+        Problem problem = mainSolution.getProblem();
+        // 메인 풀이 좋아요 수
+        int likes = likesRepository.findAllBySolution(mainSolution).size();
+        // 메인 풀이 스크랩 수
+        int scraps = solutionRepository.findAllByScrapSolution(mainSolution).size();
+
+        //문제
+        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
+
+        //메인 풀이
+        MainSolutionResponse mainSolutionResponse = MainSolutionResponse.from(
+                mainSolution.getTitle(),Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()),
+                mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
+
+        //메인 풀이의 댓글 엔티티 리스트
+        List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
+        //부모가 없는 댓글들 더하기
+        List<CommentWithRepliesResponse> mainSolutionCommentsResponse = mainSolutionComments.stream().filter((comment -> comment.getParentId()==null))
+                .map(comment -> CommentWithRepliesResponse.from(comment, new ArrayList<>(),checkCommentIsMine(memberId, comment)))
+                .collect(Collectors.toList());
+        // 부모가 있는 댓글들 더하기
+        mainSolutionComments.stream().filter(comment -> comment.getParentId()!=null)
+                .forEach(comment -> addReplyComments(mainSolutionCommentsResponse,comment,memberId));
+
+        //메인 풀이의 리뷰 엔티티 리스트
+        List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
+        //부모가 없는 리뷰들 더하기
+        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
+                .filter(review -> review.getParentId() == null)
+                .map(review -> ReviewWIthRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
+                .collect(Collectors.toList());
+
+        //부모가 있는 리뷰를 더하기
+        mainSolutionReviews.stream()
+                .filter(review -> review.getParentId()!=null)
+                .forEach(review -> addReplyReviews(mainSolutionReviewResponse, review, memberId));
+
+
+
+        // 사이드에 있는 풀이 목록
+        List<SolutionTitleAndIdResponse> sideSolutions = solutionList.stream()
+                .map(solution -> SolutionTitleAndIdResponse.from(solution.getTitle(), solution.getId()))
+                .collect(Collectors.toList());
+
+        // 추천 풀이 : 일단 제목주기, 좋아요 기준으로 가져옴
+        List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
+        List<RecommendedSolutionResponse> recommendedSolutionList = recommendedSolutions.stream()
+                .map(solution -> makeRecommendedSolutionList(solution))
+                .collect(Collectors.toList());
+
+        // 이 문제에 대해 내가 스크랩 한 다른사람의 풀이 목록
+        List<SolutionTitleAndIdResponse> sideScrapSolutions  = solutionRepository.findAllByProblem(problem)
+                .stream().filter(solution -> solution.getScrapSolution() != null)
+                .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(), solution.getScrapSolution().getId()))
+                .collect(Collectors.toList());
+
+
+        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,mainSolutionReviewResponse,recommendedSolutionList,sideSolutions,sideScrapSolutions);
+    }
+
+    private RecommendedSolutionResponse makeRecommendedSolutionList(Solution solution) {
+        return RecommendedSolutionResponse.from(solution.getId(),likesRepository.findAllBySolution(solution).size(),solution.getTitle(),solution.getMember().getNickname());
+    }
+
+    private void addReplyReviews(List<ReviewWIthRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
+        mainSolutionReviewResponse.stream()
+                .filter(parentReview->parentReview.getId().equals(review.getParentId()))
+                .findFirst()
+                .get()
+                .getReplies()
+                .add(ReviewWIthRepliesResponse.from(review, checkReviewIsMine(memberId,review)));
+    }
+
+    private boolean checkReviewIsMine(Long memberId, Review review) {
+        return review.getMember().getId().equals(memberId);
+    }
+
+    private Solution chooseMainSolution(Long solutionId, List<Solution> solutionList) {
+        if (solutionList==null){
+            return null;
+        }
+        if (solutionId==null){
+            return solutionList.get(0);
+        }
+        for (Solution solution : solutionList){
+            if (solution.getId().equals(solutionId)){
+                return solution;
+            }
+        }
+        throw new SolutionNotFoundException();
     }
 
 
@@ -233,18 +346,18 @@ public class SolutionService {
                 .anyMatch(id -> id.equals(memberId));
     }
 
-    public Problem getProblem(SolutionPostRequest solutionPostRequest){
+    public Problem getProblem(WriteSolutionRequest writeSolutionRequest){
         // 입력한 문제가 이미 존재하는 문제인지 확인
-        Problem recentProblem = problemRepository.findByLink(solutionPostRequest.getProblemLink());
+        Problem recentProblem = problemRepository.findByLink(writeSolutionRequest.getProblemLink());
         // 존재하는 문제일 경우
         if (recentProblem!=null){
             return recentProblem;
         }
         // 존재하지 않는 문제일 경우 새로운 문제를 만들어서 반환한다
         // 링크 검증
-        JudgeConstant judgeName = validLink(solutionPostRequest.getProblemLink());
+        JudgeConstant judgeName = validLink(writeSolutionRequest.getProblemLink());
 
-        return solutionPostRequest.toProblem(judgeName);
+        return writeSolutionRequest.toProblem(judgeName);
     }
 
     private JudgeConstant validLink(String problemLink) {

@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,37 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .where(solution.member.id.eq(memberId), solution.id.loe(page))
                 .orderBy(solution.createdAt.desc())
                 .limit(3)
+                .fetch();
+    }
+
+    @Override
+    public List<Solution> findAllSolutionOfNewestProblem(Long memberId){
+       //  QSolution subSolution = new QSolution("subSolution");
+
+        Long recentProblemId = jpaQueryFactory
+                .select(solution.problem.id)
+                .from(solution)
+                .orderBy(solution.createdAt.desc())
+                .limit(1)
+                .fetchOne();
+
+        return jpaQueryFactory
+                .select(solution)
+                .from(solution)
+                .where(solution.problem.id.eq(recentProblemId))
+                .orderBy(solution.createdAt.desc())
+                .fetch();
+    }
+
+    public List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Long problemId){
+        return jpaQueryFactory
+                .select(solution)
+                .from(likes)
+                .rightJoin(likes.solution,solution)
+                .groupBy(solution)
+                .where(solution.problem.id.eq(problemId))
+                .orderBy(likes.count().desc(),solution.createdAt.desc())
+                .limit(6)
                 .fetch();
     }
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {

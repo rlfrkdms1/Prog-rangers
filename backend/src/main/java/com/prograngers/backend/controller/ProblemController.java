@@ -1,6 +1,6 @@
 package com.prograngers.backend.controller;
 
-import com.prograngers.backend.dto.problem.response.ProblemListResponse;
+import com.prograngers.backend.dto.problem.response.ShowProblemListResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class ProblemController {
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = SORT_CONSTANT_DEFAULT) SortConstant sortBy) {
-        ProblemListResponse problemList  = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
+        ShowProblemListResponse problemList  = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemList);
     }
 

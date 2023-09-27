@@ -2,7 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.member.response.MemberProfileResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.response.member.MemberAccountInfoResponse;
 import com.prograngers.backend.service.MemberService;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,8 +48,8 @@ public class MemberController {
      */
     @GetMapping("/members/profile/{memberNickname}")
     public ResponseEntity<?> memberProfile(@PathVariable String memberNickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
-        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberNickname,page);
-        return ResponseEntity.ok().body(memberProfileResponse);
+        ShowMemberProfileResponse showMemberProfileResponse = memberService.getMemberProfile(memberNickname,page);
+        return ResponseEntity.ok().body(showMemberProfileResponse);
     }
 
 }

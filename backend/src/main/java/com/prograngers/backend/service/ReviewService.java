@@ -1,11 +1,11 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
-import com.prograngers.backend.dto.review.request.ReviewPostRequest;
-import com.prograngers.backend.dto.review.response.SolutionLine;
-import com.prograngers.backend.dto.review.response.SolutionReviewReply;
-import com.prograngers.backend.dto.review.response.SolutionReview;
-import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
+import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
+import com.prograngers.backend.dto.review.request.WriteReviewRequest;
+import com.prograngers.backend.dto.review.response.CodeWithCodeLineNumberAndReviewResponse;
+import com.prograngers.backend.dto.review.response.ReplyResponse;
+import com.prograngers.backend.dto.review.response.ReviewWithRepliesResponse;
+import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
@@ -39,18 +39,18 @@ public class ReviewService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void writeReview(ReviewPostRequest reviewPostRequest, Long memberId,Long solutionId) {
+    public void writeReview(WriteReviewRequest writeReviewRequest, Long memberId, Long solutionId) {
         Member writer = findMemberById(memberId);
         Solution solution = findSolutionById(solutionId);
-        reviewRepository.save(reviewPostRequest.toReview(writer,solution));
+        reviewRepository.save(writeReviewRequest.toReview(writer,solution));
     }
     @Transactional
-    public void updateReview(ReviewPatchRequest reviewPatchRequest, Long memberId, Long reviewId) {
+    public void updateReview(UpdateReviewRequest updateReviewRequest, Long memberId, Long reviewId) {
         Review review = findReviewById(reviewId);
         Member member = findMemberById(memberId);
         validMemberAuthorization(review, member);
         validReviewAlreadyDeleted(review);
-        reviewPatchRequest.updateReview(review);
+        review.update(updateReviewRequest.getContent());
     }
 
     @Transactional
@@ -62,57 +62,57 @@ public class ReviewService {
         review.delete();
     }
 
-    public SolutionReviewsResponse getReviewDetail(Long solutionId,Long memberId) {
+    public ShowReviewsResponse getReviewDetail(Long solutionId, Long memberId) {
         // solutionId에 해당하는 풀이 찾기
         Solution solution = findSolutionById(solutionId);
         // 줄 나눠서 배열에 저장
         String[] lines = solution.getCode().split("\n");
         // 최종 응답 dto에 풀이 내용을 넣는다
-        SolutionReviewsResponse solutionReviewsResponse = SolutionReviewsResponse.from(solution, lines);
+        ShowReviewsResponse showReviewsResponse = ShowReviewsResponse.from(solution, lines);
         // 최종 응답 dto에서 line들을 가져온다
-        List<SolutionLine> addedSolutionLines = solutionReviewsResponse.getSolutionLines();
-        addReviewAtLine(addedSolutionLines, memberId);
-        solutionReviewsResponse.setSolutionLines(addedSolutionLines);
-        return solutionReviewsResponse;
+        List<CodeWithCodeLineNumberAndReviewResponse> addedCodeLineResponsWithReviews = showReviewsResponse.getCodeWithCodeLineNumberAndReviewResponse();
+        addReviewAtLine(addedCodeLineResponsWithReviews, memberId);
+        showReviewsResponse.setCodeWithCodeLineNumberAndReviewResponse(addedCodeLineResponsWithReviews);
+        return showReviewsResponse;
     }
 
     private Solution findSolutionById(Long solutionId) {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private void addReviewAtLine(List<SolutionLine> addedSolutionLines, Long memberId) {
+    private void addReviewAtLine(List<CodeWithCodeLineNumberAndReviewResponse> addedCodeLineResponsWithReviews, Long memberId) {
         // 라인들에 대해 for문을 돌면서 리뷰를 추가한다
-        for (SolutionLine solutionLine : addedSolutionLines) {
-            Integer codeLineNumber = solutionLine.getCodeLineNumber();
+        for (CodeWithCodeLineNumberAndReviewResponse codeWithCodeLineNumberAndReviewResponse : addedCodeLineResponsWithReviews) {
+            Integer codeLineNumber = codeWithCodeLineNumberAndReviewResponse.getCodeLineNumber();
 
             // codeLineNumber에 해당하는 review들을 찾는다
             List<Review> reviews = reviewRepository
                     .findAllByCodeLineNumberOrderByCreatedAtAsc(codeLineNumber);
-            List<SolutionReview> solutionReviewResponse = new ArrayList<>();
+            List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse = new ArrayList<>();
 
             // 해당 라인의 리뷰들에 대해 for문을 돈다
             for (Review review : reviews) {
-                // 부모가 없는 리뷰인 경우 ReviewResponse dto로 만든다
+                // 부모가 없는 리뷰인 경우 ReviewWithRepliesResponse dto로 만든다
                 if (review.getParentId() == null) {
-                    makeReviewResponse(solutionReviewResponse, review, memberId);
+                    makeReviewResponse(reviewResponseWithRepliesResponse, review, memberId);
                 }
                 // 부모가 있는 리뷰인 경우 Replyresponse dto로 만든다
                 else {
-                    makeReplyResponse(solutionReviewResponse, review, memberId);
+                    makeReplyResponse(reviewResponseWithRepliesResponse, review, memberId);
                 }
             }
-            solutionLine.setSolutionReviews(solutionReviewResponse);
+            codeWithCodeLineNumberAndReviewResponse.setReviewWithRepliesResponse(reviewResponseWithRepliesResponse);
         }
     }
 
-    private void makeReviewResponse(List<SolutionReview> solutionReviewResponse, Review review, Long memberId) {
-        solutionReviewResponse.add(SolutionReview.from(review, validReviewIsMine(review,memberId)));
+    private void makeReviewResponse(List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse, Review review, Long memberId) {
+        reviewResponseWithRepliesResponse.add(ReviewWithRepliesResponse.from(review, validReviewIsMine(review,memberId)));
     }
 
-    private void makeReplyResponse(List<SolutionReview> solutionReviewResponse, Review review, Long memberId) {
-        for (SolutionReview r : solutionReviewResponse) {
+    private void makeReplyResponse(List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse, Review review, Long memberId) {
+        for (ReviewWithRepliesResponse r : reviewResponseWithRepliesResponse) {
             if (r.getId().equals(review.getParentId())) {
-                r.getReplies().add(SolutionReviewReply.from(review,validReviewIsMine(review,memberId)));
+                r.getReplies().add(ReplyResponse.from(review,validReviewIsMine(review,memberId)));
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
+import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.review.Review;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -96,8 +95,8 @@ class ReviewServiceTest {
                 ()->assertThrows(ReviewAlreadyDeletedException.class,()->reviewService.deleteReview(1L,1L))
         );
     }
-    private ReviewPatchRequest 리뷰_수정_요청_생성(){
-        return new ReviewPatchRequest("수정 내용");
+    private UpdateReviewRequest 리뷰_수정_요청_생성(){
+        return new UpdateReviewRequest("수정 내용");
     }
 
 }
