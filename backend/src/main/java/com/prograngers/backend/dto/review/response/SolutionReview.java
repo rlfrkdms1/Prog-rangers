@@ -2,7 +2,7 @@ package com.prograngers.backend.dto.review.response;
 
 
 import com.prograngers.backend.entity.review.Review;
-import com.prograngers.backend.entity.review.ReviewStatusConStant;
+import com.prograngers.backend.entity.review.ReviewStatusConstant;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class SolutionReview {
     private List<SolutionReviewReply> replies;
     private boolean mine;
 
-    private ReviewStatusConStant status;
+    private ReviewStatusConstant status;
     public static SolutionReview from(Review review, boolean reviewIsMine){
 
 

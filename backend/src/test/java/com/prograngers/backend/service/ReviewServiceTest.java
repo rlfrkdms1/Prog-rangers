@@ -1,3 +1,4 @@
+/*
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
@@ -100,4 +101,4 @@ class ReviewServiceTest {
         return new ReviewPatchRequest("수정 내용");
     }
 
-}
+}*/

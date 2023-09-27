@@ -3,8 +3,8 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.member.response.MemberProfileResponse;
-import com.prograngers.backend.dto.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.response.member.MemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
+import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class MemberController {
 
     private final MemberService memberService;
@@ -30,7 +29,7 @@ public class MemberController {
 
     @Login
     @GetMapping("/mypage/account-settings")
-    public MemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
+    public ShowMemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 
