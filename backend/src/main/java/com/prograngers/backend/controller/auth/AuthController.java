@@ -25,13 +25,13 @@ import static com.prograngers.backend.controller.auth.RefreshCookieProvider.REFR
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class AuthController {
 
     private final AuthService authService;
     private final RefreshCookieProvider refreshCookieProvider;
 
-    @GetMapping("/check-nickname-duplication")
+    @GetMapping("/members")
     public ResponseEntity<Void> checkNicknameDuplication(@RequestParam String nickname) {
         authService.validNicknameDuplication(nickname);
         return ResponseEntity.noContent().build();
