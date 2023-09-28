@@ -53,6 +53,16 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .fetch();
     }
 
+    private <T> JPAQuery<T> findByConditions(JPAQuery<T> query, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Long memberId) {
+        return query.join(solution.problem, problem).fetchJoin()
+                .where(solution.member.id.eq(memberId),
+                        keywordEq(keyword),
+                        languageEq(language),
+                        algorithmEq(algorithm),
+                        dataStructureEq(dataStructure));
+    }
+
+
     private BooleanExpression keywordEq(String keyword) {
         return keyword != null ? solution.title.contains(keyword) : null;
     }
