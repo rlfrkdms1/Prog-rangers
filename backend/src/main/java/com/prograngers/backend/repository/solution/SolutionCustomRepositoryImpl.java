@@ -52,6 +52,11 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .limit(3)
                 .fetch();
     }
+
+    private BooleanExpression keywordEq(String keyword) {
+        return keyword != null ? solution.title.contains(keyword) : null;
+    }
+
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
         return dataStructure != null ? solution.dataStructure.eq(dataStructure) : null;
     }
