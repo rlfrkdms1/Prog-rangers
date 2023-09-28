@@ -1,6 +1,5 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.review.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.MainSolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
 import com.prograngers.backend.dto.solution.response.ReviewWIthRepliesResponse;
