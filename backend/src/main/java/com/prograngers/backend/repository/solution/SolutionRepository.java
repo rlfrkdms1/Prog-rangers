@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Repository
-public interface SolutionRepository extends JpaRepository<Solution, Long>, QueryDslSolutionRepository{
+public interface SolutionRepository extends JpaRepository<Solution, Long>, SolutionCustomRepository {
     List<Solution> findAllByMember(Member member);
     List<Solution> findAllByScrapSolution(Solution solution);
     List<Solution> findTop3ByMemberOrderByCreatedAtDesc(Member member);

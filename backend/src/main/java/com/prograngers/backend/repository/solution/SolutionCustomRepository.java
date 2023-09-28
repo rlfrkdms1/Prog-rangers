@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface QueryDslSolutionRepository {
+public interface SolutionCustomRepository {
 
     PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm,
