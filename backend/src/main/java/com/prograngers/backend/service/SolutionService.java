@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.solution.response.ShowMySolutionListResponse;
 import com.prograngers.backend.dto.solution.response.SolutionDetailComment;
 import com.prograngers.backend.dto.solution.response.SolutionDetailProblem;
 import com.prograngers.backend.dto.solution.response.SolutionDetailSolution;
@@ -33,7 +34,9 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +51,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class SolutionService {
 
+    private static final int MY_SOLUTION_LIST_PAGE_SIZE = 4;
     private final MessageSource ms;
 
     private final SolutionRepository solutionRepository;
@@ -244,8 +248,10 @@ public class SolutionService {
         return JudgeConstant.from(problemLink);
     }
 
-    public void getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, LanguageConstant language1, int page, Long memberId) {
+    public ShowMySolutionListResponse getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, int page, Long memberId) {
         validPageNumber(page);
+        Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(page, MY_SOLUTION_LIST_PAGE_SIZE), keyword, language, algorithm, dataStructure, level, memberId);
+        return ShowMySolutionListResponse.from(solutions);
     }
 
     private void validPageNumber(int page) {
