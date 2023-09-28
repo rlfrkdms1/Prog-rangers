@@ -2,7 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.response.dashboard.ShowDashBoardResponse;
+import com.prograngers.backend.dto.dashboard.response.ShowDashBoardResponse;
 import com.prograngers.backend.service.DashBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +14,7 @@ import java.time.YearMonth;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class DashBoardController {
 
     private final DashBoardService dashBoardService;

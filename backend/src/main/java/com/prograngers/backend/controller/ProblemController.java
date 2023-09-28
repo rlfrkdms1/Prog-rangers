@@ -23,7 +23,7 @@ import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("prog-rangers/problems")
+@RequestMapping("/api/v1/problems")
 @Slf4j
 public class ProblemController {
 
