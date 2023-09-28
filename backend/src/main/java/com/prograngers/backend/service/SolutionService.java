@@ -202,7 +202,6 @@ public class SolutionService {
 
     // 내 풀이 보여주기
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
-        findMemberById(memberId);
         Solution mainSolution = findSolutionById(solutionId);
         List<Solution> solutionList = solutionRepository.findAllByProblem(mainSolution.getProblem());
         Problem problem = mainSolution.getProblem();
