@@ -202,74 +202,62 @@ public class SolutionService {
 
     // 내 풀이 보여주기
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
-        // member 검증
         findMemberById(memberId);
-        // solution 검증, 화면의 메인에 보여질 풀이
         Solution mainSolution = findSolutionById(solutionId);
-
-        // member가 가장 최근에 푼 풀이의 문제의 모든 풀이를 가져온다
-        // List<Solution> solutionList = solutionRepository.findAllSolutionOfNewestProblem(memberId);
         List<Solution> solutionList = solutionRepository.findAllByProblem(mainSolution.getProblem());
-
-        // 문제
         Problem problem = mainSolution.getProblem();
-        // 메인 풀이 좋아요 수
         int likes = likesRepository.findAllBySolution(mainSolution).size();
-        // 메인 풀이 스크랩 수
         int scraps = solutionRepository.findAllByScrapSolution(mainSolution).size();
-
-        //문제
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-
-        //메인 풀이
-        MainSolutionResponse mainSolutionResponse = MainSolutionResponse.from(
-                mainSolution.getTitle(),Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()),
-                mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
-
-        //메인 풀이의 댓글 엔티티 리스트
+        MainSolutionResponse mainSolutionResponse = MainSolutionResponse.from(mainSolution.getTitle(),Arrays.asList(mainSolution.getAlgorithm(),mainSolution.getDataStructure()), mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
         List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
-        //부모가 없는 댓글들 더하기
+        List<CommentWithRepliesResponse> mainSolutionCommentsResponse = getMainSolutionCommentsResponse(memberId, mainSolutionComments);
+        List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
+        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = getMainSolutionReviewResponse(memberId, mainSolutionReviews);
+        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(solutionList);
+        List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
+        List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
+        List<SolutionTitleAndIdResponse> sideScrapSolutions  = getSideScrapSolutions(problem);
+        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,mainSolutionReviewResponse,recommendedSolutionList,sideSolutions,sideScrapSolutions);
+    }
+
+    private List<CommentWithRepliesResponse> getMainSolutionCommentsResponse(Long memberId, List<Comment> mainSolutionComments) {
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = mainSolutionComments.stream().filter((comment -> comment.getParentId()==null))
                 .map(comment -> CommentWithRepliesResponse.from(comment, new ArrayList<>(),checkCommentIsMine(memberId, comment)))
                 .collect(Collectors.toList());
-        // 부모가 있는 댓글들 더하기
         mainSolutionComments.stream().filter(comment -> comment.getParentId()!=null)
-                .forEach(comment -> addReplyComments(mainSolutionCommentsResponse,comment,memberId));
+                .forEach(comment -> addReplyComments(mainSolutionCommentsResponse,comment, memberId));
+        return mainSolutionCommentsResponse;
+    }
 
-        //메인 풀이의 리뷰 엔티티 리스트
-        List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
-        //부모가 없는 리뷰들 더하기
+    private List<ReviewWIthRepliesResponse> getMainSolutionReviewResponse(Long memberId, List<Review> mainSolutionReviews) {
         List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
                 .filter(review -> review.getParentId() == null)
                 .map(review -> ReviewWIthRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
                 .collect(Collectors.toList());
-
-        //부모가 있는 리뷰를 더하기
         mainSolutionReviews.stream()
                 .filter(review -> review.getParentId()!=null)
                 .forEach(review -> addReplyReviews(mainSolutionReviewResponse, review, memberId));
+        return mainSolutionReviewResponse;
+    }
 
-
-
-        // 사이드에 있는 풀이 목록
-        List<SolutionTitleAndIdResponse> sideSolutions = solutionList.stream()
+    private static List<SolutionTitleAndIdResponse> getSideSolutions(List<Solution> solutionList) {
+        return solutionList.stream()
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getTitle(), solution.getId()))
                 .collect(Collectors.toList());
+    }
 
-        // 추천 풀이 : 일단 제목주기, 좋아요 기준으로 가져옴
-        List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
-        List<RecommendedSolutionResponse> recommendedSolutionList = recommendedSolutions.stream()
+    private List<RecommendedSolutionResponse> getRecommendedSolutions(List<Solution> recommendedSolutions) {
+        return recommendedSolutions.stream()
                 .map(solution -> makeRecommendedSolutionList(solution))
                 .collect(Collectors.toList());
+    }
 
-        // 이 문제에 대해 내가 스크랩 한 다른사람의 풀이 목록
-        List<SolutionTitleAndIdResponse> sideScrapSolutions  = solutionRepository.findAllByProblem(problem)
+    private List<SolutionTitleAndIdResponse> getSideScrapSolutions(Problem problem) {
+        return solutionRepository.findAllByProblem(problem)
                 .stream().filter(solution -> solution.getScrapSolution() != null)
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(), solution.getScrapSolution().getId()))
                 .collect(Collectors.toList());
-
-
-        return ShowMySolutionDetailResponse.from(problemResponse,mainSolutionResponse,mainSolutionCommentsResponse,mainSolutionReviewResponse,recommendedSolutionList,sideSolutions,sideScrapSolutions);
     }
 
     private RecommendedSolutionResponse makeRecommendedSolutionList(Solution solution) {
