@@ -1,10 +1,12 @@
 package com.prograngers.backend.repository.solution;
 
 import com.prograngers.backend.entity.Follow;
+import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.repository.follow.FollowRepository;
+import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.support.RepositoryTest;
@@ -50,6 +52,9 @@ class SolutionRepositoryTest {
 
     @Autowired
     private FollowRepository followRepository;
+    
+    @Autowired
+    private LikesRepository likesRepository;
 
     @DisplayName("멤버 이름으로 풀이를 전부 찾을 수 있다")
     @Test
@@ -362,24 +367,80 @@ class SolutionRepositoryTest {
         );
     }
 
+    @Test
+    @DisplayName("문제가 주어졌을 때 좋아요 순으로 상위 6개의 풀이를 정렬해서 가져올 수 있다")
+    void 문제_풀이_좋아요_정렬_가져오기(){
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Member member4 = 저장(장지담.기본_정보_생성());
+        Member member5 = 저장(장지담.기본_정보_생성());
+        Member member6 = 저장(장지담.기본_정보_생성());
+
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution7 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        
+        저장(좋아요_생성(member1,solution1));
+        저장(좋아요_생성(member2,solution1));
+        저장(좋아요_생성(member3,solution1));
+        저장(좋아요_생성(member4,solution1));
+        저장(좋아요_생성(member5,solution1));
+        저장(좋아요_생성(member6,solution1));
+
+        저장(좋아요_생성(member1,solution2));
+        저장(좋아요_생성(member2,solution2));
+        저장(좋아요_생성(member3,solution2));
+        저장(좋아요_생성(member4,solution2));
+        저장(좋아요_생성(member5,solution2));
+
+        저장(좋아요_생성(member1,solution3));
+        저장(좋아요_생성(member2,solution3));
+        저장(좋아요_생성(member3,solution3));
+        저장(좋아요_생성(member4,solution3));
+
+        저장(좋아요_생성(member1,solution4));
+        저장(좋아요_생성(member2,solution4));
+        저장(좋아요_생성(member2,solution4));
+
+        저장(좋아요_생성(member1,solution5));
+        저장(좋아요_생성(member2,solution5));
+
+        저장(좋아요_생성(member1,solution6));
+
+        List<Solution> result = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
+
+        assertThat(result).containsExactly(solution1,solution2,solution3,solution4,solution5,solution6);
+    }
+
+    private Likes 좋아요_생성(Member member, Solution solution){
+        return Likes.builder()
+                .member(member)
+                .solution(solution)
+                .build();
+    }
 
     private Follow 팔로우_생성(Member member1, Member member2) {
-        return Follow.builder().followerId(member1.getId()).followingId(member2.getId()).build();
+        return Follow
+                .builder()
+                .followerId(member1.getId())
+                .followingId(member2.getId())
+                .build();
     }
 
     private Member 저장(Member member) {
         return memberRepository.save(member);
     }
-
     private Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
-
-    private Solution 저장(Solution solution) {
-        return solutionRepository.save(solution);
-    }
-
-    private Follow 저장(Follow follow) {return followRepository.save(follow);}
-
-
+    private Solution 저장(Solution solution) { return solutionRepository.save(solution); }
+    private Follow 저장(Follow follow) { return followRepository.save(follow); }
+    private Likes 저장(Likes likes){ return likesRepository.save(likes); }
 }
