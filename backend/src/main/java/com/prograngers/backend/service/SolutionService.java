@@ -18,6 +18,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
@@ -243,4 +244,13 @@ public class SolutionService {
         return JudgeConstant.from(problemLink);
     }
 
+    public void getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, LanguageConstant language1, int page, Long memberId) {
+        validPageNumber(page);
+    }
+
+    private void validPageNumber(int page) {
+        if (page < 1) {
+            throw new InvalidPageNumberException();
+        }
+    }
 }
