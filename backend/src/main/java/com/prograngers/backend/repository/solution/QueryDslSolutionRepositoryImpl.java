@@ -50,24 +50,6 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .fetch();
     }
 
-    @Override
-    public List<Solution> findAllSolutionOfNewestProblem(Long memberId){
-       //  QSolution subSolution = new QSolution("subSolution");
-
-        Long recentProblemId = jpaQueryFactory
-                .select(solution.problem.id)
-                .from(solution)
-                .orderBy(solution.createdAt.desc())
-                .limit(1)
-                .fetchOne();
-
-        return jpaQueryFactory
-                .select(solution)
-                .from(solution)
-                .where(solution.problem.id.eq(recentProblemId))
-                .orderBy(solution.createdAt.desc())
-                .fetch();
-    }
 
     public List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Long problemId){
         return jpaQueryFactory

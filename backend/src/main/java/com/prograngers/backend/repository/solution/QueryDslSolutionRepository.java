@@ -17,7 +17,5 @@ public interface QueryDslSolutionRepository {
             DataStructureConstant dataStructure, SortConstant sortBy);
     List<Solution> findProfileSolutions(Long memberId,Long page);
 
-    List<Solution> findAllSolutionOfNewestProblem(Long memberId);
-
     List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Long problemId);
 }
