@@ -7,23 +7,24 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.prograngers.backend.entity.QLikes.*;
+import static com.prograngers.backend.entity.problem.QProblem.problem;
 import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.entity.solution.QSolution.*;
 
 @RequiredArgsConstructor
-@Repository
 @Slf4j
-public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepository {
+public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -51,6 +52,19 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .orderBy(solution.createdAt.desc())
                 .limit(3)
                 .fetch();
+    }
+
+    @Override
+    public Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Long memberId) {
+        JPAQuery<Solution> contentQuery = jpaQueryFactory.selectFrom(solution);
+        JPAQuery<Long> countQuery = jpaQueryFactory.select(solution.count()).from(solution);
+        List<Solution> content = findByConditions(contentQuery, keyword, language, algorithm, dataStructure, memberId)
+                .orderBy(solution.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        Long count = findByConditions(countQuery, keyword, language, algorithm, dataStructure, memberId).fetchOne();
+        return count == null ? Page.empty() : new PageImpl<>(content, pageable, count);
     }
 
     private <T> JPAQuery<T> findByConditions(JPAQuery<T> query, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Long memberId) {
