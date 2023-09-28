@@ -31,15 +31,15 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
     @InjectMocks
-    AuthService authService;
+    private AuthService authService;
     @Mock
-    MemberRepository memberRepository;
-    @Mock JwtTokenProvider jwtTokenProvider;
-    @Mock RefreshTokenRepository refreshTokenRepository;
+    private MemberRepository memberRepository;
+    @Mock private JwtTokenProvider jwtTokenProvider;
+    @Mock private RefreshTokenRepository refreshTokenRepository;
 
     @Test
     @DisplayName("같은 닉네임을 가진 회원이 이미 존재할 경우 중복 검사시 예외를 반환한다.")
-    public void 닉네임이_중복검사시_예외를_반환할_수_있다(){
+    void 닉네임이_중복검사시_예외를_반환할_수_있다(){
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
@@ -49,7 +49,7 @@ class AuthServiceTest {
     }
 
     @Test
-    public void 닉네임_중복검사를_할_수_있다() {
+    void 닉네임_중복검사를_할_수_있다() {
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.empty());
         authService.validNicknameDuplication(nickname);
@@ -57,7 +57,7 @@ class AuthServiceTest {
     }
 
     @Test
-    public void 이미_가입된_회원의_경우_예외를_반환한다(){
+    void 이미_가입된_회원의_경우_예외를_반환한다(){
         String email = "rlfrkdms1@naver.com";
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(길가은.이메일_추가_생성(email)));
         assertAll(
@@ -68,7 +68,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("회원가입시 존재하는 닉네임으로 요청하면 예외를 반환한다.")
-    public void 이미_존재하는_닉네임의_경우_예외를_반환한다(){
+    void 이미_존재하는_닉네임의_경우_예외를_반환한다(){
         String email = "email";
         String nickname = "rlfrkdms1";
         given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
@@ -81,7 +81,7 @@ class AuthServiceTest {
     }
 
     @Test
-    public void 회원가입을_진행할_수_있다() {
+    void 회원가입을_진행할_수_있다() {
         String email = "email";
         String nickname = "rlfrkdms1";
         String expectedToken = "expectedAccessToken";
@@ -116,7 +116,7 @@ class AuthServiceTest {
     }
 
     @Test
-    public void 일반_로그인_이메일이_틀렸을_떄(){
+    void 일반_로그인_이메일이_틀렸을_떄(){
         String email = "rlfrkdms@naver.com";
         String password = "rlfrkdms";
         LoginRequest loginRequest = 길가은.로그인_요청_생성(email, password);
@@ -129,7 +129,7 @@ class AuthServiceTest {
     }
 
     @Test
-    public void 일반_로그인_비밀번호_틀렸을_떄(){
+    void 일반_로그인_비밀번호_틀렸을_떄(){
         String email = "rlfrkdms@naver.com";
         String correctEncodedPassword = "rlfrkdms";
         String wrongPassword = "rlfrk";
@@ -148,7 +148,7 @@ class AuthServiceTest {
     }
 
     @Test
-    public void 일반_로그인(){
+    void 일반_로그인(){
         String email = "rlfrkdms@naver.com";
         String password = "password";
         String encodedPassword = "encodedPassword";
