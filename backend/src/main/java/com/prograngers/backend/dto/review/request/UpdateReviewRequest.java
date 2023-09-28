@@ -11,5 +11,4 @@ import lombok.Setter;
 public class UpdateReviewRequest {
     @NotBlank(message = "내용은 빈칸일 수 없습니다")
     String  content;
-
 }

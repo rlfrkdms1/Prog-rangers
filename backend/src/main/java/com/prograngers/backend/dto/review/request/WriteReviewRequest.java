@@ -13,7 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Getter
 @Setter

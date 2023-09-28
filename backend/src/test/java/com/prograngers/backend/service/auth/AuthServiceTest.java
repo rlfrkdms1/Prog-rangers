@@ -1,7 +1,7 @@
 package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.dto.request.auth.LoginRequest;
-import com.prograngers.backend.dto.request.auth.SignUpRequest;
+import com.prograngers.backend.dto.auth.request.LoginRequest;
+import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
@@ -88,7 +88,7 @@ class AuthServiceTest {
         String password = "test";
         String encodedPassword = "encodedPassword";
         SignUpRequest signUpRequest = 길가은.회원_가입_요청_생성(email, password);
-        Member member = 길가은.일반_회원_생성(1L, email, encodedPassword);
+        Member member = 길가은.일반_회원_생성(email, encodedPassword);
         RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).refreshToken(UUID.randomUUID().toString()).build();
 
 

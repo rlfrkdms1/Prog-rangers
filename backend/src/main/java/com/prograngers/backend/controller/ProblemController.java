@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("prog-rangers/problems")
+@RequestMapping("/api/v1/problems")
 @Slf4j
 public class ProblemController {
 

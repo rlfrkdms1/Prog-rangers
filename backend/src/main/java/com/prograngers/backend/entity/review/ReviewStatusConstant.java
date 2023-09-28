@@ -1,6 +1,6 @@
 package com.prograngers.backend.entity.review;
 
-public enum ReviewStatusConStant {
+public enum ReviewStatusConstant {
     CREATED,
     FIXED,
     DELETED

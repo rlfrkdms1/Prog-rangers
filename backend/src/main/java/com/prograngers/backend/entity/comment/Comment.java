@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
 
 @Entity
 @Getter
@@ -41,15 +41,18 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id",nullable = false)
     private Solution solution;
+
     @Column(nullable = false)
     private String content;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     private Long parentId;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private CommentStatusConStant status;
+    private CommentStatusConstant status;
 
     public void update(String content) {
         if (content != null) {
@@ -57,6 +60,7 @@ public class Comment {
             this.status = FIXED;
         }
     }
+
     public void delete(){
         this.content = DELETED_CONTENT;
         this.status = DELETED;

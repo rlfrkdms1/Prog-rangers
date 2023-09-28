@@ -20,7 +20,7 @@ import java.net.URI;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class LikesController {
 
     private final MessageSource ms;

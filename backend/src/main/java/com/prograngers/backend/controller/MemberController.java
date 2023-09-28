@@ -3,8 +3,8 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
-import com.prograngers.backend.dto.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.response.member.MemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
+import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/prog-rangers")
+@RequestMapping("/api/v1")
 public class MemberController {
 
     private final MemberService memberService;
@@ -29,7 +29,7 @@ public class MemberController {
 
     @Login
     @GetMapping("/mypage/account-settings")
-    public MemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
+    public ShowMemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 
@@ -40,12 +40,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI)).build();
     }
 
-    /**
-     *  타인 페이지 보기
-     * @param memberId : 멤버 아이디
-     * @param page 최초값 : 9223372036854775807
-     * @return
-     */
     @GetMapping("/members/profile/{memberNickname}")
     public ResponseEntity<?> memberProfile(@PathVariable String memberNickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
         ShowMemberProfileResponse showMemberProfileResponse = memberService.getMemberProfile(memberNickname,page);

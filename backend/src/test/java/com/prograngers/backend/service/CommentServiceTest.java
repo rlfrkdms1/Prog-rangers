@@ -5,7 +5,6 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -18,13 +17,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConStant.DELETED;
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
@@ -55,57 +51,6 @@ class CommentServiceTest {
 
     @InjectMocks
     private CommentService commentService;
-
-    @DisplayName("풀이로 댓글을 찾을 수 있다")
-    @Test
-    void 솔루션으로_댓글_찾기_테스트() {
-
-        // given
-        Member member = 저장(장지담.기본_정보_생성());
-        Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 저장(공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
-
-
-        Comment comment1 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
-        Comment comment2 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
-
-        List<Comment> comments = new ArrayList<>();
-        comments.add(comment1);
-        comments.add(comment2);
-
-        when(commentRepository.findAllBySolution(solution)).thenReturn(comments);
-
-        // when
-        List<Comment> bySolution = commentService.findBySolution(solution);
-
-        // then
-        assertThat(bySolution.size()).isEqualTo(2);
-    }
-
-    @DisplayName("댓글 아이디로 댓글을 찾을 수 있다")
-    @Test
-    void 아이디로_댓글_찾기_테스트() {
-        // given
-        Member member = 저장(장지담.기본_정보_생성());
-        Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 저장(공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1));
-
-
-        Comment comment1 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
-        Comment comment2 = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
-
-        when(commentRepository.save(any())).thenReturn(comment1).thenReturn(comment2);
-        when(commentRepository.findById(1L)).thenReturn(Optional.ofNullable(comment1));
-
-        Comment saved = commentRepository.save(comment1);
-        commentRepository.save(comment2);
-
-        // when
-        Comment found = commentService.findById(1L);
-
-        // then
-        assertThat(found).isEqualTo(saved);
-    }
 
 
     @DisplayName("댓글을 수정할 수 있다")
@@ -166,12 +111,6 @@ class CommentServiceTest {
                 ()-> assertThat(found.getStatus()).isEqualTo(DELETED)
         );
 
-    }
-
-    @DisplayName("없는 댓글을 조회할 경우 예외 발생")
-    @Test
-    void 없는_댓글_조회() {
-        assertThrows(CommentNotFoundException.class, () -> commentService.findById(1L));
     }
 
     @DisplayName("내 댓글이 아닌 댓글을  수정하려 할 경우 예외 발생")

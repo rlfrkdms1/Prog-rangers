@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConStant.*;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Service
 @Slf4j
