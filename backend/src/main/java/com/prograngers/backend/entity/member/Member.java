@@ -67,7 +67,8 @@ public class Member {
     }
 
     @Builder
-    public Member(Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt) {
+    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt) {
+        this.id = id;
         this.socialId = socialId;
         this.type = type;
         this.nickname = nickname;
@@ -78,8 +79,6 @@ public class Member {
         this.photo = photo;
         this.passwordModifiedAt = passwordModifiedAt;
     }
-
-
 
     private void updateNickName(String nickname) {
         if (nickname != null) {
