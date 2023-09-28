@@ -15,21 +15,16 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
-import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
@@ -38,8 +33,6 @@ import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
