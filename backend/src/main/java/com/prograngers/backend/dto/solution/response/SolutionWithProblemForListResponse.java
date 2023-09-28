@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class SolutionWithProblemForListResponse {
 
+    private Long solutionId;
     private JudgeConstant judge;
     private String title;
     private List<HashTag> tags;
@@ -23,6 +24,7 @@ public class SolutionWithProblemForListResponse {
     public static SolutionWithProblemForListResponse from(Solution solution) {
         Problem problem = solution.getProblem();
         return SolutionWithProblemForListResponse.builder()
+                .solutionId(solution.getId())
                 .judge(problem.getOjName())
                 .title(solution.getTitle())
                 .tags(List.of(solution.getAlgorithm(), solution.getDataStructure(), solution.getLanguage()))
