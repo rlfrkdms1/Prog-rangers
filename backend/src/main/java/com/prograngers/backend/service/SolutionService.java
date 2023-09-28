@@ -144,7 +144,7 @@ public class SolutionService {
         return ShowMySolutionDetailResponse.from(problemResponse, mainSolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
     }
 
-    public Solution findSolutionById(Long solutionId) {
+    private Solution findSolutionById(Long solutionId) {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
