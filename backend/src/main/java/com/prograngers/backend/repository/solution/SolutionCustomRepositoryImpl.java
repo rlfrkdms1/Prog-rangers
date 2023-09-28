@@ -55,27 +55,31 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
     }
 
     @Override
-    public Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Long memberId) {
+    public Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId) {
         JPAQuery<Solution> contentQuery = jpaQueryFactory.selectFrom(solution);
         JPAQuery<Long> countQuery = jpaQueryFactory.select(solution.count()).from(solution);
-        List<Solution> content = findByConditions(contentQuery, keyword, language, algorithm, dataStructure, memberId)
+        List<Solution> content = findByConditions(contentQuery, keyword, language, algorithm, dataStructure, level, memberId)
                 .orderBy(solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        Long count = findByConditions(countQuery, keyword, language, algorithm, dataStructure, memberId).fetchOne();
+        Long count = findByConditions(countQuery, keyword, language, algorithm, dataStructure, level, memberId).fetchOne();
         return count == null ? Page.empty() : new PageImpl<>(content, pageable, count);
     }
 
-    private <T> JPAQuery<T> findByConditions(JPAQuery<T> query, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Long memberId) {
+    private <T> JPAQuery<T> findByConditions(JPAQuery<T> query, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId) {
         return query.join(solution.problem, problem).fetchJoin()
                 .where(solution.member.id.eq(memberId),
                         keywordEq(keyword),
                         languageEq(language),
                         algorithmEq(algorithm),
-                        dataStructureEq(dataStructure));
+                        dataStructureEq(dataStructure),
+                        levelEq(level));
     }
 
+    private BooleanExpression levelEq(Integer level) {
+        return level != null ? solution.level.eq(level) : null;
+    }
 
     private BooleanExpression keywordEq(String keyword) {
         return keyword != null ? solution.title.contains(keyword) : null;
