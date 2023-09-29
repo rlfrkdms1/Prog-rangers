@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 public class LoginResponse {
 
-    private String accessToken;
     private String nickname;
+    private String accessToken;
 
     public static LoginResponse from(AuthResult authResult){
         return LoginResponse.builder()
