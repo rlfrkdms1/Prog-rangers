@@ -25,7 +25,6 @@ import java.net.URI;
 public class MemberController {
 
     private final MemberService memberService;
-    private static final String MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI = "/prog-rangers/mypage/account-settings";
 
     @Login
     @GetMapping("/mypage/account-settings")
@@ -37,12 +36,11 @@ public class MemberController {
     @PatchMapping("/mypage/account-settings")
     public ResponseEntity<Void> updateMemberAccountInfo(@LoggedInMember Long memberId,@RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         memberService.updateMemberAccountInfo(memberId, updateMemberAccountInfoRequest);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI)).build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/members/{nickname}")
-    public ResponseEntity<?> memberProfile(@PathVariable String nickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
-        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(nickname,page);
-        return ResponseEntity.ok().body(memberProfileResponse);
+    public ShowMemberProfileResponse showProfile(@PathVariable String nickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
+        return memberService.getMemberProfile(nickname,page);
     }
 }

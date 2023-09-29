@@ -1,18 +1,18 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.MySolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
 import com.prograngers.backend.dto.solution.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
+import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionTitleAndIdResponse;
 import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse;
 import com.prograngers.backend.dto.solution.response.CommentWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.SolutionResponse;
-import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
-import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
-import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.ShowSolutionListResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
@@ -37,7 +37,6 @@ import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -101,7 +101,7 @@ public class SolutionService {
     }
 
 
-    public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
+    public ShowSolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         // 풀이, 문제, 회원 가져오기
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
@@ -115,7 +115,7 @@ public class SolutionService {
         ProblemResponse solutionDetailProblem = ProblemResponse.from(problem.getTitle(), problem.getOjName());
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionId(solution));
         List<CommentWithRepliesResponse> commentWithRepliesResponse = makeCommentsResponse(comments, memberId);
-        return ShowSolutionDetailWithProblemAndCommentsResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesResponse);
+        return ShowSolutionDetailResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesResponse);
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
@@ -183,11 +183,11 @@ public class SolutionService {
                 .add(CommentWithRepliesResponse.of(comment, checkCommentIsMine(memberId, comment)));
     }
 
-    public SolutionListResponse getSolutionList(
+    public ShowSolutionListResponse getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
-        return SolutionListResponse.from(solutions, pageable.getPageNumber());
+        return ShowSolutionListResponse.from(solutions, pageable.getPageNumber());
     }
 
     private List<ReviewWithRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {

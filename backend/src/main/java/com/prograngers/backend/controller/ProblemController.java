@@ -1,20 +1,16 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.problem.response.ShowProblemListResponse;
-import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
-import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.service.ProblemService;
-import com.prograngers.backend.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProblemController {
 
     private final ProblemService problemService;
-    private final SolutionService solutionService;
     private final String SORT_CONSTANT_DEFAULT = "NEWEST";
 
     @GetMapping

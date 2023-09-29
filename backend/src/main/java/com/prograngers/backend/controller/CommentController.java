@@ -40,18 +40,18 @@ public class CommentController {
 
     @Login
     @PostMapping("/solutions/{solutionId}/comments")
-    public ResponseEntity<Void> write(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
+    public ResponseEntity<Void> write(@PathVariable Long solutionId, @RequestBody @Valid WriteCommentRequest request,
                                       @LoggedInMember Long memberId) {
-        commentService.addComment(solutionId, commentRequest, memberId);
+        commentService.addComment(solutionId, request, memberId);
         return ResponseEntity.created(URI.create("/api/v1/solutions/" + solutionId)).build();
     }
 
     @Login
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<Void> update(@PathVariable Long commentId,
-                                       @RequestBody @Valid CommentPatchRequest commentPatchRequest,
+                                       @RequestBody @Valid UpdateCommentRequest request,
                                        @LoggedInMember Long memberId) {
-        commentService.updateComment(commentId, commentPatchRequest, memberId);
+        commentService.updateComment(commentId, request, memberId);
         return ResponseEntity.noContent().build();
     }
 

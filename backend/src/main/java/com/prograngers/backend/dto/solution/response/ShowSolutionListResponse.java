@@ -18,44 +18,44 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SolutionListResponse {
-    String problemName;
-    JudgeConstant ojName;
-    List<SolutionAtSolutionListResponse> solutions;
-    int totalPages;
+public class ShowSolutionListResponse {
 
-    int page;
+    private String problemName;
+    private JudgeConstant ojName;
+    private List<SolutionAtSolutionListResponse> solutions;
+    private int totalPages;
+    private int page;
 
-    public static SolutionListResponse from(PageImpl<Solution> pages, int page) {
+    public static ShowSolutionListResponse from(PageImpl<Solution> pages, int page) {
         List<Solution> solutions = pages.getContent();
         if (solutions.size()==0){
             return null;
         }
         Problem problem = getProblem(solutions);
-        SolutionListResponse solutionListResponse = addProblemNameAndOjNameAtResponse(pages, problem);
-        addSolutionAtResponse(solutions, solutionListResponse);
-        solutionListResponse.setPage(page);
-        return solutionListResponse;
+        ShowSolutionListResponse showSolutionListResponse = addProblemNameAndOjNameAtResponse(pages, problem);
+        addSolutionAtResponse(solutions, showSolutionListResponse);
+        showSolutionListResponse.setPage(page);
+        return showSolutionListResponse;
     }
 
-    private static void addSolutionAtResponse(List<Solution> solutions, SolutionListResponse solutionListResponse) {
+    private static void addSolutionAtResponse(List<Solution> solutions, ShowSolutionListResponse showSolutionListResponse) {
         solutions.stream()
-                        .forEach((solution -> solutionListResponse.getSolutions().add(SolutionAtSolutionListResponse.builder()
+                        .forEach((solution -> showSolutionListResponse.getSolutions().add(SolutionAtSolutionListResponse.builder()
                                 .solutionName(solution.getTitle())
                                 .algorithm(solution.getAlgorithm())
                                 .dataStructure(solution.getDataStructure())
                                 .build())));
     }
 
-    private static SolutionListResponse addProblemNameAndOjNameAtResponse(PageImpl<Solution> pages, Problem problem) {
+    private static ShowSolutionListResponse addProblemNameAndOjNameAtResponse(PageImpl<Solution> pages, Problem problem) {
         // 문제이름, 저지명 세팅
-        SolutionListResponse solutionListResponse = SolutionListResponse.builder()
+        ShowSolutionListResponse showSolutionListResponse = ShowSolutionListResponse.builder()
                 .problemName(problem.getTitle())
                 .ojName(problem.getOjName())
                 .solutions(new ArrayList<>())
                 .totalPages(pages.getTotalPages())
                 .build();
-        return solutionListResponse;
+        return showSolutionListResponse;
     }
 
     private static Problem getProblem(List<Solution> solutions) {

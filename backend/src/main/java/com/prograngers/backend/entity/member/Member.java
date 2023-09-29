@@ -24,7 +24,6 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
