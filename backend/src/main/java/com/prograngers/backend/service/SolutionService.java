@@ -127,8 +127,9 @@ public class SolutionService {
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
         Solution mainSolution = findSolutionById(solutionId);
-        List<Solution> solutionList = solutionRepository.findAllByProblem(mainSolution.getProblem());
         Problem problem = mainSolution.getProblem();
+        List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem);
+        List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
         Long likes = likesRepository.countBySolution(mainSolution);
         Long scraps = solutionRepository.countByScrapSolution(mainSolution);
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
@@ -137,11 +138,17 @@ public class SolutionService {
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments, memberId);
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
         List<ReviewWithRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
-        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(solutionList);
+        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
         List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
-        List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(problem);
+        List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(solutionList, memberId);
         return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+    }
+
+    private List<Solution> getMySolutionList(Long memberId, List<Solution> solutionList) {
+        return solutionList.stream()
+                .filter(solution -> solution.getMember().getId().equals(memberId))
+                .collect(Collectors.toList());
     }
 
     private Solution findSolutionById(Long solutionId) {
@@ -213,9 +220,10 @@ public class SolutionService {
                 .collect(Collectors.toList());
     }
 
-    private List<SolutionTitleAndIdResponse> getSideScrapSolutions(Problem problem) {
-        return solutionRepository.findAllByProblem(problem)
-                .stream().filter(solution -> solution.getScrapSolution() != null)
+    private List<SolutionTitleAndIdResponse> getSideScrapSolutions(List<Solution> solutions,Long memberId) {
+        return solutions.stream()
+                .filter(solution -> solution.getScrapSolution()!=null)
+                .filter(solution -> solution.getMember().getId().equals(memberId))
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(), solution.getScrapSolution().getId()))
                 .collect(Collectors.toList());
     }
