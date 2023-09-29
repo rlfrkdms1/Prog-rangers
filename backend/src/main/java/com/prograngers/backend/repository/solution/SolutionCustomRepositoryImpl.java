@@ -71,7 +71,7 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
 
     @Override
     public Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId) {
-        JPAQuery<Solution> contentQuery = jpaQueryFactory.selectFrom(solution);
+        JPAQuery<Solution> contentQuery = jpaQueryFactory.selectFrom(solution).join(solution.problem).fetchJoin();
         JPAQuery<Long> countQuery = jpaQueryFactory.select(solution.count()).from(solution);
         List<Solution> content = findByConditions(contentQuery, keyword, language, algorithm, dataStructure, level, memberId)
                 .orderBy(solution.createdAt.desc())
@@ -83,8 +83,7 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
     }
 
     private <T> JPAQuery<T> findByConditions(JPAQuery<T> query, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId) {
-        return query.join(solution.problem, problem).fetchJoin()
-                .where(solution.member.id.eq(memberId),
+        return query.where(solution.member.id.eq(memberId),
                         keywordEq(keyword),
                         languageEq(language),
                         algorithmEq(algorithm),
