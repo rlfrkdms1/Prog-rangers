@@ -4,5 +4,5 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
  
 export const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_CLIENT_ID;
 export const NAVER_REDIRECT_URI = "http://localhost:3000/login/naver"
-// export const NAVER_STATE = new BigInteger(130, random).toString();
-// export const NAVER_AUTH_URL =`ttps://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${NAVER_REDIRECT_URI}&state=${NAVER_STATE}`
+export const NAVER_STATE_STRING = process.env.REACT_APP_NAVER_STATE_STRING;
+export const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&amp;client_id={NAVER_CLIENT_ID}&amp;state={NAVER_STATE_STRING}&amp;redirect_uri={NAVER_REDIRECT_URI}`;
