@@ -369,6 +369,23 @@ class SolutionRepositoryTest {
     }
 
     @Test
+    @DisplayName("회원이 주어졌을 때 해당 회원이 작성한 풀이들의 목록을 날짜순으로 조회할 수 있다.")
+    void 내_풀이_목록_조회() {
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now().minusDays(1), JAVA, 1));
+        Solution solution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.now(), JAVA, 1));
+
+        Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, null, null, null, member1.getId());
+
+        assertThat(solutions).containsExactly(solution);
+
+    }
+
+    @Test
     @DisplayName("문제가 주어졌을 때 좋아요 순으로 상위 6개의 풀이를 정렬해서 가져올 수 있다")
     void 문제_풀이_좋아요_정렬_가져오기() {
         Member member1 = 저장(장지담.기본_정보_생성());
