@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export const KakaoReirect = () => {
+export const KakaoRedirect = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const KAKAO_CODE = location.search.split('=')[1];
