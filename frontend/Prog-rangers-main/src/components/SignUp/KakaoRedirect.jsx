@@ -7,6 +7,7 @@ export const KakaoRedirect = () => {
   const navigate = useNavigate();
   let params = new URL(document.location).searchParams;
   let KAKAO_CODE = params.get("code");
+  console.log(KAKAO_CODE);
 
   useEffect(() => {
     fetch(`http://13.124.131.171:8080/api/v1/login/kakao?code=${KAKAO_CODE}`,{
