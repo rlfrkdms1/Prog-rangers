@@ -374,49 +374,31 @@ class SolutionRepositoryTest {
         Member member2 = 저장(장지담.기본_정보_생성());
         Member member3 = 저장(장지담.기본_정보_생성());
         Member member4 = 저장(장지담.기본_정보_생성());
-        Member member5 = 저장(장지담.기본_정보_생성());
-        Member member6 = 저장(장지담.기본_정보_생성());
 
         Problem problem = 저장(백준_문제.기본_정보_생성());
 
-        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
         Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
         Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
-        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
-        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
-        Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
-        Solution solution7 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
-        
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+
         저장(좋아요_생성(member1,solution1));
         저장(좋아요_생성(member2,solution1));
         저장(좋아요_생성(member3,solution1));
         저장(좋아요_생성(member4,solution1));
-        저장(좋아요_생성(member5,solution1));
-        저장(좋아요_생성(member6,solution1));
 
         저장(좋아요_생성(member1,solution2));
         저장(좋아요_생성(member2,solution2));
         저장(좋아요_생성(member3,solution2));
-        저장(좋아요_생성(member4,solution2));
-        저장(좋아요_생성(member5,solution2));
 
         저장(좋아요_생성(member1,solution3));
         저장(좋아요_생성(member2,solution3));
-        저장(좋아요_생성(member3,solution3));
-        저장(좋아요_생성(member4,solution3));
 
         저장(좋아요_생성(member1,solution4));
-        저장(좋아요_생성(member2,solution4));
-        저장(좋아요_생성(member2,solution4));
 
-        저장(좋아요_생성(member1,solution5));
-        저장(좋아요_생성(member2,solution5));
+        List<Solution> result = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem,3);
 
-        저장(좋아요_생성(member1,solution6));
-
-        List<Solution> result = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
-
-        assertThat(result).containsExactly(solution1,solution2,solution3,solution4,solution5,solution6);
+        assertThat(result).containsExactly(solution1,solution2,solution3);
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){
