@@ -1,16 +1,18 @@
 import React, { useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 export const KakaoRedirect = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const KAKAO_CODE = location.search.split('=')[1];
+  let params = new URL(document.location).searchParams;
+  let KAKAO_CODE = params.get("code");
 
   useEffect(() => {
-    fetch(`http://13.124.131.171:8080/api/login/kakao?code=${KAKAO_CODE}`,{
+    fetch(`http://13.124.131.171:8080/api/v1/login/kakao?code=${KAKAO_CODE}`,{
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded;",
+          "Content-Type": "application/json;",
         },
       })
       .then(res =>{
