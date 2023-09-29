@@ -401,6 +401,28 @@ class SolutionRepositoryTest {
         assertThat(result).containsExactly(solution1,solution2,solution3);
     }
 
+    @Test
+    @DisplayName("문제에 해당하는 풀이를 날짜 내림차순으로 가져온다")
+    void findAllByProblemOrderByCreatedAtDescTest(){
+        //given
+        Member member = 저장(장지담.기본_정보_생성());
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+        Problem problem2 = 저장(백준_문제.기본_정보_생성());
+
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(1), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(3), JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(2), JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
+        Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
+
+        //when
+        List<Solution> result = solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem1);
+
+        //then
+        assertThat(result).containsExactly(solution1,solution2,solution3);
+    }
+
     private Likes 좋아요_생성(Member member, Solution solution){
         return Likes.builder()
                 .member(member)
