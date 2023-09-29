@@ -66,7 +66,7 @@ echo location of your Java installation.
 goto fail
 
 :execute
-@rem Setup the command codeWithCodeLineNumberAndReviewResponse
+@rem Setup the command codeLineWithReview
 
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 
