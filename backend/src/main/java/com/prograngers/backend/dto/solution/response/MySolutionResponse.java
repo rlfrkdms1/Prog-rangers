@@ -14,10 +14,10 @@ public class MySolutionResponse {
     private List<Object> tags;
     private String description;
     private String[] code;
-    private int likes;
-    private int  scraps;
+    private Long likes;
+    private Long  scraps;
 
-    public static MySolutionResponse from(String title, List<Object> tags, String description, String[] code, int likes, int scraps){
+    public static MySolutionResponse from(String title, List<Object> tags, String description, String[] code, Long likes, Long scraps){
         return MySolutionResponse.builder()
                 .title(title)
                 .tags(tags)

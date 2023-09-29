@@ -129,8 +129,8 @@ public class SolutionService {
         Solution mainSolution = findSolutionById(solutionId);
         List<Solution> solutionList = solutionRepository.findAllByProblem(mainSolution.getProblem());
         Problem problem = mainSolution.getProblem();
-        int likes = likesRepository.findAllBySolution(mainSolution).size();
-        int scraps = solutionRepository.findAllByScrapSolution(mainSolution).size();
+        Long likes = likesRepository.countBySolution(mainSolution);
+        Long scraps = solutionRepository.countByScrapSolution(mainSolution);
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
         MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution.getTitle(), Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()), mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
         List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
