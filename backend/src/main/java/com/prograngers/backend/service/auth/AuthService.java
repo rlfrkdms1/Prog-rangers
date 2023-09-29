@@ -48,7 +48,7 @@ public class AuthService {
         Member member = findByEmail(loginRequest.getEmail());
         validPassword(member.getPassword(), loginRequest.getPassword());
         //access token 발급
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     private Member findByEmail(String email) {
@@ -61,11 +61,12 @@ public class AuthService {
         }
     }
 
-    private AuthResult issueToken(Long memberId) {
+    private AuthResult issueToken(Member member) {
+        Long memberId = member.getId();
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
         //refresh token 발급, 저장, 쿠키 생성
         RefreshToken refreshToken = refreshTokenRepository.save(createRefreshToken(memberId));
-        return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
+        return AuthResult.of(accessToken, refreshToken, member);
     }
 
     private RefreshToken createRefreshToken(Long memberId) {
@@ -80,7 +81,7 @@ public class AuthService {
         member.encodePassword(member.getPassword());
         memberRepository.save(member);
         //access token 발급
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     private void validExistMember(SignUpRequest signUpRequest) {
@@ -95,7 +96,11 @@ public class AuthService {
         RefreshToken findRefreshToken = validRefreshToken(refreshToken);
         Long memberId = findRefreshToken.getMemberId();
         refreshTokenRepository.delete(findRefreshToken);
-        return issueToken(memberId);
+        return issueToken(findMemberById(memberId));
+    }
+
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private RefreshToken validRefreshToken(String refreshToken) {
@@ -109,7 +114,7 @@ public class AuthService {
         GetKakaoUserInfoResponse getKakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(getKakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(getKakaoUserInfoResponse.getId())
                 .orElseGet(() -> socialRegister(getKakaoUserInfoResponse.toMember()));
-        return issueToken(member.getId());
+        return issueToken(member);
     }
     @Transactional
     public AuthResult googleLogin(String code) {
@@ -117,7 +122,7 @@ public class AuthService {
         GetGoogleUserInfoResponse getGoogleUserInfoResponse = googleOauth.googleGetUserInfo(getGoogleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(getGoogleUserInfoResponse.getId().hashCode()))
                 .orElseGet(() -> socialRegister(getGoogleUserInfoResponse.toMember()));
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     @Transactional
@@ -127,7 +132,7 @@ public class AuthService {
         GetNaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getNaverSocialIdResponse().getId().hashCode()))
                 .orElseGet(() -> socialRegister(userInfo.toMember()));
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     private void validCode(String code) {

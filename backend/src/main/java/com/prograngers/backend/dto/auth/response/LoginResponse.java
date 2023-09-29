@@ -9,10 +9,12 @@ import lombok.Data;
 public class LoginResponse {
 
     private String accessToken;
+    private String nickname;
 
     public static LoginResponse from(AuthResult authResult){
         return LoginResponse.builder()
                 .accessToken(authResult.getAccessToken())
+                .nickname(authResult.getNickname())
                 .build();
     }
 }
