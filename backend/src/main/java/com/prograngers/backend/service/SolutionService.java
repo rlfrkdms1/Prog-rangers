@@ -160,7 +160,7 @@ public class SolutionService {
 
         comments.stream().filter(comment -> comment.getParentId() == null)
                 .forEach(comment -> {
-                    commentWithRepliesResponseList.add(CommentWithRepliesResponse.from(comment, new ArrayList<>(), checkCommentIsMine(memberId, comment)));
+                    commentWithRepliesResponseList.add(CommentWithRepliesResponse.of(comment, new ArrayList<>(), checkCommentIsMine(memberId, comment)));
                 });
         comments.stream().filter((comment) -> comment.getParentId() != null)
                 .forEach((comment) -> {
@@ -180,7 +180,7 @@ public class SolutionService {
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(CommentWithRepliesResponse.from(comment, checkCommentIsMine(memberId, comment)));
+                .add(CommentWithRepliesResponse.of(comment, checkCommentIsMine(memberId, comment)));
     }
 
     public SolutionListResponse getSolutionList(
