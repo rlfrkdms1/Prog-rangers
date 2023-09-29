@@ -2,7 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.response.MySolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
-import com.prograngers.backend.dto.solution.response.ReviewWIthRepliesResponse;
+import com.prograngers.backend.dto.solution.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionTitleAndIdResponse;
 import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse;
@@ -136,7 +136,7 @@ public class SolutionService {
         List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments, memberId);
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
-        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
+        List<ReviewWithRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
         List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(solutionList);
         List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
@@ -190,10 +190,10 @@ public class SolutionService {
         return SolutionListResponse.from(solutions, pageable.getPageNumber());
     }
 
-    private List<ReviewWIthRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {
-        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
+    private List<ReviewWithRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {
+        List<ReviewWithRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
                 .filter(review -> review.getParentId() == null)
-                .map(review -> ReviewWIthRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
+                .map(review -> ReviewWithRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
                 .collect(Collectors.toList());
         mainSolutionReviews.stream()
                 .filter(review -> review.getParentId() != null)
@@ -224,13 +224,13 @@ public class SolutionService {
         return RecommendedSolutionResponse.from(solution.getId(), likesRepository.findAllBySolution(solution).size(), solution.getTitle(), solution.getMember().getNickname());
     }
 
-    private void addReplyReviews(List<ReviewWIthRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
+    private void addReplyReviews(List<ReviewWithRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
         mainSolutionReviewResponse.stream()
                 .filter(parentReview -> parentReview.getId().equals(review.getParentId()))
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(ReviewWIthRepliesResponse.from(review, checkReviewIsMine(memberId, review)));
+                .add(ReviewWithRepliesResponse.from(review, checkReviewIsMine(memberId, review)));
     }
 
     private boolean checkReviewIsMine(Long memberId, Review review) {

@@ -20,14 +20,14 @@ public class ShowMySolutionDetailResponse {
     // 댓글
     private List<CommentWithRepliesResponse> comments;
     //리뷰
-    private List<ReviewWIthRepliesResponse> reviews;
+    private List<ReviewWithRepliesResponse> reviews;
     // 추천 풀이
     private List<RecommendedSolutionResponse> recommendedSolutions;
     // 사이드바 이 문제에 대한 풀이 3가지, 스크랩한 풀이 3가지
     private List<SolutionTitleAndIdResponse> mySolutionList;
     private List<SolutionTitleAndIdResponse> myScrapSolutionList;
     public static ShowMySolutionDetailResponse from(
-            ProblemResponse problem, MySolutionResponse solution, List<CommentWithRepliesResponse> comments, List<ReviewWIthRepliesResponse> reviews,
+            ProblemResponse problem, MySolutionResponse solution, List<CommentWithRepliesResponse> comments, List<ReviewWithRepliesResponse> reviews,
             List<RecommendedSolutionResponse> recommendedSolutions,
             List<SolutionTitleAndIdResponse> solutions, List<SolutionTitleAndIdResponse> scraps){
         return ShowMySolutionDetailResponse.builder()
