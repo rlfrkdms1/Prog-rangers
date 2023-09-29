@@ -24,7 +24,7 @@ import {
   Like,
   Follow
 } from './pages';
-import { KakaoReirect } from './components/SignUp/KakaoRedirect';
+import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 
 const router = createBrowserRouter([
   {
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
       { path: 'signIn', element: <SignIn /> },
-      { path: 'signIn/kakao', element: <KakaoReirect/> },
+      { path: 'signIn/kakao', element: <KakaoRedirect/> },
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',

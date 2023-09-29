@@ -7,7 +7,7 @@ export const KakaoRedirect = () => {
   const KAKAO_CODE = location.search.split('=')[1];
 
   useEffect(() => {
-    fetch(`http://13.124.131.171:8080/prog-rangers/login/kakao?code=${KAKAO_CODE}`,{
+    fetch(`http://13.124.131.171:8080/api/login/kakao?code=${KAKAO_CODE}`,{
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded;",
