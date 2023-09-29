@@ -28,6 +28,7 @@ import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
 @Builder
 public class Comment {
 
+    private static final String DELETED_CONTENT = "삭제된 댓글입니다";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +60,6 @@ public class Comment {
             this.status = FIXED;
         }
     }
-
-    private static final String DELETED_CONTENT = "삭제된 댓글입니다";
 
     public void delete(){
         this.content = DELETED_CONTENT;

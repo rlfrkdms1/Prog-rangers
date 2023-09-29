@@ -2,8 +2,8 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
+import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.service.CommentService;
 import jakarta.validation.Valid;
@@ -31,8 +31,6 @@ public class CommentController {
 
     private final CommentService commentService;
     private static final String PAGE_NUMBER_DEFAULT = "1";
-
-
 
     @Login
     @GetMapping("/mypage/comments")
@@ -64,6 +62,4 @@ public class CommentController {
         commentService.deleteComment(commentId, memberId);
         return ResponseEntity.noContent().build();
     }
-
-
 }

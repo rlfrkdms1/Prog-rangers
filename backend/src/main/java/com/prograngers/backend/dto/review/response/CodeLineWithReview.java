@@ -1,6 +1,5 @@
 package com.prograngers.backend.dto.review.response;
 
-import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Builder
-public class SolutionLine {
+public class CodeLineWithReview {
     private Integer codeLineNumber;
     private String code;
-    private List<SolutionReview> solutionReviews;
+    private List<ReviewWithRepliesResponse> reviews;
 
-    public static SolutionLine from(String line, int lineNumber){
-        return SolutionLine.builder()
+    public static CodeLineWithReview from(String line, int lineNumber){
+        return CodeLineWithReview.builder()
                 .codeLineNumber(lineNumber)
                 .code(line)
                 .build();

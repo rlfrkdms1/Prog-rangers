@@ -9,9 +9,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberProfileProblemSolution {
+public class SolutionWithProblemResponse {
 
-    private String nickname;
     private String problemName;
     private DataStructureConstant dataStructure;
     private AlgorithmConstant algorithm;
@@ -19,8 +18,8 @@ public class MemberProfileProblemSolution {
     private String description;
     private String[] code;
 
-    public static MemberProfileProblemSolution from(Solution solution){
-        return MemberProfileProblemSolution.builder()
+    public static SolutionWithProblemResponse from(Solution solution){
+        return SolutionWithProblemResponse.builder()
                 .problemName(solution.getProblem().getTitle())
                 .dataStructure(solution.getDataStructure())
                 .algorithm(solution.getAlgorithm())
@@ -29,5 +28,4 @@ public class MemberProfileProblemSolution {
                 .code(solution.getCode().split("\n"))
                 .build();
     }
-
 }

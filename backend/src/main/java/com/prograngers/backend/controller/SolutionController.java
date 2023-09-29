@@ -20,9 +20,8 @@ import java.net.URI;
 @RequestMapping("/api/v1")
 @Slf4j
 public class SolutionController {
-
     private final SolutionService solutionService;
-
+  
     @Login
     @PostMapping("/solutions")
     public ResponseEntity<Void> write(@LoggedInMember Long memberId, @RequestBody @Valid SolutionPostRequest solutionPostRequest){
@@ -58,5 +57,4 @@ public class SolutionController {
         SolutionDetailResponse solutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
         return ResponseEntity.ok().body(solutionDetailResponse);
     }
-
 }

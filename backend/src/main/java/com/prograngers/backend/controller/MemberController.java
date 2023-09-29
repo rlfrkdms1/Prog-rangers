@@ -2,7 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.member.response.MemberProfileResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.service.MemberService;
@@ -45,5 +45,4 @@ public class MemberController {
         MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(nickname,page);
         return ResponseEntity.ok().body(memberProfileResponse);
     }
-
 }

@@ -3,9 +3,9 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
-import com.prograngers.backend.dto.review.request.ReviewPostRequest;
-import com.prograngers.backend.dto.review.response.SolutionReviewsResponse;
+import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
+import com.prograngers.backend.dto.review.request.WriteReviewRequest;
+import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class ReviewController {
     // 상세보기 한 줄 리뷰
     @GetMapping("/reviews")
     public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId){
-        SolutionReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
+        ShowReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
         return ResponseEntity.ok().body(reviewDetail);
     }
 
@@ -50,7 +50,7 @@ public class ReviewController {
     @Login
     public ResponseEntity<Void> update(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPatchRequest reviewPatchRequest,
                                          @LoggedInMember Long memberId,@PathVariable Long reviewId){
-        reviewService.updateReview(reviewPatchRequest,memberId,reviewId);
+        reviewService.updateReview(updateReviewRequest,memberId,reviewId);
         // 풀이 상세보기로 리다이렉트
         return ResponseEntity.noContent().build();
     }
