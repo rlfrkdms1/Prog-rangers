@@ -16,7 +16,7 @@ public class ShowMySolutionDetailResponse {
     // 문제
     private ProblemResponse problem;
     // 풀이
-    private MainSolutionResponse solution;
+    private MySolutionResponse solution;
     // 댓글
     private List<CommentWithRepliesResponse> comments;
     //리뷰
@@ -27,7 +27,7 @@ public class ShowMySolutionDetailResponse {
     private List<SolutionTitleAndIdResponse> mySolutionList;
     private List<SolutionTitleAndIdResponse> myScrapSolutionList;
     public static ShowMySolutionDetailResponse from(
-            ProblemResponse problem, MainSolutionResponse solution, List<CommentWithRepliesResponse> comments,List<ReviewWIthRepliesResponse> reviews,
+            ProblemResponse problem, MySolutionResponse solution, List<CommentWithRepliesResponse> comments, List<ReviewWIthRepliesResponse> reviews,
             List<RecommendedSolutionResponse> recommendedSolutions,
             List<SolutionTitleAndIdResponse> solutions, List<SolutionTitleAndIdResponse> scraps){
         return ShowMySolutionDetailResponse.builder()

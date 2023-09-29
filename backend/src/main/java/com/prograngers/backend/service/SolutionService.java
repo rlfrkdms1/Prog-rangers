@@ -1,6 +1,6 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.solution.response.MainSolutionResponse;
+import com.prograngers.backend.dto.solution.response.MySolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
 import com.prograngers.backend.dto.solution.response.ReviewWIthRepliesResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
@@ -132,7 +132,7 @@ public class SolutionService {
         int likes = likesRepository.findAllBySolution(mainSolution).size();
         int scraps = solutionRepository.findAllByScrapSolution(mainSolution).size();
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-        MainSolutionResponse mainSolutionResponse = MainSolutionResponse.from(mainSolution.getTitle(), Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()), mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
+        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution.getTitle(), Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()), mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
         List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments, memberId);
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
@@ -141,7 +141,7 @@ public class SolutionService {
         List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
         List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(problem);
-        return ShowMySolutionDetailResponse.from(problemResponse, mainSolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+        return ShowMySolutionDetailResponse.from(problemResponse, mySolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
     }
 
     private Solution findSolutionById(Long solutionId) {
