@@ -8,11 +8,18 @@ import com.prograngers.backend.dto.solution.response.ShowSolutionDetailWithProbl
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
+import com.prograngers.backend.dto.solution.response.SolutionListResponse;
+import com.prograngers.backend.entity.solution.AlgorithmConstant;
+import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.solution.LanguageConstant;
+import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.service.SolutionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +33,8 @@ import java.net.URI;
 public class SolutionController {
     private final SolutionService solutionService;
     private final MessageSource ms;
+    private final String SORT_CONSTANT_DEFAULT = "NEWEST";
+
     // solution 쓰기
     @Login
     @PostMapping
@@ -99,6 +108,19 @@ public class SolutionController {
     public ResponseEntity<?> mySolutionDetail(@LoggedInMember Long memberId, @RequestParam Long solutionId){
         ShowMySolutionDetailResponse showMySolutionDetailResponse = solutionService.getMySolutionDetail(memberId,solutionId);
         return ResponseEntity.ok().body(showMySolutionDetailResponse);
+    }
+
+    @GetMapping("{problemId}/solutions")
+    public ResponseEntity<?> solutionList(
+            @PageableDefault(size = 5) Pageable pageable,
+            @PathVariable Long problemId,
+            @RequestParam(required = false) LanguageConstant language,
+            @RequestParam(required = false) AlgorithmConstant algorithm,
+            @RequestParam(required = false) DataStructureConstant dataStructure,
+            @RequestParam(defaultValue = SORT_CONSTANT_DEFAULT) SortConstant sortBy
+    ) {
+        SolutionListResponse solutionListResponse = solutionService.getSolutionList(pageable, problemId, language, algorithm, dataStructure, sortBy);
+        return ResponseEntity.ok().body(solutionListResponse);
     }
 
 
