@@ -4,7 +4,7 @@ import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
-import com.prograngers.backend.dto.solution.response.ShowSolutionDetailWithProblemAndCommentsResponse;
+import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
@@ -89,8 +89,8 @@ public class SolutionController {
     // Solution 상세보기 요청
     @GetMapping("/{solutionId}")
     public ResponseEntity<?> solutionDetail(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId) {
-        ShowSolutionDetailWithProblemAndCommentsResponse showSolutionDetailWithProblemAndCommentsResponse = solutionService.getSolutionDetail(solutionId, memberId);
-        return ResponseEntity.ok().body(showSolutionDetailWithProblemAndCommentsResponse);
+        ShowSolutionDetailResponse showSolutionDetailResponse = solutionService.getSolutionDetail(solutionId, memberId);
+        return ResponseEntity.ok().body(showSolutionDetailResponse);
     }
 
 

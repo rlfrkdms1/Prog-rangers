@@ -10,7 +10,7 @@ import com.prograngers.backend.dto.solution.response.CommentWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.SolutionResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowSolutionDetailWithProblemAndCommentsResponse;
+import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
@@ -109,7 +109,7 @@ public class SolutionService {
         return ShowSolutionUpdateFormResponse.toDto(target);
     }
 
-    public ShowSolutionDetailWithProblemAndCommentsResponse getSolutionDetail(Long solutionId, Long memberId) {
+    public ShowSolutionDetailResponse getSolutionDetail(Long solutionId, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
         List<Comment> comments = commentRepository.findAllBySolution(solution);
@@ -122,7 +122,7 @@ public class SolutionService {
         ProblemResponse solutionDetailProblem = ProblemResponse.from(problem.getTitle(), problem.getOjName());
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionLink(solution));
         List<CommentWithRepliesResponse> commentWithRepliesRespons = makeCommentsResponse(comments, memberId);
-        return ShowSolutionDetailWithProblemAndCommentsResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesRespons);
+        return ShowSolutionDetailResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesRespons);
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {

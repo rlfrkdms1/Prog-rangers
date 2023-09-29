@@ -15,15 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 @Slf4j
 @Builder
-public class ShowSolutionDetailWithProblemAndCommentsResponse {
+public class ShowSolutionDetailResponse {
 
     private ProblemResponse problem;
     private SolutionResponse solution;
     private List<CommentWithRepliesResponse> comments;
 
-    public static ShowSolutionDetailWithProblemAndCommentsResponse from(ProblemResponse problem, SolutionResponse solution,
-                                                                        List<CommentWithRepliesResponse> comments) {
-        return ShowSolutionDetailWithProblemAndCommentsResponse.builder()
+    public static ShowSolutionDetailResponse from(ProblemResponse problem, SolutionResponse solution,
+                                                  List<CommentWithRepliesResponse> comments) {
+        return ShowSolutionDetailResponse.builder()
                 .problem(problem)
                 .solution(solution)
                 .comments(comments)
