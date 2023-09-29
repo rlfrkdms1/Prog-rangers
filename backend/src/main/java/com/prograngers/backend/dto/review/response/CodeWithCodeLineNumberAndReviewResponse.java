@@ -16,7 +16,7 @@ import java.util.List;
 public class CodeWithCodeLineNumberAndReviewResponse {
     private Integer codeLineNumber;
     private String code;
-    private List<ReviewWithRepliesResponse> reviewWithRepliesResponse;
+    private List<ReviewWithRepliesResponse> reviews;
 
     public static CodeWithCodeLineNumberAndReviewResponse from(String line, int lineNumber){
         return CodeWithCodeLineNumberAndReviewResponse.builder()
