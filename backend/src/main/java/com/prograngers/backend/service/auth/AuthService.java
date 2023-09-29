@@ -128,8 +128,9 @@ public class AuthService {
     @Transactional
     public AuthResult naverLogin(String code, String state) {
         GetNaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
+        log.info(naverToken.toString());
         GetNaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
-        Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getNaverSocialIdResponse().getId().hashCode()))
+        Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
                 .orElseGet(() -> socialRegister(userInfo.toMember()));
         return issueToken(member);
     }
