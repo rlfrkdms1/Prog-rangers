@@ -122,7 +122,7 @@ public class AuthService {
 
     @Transactional
     public AuthResult naverLogin(String code, String state) {
-        validCode(code);
+        validState(state);
         GetNaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
         GetNaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getNaverSocialIdResponse().getId().hashCode()))
@@ -130,8 +130,8 @@ public class AuthService {
         return issueToken(member.getId());
     }
 
-    private void validCode(String code) {
-        if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
+    private void validState(String state) {
+        if(!state.equals(naverOauth.getState())) throw new IncorrectCodeInNaverLoginException();
     }
 
     private Member socialRegister(Member member) {
