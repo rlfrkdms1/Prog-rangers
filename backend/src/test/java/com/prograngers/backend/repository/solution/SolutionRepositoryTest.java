@@ -435,6 +435,23 @@ class SolutionRepositoryTest {
     }
 
     @Test
+    @DisplayName("회원과 키워드가 주어졌을 때 해당 회원이 작성한 풀이의 난이도를 필터링해서 목록을 조회할 수 있다.")
+    void 내_풀이_목록_난이도(){
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now().minusDays(1), JAVA, 1));
+        Solution solution2 = 저장(비공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 3));
+
+        Page<Solution> solutions1 = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, null, null, 1, member1.getId());
+        Page<Solution> solutions2 = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, null, null, 3, member1.getId());
+
+        assertAll(
+                () -> assertThat(solutions1).containsExactly(solution1),
+                () -> assertThat(solutions2).containsExactly(solution2)
+        );
+    }
+
+    @Test
     @DisplayName("문제가 주어졌을 때 좋아요 순으로 상위 6개의 풀이를 정렬해서 가져올 수 있다")
     void 문제_풀이_좋아요_정렬_가져오기() {
         Member member1 = 저장(장지담.기본_정보_생성());
