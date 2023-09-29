@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-@RequestMapping("api/v1/solutions/{solutionId}")
+@RequestMapping("/api/v1/solutions/{solutionId}")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -40,30 +40,27 @@ public class ReviewController {
 
     @PostMapping("/reviews")
     @Login
-    public ResponseEntity<?> writeReview(@PathVariable Long solutionId, @Valid  @RequestBody WriteReviewRequest writeReviewRequest, @LoggedInMember Long memberId){
-        reviewService.writeReview(writeReviewRequest,memberId,solutionId);
+    public ResponseEntity<Void> write(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPostRequest reviewPostRequest, @LoggedInMember Long memberId){
+        reviewService.writeReview(reviewPostRequest,memberId,solutionId);
         // 풀이 상세보기로 리다이렉트
-        return redirect(solutionId);
+        return ResponseEntity.created(URI.create("/api/v1/solutions/" + solutionId)).build();
     }
 
     @PatchMapping("/reviews/{reviewId}")
     @Login
-    public ResponseEntity<?> updateReview(@PathVariable Long solutionId, @Valid  @RequestBody UpdateReviewRequest updateReviewRequest,
+    public ResponseEntity<Void> update(@PathVariable Long solutionId, @Valid  @RequestBody ReviewPatchRequest reviewPatchRequest,
                                          @LoggedInMember Long memberId,@PathVariable Long reviewId){
         reviewService.updateReview(updateReviewRequest,memberId,reviewId);
         // 풀이 상세보기로 리다이렉트
-        return redirect(solutionId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/reviews/{reviewId}")
     @Login
-    public ResponseEntity<?> deleteReview(@PathVariable Long solutionId,@LoggedInMember Long memberId,@PathVariable Long reviewId){
+    public ResponseEntity<Void> delete(@PathVariable Long solutionId,@LoggedInMember Long memberId,@PathVariable Long reviewId){
         reviewService.deleteReview(memberId,reviewId);
         // 풀이 상세보기로 리다이렉트
-        return redirect(solutionId);
-    }
-    private ResponseEntity redirect(Long solutionId) {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(REDIRECT_PATH + "/" + solutionId)).build();
+        return ResponseEntity.noContent().build();
     }
 
 }

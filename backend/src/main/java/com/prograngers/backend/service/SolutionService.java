@@ -9,11 +9,10 @@ import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse
 import com.prograngers.backend.dto.solution.response.CommentWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.SolutionResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
-import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
-import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
@@ -47,7 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -103,13 +101,9 @@ public class SolutionService {
         return solutionRepository.save(solution).getId();
     }
 
-    public ShowSolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
-        Solution target = findSolutionById(solutionId);
-        validMemberAuthorization(target, findMemberById(memberId));
-        return ShowSolutionUpdateFormResponse.toDto(target);
-    }
 
-    public ShowSolutionDetailResponse getSolutionDetail(Long solutionId, Long memberId) {
+    public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
+        // 풀이, 문제, 회원 가져오기
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
         List<Comment> comments = commentRepository.findAllBySolution(solution);
