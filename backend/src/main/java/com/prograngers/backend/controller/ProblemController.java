@@ -26,35 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProblemController {
 
     private final ProblemService problemService;
-
     private final SolutionService solutionService;
-
     private final String SORT_CONSTANT_DEFAULT = "NEWEST";
 
-    // problem 목록보기
     @GetMapping
     public ResponseEntity<?> problems(
-            @PageableDefault(size = 5)Pageable pageable,
+            @PageableDefault(size = 5) Pageable pageable,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = SORT_CONSTANT_DEFAULT) SortConstant sortBy) {
-        ShowProblemListResponse problemList  = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
+        ShowProblemListResponse problemList = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
         return ResponseEntity.ok(problemList);
     }
-
-
-    // solution 목록보기
-    @GetMapping("{problemId}/solutions")
-    public ResponseEntity<?> solutionList(
-            @PageableDefault(size = 5)Pageable pageable,
-            @PathVariable Long problemId,
-            @RequestParam(required = false) LanguageConstant language,
-            @RequestParam(required = false) AlgorithmConstant algorithm,
-            @RequestParam(required = false) DataStructureConstant dataStructure,
-            @RequestParam(defaultValue = SORT_CONSTANT_DEFAULT) SortConstant sortBy
-    ){
-        SolutionListResponse solutionListResponse = solutionService.getSolutionList(pageable, problemId, language,algorithm,dataStructure,sortBy);
-        return ResponseEntity.ok().body(solutionListResponse);
-    }
-
 }
