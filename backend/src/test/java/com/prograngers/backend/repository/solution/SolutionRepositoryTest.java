@@ -382,7 +382,25 @@ class SolutionRepositoryTest {
         Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, null, null, null, member1.getId());
 
         assertThat(solutions).containsExactly(solution);
+    }
 
+    @Test
+    @DisplayName("회원과 키워드가 주어졌을 때 해당 회원이 작성한 풀이를 검색해서 목록을 조회할 수 있다.")
+    void 내_풀이_목록_검색(){
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        String keyword = "찾는 제목";
+        Solution solution2 = 저장(공개_풀이.풀이_제목_지정_생성(keyword + "1", problem, member1, LocalDateTime.now().minusDays(1), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.풀이_제목_지정_생성("1" + keyword, problem, member1, LocalDateTime.now(), JAVA, 1));
+        저장(비공개_풀이.풀이_제목_지정_생성("다른 제목", problem, member1, LocalDateTime.now(), JAVA, 1));
+
+        Page<Solution> solutions1 = solutionRepository.getMyList(PageRequest.of(0, 1), keyword, null, null, null, null, member1.getId());
+        Page<Solution> solutions2 = solutionRepository.getMyList(PageRequest.of(1, 1), keyword, null, null, null, null, member1.getId());
+
+        assertAll(
+                () -> assertThat(solutions1).containsExactly(solution1),
+                () -> assertThat(solutions2).containsExactly(solution2)
+        );
     }
 
     @Test
