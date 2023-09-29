@@ -1,6 +1,6 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.member.response.MemberProfileResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.entity.badge.Badge;
@@ -70,14 +70,14 @@ public class MemberService {
             throw new AlreadyExistNicknameException();
     }
 
-    public MemberProfileResponse getMemberProfile(String memberNickname,Long page) {
+    public ShowMemberProfileResponse getMemberProfile(String memberNickname, Long page) {
         Member member = findByNickname(memberNickname);
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
         Long followCount = followRepository.getFollowCount(member);
         Long followingCount = followRepository.getFollowingCount(member);
 
-        return MemberProfileResponse.from(member,badges,solutions,followCount,followingCount);
+        return ShowMemberProfileResponse.from(member,badges,solutions,followCount,followingCount);
     }
 
     private Member findByNickname(String memberNickname) {

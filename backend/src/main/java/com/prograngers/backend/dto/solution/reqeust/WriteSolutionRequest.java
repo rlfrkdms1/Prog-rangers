@@ -7,7 +7,6 @@ import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.repository.problem.ProblemRepository;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Builder
 @Slf4j
-public class SolutionPostRequest {
+public class WriteSolutionRequest {
 
     @NotBlank(message = "문제 제목을 입력해주세요")
     private String problemTitle;
@@ -89,8 +88,8 @@ public class SolutionPostRequest {
         return solution;
     }
 
-    public static SolutionPostRequest from(Solution solution){
-        return SolutionPostRequest.builder()
+    public static WriteSolutionRequest from(Solution solution){
+        return WriteSolutionRequest.builder()
                 .algorithm(solution.getAlgorithm())
                 .code(solution.getCode())
                 .level(solution.getLevel())

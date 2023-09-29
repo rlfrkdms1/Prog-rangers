@@ -17,7 +17,7 @@ import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREAT
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentRequest {
+public class WriteCommentRequest {
     @NotBlank(message = "댓글 내용을 입력해주세요")
     String content;
     Long parentId;

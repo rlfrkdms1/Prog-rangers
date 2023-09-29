@@ -2,8 +2,8 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
+import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.service.CommentService;
 import jakarta.validation.Valid;
@@ -32,8 +32,6 @@ public class CommentController {
     private final CommentService commentService;
     private static final String PAGE_NUMBER_DEFAULT = "1";
 
-
-
     @Login
     @GetMapping("/mypage/comments")
     public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId, @RequestParam(defaultValue = PAGE_NUMBER_DEFAULT) Integer pageNumber) {
@@ -42,18 +40,18 @@ public class CommentController {
 
     @Login
     @PostMapping("/solutions/{solutionId}/comments")
-    public ResponseEntity<Void> write(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
+    public ResponseEntity<Void> write(@PathVariable Long solutionId, @RequestBody @Valid WriteCommentRequest request,
                                       @LoggedInMember Long memberId) {
-        commentService.addComment(solutionId, commentRequest, memberId);
+        commentService.addComment(solutionId, request, memberId);
         return ResponseEntity.created(URI.create("/api/v1/solutions/" + solutionId)).build();
     }
 
     @Login
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<Void> update(@PathVariable Long commentId,
-                                       @RequestBody @Valid CommentPatchRequest commentPatchRequest,
+                                       @RequestBody @Valid UpdateCommentRequest request,
                                        @LoggedInMember Long memberId) {
-        commentService.updateComment(commentId, commentPatchRequest, memberId);
+        commentService.updateComment(commentId, request, memberId);
         return ResponseEntity.noContent().build();
     }
 
@@ -64,6 +62,4 @@ public class CommentController {
         commentService.deleteComment(commentId, memberId);
         return ResponseEntity.noContent().build();
     }
-
-
 }

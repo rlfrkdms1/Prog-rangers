@@ -1,5 +1,6 @@
 package com.prograngers.backend.repository.solution;
 
+import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -19,4 +20,6 @@ public interface SolutionCustomRepository {
     List<Solution> findProfileSolutions(Long memberId,Long page);
 
     Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId);
+
+    List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
 }

@@ -19,7 +19,7 @@ import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewPostRequest {
+public class WriteReviewRequest {
 
     @Nullable
     private Long parentId;

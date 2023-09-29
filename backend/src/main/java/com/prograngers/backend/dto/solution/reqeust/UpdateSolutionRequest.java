@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SolutionPatchRequest {
+public class UpdateSolutionRequest {
     @NotBlank(message = "풀이 제목을 입력해주세요")
     private String title;
     private AlgorithmConstant algorithmName;
