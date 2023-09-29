@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { RecoilRoot } from 'recoil';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
@@ -25,6 +26,8 @@ import {
   Follow
 } from './pages';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
+import { NaverRedirect } from './components/SignUp/NaverRedirect';
+import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
 
 const router = createBrowserRouter([
   {
@@ -34,8 +37,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
-      { path: 'signIn', element: <SignIn /> },
+      { path: 'login', element: <SignIn /> },
       { path: 'login/kakao', element: <KakaoRedirect/> },
+      { path: 'login/naver', element: <NaverRedirect/> },
+      { path: 'login/google', element: <GoogleRedirect/> },
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',
@@ -64,7 +69,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root')
 );
 root.render(
-  <RouterProvider router={router} />
+  <RecoilRoot>
+    <RouterProvider router={router} />
+  </RecoilRoot>
 );
 
 // If you want to start measuring performance in your app, pass a function
