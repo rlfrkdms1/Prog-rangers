@@ -26,13 +26,13 @@ public class SolutionResponse {
     private String description;
     private Integer likes;
     private Integer scraps;
-    private String scrapLink;
+    private Long scrapId;
     private boolean pushedLike;
     private boolean scraped;
     private boolean mine;
 
     public static SolutionResponse from(Solution solution, String nickname, String problemLink,
-                                        int likeCount, int scrapCount, boolean pushedLike, boolean scraped, boolean mine, String scrapSolutionLink){
+                                        int likeCount, int scrapCount, boolean pushedLike, boolean scraped, boolean mine, Long scrapId){
         return SolutionResponse.builder()
                 .id(solution.getId())
                 .nickname(nickname)
@@ -47,7 +47,7 @@ public class SolutionResponse {
                 .pushedLike(pushedLike)
                 .scraped(scraped)
                 .mine(mine)
-                .scrapLink(scrapSolutionLink)
+                .scrapId(scrapId)
                 .build();
     }
 }

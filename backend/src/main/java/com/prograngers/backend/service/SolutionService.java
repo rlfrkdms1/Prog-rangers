@@ -55,7 +55,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 public class SolutionService {
-    private final MessageSource messageSource;
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
@@ -120,9 +119,9 @@ public class SolutionService {
         boolean pushedLike = validPushedLike(memberId, likes);
         boolean scraped = validScraped(memberId, scrapedSolutions);
         ProblemResponse solutionDetailProblem = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-        SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionLink(solution));
-        List<CommentWithRepliesResponse> commentWithRepliesRespons = makeCommentsResponse(comments, memberId);
-        return ShowSolutionDetailWithProblemAndCommentsResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesRespons);
+        SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionId(solution));
+        List<CommentWithRepliesResponse> commentWithRepliesResponse = makeCommentsResponse(comments, memberId);
+        return ShowSolutionDetailWithProblemAndCommentsResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesResponse);
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
@@ -148,9 +147,9 @@ public class SolutionService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private String getScrapSolutionLink(Solution solution) {
+    private Long getScrapSolutionId(Solution solution) {
         if (solution.getScrapSolution() != null) {
-            return messageSource.getMessage("redirect_path", null, null) + "/solutions" + solution.getScrapSolution().getId();
+            return solution.getScrapSolution().getId();
         }
         return null;
     }
@@ -215,7 +214,8 @@ public class SolutionService {
 
     private List<SolutionTitleAndIdResponse> getSideScrapSolutions(Problem problem) {
         return solutionRepository.findAllByProblem(problem)
-                .stream().filter(solution -> solution.getScrapSolution() != null)
+                .stream()
+                .filter(solution -> solution.getScrapSolution() != null)
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(), solution.getScrapSolution().getId()))
                 .collect(Collectors.toList());
     }
