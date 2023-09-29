@@ -12,11 +12,10 @@ import java.util.List;
 public class ShowProblemListResponse {
     private List<ProblemListResponse> problems;
     private int totalCount;
-
     private int pageNumber;
 
-    public static ShowProblemListResponse from(List<ProblemListResponse> listProblems, int totalCount, int page){
-        return new ShowProblemListResponse(listProblems,totalCount,page);
+    public static ShowProblemListResponse from(List<ProblemListResponse> listProblems, int totalCount, int page) {
+        return new ShowProblemListResponse(listProblems, totalCount, page);
     }
 
 }
