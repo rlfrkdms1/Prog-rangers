@@ -25,7 +25,6 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
@@ -67,6 +66,20 @@ public class Member {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Builder
+    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt) {
+        this.id = id;
+        this.socialId = socialId;
+        this.type = type;
+        this.nickname = nickname;
+        this.email = email;
+        this.github = github;
+        this.introduction = introduction;
+        this.password = password;
+        this.photo = photo;
+        this.passwordModifiedAt = passwordModifiedAt;
     }
 
     private void updateNickName(String nickname) {

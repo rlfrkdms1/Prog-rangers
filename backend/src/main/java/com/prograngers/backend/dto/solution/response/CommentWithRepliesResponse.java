@@ -4,37 +4,43 @@ package com.prograngers.backend.dto.solution.response;
 import com.prograngers.backend.entity.comment.Comment;
 
 import com.prograngers.backend.entity.comment.CommentStatusConstant;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class CommentWithRepliesResponse {
-    String photo;
-    Long id;
-    String nickname;
-    String content;
-    CommentStatusConstant status;
-    List<CommentWithRepliesResponse> replies;
+    private String photo;
+    private Long id;
+    private String nickname;
+    private String content;
+    private CommentStatusConstant status;
+    private List<CommentWithRepliesResponse> replies;
+    private boolean mine;
 
-    boolean mine;
-
-    public static CommentWithRepliesResponse from(Comment comment, ArrayList<CommentWithRepliesResponse> replies, boolean isMine){
-
-        return new CommentWithRepliesResponse(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), replies,
-               isMine);
+    public static CommentWithRepliesResponse of(Comment comment, ArrayList<CommentWithRepliesResponse> replies, boolean isMine){
+        return CommentWithRepliesResponse.builder()
+                .photo(comment.getMember().getPhoto())
+                .id(comment.getId())
+                .nickname(comment.getMember().getNickname())
+                .content(comment.getContent())
+                .status(comment.getStatus())
+                .replies(replies)
+                .mine(isMine)
+                .build();
     }
 
-    public static CommentWithRepliesResponse from(Comment comment, boolean isMine){
-        return new CommentWithRepliesResponse(comment.getMember().getPhoto(), comment.getId(), comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null
-        ,isMine);
+    public static CommentWithRepliesResponse of(Comment comment, boolean isMine){
+        return CommentWithRepliesResponse.builder()
+                .photo(comment.getMember().getPhoto())
+                .id(comment.getId())
+                .nickname(comment.getMember().getNickname())
+                .content(comment.getContent())
+                .status(comment.getStatus())
+                .mine(isMine)
+                .build();
     }
-
 }

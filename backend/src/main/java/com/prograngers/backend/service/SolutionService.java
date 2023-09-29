@@ -1,19 +1,18 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.solution.response.MainSolutionResponse;
+import com.prograngers.backend.dto.solution.response.MySolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
-import com.prograngers.backend.dto.solution.response.ReviewWIthRepliesResponse;
+import com.prograngers.backend.dto.solution.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionTitleAndIdResponse;
 import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse;
 import com.prograngers.backend.dto.solution.response.CommentWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.SolutionResponse;
 import com.prograngers.backend.dto.solution.response.SolutionListResponse;
-import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowSolutionDetailWithProblemAndCommentsResponse;
-import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
-import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowSolutionUpdateFormResponse;
+import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
+import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
+import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
@@ -47,7 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -102,13 +100,9 @@ public class SolutionService {
         return solutionRepository.save(solution).getId();
     }
 
-    public ShowSolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
-        Solution target = findSolutionById(solutionId);
-        validMemberAuthorization(target, findMemberById(memberId));
-        return ShowSolutionUpdateFormResponse.toDto(target);
-    }
 
-    public ShowSolutionDetailWithProblemAndCommentsResponse getSolutionDetail(Long solutionId, Long memberId) {
+    public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
+        // 풀이, 문제, 회원 가져오기
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
         List<Comment> comments = commentRepository.findAllBySolution(solution);
@@ -126,21 +120,28 @@ public class SolutionService {
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
         Solution mainSolution = findSolutionById(solutionId);
-        List<Solution> solutionList = solutionRepository.findAllByProblem(mainSolution.getProblem());
         Problem problem = mainSolution.getProblem();
-        int likes = likesRepository.findAllBySolution(mainSolution).size();
-        int scraps = solutionRepository.findAllByScrapSolution(mainSolution).size();
+        List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem);
+        List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
+        Long likes = likesRepository.countBySolution(mainSolution);
+        Long scraps = solutionRepository.countByScrapSolution(mainSolution);
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-        MainSolutionResponse mainSolutionResponse = MainSolutionResponse.from(mainSolution.getTitle(), Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()), mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
+        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution.getTitle(), Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()), mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
         List<Comment> mainSolutionComments = commentRepository.findAllBySolution(mainSolution);
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments, memberId);
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolution(mainSolution);
-        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
-        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(solutionList);
-        List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
+        List<ReviewWithRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
+        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
+        List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem,6);
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
-        List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(problem);
-        return ShowMySolutionDetailResponse.from(problemResponse, mainSolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+        List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(solutionList, memberId);
+        return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+    }
+
+    private List<Solution> getMySolutionList(Long memberId, List<Solution> solutionList) {
+        return solutionList.stream()
+                .filter(solution -> solution.getMember().getId().equals(memberId))
+                .collect(Collectors.toList());
     }
 
     private Solution findSolutionById(Long solutionId) {
@@ -159,7 +160,7 @@ public class SolutionService {
 
         comments.stream().filter(comment -> comment.getParentId() == null)
                 .forEach(comment -> {
-                    commentWithRepliesResponseList.add(CommentWithRepliesResponse.from(comment, new ArrayList<>(), checkCommentIsMine(memberId, comment)));
+                    commentWithRepliesResponseList.add(CommentWithRepliesResponse.of(comment, new ArrayList<>(), checkCommentIsMine(memberId, comment)));
                 });
         comments.stream().filter((comment) -> comment.getParentId() != null)
                 .forEach((comment) -> {
@@ -179,7 +180,7 @@ public class SolutionService {
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(CommentWithRepliesResponse.from(comment, checkCommentIsMine(memberId, comment)));
+                .add(CommentWithRepliesResponse.of(comment, checkCommentIsMine(memberId, comment)));
     }
 
     public SolutionListResponse getSolutionList(
@@ -189,10 +190,10 @@ public class SolutionService {
         return SolutionListResponse.from(solutions, pageable.getPageNumber());
     }
 
-    private List<ReviewWIthRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {
-        List<ReviewWIthRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
+    private List<ReviewWithRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {
+        List<ReviewWithRepliesResponse> mainSolutionReviewResponse = mainSolutionReviews.stream()
                 .filter(review -> review.getParentId() == null)
-                .map(review -> ReviewWIthRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
+                .map(review -> ReviewWithRepliesResponse.from(review, new ArrayList<>(), checkReviewIsMine(memberId, review)))
                 .collect(Collectors.toList());
         mainSolutionReviews.stream()
                 .filter(review -> review.getParentId() != null)
@@ -212,10 +213,11 @@ public class SolutionService {
                 .collect(Collectors.toList());
     }
 
-    private List<SolutionTitleAndIdResponse> getSideScrapSolutions(Problem problem) {
-        return solutionRepository.findAllByProblem(problem)
-                .stream()
-                .filter(solution -> solution.getScrapSolution() != null)
+
+    private List<SolutionTitleAndIdResponse> getSideScrapSolutions(List<Solution> solutions,Long memberId) {
+        return solutions.stream()
+                .filter(solution -> solution.getScrapSolution()!=null)
+                .filter(solution -> solution.getMember().getId().equals(memberId))
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(), solution.getScrapSolution().getId()))
                 .collect(Collectors.toList());
     }
@@ -224,13 +226,13 @@ public class SolutionService {
         return RecommendedSolutionResponse.from(solution.getId(), likesRepository.findAllBySolution(solution).size(), solution.getTitle(), solution.getMember().getNickname());
     }
 
-    private void addReplyReviews(List<ReviewWIthRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
+    private void addReplyReviews(List<ReviewWithRepliesResponse> mainSolutionReviewResponse, Review review, Long memberId) {
         mainSolutionReviewResponse.stream()
                 .filter(parentReview -> parentReview.getId().equals(review.getParentId()))
                 .findFirst()
                 .get()
                 .getReplies()
-                .add(ReviewWIthRepliesResponse.from(review, checkReviewIsMine(memberId, review)));
+                .add(ReviewWithRepliesResponse.from(review, checkReviewIsMine(memberId, review)));
     }
 
     private boolean checkReviewIsMine(Long memberId, Review review) {

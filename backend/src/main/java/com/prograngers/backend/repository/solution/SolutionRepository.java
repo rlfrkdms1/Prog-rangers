@@ -11,13 +11,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SolutionRepository extends JpaRepository<Solution, Long>, QueryDslSolutionRepository{
+public interface SolutionRepository extends JpaRepository<Solution, Long>, QueryDslSolutionRepository {
     List<Solution> findAllByMember(Member member);
+
     List<Solution> findAllByScrapSolution(Solution solution);
+
+    Long countByScrapSolution(Solution solution);
+
     List<Solution> findTop3ByMemberOrderByCreatedAtDesc(Member member);
-    List<Solution> findAllByProblem(Problem problem);
+
+    List<Solution> findAllByProblemOrderByCreatedAtDesc(Problem problem);
+
     @Query("select s from Solution s join Follow f on s.member.id = f.followingId where f.followerId = :memberId order by s.createdAt desc limit 5")
     List<Solution> findFollowingsRecentSolutions(@Param("memberId") Long memberId);
+
     @Query("select distinct function('date_format', s.createdAt, '%d') from Solution s where s.member.id = :memberId and function('date_format', s.createdAt, '%m') = :month")
     List<Integer> findAllByMonth(@Param("memberId") Long memberId, @Param("month") int month);
 }

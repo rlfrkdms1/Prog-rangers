@@ -11,17 +11,17 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class ReviewWIthRepliesResponse {
+public class ReviewWithRepliesResponse {
     private Long id;
     private int codeLineNumber;
     private String nickname;
     private String content;
-    private List<ReviewWIthRepliesResponse> replies;
+    private List<ReviewWithRepliesResponse> replies;
 
     boolean mine;
 
-    public static ReviewWIthRepliesResponse from(Review review, ArrayList<ReviewWIthRepliesResponse> replies, boolean mine) {
-        return ReviewWIthRepliesResponse.builder()
+    public static ReviewWithRepliesResponse from(Review review, ArrayList<ReviewWithRepliesResponse> replies, boolean mine) {
+        return ReviewWithRepliesResponse.builder()
                 .id(review.getId())
                 .codeLineNumber(review.getCodeLineNumber())
                 .nickname(review.getMember().getNickname())
@@ -31,8 +31,8 @@ public class ReviewWIthRepliesResponse {
                 .build();
     }
 
-    public static ReviewWIthRepliesResponse from(Review review,  boolean mine) {
-        return ReviewWIthRepliesResponse.builder()
+    public static ReviewWithRepliesResponse from(Review review, boolean mine) {
+        return ReviewWithRepliesResponse.builder()
                 .id(review.getId())
                 .codeLineNumber(review.getCodeLineNumber())
                 .nickname(review.getMember().getNickname())

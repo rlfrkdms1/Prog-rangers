@@ -29,10 +29,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final MessageSource messageSource;
-
     private final CommentService commentService;
-
     private static final String PAGE_NUMBER_DEFAULT = "1";
 
     @Login
@@ -43,35 +40,26 @@ public class CommentController {
 
     @Login
     @PostMapping("/solutions/{solutionId}/comments")
-    public ResponseEntity<?> writeComment(@PathVariable Long solutionId, @RequestBody @Valid WriteCommentRequest writeCommentRequest,
-                                        @LoggedInMember Long memberId) {
-        commentService.addComment(solutionId, writeCommentRequest, memberId);
-        return redirect(solutionId);
+    public ResponseEntity<Void> write(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
+                                      @LoggedInMember Long memberId) {
+        commentService.addComment(solutionId, commentRequest, memberId);
+        return ResponseEntity.created(URI.create("/api/v1/solutions/" + solutionId)).build();
     }
 
     @Login
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @RequestBody @Valid UpdateCommentRequest updateCommentRequest,
-                                           @LoggedInMember Long memberId) {
-        Long solutionId = commentService.updateComment(commentId, updateCommentRequest, memberId);
-        return redirect(solutionId);
+    public ResponseEntity<Void> update(@PathVariable Long commentId,
+                                       @RequestBody @Valid CommentPatchRequest commentPatchRequest,
+                                       @LoggedInMember Long memberId) {
+        commentService.updateComment(commentId, commentPatchRequest, memberId);
+        return ResponseEntity.noContent().build();
     }
 
     @Login
-    @DeleteMapping("/solutions/{solutionId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
-                                           @LoggedInMember Long memberId) {
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Void> delete(@PathVariable Long commentId,
+                                       @LoggedInMember Long memberId) {
         commentService.deleteComment(commentId, memberId);
-        return redirect(solutionId);
+        return ResponseEntity.noContent().build();
     }
-
-    private ResponseEntity<Void> redirect(Long solutionId) {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
-    }
-
-    private String getRedirectPath() {
-        return messageSource.getMessage("redirect_path", null, null) + "/solutions/";
-    }
-
 }

@@ -19,7 +19,7 @@ public class ShowReviewsResponse {
     private String title;
     private AlgorithmConstant algorithm;
     private DataStructureConstant dataStructure;
-    private List<CodeWithCodeLineNumberAndReviewResponse> codeWithCodeLineNumberAndReviewResponse;
+    private List<CodeLineWithReview> codeLineWithReview;
 
     public static ShowReviewsResponse from(Solution solution, String[] lines) {
         ShowReviewsResponse showReviewsResponse =
@@ -33,7 +33,7 @@ public class ShowReviewsResponse {
     private static void addLinesAtResponseDto(String[] lines, ShowReviewsResponse showReviewsResponse) {
         // 먼저 최종 응답 dto에 각 라인을 넣는다
         for (int lineNumber = 0; lineNumber < lines.length; lineNumber++) {
-            showReviewsResponse.getCodeWithCodeLineNumberAndReviewResponse().add(CodeWithCodeLineNumberAndReviewResponse.from(lines[lineNumber],lineNumber+1));
+            showReviewsResponse.getCodeLineWithReview().add(CodeLineWithReview.from(lines[lineNumber],lineNumber+1));
         }
     }
 }

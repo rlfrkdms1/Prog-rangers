@@ -21,7 +21,7 @@ import java.util.List;
 public class SolutionListResponse {
     String problemName;
     JudgeConstant ojName;
-    List<SolutionAtSolutionListResponse> solutionAtSolutionListResponses;
+    List<SolutionAtSolutionListResponse> solutions;
     int totalPages;
 
     int page;
@@ -40,7 +40,7 @@ public class SolutionListResponse {
 
     private static void addSolutionAtResponse(List<Solution> solutions, SolutionListResponse solutionListResponse) {
         solutions.stream()
-                        .forEach((solution -> solutionListResponse.getSolutionAtSolutionListResponses().add(                    SolutionAtSolutionListResponse.builder()
+                        .forEach((solution -> solutionListResponse.getSolutions().add(SolutionAtSolutionListResponse.builder()
                                 .solutionName(solution.getTitle())
                                 .algorithm(solution.getAlgorithm())
                                 .dataStructure(solution.getDataStructure())
@@ -52,7 +52,7 @@ public class SolutionListResponse {
         SolutionListResponse solutionListResponse = SolutionListResponse.builder()
                 .problemName(problem.getTitle())
                 .ojName(problem.getOjName())
-                .solutionAtSolutionListResponses(new ArrayList<>())
+                .solutions(new ArrayList<>())
                 .totalPages(pages.getTotalPages())
                 .build();
         return solutionListResponse;

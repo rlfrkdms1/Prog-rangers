@@ -45,18 +45,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @Slf4j
 class SolutionServiceTest {
-
     @Mock
     private SolutionRepository solutionRepository;
     @Mock
     private CommentRepository commentRepository;
-
     @Mock
     private ProblemRepository problemRepository;
-
     @Mock
     private MemberRepository memberRepository;
-
     @InjectMocks
     private SolutionService solutionService;
 
@@ -142,7 +138,6 @@ class SolutionServiceTest {
                 () -> solutionService.delete(solution1.getId(), member2.getId()
                 ));
     }
-
 
     ScarpSolutionRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level) {
         return new ScarpSolutionRequest(title, description, level);

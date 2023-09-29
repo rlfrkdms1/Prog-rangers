@@ -40,10 +40,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI)).build();
     }
 
-    @GetMapping("/members/profile/{memberNickname}")
-    public ResponseEntity<?> memberProfile(@PathVariable String memberNickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
-        ShowMemberProfileResponse showMemberProfileResponse = memberService.getMemberProfile(memberNickname,page);
-        return ResponseEntity.ok().body(showMemberProfileResponse);
+    @GetMapping("/members/{nickname}")
+    public ResponseEntity<?> memberProfile(@PathVariable String nickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
+        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(nickname,page);
+        return ResponseEntity.ok().body(memberProfileResponse);
     }
-
 }
