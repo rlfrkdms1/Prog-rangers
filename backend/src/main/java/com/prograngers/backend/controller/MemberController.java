@@ -40,15 +40,9 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(MEMBER_ACCOUNT_SETTINGS_REDIRECT_URI)).build();
     }
 
-    /**
-     *  타인 페이지 보기
-     * @param memberId : 멤버 아이디
-     * @param page 최초값 : 9223372036854775807
-     * @return
-     */
-    @GetMapping("/members/profile/{memberNickname}")
-    public ResponseEntity<?> memberProfile(@PathVariable String memberNickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
-        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(memberNickname,page);
+    @GetMapping("/members/{nickname}")
+    public ResponseEntity<?> memberProfile(@PathVariable String nickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
+        MemberProfileResponse memberProfileResponse = memberService.getMemberProfile(nickname,page);
         return ResponseEntity.ok().body(memberProfileResponse);
     }
 

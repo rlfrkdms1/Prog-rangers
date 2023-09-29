@@ -8,7 +8,6 @@ import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionPostRequest;
 import com.prograngers.backend.dto.solution.response.SolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPatchRequest;
 import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
-import com.prograngers.backend.dto.solution.response.SolutionUpdateFormResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
@@ -40,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -102,12 +100,6 @@ public class SolutionService {
         // 스크랩 Solution과 사용자가 폼에 입력한 내용을 토대로 새로운 Solution을 만든다
         Solution solution = request.toSolution(findSolutionById(scrapTargetId),findMemberById(memberId));
         return solutionRepository.save(solution).getId();
-    }
-
-    public SolutionUpdateFormResponse getUpdateForm(Long solutionId, Long memberId) {
-        Solution target = findSolutionById(solutionId);
-        validMemberAuthorization(target, findMemberById(memberId));
-        return SolutionUpdateFormResponse.toDto(target);
     }
 
     public SolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
