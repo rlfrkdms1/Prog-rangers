@@ -136,7 +136,7 @@ public class AuthService {
     }
 
     private void validCode(String code) {
-        if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
+        if(!code.equals(naverOauth.getState())) throw new IncorrectCodeInNaverLoginException();
     }
 
     private Member socialRegister(Member member) {
