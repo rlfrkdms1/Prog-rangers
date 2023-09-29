@@ -1,28 +1,21 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const NaverRedirect = () => {
-  const href = window.location.href;
+  const navigate = useNavigate();
   let params = new URL(document.location).searchParams;
   let code = params.get("code");
   let state = params.get("state");
+  console.log(code);
+  console.log(state);
 
-  // const naver = async () => {
-  //   try{
-  //     const result = await axios.get(
-  //       `http://13.124.131.171:8080/prog-rangers/login/naver?code=${code}&state=${state}`
-  //     );
-  //   }catch(error){
-  //     console.log("error", error);
-  //   }
-  // }
-  // useEffect(() => {
-  //   naver
-  // }, []);
   useEffect(() => {
-    fetch(`http://13.124.131.171:8080/prog-rangers/login/naver?code=${code}&state=${state}`, {
+    fetch(`http://13.124.131.171:8080/api/v1/login/naver?code=${code}&state=${state}`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json;",
+      },
     })
     .then(res => {
       return res.json();
@@ -30,11 +23,12 @@ export const NaverRedirect = () => {
     .then(data => {
       console.log(data);
       localStorage.setItem('token', data.accessToken);
-      Navigate("/");
+      navigate("/");
     })
     .catch(error => {
       console.log('Error:', error);
     })
+
   }, []);
 
   return(
