@@ -404,6 +404,35 @@ class SolutionRepositoryTest {
     }
 
     @Test
+    @DisplayName("회원과 키워드가 주어졌을 때 해당 회원이 작성한 풀이를 검색해서 목록을 조회할 수 있다.")
+    void 내_풀이_목록_태그(){
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now().minusDays(1), AlgorithmConstant.DFS, DataStructureConstant.ARRAY, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now().minusDays(2), AlgorithmConstant.DFS, LIST, JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), AlgorithmConstant.DFS, LIST, JAVA, 1));
+        저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now().minusDays(3), AlgorithmConstant.BINARY_SEARCH, null, C, 1));
+        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now().minusDays(4), AlgorithmConstant.QUICK_SORT, ARRAY, PYTHON, 1));
+
+        Page<Solution> solutions1 = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, DFS, LIST, null, member1.getId());
+        Page<Solution> solutions2 = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, null, ARRAY, null, member1.getId());
+        Page<Solution> solutions3 = solutionRepository.getMyList(PageRequest.of(0, 1), null, null, BFS, ARRAY, null, member1.getId());
+        Page<Solution> solutions4 = solutionRepository.getMyList(PageRequest.of(1, 1), null, null, DFS, LIST, null, member1.getId());
+        Page<Solution> solutions5 = solutionRepository.getMyList(PageRequest.of(0, 2), null, JAVA, null, null, null, member1.getId());
+        Page<Solution> solutions6 = solutionRepository.getMyList(PageRequest.of(0, 2), null, PYTHON, null, null, null, member1.getId());
+
+
+        assertAll(
+                () -> assertThat(solutions1).containsExactly(solution3),
+                () -> assertThat(solutions2).containsExactly(solution1),
+                () -> assertThat(solutions3).isEmpty(),
+                () -> assertThat(solutions4).containsExactly(solution2),
+                () -> assertThat(solutions5).containsExactly(solution3, solution1),
+                () -> assertThat(solutions6).containsExactly(solution4)
+        );
+    }
+
+    @Test
     @DisplayName("문제가 주어졌을 때 좋아요 순으로 상위 6개의 풀이를 정렬해서 가져올 수 있다")
     void 문제_풀이_좋아요_정렬_가져오기() {
         Member member1 = 저장(장지담.기본_정보_생성());
