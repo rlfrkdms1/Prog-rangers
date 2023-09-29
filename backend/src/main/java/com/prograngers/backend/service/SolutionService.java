@@ -141,7 +141,7 @@ public class SolutionService {
         List<Solution> recommendedSolutions = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem.getId());
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
         List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(problem);
-        return ShowMySolutionDetailResponse.from(problemResponse, mySolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+        return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse, mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
     }
 
     private Solution findSolutionById(Long solutionId) {
