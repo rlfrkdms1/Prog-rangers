@@ -121,7 +121,7 @@ public class SolutionService {
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
         Solution mainSolution = findSolutionById(solutionId);
         Problem problem = mainSolution.getProblem();
-        List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem);
+        List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem);
         List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
         Long likes = likesRepository.countBySolution(mainSolution);
         Long scraps = solutionRepository.countByScrapSolution(mainSolution);
