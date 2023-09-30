@@ -1,7 +1,7 @@
 package com.prograngers.backend.service.auth.oauth;
 
-import com.prograngers.backend.dto.response.auth.google.GoogleTokenResponse;
-import com.prograngers.backend.dto.response.auth.google.GoogleUserInfoResponse;
+import com.prograngers.backend.dto.auth.response.google.GetGoogleTokenResponse;
+import com.prograngers.backend.dto.auth.response.google.GetGoogleUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,22 +34,22 @@ public class GoogleOauth {
         this.webClient = webClient;
     }
 
-    public GoogleTokenResponse googleGetToken(String code) {
+    public GetGoogleTokenResponse googleGetToken(String code) {
         return webClient.post()
                 .uri(TOKEN_URI)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .bodyValue(convertToMultiValueMap(grantType, clientId, redirectUri, code, clientSecret))
                 .retrieve()
-                .bodyToMono(GoogleTokenResponse.class)
+                .bodyToMono(GetGoogleTokenResponse.class)
                 .block();
     }
 
-    public GoogleUserInfoResponse googleGetUserInfo(String accessToken) {
+    public GetGoogleUserInfoResponse googleGetUserInfo(String accessToken) {
         return webClient.get()
                 .uri(USER_INFO_URI)
                 .header(HttpHeaders.AUTHORIZATION, String.format(BEARER_FORMAT, accessToken))
                 .retrieve()
-                .bodyToMono(GoogleUserInfoResponse.class)
+                .bodyToMono(GetGoogleUserInfoResponse.class)
                 .block();
     }
 }
