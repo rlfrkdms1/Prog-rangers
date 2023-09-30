@@ -18,5 +18,5 @@ public interface QueryDslSolutionRepository {
 
     List<Solution> findProfileSolutions(Long memberId, Long page);
 
-    List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
+    List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
 }

@@ -53,7 +53,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     }
 
 
-    public List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Problem problem, int limit) {
+    public List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit) {
         return jpaQueryFactory
                 .select(solution)
                 .from(likes)
