@@ -1,10 +1,8 @@
 package com.prograngers.backend.repository.solution;
 
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.*;
 import com.prograngers.backend.entity.solution.QSolution;
-import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.entity.solution.AlgorithmConstant;
-import com.prograngers.backend.entity.solution.DataStructureConstant;
-import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,19 +29,20 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
     public PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
-        if (sortBy.equals(NEWEST)){
+        if (sortBy.equals(NEWEST)) {
             return getSolutionsSorByNewest(pageable, problemId, language, algorithm, dataStructure);
         }
-        if (sortBy.equals(LIKES)){
+        if (sortBy.equals(LIKES)) {
             return getSolutionsSortByLikes(pageable, problemId, language, algorithm, dataStructure);
         }
-        if (sortBy.equals(SCRAPS)){
+        if (sortBy.equals(SCRAPS)) {
             return getSolutionsSortByScraps(pageable, problemId, language, algorithm, dataStructure);
         }
         return null;
     }
+
     @Override
-    public List<Solution> findProfileSolutions(Long memberId,Long page) {
+    public List<Solution> findProfileSolutions(Long memberId, Long page) {
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
@@ -52,6 +51,20 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .limit(3)
                 .fetch();
     }
+
+
+    public List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Problem problem, int limit) {
+        return jpaQueryFactory
+                .select(solution)
+                .from(likes)
+                .rightJoin(likes.solution, solution)
+                .groupBy(solution)
+                .where(solution.problem.eq(problem))
+                .orderBy(likes.count().desc(), solution.createdAt.desc())
+                .limit(limit)
+                .fetch();
+    }
+
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {
         return dataStructure != null ? solution.dataStructure.eq(dataStructure) : null;
     }
@@ -78,10 +91,10 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
         result = jpaQueryFactory
                 .select(solution)
                 .from(subSolution)
-                .rightJoin(subSolution.scrapSolution,solution)
+                .rightJoin(subSolution.scrapSolution, solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .groupBy(solution.id)
-                .orderBy(subSolution.count().desc(),solution.createdAt.desc())
+                .orderBy(subSolution.count().desc(), solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -96,7 +109,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .rightJoin(likes.solution, solution)
                 .where(solutionPublic(), solutionEqProblemId(problemId), languageEq(language), algorithmEq(algorithm), dataStructureEq(dataStructure))
                 .groupBy(solution.id)
-                .orderBy(likes.id.count().desc(),solution.createdAt.desc())
+                .orderBy(likes.id.count().desc(), solution.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -123,6 +136,7 @@ public class QueryDslSolutionRepositoryImpl implements QueryDslSolutionRepositor
                 .fetchOne();
         return count;
     }
+
     private PageImpl<Solution> getSolutionsSortByScraps(Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure) {
         List<Solution> result;
         result = getScrapsSolutions(pageable, problemId, language, algorithm, dataStructure);

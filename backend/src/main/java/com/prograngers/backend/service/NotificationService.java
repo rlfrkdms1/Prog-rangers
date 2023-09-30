@@ -1,6 +1,6 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.response.notification.NotificationResponse;
+import com.prograngers.backend.dto.notification.response.ShowNotificationResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.Review;
 import com.prograngers.backend.entity.comment.Comment;
@@ -35,11 +35,11 @@ public class NotificationService {
      */
     public void send(Review review, Solution solution, Member writer){
         Notification notification = createReviewNotification(review, solution, writer);
-        NotificationResponse notificationResponse = NotificationResponse.from(notification);
+        ShowNotificationResponse showNotificationResponse = ShowNotificationResponse.from(notification);
         sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
                 .forEach((emitterId, emitter) -> {
-                    cachedEventRepository.save(emitterId, notificationResponse);
-                    sendToClient(emitter, emitterId, notificationResponse);
+                    cachedEventRepository.save(emitterId, showNotificationResponse);
+                    sendToClient(emitter, emitterId, showNotificationResponse);
                 });
         notificationRepository.save(notification);
     }
@@ -58,11 +58,11 @@ public class NotificationService {
 
     public void send(Comment comment, Solution solution, Member writer){
         Notification notification = createCommentNotification(comment, solution, writer);
-        NotificationResponse notificationResponse = NotificationResponse.from(notification);
+        ShowNotificationResponse showNotificationResponse = ShowNotificationResponse.from(notification);
         sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
                 .forEach((emitterId, emitter) -> {
-                    cachedEventRepository.save(emitterId, notificationResponse);
-                    sendToClient(emitter, emitterId, notificationResponse);
+                    cachedEventRepository.save(emitterId, showNotificationResponse);
+                    sendToClient(emitter, emitterId, showNotificationResponse);
                 });
         notificationRepository.save(notification);
     }
@@ -103,7 +103,7 @@ public class NotificationService {
         sendToClient(emitter, emitterId, "Notification Subscribe Success");
 
         if (!lastEventId.isEmpty()) {
-            Map<String, NotificationResponse> cachedEvents = cachedEventRepository.findAllByMemberId(String.valueOf(memberId));
+            Map<String, ShowNotificationResponse> cachedEvents = cachedEventRepository.findAllByMemberId(String.valueOf(memberId));
             cachedEvents.entrySet().stream()
                     .filter(entry -> entry.getKey().compareTo(lastEventId) > 0)
                     .forEach(entry -> sendToClient(emitter, emitterId, entry.getValue()));

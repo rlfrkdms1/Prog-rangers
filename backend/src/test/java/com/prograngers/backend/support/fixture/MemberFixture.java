@@ -1,7 +1,7 @@
 package com.prograngers.backend.support.fixture;
 
-import com.prograngers.backend.dto.request.auth.LoginRequest;
-import com.prograngers.backend.dto.request.auth.SignUpRequest;
+import com.prograngers.backend.dto.auth.request.LoginRequest;
+import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import lombok.AllArgsConstructor;

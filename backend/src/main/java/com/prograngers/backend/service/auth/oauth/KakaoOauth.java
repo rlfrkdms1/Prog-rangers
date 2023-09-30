@@ -1,7 +1,7 @@
 package com.prograngers.backend.service.auth.oauth;
 
-import com.prograngers.backend.dto.response.auth.kakao.KakaoTokenResponse;
-import com.prograngers.backend.dto.response.auth.kakao.KakaoUserInfoResponse;
+import com.prograngers.backend.dto.auth.response.kakao.GetKakaoTokenResponse;
+import com.prograngers.backend.dto.auth.response.kakao.GetKakaoUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,23 +34,30 @@ public class KakaoOauth {
         this.webClient = webClient;
     }
 
-    public KakaoTokenResponse kakaoGetToken(String code) {
+    public GetKakaoTokenResponse kakaoGetToken(String code) {
         return webClient.post()
                 .uri(TOKEN_URI)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .bodyValue(convertToMultiValueMap(grantType, clientId, redirectUri, code, clientSecret))
                 .retrieve()
+<<<<<<< HEAD
                 .bodyToMono(KakaoTokenResponse.class)
+=======
+                .bodyToMono(GetKakaoTokenResponse.class)
+                .doOnError(e -> {
+                    log.info("Error occurred: ", e);
+                })
+>>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1
                 .block();
     }
 
-    public KakaoUserInfoResponse kakaoGetUserInfo(String accessToken){
+    public GetKakaoUserInfoResponse kakaoGetUserInfo(String accessToken){
         return webClient.get()
                 .uri(USER_INFO_URI)
                 .header(HttpHeaders.AUTHORIZATION, String.format(BEARER_FORMAT, accessToken))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .retrieve()
-                .bodyToMono(KakaoUserInfoResponse.class)
+                .bodyToMono(GetKakaoUserInfoResponse.class)
                 .block();
     }
 }

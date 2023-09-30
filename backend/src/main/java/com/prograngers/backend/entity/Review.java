@@ -16,7 +16,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+<<<<<<< HEAD:backend/src/main/java/com/prograngers/backend/entity/Review.java
 import java.time.LocalDateTime;
+=======
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
+>>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1:backend/src/main/java/com/prograngers/backend/entity/review/Review.java
 
 @Entity
 @Getter
@@ -47,4 +51,21 @@ public class Review {
 
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
+<<<<<<< HEAD:backend/src/main/java/com/prograngers/backend/entity/Review.java
+=======
+
+    @Column(nullable = false, name = "status")
+    @Enumerated(value = EnumType.STRING)
+    private ReviewStatusConstant status;
+
+    public void update(String content){
+        this.content = content;
+        this.status = FIXED;
+    }
+
+    public void delete() {
+        this.content = DELETED_CONTENT;
+        this.status = DELETED;
+    }
+>>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1:backend/src/main/java/com/prograngers/backend/entity/review/Review.java
 }

@@ -1,9 +1,9 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.response.dashboard.IsDayOfStudy;
-import com.prograngers.backend.dto.response.dashboard.NotificationInfo;
-import com.prograngers.backend.dto.response.dashboard.ShowDashBoardResponse;
-import com.prograngers.backend.dto.response.dashboard.SolutionInfo;
+import com.prograngers.backend.dto.dashboard.response.IsDayOfStudyResponse;
+import com.prograngers.backend.dto.dashboard.response.NotificationWithSolutionResponse;
+import com.prograngers.backend.dto.dashboard.response.ShowDashBoardResponse;
+import com.prograngers.backend.dto.dashboard.response.SolutionWithProblemResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.dashboard.MonthConstant;
@@ -42,6 +42,7 @@ public class DashBoardService {
     public ShowDashBoardResponse createDashBoard(Long memberId, YearMonth date) {
         if (date == null) date = YearMonth.now();
         Member member = findMemberById(memberId);
+<<<<<<< HEAD
         //알림
         List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
         List<NotificationInfo> notificationInfoList = notifications.stream().map(notification -> NotificationInfo.of(notification, notification.getSolution())).collect(Collectors.toList());
@@ -68,6 +69,50 @@ public class DashBoardService {
         monthlyStudy.stream().forEach(i -> monthlyStudyMap.put(i, true));
         List<IsDayOfStudy> monthlyStudyCalendar = monthlyStudyMap.entrySet().stream().map(entry -> new IsDayOfStudy(entry.getKey(), entry.getValue())).collect(Collectors.toList());
         return monthlyStudyCalendar;
+=======
+
+        List<NotificationWithSolutionResponse> notifications = getNotifications(member);
+        List<SolutionWithProblemResponse> myRecentSolutions = getMyRecentSolutions(member);
+        List<String> badges = getBadges(member);
+        List<IsDayOfStudyResponse> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, date);
+        List<SolutionWithProblemResponse> followingRecentSolutions = getFollowingRecentSolutions(memberId);
+
+        return ShowDashBoardResponse.of(monthlyStudyCalendar, notifications, myRecentSolutions, badges, followingRecentSolutions);
+    }
+
+    private List<NotificationWithSolutionResponse> getNotifications(Member member) {
+        List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
+        return notifications.stream().map(notification -> NotificationWithSolutionResponse.of(notification, notification.getSolution())).collect(Collectors.toList());
+    }
+
+    private List<SolutionWithProblemResponse> getMyRecentSolutions(Member member) {
+        List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
+        return myRecentSolutions.stream().map(solution -> SolutionWithProblemResponse.of(solution, solution.getProblem())).collect(Collectors.toList());
+    }
+
+    private List<String> getBadges(Member member) {
+        List<Badge> badges = badgeRepository.findAllByMember(member);
+        return badges.stream().map(badge -> badge.getBadgeType().name()).collect(Collectors.toList());
+    }
+
+    private List<SolutionWithProblemResponse> getFollowingRecentSolutions(Long memberId) {
+        List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
+        return followingsRecentSolutions.stream().map(solution -> SolutionWithProblemResponse.of(solution, solution.getProblem())).collect(Collectors.toList());
+    }
+
+    private List<IsDayOfStudyResponse> getMonthlyStudyCalendar(Long memberId, YearMonth date) {
+        int month = date.getMonthValue();
+        List<Integer> monthlyStudy = getMonthlyStudy(memberId, month);
+        Map<Integer, Boolean> monthlyStudyMap = IntStream.rangeClosed(1, YearMonth.of(date.getYear(), month).lengthOfMonth()).boxed().collect(Collectors.toMap(Function.identity(), i -> Boolean.FALSE));
+        monthlyStudy.stream().forEach(i -> monthlyStudyMap.put(i, true));
+        return monthlyStudyMap.entrySet().stream().map(entry -> new IsDayOfStudyResponse(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+    }
+
+    private List<Integer> getMonthlyStudy(Long memberId, int month) {
+        List<Integer> monthlySolutions = solutionRepository.findAllByMonth(memberId, month);
+        List<Integer> monthlyReviews = reviewRepository.findAllByMonth(memberId, month);
+        return Stream.concat(monthlySolutions.stream(), monthlyReviews.stream()).distinct().collect(Collectors.toList());
+>>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1
     }
 
     private Member findMemberById(Long memberId){

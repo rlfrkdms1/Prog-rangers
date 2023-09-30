@@ -1,7 +1,7 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.problem.response.ProblemListProblem;
 import com.prograngers.backend.dto.problem.response.ProblemListResponse;
+import com.prograngers.backend.dto.problem.response.ShowProblemListResponse;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,36 +29,36 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
 
-    public ProblemListResponse getProblemList(
+    public ShowProblemListResponse getProblemList(
             Pageable pageable,
             AlgorithmConstant algorithm,
             DataStructureConstant dataStructure,
             SortConstant sortBy) {
         PageImpl<Problem> pageImpl = problemRepository.findAll(pageable, dataStructure, algorithm, sortBy);
         List<Problem> problems = pageImpl.getContent();
-        List<ProblemListProblem> problemListProblemResponse = makeProblemList(problems);
-        ProblemListResponse response = ProblemListResponse.from(problemListProblemResponse, pageImpl.getTotalPages(),pageable.getPageNumber());
+        List<ProblemListResponse> problemListResponseResponse = makeProblemList(problems);
+        ShowProblemListResponse response = ShowProblemListResponse.from(problemListResponseResponse, pageImpl.getTotalPages(),pageable.getPageNumber());
         return response;
     }
 
-    private List<ProblemListProblem> makeProblemList(List<Problem> problems) {
+    private List<ProblemListResponse> makeProblemList(List<Problem> problems) {
         // 반환할 dto 리스트
-        List<ProblemListProblem> problemListProblemResponse = new ArrayList<>();
+        List<ProblemListResponse> problemListResponseResponse = new ArrayList<>();
 
         // 결과를  for문 돌면서 반환 dto를 만든다
         problems.stream()
                 .forEach(problem ->{
-                    ProblemListProblem problemListProblem = ProblemListProblem.from(problem);
+                    ProblemListResponse problemListResponse = ProblemListResponse.from(problem);
                     List<Solution> solutions = problem.getSolutions();
 
-                    addTagToProblemListProblem(problemListProblem, solutions);
-                    problemListProblemResponse.add(problemListProblem);
+                    addTagToProblemListProblem(problemListResponse, solutions);
+                    problemListResponseResponse.add(problemListResponse);
                 });
 
-        return problemListProblemResponse;
+        return problemListResponseResponse;
     }
 
-    private void addTagToProblemListProblem(ProblemListProblem problemListProblem, List<Solution> solutions) {
+    private void addTagToProblemListProblem(ProblemListResponse problemListResponse, List<Solution> solutions) {
         HashMap<Object, Integer> tagCountMap = new HashMap<>();
 
         solutions.stream()
@@ -75,13 +74,18 @@ public class ProblemService {
         // 태그 개수에 따라 정렬
         tagList.sort((tag1, tag2) -> tagCountMap.get(tag2).compareTo(tagCountMap.get(tag1)));
 
-        addTag(problemListProblem, tagList);
+        addTag(problemListResponse, tagList);
     }
 
-    private void addTag(ProblemListProblem problemListProblem, List<Object> tagList) {
+    private void addTag(ProblemListResponse problemListResponse, List<Object> tagList) {
         int tagCount = 0;
         while(tagCount<MAX_TAG_COUNT){
+<<<<<<< HEAD
             if (tagList.get(tagCount)!=null) problemListProblem.getTags().add(tagList.get(tagCount++));
+=======
+            if (tagList.size()>tagCount) problemListResponse.getTags().add(tagList.get(tagCount));
+            tagCount+=1;
+>>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1
         }
     }
 }
