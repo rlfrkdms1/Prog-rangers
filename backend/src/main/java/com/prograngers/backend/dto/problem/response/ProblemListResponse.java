@@ -1,22 +1,31 @@
 package com.prograngers.backend.dto.problem.response;
 
-import lombok.AllArgsConstructor;
+import com.prograngers.backend.entity.problem.JudgeConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 public class ProblemListResponse {
-    private List<ProblemListProblem> problems;
-    private int totalCount;
+    String title;
+    JudgeConstant ojName;
 
-    private int pageNumber;
+    List<Object> tags;
 
-    public static ProblemListResponse from(List<ProblemListProblem> listProblems, int totalCount, int page){
-        return new ProblemListResponse(listProblems,totalCount,page);
+
+    public static ProblemListResponse from(Problem problem) {
+        ProblemListResponse problemListResponseResponse = ProblemListResponse.builder()
+                .title(problem.getTitle())
+                .ojName(problem.getOjName())
+                .tags(new ArrayList<>())
+                .build();
+
+        return problemListResponseResponse;
     }
-
 }

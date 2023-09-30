@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
 
 @Entity
 @Getter
@@ -27,6 +27,8 @@ import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
 @NoArgsConstructor
 @Builder
 public class Comment {
+
+    private static final String DELETED_CONTENT = "삭제된 댓글입니다";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,26 +41,28 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id",nullable = false)
     private Solution solution;
+
     @Column(nullable = false)
     private String content;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     private Long parentId;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private CommentStatusConStant status;
+    private CommentStatusConstant status;
 
-    private void updateContent(String content) {
+    public void update(String content) {
         if (content != null) {
             this.content = content;
             this.status = FIXED;
         }
     }
-    public void update(String content){
-        updateContent(content);
-    }
+
     public void delete(){
+        this.content = DELETED_CONTENT;
         this.status = DELETED;
     }
 

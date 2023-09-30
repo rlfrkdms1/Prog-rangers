@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS `comment` (
     `created_at`   TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
     `status`       varchar(255),
     `content`      varchar(255) NOT NULL,
-    `mention`      varchar(255),
     `parent_id`    bigint,
     `member_id`    bigint       NOT NULL,
     `solution_id`  bigint       NOT NULL,
@@ -33,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `member` (
     `password`            varchar(255),
     `photo`               varchar(255),
     `type`                varchar(255) NOT NULL,
-    `current_modified_at` date,
+    `currently_modified_at` date,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -56,7 +55,6 @@ CREATE TABLE IF NOT EXISTS `review` (
     `code_line_number` int          NOT NULL,
     `created_at`       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     `content`          varchar(255) NOT NULL,
-    `mention`          varchar(255),
     `parent_id`        bigint,
     `member_id`        bigint       NOT NULL,
     `solution_id`      bigint       NOT NULL,

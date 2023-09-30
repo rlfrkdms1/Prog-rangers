@@ -1,20 +1,20 @@
 package com.prograngers.backend.repository.solution;
 
-import com.prograngers.backend.TestConfig;
+import com.prograngers.backend.entity.Follow;
+import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.repository.follow.FollowRepository;
+import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.problem.ProblemRepository;
+import com.prograngers.backend.support.RepositoryTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +27,8 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRA
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.*;
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
+import static com.prograngers.backend.support.fixture.MemberFixture.이수빈;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
@@ -35,11 +37,8 @@ import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
 @Slf4j
-@Transactional
-@Import(TestConfig.class)
+@RepositoryTest
 class SolutionRepositoryTest {
 
     @Autowired
@@ -50,6 +49,12 @@ class SolutionRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
+    
+    @Autowired
+    private LikesRepository likesRepository;
 
     @DisplayName("멤버 이름으로 풀이를 전부 찾을 수 있다")
     @Test
@@ -307,16 +312,139 @@ class SolutionRepositoryTest {
         assertThat(result).containsExactly(solution1);
     }
 
-    Member 저장(Member member) {
+    @Test
+    @DisplayName("풀이들이 주어졌을 때 해당하는 회원이 작성한 최근 풀이 3개를 정렬해서 가져올 수 있다.")
+    void 나의_최근_풀이_조회(){
+        Member member = 저장(길가은.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
+        저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 8, 3, 12, 0), JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 3, 11, 0), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 4, 11, 0), JAVA, 1));
+
+        List<Solution> solutionList = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
+        assertThat(solutionList).containsExactly(solution1, solution2, solution3);
+    }
+
+    @Test
+    @DisplayName("팔로우의 최근 풀이를 5개 조회할 수 있다.")
+    void 팔로우의_최근_풀이() {
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(이수빈.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        저장(팔로우_생성(member1, member2));
+        저장(팔로우_생성(member1, member3));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 2, 12, 0), JAVA, 1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 8, 2, 12, 0), JAVA, 1));
+        저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 7, 2, 12, 0), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 5, 12, 0), JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member3, LocalDateTime.of(2023, 9, 4, 12, 0), JAVA, 1));
+        List<Solution> solutionList = solutionRepository.findFollowingsRecentSolutions(member1.getId());
+        assertThat(solutionList).containsExactly(solution1, solution2, solution3, solution4, solution5);
+    }
+
+    @Test
+    @DisplayName("회원이 주어졌을 때 해당 회원이 작성한 주어진 달의 풀이들을 조회할 수 있다.")
+    void 월별_풀이_조회(){
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        Integer solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 5, 12, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution3 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 11, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution4 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 8, 4, 11, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+        Integer solution5 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 10, 11, 0), JAVA, 1)).getCreatedAt().getDayOfMonth();
+
+        List<Integer> dayOfWriteSolution1 = solutionRepository.findAllByMonth(member1.getId(), 9);
+        List<Integer> dayOfWriteSolution2 = solutionRepository.findAllByMonth(member2.getId(), 9);
+        assertAll(
+                () -> assertThat(dayOfWriteSolution1).contains(solution1, solution2, solution3).doesNotContain(solution4, solution5),
+                () -> assertThat(dayOfWriteSolution2).contains(solution5).doesNotContain(solution1, solution2, solution3, solution4)
+        );
+    }
+
+    @Test
+    @DisplayName("문제가 주어졌을 때 좋아요 순으로 상위 6개의 풀이를 정렬해서 가져올 수 있다")
+    void 문제_풀이_좋아요_정렬_가져오기(){
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Member member4 = 저장(장지담.기본_정보_생성());
+
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+
+        저장(좋아요_생성(member1,solution1));
+        저장(좋아요_생성(member2,solution1));
+        저장(좋아요_생성(member3,solution1));
+        저장(좋아요_생성(member4,solution1));
+
+        저장(좋아요_생성(member1,solution2));
+        저장(좋아요_생성(member2,solution2));
+        저장(좋아요_생성(member3,solution2));
+
+        저장(좋아요_생성(member1,solution3));
+        저장(좋아요_생성(member2,solution3));
+
+        저장(좋아요_생성(member1,solution4));
+
+        List<Solution> result = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem,3);
+
+        assertThat(result).containsExactly(solution1,solution2,solution3);
+    }
+
+    @Test
+    @DisplayName("문제에 해당하는 풀이를 날짜 내림차순으로 가져온다")
+    void findAllByProblemOrderByCreatedAtDescTest(){
+        //given
+        Member member = 저장(장지담.기본_정보_생성());
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+        Problem problem2 = 저장(백준_문제.기본_정보_생성());
+
+        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(1), JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(3), JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(2), JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
+        Solution solution5 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
+        Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
+
+        //when
+        List<Solution> result = solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem1);
+
+        //then
+        assertThat(result).containsExactly(solution1,solution2,solution3);
+    }
+
+    private Likes 좋아요_생성(Member member, Solution solution){
+        return Likes.builder()
+                .member(member)
+                .solution(solution)
+                .build();
+    }
+
+    private Follow 팔로우_생성(Member member1, Member member2) {
+        return Follow
+                .builder()
+                .followerId(member1.getId())
+                .followingId(member2.getId())
+                .build();
+    }
+
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
-
-    Problem 저장(Problem problem) {
+    private Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
-
-    Solution 저장(Solution solution) {
-        return solutionRepository.save(solution);
-    }
-
+    private Solution 저장(Solution solution) { return solutionRepository.save(solution); }
+    private Follow 저장(Follow follow) { return followRepository.save(follow); }
+    private Likes 저장(Likes likes){ return likesRepository.save(likes); }
 }
