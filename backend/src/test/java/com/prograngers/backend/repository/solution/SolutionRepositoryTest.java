@@ -396,7 +396,7 @@ class SolutionRepositoryTest {
 
         저장(좋아요_생성(member1,solution4));
 
-        List<Solution> result = solutionRepository.findTop6SolutionOfProblemOrderByLikesDesc(problem,3);
+        List<Solution> result = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,3);
 
         assertThat(result).containsExactly(solution1,solution2,solution3);
     }
