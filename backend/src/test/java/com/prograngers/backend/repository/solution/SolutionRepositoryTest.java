@@ -402,7 +402,7 @@ class SolutionRepositoryTest {
     }
 
     @Test
-    @DisplayName("문제에 해당하는 풀이를 날짜 내림차순으로 가져온다")
+    @DisplayName("문제에 해당하는 풀이를 날짜 오름차순으로 가져온다")
     void findAllByProblemOrderByCreatedAtDescTest(){
         //given
         Member member = 저장(장지담.기본_정보_생성());
@@ -417,10 +417,10 @@ class SolutionRepositoryTest {
         Solution solution6 = 저장(공개_풀이.기본_정보_생성(problem2, member, LocalDateTime.now(), JAVA, 1));
 
         //when
-        List<Solution> result = solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem1);
+        List<Solution> result = solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem1);
 
         //then
-        assertThat(result).containsExactly(solution1,solution2,solution3);
+        assertThat(result).containsExactly(solution3,solution2,solution1);
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){
