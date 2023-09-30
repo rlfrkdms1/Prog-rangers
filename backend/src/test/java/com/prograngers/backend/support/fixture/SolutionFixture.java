@@ -16,8 +16,8 @@ import static com.prograngers.backend.entity.solution.Solution.*;
 @AllArgsConstructor
 public enum SolutionFixture {
 
-    공개_풀이("풀이제목",true,"풀이코드","풀이설명"),
-    비공개_풀이("풀이제목",false,"풀이코드","풀이설명");
+    공개_풀이("풀이제목",true,"import\nmain\nhello world\nreturn","풀이설명"),
+    비공개_풀이("풀이제목",false,"import\nmain\nhello world\nreturn","풀이설명");
     private final String title;
     private final boolean isPublic;
     private final String code;
