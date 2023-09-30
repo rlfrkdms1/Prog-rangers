@@ -1,16 +1,25 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-export const AuthContext = createContext();
+const token = localStorage.getItem('token');
+const nickname = localStorage.getItem('nickname');
 
-export function useAuth() {
-  return useContext(AuthContext);
+export const IsLoginContext = createContext({ isLogin: nickname !== null && token !== null ? true : false});
+
+export function IsLoginProvider({ children }) {
+  const [ isLogin, setIsLogin ] = useState(nickname !== null && token !== null ? true : false);
+  const value = useMemo(() => ({ isLogin, setIsLogin }), [ isLogin, setIsLogin ]);
+
+  return (
+    <IsLoginContext.Provider value={value}>
+      {children}
+    </IsLoginContext.Provider>
+  );
 }
 
-export function AuthProvider({ children }) {
-  const [accessToken, setAccessToken] = useState(false);
-  return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-      {children}
-    </AuthContext.Provider>
-  );
+export function useIsLoginState() {
+  const context = useContext(IsLoginContext);
+  if(!context){ 
+    throw new Error('Cannot find isLoginProvider');
+  }
+  return context.isLogin;
 }

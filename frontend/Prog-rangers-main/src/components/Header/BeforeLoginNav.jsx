@@ -11,7 +11,7 @@ export const BeforeLoginNav = () => {
       <Link to="/problems" css={linkDefault}>
         풀이 보러가기
       </Link>
-      <Link to="signIn" css={linkDefault}>
+      <Link to="login" css={linkDefault}>
         로그인
       </Link>
       <Link to="signUp" css={linkDefault}>
