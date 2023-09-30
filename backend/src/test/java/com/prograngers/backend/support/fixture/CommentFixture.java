@@ -35,9 +35,10 @@ public enum CommentFixture {
                 .build();
     }
 
-    public Comment 부모_지정_생성(Long parentId, Member member, Solution solution, LocalDateTime createdDate){
+    public Comment 부모_지정_생성(Long parentId, Long id, Member member, Solution solution, LocalDateTime createdDate){
         return 기본_빌더_생성()
                 .parentId(parentId)
+                .id(id)
                 .member(member)
                 .solution(solution)
                 .createdAt(createdDate)
