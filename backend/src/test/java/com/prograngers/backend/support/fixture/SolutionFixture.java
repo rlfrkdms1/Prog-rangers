@@ -70,6 +70,20 @@ public enum SolutionFixture {
                 .build();
     }
 
+    public Solution 스크랩_아아디_지정_생성(Long id, Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .problem(scrapSolution.getProblem())
+                .member(member)
+                .createdAt(createdDate)
+                .algorithm(scrapSolution.getAlgorithm())
+                .dataStructure(scrapSolution.getDataStructure())
+                .language(scrapSolution.getLanguage())
+                .level(level)
+                .scrapSolution(scrapSolution)
+                .build();
+    }
+
     public Solution 아이디_지정_생성(
             Long id, Problem problem, Member member, LocalDateTime createdDate,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure,LanguageConstant language, Integer level) {
