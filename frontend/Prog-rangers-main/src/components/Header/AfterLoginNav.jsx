@@ -4,6 +4,7 @@ import { Link, navigate, useNavigate } from 'react-router-dom';
 import {
   navStyle,
   linkDefault,
+  StyledLink
 } from './headerStyle';
 import { IsLoginContext } from '../../context/AuthContext';
 
@@ -21,18 +22,18 @@ export const AfterLoginNav = () => {
 
   return (
     <div className="AfterLoginNav" css={navStyle}>
-      <Link to="problems" css={linkDefault}>
+      <StyledLink to="problems" >
         풀이 보러가기
-      </Link>
-      <Link to="registerReview" css={linkDefault}>
+      </StyledLink>
+      <StyledLink to="registerReview" >
         풀이 쓰러가기
-      </Link>
-      <Link to="myPage" css={linkDefault}>
+      </StyledLink>
+      <StyledLink to="myPage" >
         {nickname}님
-      </Link>
-      <Link to="" css={linkDefault} onClick={logoutAction}>
+      </StyledLink>
+      <StyledLink to="" onClick={logoutAction}>
         로그아웃
-      </Link>
+      </StyledLink>
     </div>
   );
 };
