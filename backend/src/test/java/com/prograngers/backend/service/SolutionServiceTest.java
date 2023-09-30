@@ -194,7 +194,7 @@ class SolutionServiceTest {
         Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
 
         when(solutionRepository.findById(solutionId)).thenReturn(Optional.of(myMainSolution));
-        when(solutionRepository.findAllByProblemOrderByCreatedAtDesc(problem)).thenReturn(Arrays.asList(mySolution3,mySolution2,mySolution1,myMainSolution,othersSolution2,othersSolution1));
+        when(solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem)).thenReturn(Arrays.asList(mySolution3,mySolution2,mySolution1,myMainSolution,othersSolution2,othersSolution1));
         when(likesRepository.countBySolution(myMainSolution)).thenReturn(3L);
         when(solutionRepository.countByScrapSolution(myMainSolution)).thenReturn(2L);
         when(commentRepository.findAllBySolutionOrderByCreatedAtAsc(myMainSolution)).thenReturn(Arrays.asList(comment1,comment2,comment3,comment4));
