@@ -139,7 +139,7 @@ export const MyPage = () => {
    ));
 
   const infoList = notificationInfoList.map((info) => (
-    <div key={info.solutionId}>
+    <div key={info.solutionId} css={css`overflow-y: auto; max-height: 565px; margin-bottom: 20px;`}>
       <div css={css`
               width: 345px;
               height: 80px;
