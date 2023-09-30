@@ -29,9 +29,9 @@ export const Solutions = () => {
   };
 
   const WantSolutions = async() => {
-    const response = await axios.get(`http://13.124.131.171:8080/prog-rangers/problems/${targetIndex+1}/solutions`);
+    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems/${targetIndex+1}/solutions`);
     setTotalPages(response.data.totalPages);
-    setSolvings(response.data.solutionListSolutions);
+    setSolvings(response.data.solutions);
     setQuestionTitle(response.data.problemName);
     setOjName(response.data.ojName);
   }

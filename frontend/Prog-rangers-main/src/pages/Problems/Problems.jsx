@@ -19,7 +19,7 @@ export const Problems = () => {
   const [ totalPages, setTotalPages ] = useState(1);
 
   const AllQuestions = async() => {
-    const response = await axios.get(`http://13.124.131.171:8080/prog-rangers/problems?page=${page-1}`);
+    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems?page=${page-1}`);
     setQuestions(response.data.problems);
     setTotalPages(response.data.totalCount);
   }
