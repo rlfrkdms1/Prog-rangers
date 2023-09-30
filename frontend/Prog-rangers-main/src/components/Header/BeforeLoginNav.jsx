@@ -7,6 +7,7 @@ import {
 } from './headerStyle';
 
 export const BeforeLoginNav = () => {
+
   return (
     <div className="BeforeLoginNav" css={navStyle}>
       <StyledLink to="/problems">

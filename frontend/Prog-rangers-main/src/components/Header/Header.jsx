@@ -15,7 +15,6 @@ const flexAlign = css`
 
 export const Header = () => {
   const isLogin = useIsLoginState();
-  console.log(isLogin);
 
   return (
     <div

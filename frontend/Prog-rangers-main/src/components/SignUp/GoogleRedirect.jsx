@@ -1,13 +1,14 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { IsLoginContext } from "../../context/AuthContext";
 
 export const GoogleRedirect = () => {
   const navigate = useNavigate();
   const href = window.location.href;
   let params = new URL(document.location).searchParams;
   let GOOGLE_CODE = params.get("code");
-  console.log(GOOGLE_CODE);
+  const { setIsLogin } = useContext(IsLoginContext);
 
   useEffect(() => {
     fetch(`http://13.124.131.171:8080/api/v1/login/google?code=${GOOGLE_CODE}`,{
@@ -22,6 +23,8 @@ export const GoogleRedirect = () => {
       .then(data => {
         console.log(data);
         localStorage.setItem('token', data.accessToken);
+        localStorage.setItem('nickname', data.nickname);
+        setIsLogin(true);
         navigate("/");
       })
       .catch(error =>{
