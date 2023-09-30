@@ -35,4 +35,16 @@ public enum ReviewFixture {
         return 기본_정보_빌더_생성(member, solution, createdAt).build();
     }
 
+    public Review 아이디_지정_생성(Long id, Member member, Solution solution, LocalDateTime createdAt) {
+        return 기본_정보_빌더_생성(member, solution, createdAt)
+                .id(id)
+                .build();
+    }
+
+    public Review 부모_지정_생성(Long parentId, Long id, Member member, Solution solution, LocalDateTime createdAt) {
+        return 기본_정보_빌더_생성(member, solution, createdAt)
+                .parentId(parentId)
+                .id(id)
+                .build();
+    }
 }
