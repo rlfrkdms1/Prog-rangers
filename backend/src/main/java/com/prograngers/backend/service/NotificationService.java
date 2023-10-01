@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
+import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
 import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;
@@ -109,6 +110,16 @@ public class NotificationService {
                     .forEach(entry -> sendToClient(emitter, emitterId, entry.getValue()));
         }
         return emitter;
+    }
+
+    public void getNotifications(Long memberId, int page) {
+
+    }
+
+    private void validPage(int page) {
+        if (page < 2) {
+            throw new InvalidPageNumberException();
+        }
     }
 
 }
