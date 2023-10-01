@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
+import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.*;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
@@ -9,12 +10,14 @@ import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +70,8 @@ class SolutionServiceTest {
     private MemberRepository memberRepository;
     @Mock
     private LikesRepository likesRepository;
+    @Mock
+    private ProblemRepository problemRepository;
     @InjectMocks
     private SolutionService solutionService;
 
@@ -239,14 +244,53 @@ class SolutionServiceTest {
         assertThat(result).usingRecursiveComparison().isEqualTo(expected);
     }
 
-    ScarpSolutionRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level) {
+    @Test
+    @DisplayName("풀이를 생성한 후 풀이 id를 반환한다")
+    void saveTest(){
+        //given
+        final Long memberId = 1L;
+        final Long solutionId = 1L;
+        final Member member = 장지담.아이디_지정_생성(memberId);
+        final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", "https://www.acmicpc.net/problem/2557", 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
+        final Problem problem = 백준_문제.기본_정보_생성();
+        final Solution expectedSolution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 1);
+
+        when(solutionRepository.save(any(Solution.class))).thenReturn(expectedSolution);
+        when(problemRepository.findByLink(any())).thenReturn(null);
+        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
+
+        //when
+        Long resultId = solutionService.save(request, memberId);
+
+        //then
+        Assertions.assertThat(resultId).isEqualTo(expectedSolution.getId());
+    }
+
+    private ScarpSolutionRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level) {
         return new ScarpSolutionRequest(title, description, level);
     }
 
-    private static UpdateSolutionRequest 풀이_수정_요청_생성(
+    private UpdateSolutionRequest 풀이_수정_요청_생성(
             String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure,
             String code, String description, int level) {
         return new UpdateSolutionRequest(title, algorithm, dataStructure, code, description, level);
+    }
+
+    private WriteSolutionRequest 풀이_생성_요청_생성(
+            String problemTitle, String solutionTitle, String problemLink,
+            Integer level, LanguageConstant language, Boolean isPublic,
+            String description, String code
+    ){
+        return WriteSolutionRequest.builder()
+                .problemTitle(problemTitle)
+                .solutionTitle(solutionTitle)
+                .problemLink(problemLink)
+                .level(level)
+                .language(language)
+                .isPublic(isPublic)
+                .description(description)
+                .code(code)
+                .build();
     }
 
 }
