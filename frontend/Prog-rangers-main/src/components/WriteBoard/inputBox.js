@@ -43,5 +43,5 @@ export const DetailInput = css`
   border-radius: 50px;
   border: none;
   resize: none;
-  padding: 20px;
+  padding: 30px;
 `;
