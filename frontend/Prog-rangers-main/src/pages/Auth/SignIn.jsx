@@ -36,7 +36,7 @@ export const SignIn = () => {
 
   return (
     <div css={pageStyle}>
-      <div css={innerPageStyle}>
+      <div css={css`${innerPageStyle}  margin-bottom: 100px;`}>
         <h2 css={headingStyle}>로그인</h2>
         <DefaultSignInForm />
         <OptionWrapper>
@@ -56,11 +56,6 @@ export const SignIn = () => {
                 자동 로그인
               </Label>
             </div>
-          </Options>
-          <Options>
-            {/* <span css={grayTextStyle}>아이디 찾기</span> */}
-            {/* <span css={grayTextStyle}>|</span> */}
-            {/* <span css={grayTextStyle}>비밀번호 찾기</span> */}
           </Options>
         </OptionWrapper>
         <SocialLoginButtons />
