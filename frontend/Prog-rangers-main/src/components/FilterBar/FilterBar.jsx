@@ -9,11 +9,17 @@ import {
 } from "./FilterBox";
 import ToggleDown from '../../assets/icons/main-toggle-down.svg';
 import ToggleUp from '../../assets/icons/main-toggle-up.svg';
+import { useAtom } from 'jotai';
+import { targetAtom, targetScope, nameAtom, nameScope } from "../../pages/BoardPage/AddSolution";
+import { useEffect } from "react";
 
-export const FilterBar = ({options, width, secondWidth}) => {
+
+export const FilterBar = ({title, options, width, secondWidth}) => {
   const [ selectedOption, setSelectedOption ] = useState(options[0]); 
   const [ isOpen, setIsOpen ] = useState(false);
   const [ isClicked, setIsClicked ] = useState(false);
+  const [ target, setTarget ] = useAtom( targetAtom, targetScope );
+  const [ name, setName ] = useAtom( nameAtom, nameScope );
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -21,6 +27,8 @@ export const FilterBar = ({options, width, secondWidth}) => {
   const handleSelect = (e) => {
     setSelectedOption(e);
     setIsClicked(true);
+    setTarget(e.name);
+    setName(title);
   };
 
   return(
