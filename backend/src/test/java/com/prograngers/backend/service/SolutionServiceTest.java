@@ -12,6 +12,7 @@ import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
@@ -29,6 +30,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 
 import java.time.LocalDateTime;
@@ -43,6 +46,7 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRA
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
@@ -279,6 +283,28 @@ class SolutionServiceTest {
 
         //when, then
         assertThrows(ProblemLinkNotFoundException.class,()->solutionService.save(request,memberId));
+    }
+
+    @Test
+    @DisplayName("풀이 목록 응답을 할 수 있다")
+    void getSolutionListTest(){
+        //given
+        final Long problemId = 1L;
+        final Member member = 장지담.기본_정보_생성();
+        final Problem problem = 백준_문제.아이디_지정_생성(problemId);
+        Solution solution1 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), JAVA, 1);
+        Solution solution2 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().plusDays(1), JAVA, 1);
+        Solution solution3 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().plusDays(2), JAVA, 1);
+        Solution solution4 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().plusDays(3), JAVA, 1);
+
+        when(problemRepository.findById(any())).thenReturn(Optional.of(problem));
+        when(solutionRepository.getSolutionList(PageRequest.of(0,4),problemId,null,null,null, NEWEST)).thenReturn(new PageImpl<>(Arrays.asList(solution4,solution3,solution2,solution1), PageRequest.of(0,4), 4L));
+
+        ShowSolutionListResponse expected = ShowSolutionListResponse.from(new PageImpl<>(Arrays.asList(solution4,solution3,solution2,solution1),PageRequest.of(0,4),4L),0);
+        //when
+        ShowSolutionListResponse result = solutionService.getSolutionList(PageRequest.of(0, 4), problemId, null, null, null, NEWEST);
+        //then
+        assertThat(result).usingRecursiveComparison().isEqualTo(expected);
     }
 
     private ScarpSolutionRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level) {
