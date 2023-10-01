@@ -163,35 +163,35 @@ class SolutionServiceTest {
         final Long solutionId = 1L;
 
         //member
-        Member member1 = 장지담.아이디_지정_생성(member1Id);
-        Member member2 = 장지담.아이디_지정_생성(member2Id);
+        final Member member1 = 장지담.아이디_지정_생성(member1Id);
+        final Member member2 = 장지담.아이디_지정_생성(member2Id);
 
         //problem
-        Problem problem = 백준_문제.기본_정보_생성();
+        final Problem problem = 백준_문제.기본_정보_생성();
 
         //mainSolution
-        Solution myMainSolution = 공개_풀이.아이디_지정_생성(1L,problem, member1, LocalDateTime.now().plusDays(2), JAVA, 3);
+        final Solution myMainSolution = 공개_풀이.아이디_지정_생성(1L,problem, member1, LocalDateTime.now().plusDays(2), JAVA, 3);
 
         //이 문제에 대한 다른 사람들의 풀이 2개
-        Solution othersSolution1 = 공개_풀이.아이디_지정_생성(2L,problem, member2, LocalDateTime.now(), JAVA, 3);
-        Solution othersSolution2 = 공개_풀이.아이디_지정_생성(3L,problem, member2, LocalDateTime.now().plusDays(1), JAVA, 3);
+        final Solution othersSolution1 = 공개_풀이.아이디_지정_생성(2L,problem, member2, LocalDateTime.now(), JAVA, 3);
+        final Solution othersSolution2 = 공개_풀이.아이디_지정_생성(3L,problem, member2, LocalDateTime.now().plusDays(1), JAVA, 3);
 
         //이 문제에 대한 내풀이 3개, 하나는 다른 사람의 풀이를 스크랩한 풀이다
-        Solution mySolution1 = 공개_풀이.아이디_지정_생성(4L,problem, member1, LocalDateTime.now().plusDays(3), JAVA, 3);
-        Solution mySolution2 = 공개_풀이.아이디_지정_생성(5L,problem, member1, LocalDateTime.now().plusDays(4), JAVA, 3);
-        Solution mySolution3 = 공개_풀이.스크랩_아아디_지정_생성(6L,member1, LocalDateTime.now().plusDays(5),3,othersSolution1);
+        final Solution mySolution1 = 공개_풀이.아이디_지정_생성(4L,problem, member1, LocalDateTime.now().plusDays(3), JAVA, 3);
+        final Solution mySolution2 = 공개_풀이.아이디_지정_생성(5L,problem, member1, LocalDateTime.now().plusDays(4), JAVA, 3);
+        final Solution mySolution3 = 공개_풀이.스크랩_아아디_지정_생성(6L,member1, LocalDateTime.now().plusDays(5),3,othersSolution1);
 
         //myMainSolution 댓글
-        Comment comment1 = 생성된_댓글.아이디_지정_생성(1L,member1, myMainSolution, LocalDateTime.now().plusDays(10));
-        Comment comment2 = 생성된_댓글.부모_지정_생성(1L, 2L, member2, myMainSolution, LocalDateTime.now().plusDays(11));
-        Comment comment3 = 생성된_댓글.아이디_지정_생성(3L,member2, myMainSolution, LocalDateTime.now().plusDays(12));
-        Comment comment4 = 생성된_댓글.부모_지정_생성(3L, 4L, member1, myMainSolution, LocalDateTime.now().plusDays(13));
+        final Comment comment1 = 생성된_댓글.아이디_지정_생성(1L,member1, myMainSolution, LocalDateTime.now().plusDays(10));
+        final Comment comment2 = 생성된_댓글.부모_지정_생성(1L, 2L, member2, myMainSolution, LocalDateTime.now().plusDays(11));
+        final Comment comment3 = 생성된_댓글.아이디_지정_생성(3L,member2, myMainSolution, LocalDateTime.now().plusDays(12));
+        final Comment comment4 = 생성된_댓글.부모_지정_생성(3L, 4L, member1, myMainSolution, LocalDateTime.now().plusDays(13));
 
         //myMainSolution 리뷰
-        Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().plusDays(10));
-        Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
-        Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().plusDays(10));
-        Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
+        final Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().plusDays(10));
+        final Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
+        final Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().plusDays(10));
+        final Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
 
         when(solutionRepository.findById(solutionId)).thenReturn(Optional.of(myMainSolution));
         when(solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem)).thenReturn(Arrays.asList(mySolution3,mySolution2,mySolution1,myMainSolution,othersSolution2,othersSolution1));
@@ -201,38 +201,30 @@ class SolutionServiceTest {
         when(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(myMainSolution)).thenReturn(Arrays.asList(review1,review2,review3,review4));
         when(solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,6)).thenReturn(Arrays.asList(othersSolution1,othersSolution2));
 
-        List<CommentWithRepliesResponse> expectedComments = new ArrayList<>();
-        CommentWithRepliesResponse comment1Expected = CommentWithRepliesResponse.of(comment1, new ArrayList<>(), true);
-        comment1Expected.getReplies().add(CommentWithRepliesResponse.of(comment2,false));
-        CommentWithRepliesResponse comment3Expected = CommentWithRepliesResponse.of(comment3, new ArrayList<>(), false);
-        comment3Expected.getReplies().add(CommentWithRepliesResponse.of(comment4,true));
-        expectedComments.add(comment1Expected);
-        expectedComments.add(comment3Expected);
+        final List<CommentWithRepliesResponse> expectedComments = Arrays.asList(CommentWithRepliesResponse.of(comment1, new ArrayList<>(), true), CommentWithRepliesResponse.of(comment3, new ArrayList<>(), false));
+        expectedComments.get(0).getReplies().add(CommentWithRepliesResponse.of(comment2,false));
+        expectedComments.get(1).getReplies().add(CommentWithRepliesResponse.of(comment4,true));
 
-        List<ReviewWithRepliesResponse> expectedReviews = new ArrayList<>();
-        ReviewWithRepliesResponse review1Expected = ReviewWithRepliesResponse.from(review1,new ArrayList<>(),true);
-        review1Expected.getReplies().add(ReviewWithRepliesResponse.from(review2,false));
-        ReviewWithRepliesResponse review3Expected = ReviewWithRepliesResponse.from(review3,new ArrayList<>(),true);
-        review3Expected.getReplies().add(ReviewWithRepliesResponse.from(review4,false));
-        expectedReviews.add(review1Expected);
-        expectedReviews.add(review3Expected);
+        final List<ReviewWithRepliesResponse> expectedReviews = Arrays.asList(ReviewWithRepliesResponse.from(review1, new ArrayList<>(), true), ReviewWithRepliesResponse.from(review3, new ArrayList<>(), true));
+        expectedReviews.get(0).getReplies().add(ReviewWithRepliesResponse.from(review2,false));
+        expectedReviews.get(1).getReplies().add(ReviewWithRepliesResponse.from(review4,false));
 
-        List<RecommendedSolutionResponse> expectedRecommendedSolutions = new ArrayList<>();
-        expectedRecommendedSolutions.add(RecommendedSolutionResponse.from(othersSolution1.getId(),0,othersSolution1.getTitle(),othersSolution1.getMember().getNickname()));
-        expectedRecommendedSolutions.add(RecommendedSolutionResponse.from(othersSolution2.getId(),0,othersSolution2.getTitle(),othersSolution2.getMember().getNickname()));
+        final List<RecommendedSolutionResponse> expectedRecommendedSolutions = Arrays.asList(
+                RecommendedSolutionResponse.from(othersSolution1.getId(), 0, othersSolution1.getTitle(), othersSolution1.getMember().getNickname()),
+                RecommendedSolutionResponse.from(othersSolution2.getId(), 0, othersSolution2.getTitle(), othersSolution2.getMember().getNickname())
+        );
 
-        List<SolutionTitleAndIdResponse> expectedSideSolutions = new ArrayList<>();
-        expectedSideSolutions.add(SolutionTitleAndIdResponse.from(mySolution3.getTitle(), mySolution3.getId()));
-        expectedSideSolutions.add(SolutionTitleAndIdResponse.from(mySolution2.getTitle(), mySolution2.getId()));
-        expectedSideSolutions.add(SolutionTitleAndIdResponse.from(mySolution1.getTitle(), mySolution1.getId()));
-        expectedSideSolutions.add(SolutionTitleAndIdResponse.from(myMainSolution.getTitle(), myMainSolution.getId()));
+        final List<SolutionTitleAndIdResponse> expectedSideSolutions = Arrays.asList(
+                SolutionTitleAndIdResponse.from(mySolution3.getTitle(), mySolution3.getId()),
+                SolutionTitleAndIdResponse.from(mySolution2.getTitle(), mySolution2.getId()),
+                SolutionTitleAndIdResponse.from(mySolution1.getTitle(), mySolution1.getId()),
+                SolutionTitleAndIdResponse.from(myMainSolution.getTitle(), myMainSolution.getId())
+        );
 
-
-        List<SolutionTitleAndIdResponse> expectedScrapSolutions = new ArrayList<>();
-        expectedScrapSolutions.add(SolutionTitleAndIdResponse.from(othersSolution1.getTitle(), othersSolution1.getId()));
+        final List<SolutionTitleAndIdResponse> expectedScrapSolutions = Arrays.asList(SolutionTitleAndIdResponse.from(othersSolution1.getTitle(), othersSolution1.getId()));
 
         //when
-        ShowMySolutionDetailResponse expected = ShowMySolutionDetailResponse.of(
+        final ShowMySolutionDetailResponse expected = ShowMySolutionDetailResponse.of(
                 ProblemResponse.from(problem.getTitle(),problem.getOjName()),
                 MySolutionResponse.from(myMainSolution.getTitle(),Arrays.asList(myMainSolution.getAlgorithm(),myMainSolution.getDataStructure()),myMainSolution.getDescription(),myMainSolution.getCode().split("\n"),3L,2L),
                 expectedComments,
@@ -241,7 +233,7 @@ class SolutionServiceTest {
                 expectedSideSolutions,
                 expectedScrapSolutions
         );
-        ShowMySolutionDetailResponse result = solutionService.getMySolutionDetail(member1Id, solutionId);
+        final ShowMySolutionDetailResponse result = solutionService.getMySolutionDetail(member1Id, solutionId);
 
         //then
         assertThat(result).usingRecursiveComparison().isEqualTo(expected);
