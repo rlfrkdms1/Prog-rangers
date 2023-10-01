@@ -102,7 +102,6 @@ public class SolutionService {
 
 
     public ShowSolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
-        // 풀이, 문제, 회원 가져오기
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
         List<Comment> comments = commentRepository.findAllBySolution(solution);
