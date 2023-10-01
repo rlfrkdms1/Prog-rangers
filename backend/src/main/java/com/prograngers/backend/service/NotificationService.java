@@ -12,6 +12,8 @@ import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -21,6 +23,8 @@ import java.util.Map;
 
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
+import static com.prograngers.backend.service.DashBoardService.DASHBOARD_NOTIFICATION_PAGE_SIZE;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -113,6 +117,8 @@ public class NotificationService {
     }
 
     public void getNotifications(Long memberId, int page) {
+        validPage(page);
+        Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_PAGE_SIZE));
 
     }
 
