@@ -62,7 +62,6 @@ export const AddMySolution = () => {
   return(
     <div>
       <div css={css`
-        border: 1px solid black;
         margin: 100px 30px 0 40px;
         width: 740px;
         display: flex;
