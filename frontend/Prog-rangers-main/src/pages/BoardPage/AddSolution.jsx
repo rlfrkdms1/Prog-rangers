@@ -36,7 +36,7 @@ export const AddSolution = () => {
         <Provider scope={targetScope}>
           <AddMySolution />
         </Provider>
-        <div css={css`${ButtonDiv}`}>
+        <div css={css`${ButtonDiv} margin-bottom: 80px;`}>
           <button onClick={refresh()} css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
           <button css={css`${SubmitButton} background-color: #C2DBE3;`}>작성 완료</button>
         </div>
