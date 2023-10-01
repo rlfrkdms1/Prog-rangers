@@ -4,6 +4,7 @@ import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.*;
+import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
@@ -48,6 +49,7 @@ import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEU
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.ReviewFixture.FIRST_LINE_REVIEW;
@@ -305,6 +307,62 @@ class SolutionServiceTest {
         ShowSolutionListResponse result = solutionService.getSolutionList(PageRequest.of(0, 4), problemId, null, null, null, NEWEST);
         //then
         assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("풀이 상세보기 응답을 할 수 있다")
+    void getSolutionDetailTest(){
+        //given
+        final Long solutionId = 1L;
+        final Long memberId = 1L;
+        final Long problemId = 1L;
+
+        Member member = 장지담.아이디_지정_생성(memberId);
+        Member other = 길가은.아이디_지정_생성(2L);
+        Problem problem = 백준_문제.아이디_지정_생성(problemId);
+        Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 3);
+        Solution scrapSolution = 공개_풀이.스크랩_아아디_지정_생성(2L, other, LocalDateTime.now(), 3, solution);
+
+        Comment comment1 = 생성된_댓글.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
+        Comment comment2 = 생성된_댓글.부모_지정_생성(1L,2L, other, solution, LocalDateTime.now().plusDays(2));
+        Comment comment3 = 생성된_댓글.아이디_지정_생성(3L, member, solution, LocalDateTime.now().plusDays(1));
+        Comment comment4 = 생성된_댓글.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now().plusDays(3));
+        Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
+        Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L, 2L,other, solution, LocalDateTime.now());
+        Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L, member, solution, LocalDateTime.now());
+        Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now());
+
+        Likes likes = 좋아요_생성(other, solution);
+
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(solutionRepository.findById(solutionId)).thenReturn(Optional.of(solution));
+        when(commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution)).thenReturn(List.of(comment1,comment2,comment3,comment4));
+        when(likesRepository.findAllBySolution(solution)).thenReturn(List.of(likes));
+        when(solutionRepository.findAllByScrapSolution(solution)).thenReturn(List.of(scrapSolution));
+        when(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution)).thenReturn(List.of(review1,review2,review3,review4));
+
+        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
+        SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), 1, 1, false, false, true, null);
+        List<CommentWithRepliesResponse> commentsResponse = Arrays.asList(CommentWithRepliesResponse.of(comment1, new ArrayList<>(), true), CommentWithRepliesResponse.of(comment3, new ArrayList<>(), true));
+        commentsResponse.get(0).getReplies().add(CommentWithRepliesResponse.of(comment2,false));
+        commentsResponse.get(1).getReplies().add(CommentWithRepliesResponse.of(comment4,false));
+
+        List<ReviewWithRepliesResponse> reviewsResponses = Arrays.asList(ReviewWithRepliesResponse.from(review1, new ArrayList<>(),true),ReviewWithRepliesResponse.from(review3, new ArrayList<>(),true));
+        reviewsResponses.get(0).getReplies().add(ReviewWithRepliesResponse.from(review2,false));
+        reviewsResponses.get(1).getReplies().add(ReviewWithRepliesResponse.from(review4,false));
+
+        ShowSolutionDetailResponse expected = ShowSolutionDetailResponse.from(problemResponse, solutionResponse, commentsResponse, reviewsResponses);
+        //when
+        ShowSolutionDetailResponse result = solutionService.getSolutionDetail(solutionId, memberId);
+        //then
+        Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    private Likes 좋아요_생성(Member member, Solution solution){
+        return Likes.builder()
+                .member(member)
+                .solution(solution)
+                .build();
     }
 
     private ScarpSolutionRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level) {
