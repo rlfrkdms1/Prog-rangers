@@ -33,7 +33,7 @@ public enum ProblemFixture {
                 .build();
     }
 
-    public Problem 아아디_지정_생성(Long id){
+    public Problem 아이디_지정_생성(Long id){
         return 기본_정보_빌더_생성()
                 .id(id)
                 .build();
