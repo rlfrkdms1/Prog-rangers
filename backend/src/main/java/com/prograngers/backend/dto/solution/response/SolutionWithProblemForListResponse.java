@@ -28,6 +28,7 @@ public class SolutionWithProblemForListResponse {
                 .judge(problem.getOjName())
                 .title(solution.getTitle())
                 .tags(List.of(solution.getAlgorithm(), solution.getDataStructure(), solution.getLanguage()))
+                .level(solution.getLevel())
                 .build();
     }
 }
