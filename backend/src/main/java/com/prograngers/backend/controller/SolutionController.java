@@ -3,10 +3,11 @@ package com.prograngers.backend.controller;
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
-import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
+import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
+import com.prograngers.backend.dto.solution.response.ShowMySolutionListResponse;
+import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.ShowSolutionListResponse;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -29,9 +30,10 @@ import static com.prograngers.backend.entity.sortconstant.SortConstant.Name.NEWE
 @RequestMapping("/api/v1")
 @Slf4j
 public class SolutionController {
-  
+
     private final SolutionService solutionService;
-  
+    private static final String DEFAULT_PAGE = "1";
+
     @Login
     @PostMapping("/solutions")
     public ResponseEntity<Void> write(@LoggedInMember Long memberId, @RequestBody @Valid WriteSolutionRequest request){
@@ -41,7 +43,7 @@ public class SolutionController {
 
     @Login
     @PostMapping("/solutions/{scrapId}")
-    public ResponseEntity<Void> scrap(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid  ScarpSolutionRequest request) {
+    public ResponseEntity<Void> scrap(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid ScarpSolutionRequest request) {
         Long saveId = solutionService.saveScrap(scrapId, request, memberId);
         return ResponseEntity.created(URI.create("/api/v1/solutions" + saveId)).build();
     }
@@ -56,7 +58,7 @@ public class SolutionController {
 
     @Login
     @DeleteMapping("/solutions/{solutionId}")
-    public ResponseEntity<Void> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId){
+    public ResponseEntity<Void> delete(@PathVariable Long solutionId, @LoggedInMember Long memberId) {
         solutionService.delete(solutionId, memberId);
         return ResponseEntity.noContent().build();
     }
@@ -89,4 +91,16 @@ public class SolutionController {
     ) {
         return solutionService.getSolutionList(pageable, problemId, language, algorithm, dataStructure, sortBy);
     }
+    @Login
+    @GetMapping("/mypage/solutions")
+    public ShowMySolutionListResponse showMyList(@RequestParam(required = false) String keyword,
+                                                 @RequestParam(required = false) LanguageConstant language,
+                                                 @RequestParam(required = false) AlgorithmConstant algorithm,
+                                                 @RequestParam(required = false) DataStructureConstant dataStructure,
+                                                 @RequestParam(required = false) Integer level,
+                                                 @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+                                                 @LoggedInMember Long memberId) {
+        return solutionService.getMyList(keyword, language, algorithm, dataStructure, level, page, memberId);
+    }
+
 }

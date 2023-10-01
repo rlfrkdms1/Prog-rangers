@@ -15,6 +15,7 @@ import com.prograngers.backend.dto.solution.response.MySolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
 import com.prograngers.backend.dto.solution.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
+import com.prograngers.backend.dto.solution.response.ShowMySolutionListResponse;
 import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.SolutionTitleAndIdResponse;
 import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse;
@@ -32,6 +33,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
@@ -45,7 +47,9 @@ import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,9 +69,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class SolutionService {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1
+=======
+
+    private static final int MY_SOLUTION_LIST_PAGE_SIZE = 4;
+>>>>>>> e1cb18d0af8a45d3c312367c939a2bfacdeb7498
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
@@ -399,4 +408,15 @@ public class SolutionService {
 >>>>>>> 1e68fe7e332e0378fce8667f04f28cff021631e1
     }
 
+    public ShowMySolutionListResponse getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, int page, Long memberId) {
+        validPageNumber(page);
+        Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(page, MY_SOLUTION_LIST_PAGE_SIZE), keyword, language, algorithm, dataStructure, level, memberId);
+        return ShowMySolutionListResponse.from(solutions);
+    }
+
+    private void validPageNumber(int page) {
+        if (page < 1) {
+            throw new InvalidPageNumberException();
+        }
+    }
 }

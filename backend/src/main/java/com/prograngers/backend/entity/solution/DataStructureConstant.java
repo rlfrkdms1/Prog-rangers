@@ -2,11 +2,12 @@ package com.prograngers.backend.entity.solution;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.prograngers.backend.entity.HashTag;
 import com.prograngers.backend.exception.enumtype.DataStructureNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum DataStructureConstant {
+public enum DataStructureConstant implements HashTag {
     LIST("LIST"),
     ARRAY("ARRAY"),
     STACK("STACK"),

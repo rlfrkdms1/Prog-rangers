@@ -11,7 +11,7 @@ import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
-import com.prograngers.backend.exception.unauthorization.IncorrectCodeInNaverLoginException;
+import com.prograngers.backend.exception.unauthorization.IncorrectStateInNaverLoginException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
@@ -135,8 +135,8 @@ public class AuthService {
         return issueToken(member);
     }
 
-    private void validCode(String code) {
-        if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
+    private void validState(String state) {
+        if(!state.equals(naverOauth.getState())) throw new IncorrectStateInNaverLoginException();
     }
 
     private Member socialRegister(Member member) {

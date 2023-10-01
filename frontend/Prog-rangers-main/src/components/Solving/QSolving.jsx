@@ -1,8 +1,16 @@
 import { css } from "@emotion/react";
-import solvings from '../../db/solving.json';
 import { solveStyle, listStyle, ojNameTag, tags } from "./QSolvingStyle";
+import sort from '../../db/autocomplete.json';
+import forTags from './fortagsort.json';
 
 export const QSolving = ({data}) => {
+
+  const getRightName = (targetValue) => {
+    const condition = (element) => element.value === targetValue;
+    const foundIndex = forTags.findIndex(condition) ;
+    const foundElement = forTags[foundIndex];
+    return foundElement?.name;
+  }
   
   return(
     <>
@@ -15,10 +23,15 @@ export const QSolving = ({data}) => {
             padding-left: 8px; 
             font-weight: bold;
             font-size: 20px;
-            color: #303030;`
+            color: #303030;
+            &:hover{
+              cursor: pointer;
+              text-decoration: underline;
+            }
+            `
           }            
           >
-            {item.title}
+            {item.solutionName}
           </div>
           <div css={css`
             width: 100%; 
@@ -29,9 +42,9 @@ export const QSolving = ({data}) => {
             justify-content: space-between;
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
-              {item.tags.map((index) => (
-                <div key={index} css={css`${tags}`}>{index}</div>
-              ))}
+              <div key={index} css={css`${tags}`}>
+                {getRightName(item.algorithm)}
+              </div>
             </div>
           </div>
         </div>
