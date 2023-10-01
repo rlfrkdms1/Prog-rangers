@@ -39,6 +39,17 @@ public class NotificationWithSolutionResponse {
                 .build();
     }
 
+    public static NotificationWithSolutionResponse from(Notification notification) {
+        Solution solution = notification.getSolution();
+        return NotificationWithSolutionResponse.builder()
+                .type(notification.getType().name())
+                .nickname(notification.getWriterNickname())
+                .solutionTitle(solution.getTitle())
+                .solutionId(solution.getId())
+                .content(getContent(notification))
+                .build();
+    }
+
     private static String getContent(Notification notification){
         if(notification.getType() == REVIEW) return notification.getReview().getContent();
         if(notification.getType() == COMMENT) return notification.getComment().getContent();
