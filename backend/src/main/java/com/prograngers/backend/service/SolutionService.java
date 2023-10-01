@@ -111,10 +111,10 @@ public class SolutionService {
         validViewPrivateSolution(solution, mine);
         boolean pushedLike = validPushedLike(memberId, likes);
         boolean scraped = validScraped(memberId, scrapedSolutions);
-        ProblemResponse solutionDetailProblem = ProblemResponse.from(problem.getTitle(), problem.getOjName());
+        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionId(solution));
         List<CommentWithRepliesResponse> commentWithRepliesResponse = makeCommentsResponse(comments, memberId);
-        return ShowSolutionDetailResponse.from(solutionDetailProblem, solutionResponse, commentWithRepliesResponse);
+        return ShowSolutionDetailResponse.from(problemResponse, solutionResponse, commentWithRepliesResponse);
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
