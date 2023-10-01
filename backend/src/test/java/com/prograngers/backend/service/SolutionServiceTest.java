@@ -8,7 +8,6 @@ import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
-import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -21,11 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
@@ -89,7 +85,7 @@ class SolutionServiceTest {
         Member member1 = 장지담.아이디_지정_생성(1L);
         Member member2 = 장지담.아이디_지정_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 비공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
+        Solution solution = 비공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
 
         // when
         when(solutionRepository.findById(solution.getId())).thenReturn(Optional.ofNullable(solution));
