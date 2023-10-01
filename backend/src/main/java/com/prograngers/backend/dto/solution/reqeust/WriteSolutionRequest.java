@@ -87,19 +87,4 @@ public class WriteSolutionRequest {
 
         return solution;
     }
-
-    public static WriteSolutionRequest from(Solution solution){
-        return WriteSolutionRequest.builder()
-                .algorithm(solution.getAlgorithm())
-                .code(solution.getCode())
-                .level(solution.getLevel())
-                .isPublic(solution.isPublic())
-                .description(solution.getDescription())
-                .dataStructure(solution.getDataStructure())
-                .language(solution.getLanguage())
-                .problemLink(solution.getProblem().getLink())
-                .problemTitle(solution.getProblem().getTitle())
-                .solutionTitle(solution.getTitle())
-                .build();
-    }
 }
