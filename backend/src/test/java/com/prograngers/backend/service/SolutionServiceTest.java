@@ -13,6 +13,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
+import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
@@ -264,6 +265,20 @@ class SolutionServiceTest {
 
         //then
         Assertions.assertThat(resultId).isEqualTo(expectedSolution.getId());
+    }
+
+    @Test
+    @DisplayName("잘못된 문제 링크로 풀이를 생성하려 할 경우 예외가 발생한다")
+    void saveTestWhenInvalidProblemLink(){
+        //given
+        final Long memberId = 1L;
+        final String WRONG_LINK = "wrongLink123";
+        final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",WRONG_LINK, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
+
+        when(problemRepository.findByLink(any())).thenReturn(null);
+
+        //when, then
+        assertThrows(ProblemLinkNotFoundException.class,()->solutionService.save(request,memberId));
     }
 
     private ScarpSolutionRequest 스크랩_풀이_생성_요청_생성(String title, String description, int level) {
