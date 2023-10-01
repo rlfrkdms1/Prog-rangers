@@ -17,7 +17,7 @@ export const SolvingList = () => {
 
     useEffect(() => {
 
-        const apiUrl = 'http://13.124.131.171:8080/prog-rangers/members/profile/test';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/members/profile/test';
     
         axios.get(apiUrl)
           .then((response) => {

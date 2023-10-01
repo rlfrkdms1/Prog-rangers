@@ -21,18 +21,18 @@ export const MyPage = () => {
 
   // API 가져오기
   const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState([]);
-  const [myRecentSolutionInfos, setMyRecentSolutionInfos] = useState([]);
-  const [followingRecentSolutionInfos, setFollowingRecentSolutionInfos] = useState([]);
-  const [notificationInfoList, setNotificationInfoList] = useState([]);
+  const [recentProblems, setrecentProblems] = useState([]);
+  const [followingRecentSolutions, setfollowingRecentSolutions] = useState([]);
+  const [notifications, setnotifications] = useState([]);
 
   // MonthlyStudyCalendar
   const [value, setValue] = useState(new Date());
   
   useEffect(() => {
     
-    const token = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk1Nzc5Njc4LCJpYXQiOjE2OTU3NDM2NzgsImlzcyI6IlByb2dyYW5nZXJzIn0.hc1mO0uoOc0Vr9_OuKYSHxCGBMIFflHT_4WLunwGAomEds4r5bp_LfNlilVWZCQQsU9y0rRGToHNi5RHlmhVlQ";
+    const token = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk2MTMzMDE5LCJpYXQiOjE2OTYwOTcwMTksImlzcyI6IlByb2dyYW5nZXJzIn0.gIJ0vSlGlBaISvpBp2fskz1DGW8abIcnWspD_sqaoE6EqdtXkhjXyQWR4CVu_cFMtSVfvpeh_Xv0JG9SQ-XJVg";
     
-    fetch("http://13.124.131.171:8080/prog-rangers/mypage/dashboard?date=2023-09", 
+    fetch("http://13.124.131.171:8080/api/v1/mypage/dashboard", 
     {
       method: "GET",
       headers: {Authorization: `Bearer ${token}`},
@@ -42,9 +42,9 @@ export const MyPage = () => {
 
          // API 응답이 정상적일 때 데이터를 설정
         setMonthlyStudyCalendar(json.monthlyStudyCalendar || []);
-        setMyRecentSolutionInfos(json.myRecentSolutionInfos || []);
-        setFollowingRecentSolutionInfos(json.followingRecentSolutionInfos || []);
-        setNotificationInfoList(json.notificationInfoList || []);
+        setrecentProblems(json.recentProblems || []);
+        setfollowingRecentSolutions(json.followingRecentSolutions || []);
+        setnotifications(json.notifications || []);
         setValue(new Date());
         
     })
@@ -54,10 +54,10 @@ export const MyPage = () => {
     
   }, []);
 
-  const sortedData = myRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
+  const sortedData = recentProblems.sort((a, b) => b.solutionId - a.solutionId);
   const top3Data = sortedData.slice(0, 3);
 
-  const sortedFollowingData = followingRecentSolutionInfos.sort((a, b) => b.solutionId - a.solutionId);
+  const sortedFollowingData = followingRecentSolutions.sort((a, b) => b.solutionId - a.solutionId);
   const top5Data = sortedFollowingData.slice(0, 5);
 
   const daysInMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
@@ -138,7 +138,7 @@ export const MyPage = () => {
             </div>
    ));
 
-  const infoList = notificationInfoList.map((info) => (
+  const infoList = notifications.map((info) => (
     <div key={info.solutionId} css={css`overflow-y: auto; max-height: 565px; margin-bottom: 20px;`}>
       <div css={css`
               width: 345px;
