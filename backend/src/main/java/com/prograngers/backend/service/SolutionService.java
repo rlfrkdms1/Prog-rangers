@@ -104,7 +104,7 @@ public class SolutionService {
     public ShowSolutionDetailResponse getSolutionDetail(Long solutionId,Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
-        List<Comment> comments = commentRepository.findAllBySolution(solution);
+        List<Comment> comments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         List<Solution> scrapedSolutions = solutionRepository.findAllByScrapSolution(solution);
         boolean mine = validSolutionIsMine(memberId, solution);
