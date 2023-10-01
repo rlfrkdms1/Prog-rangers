@@ -12,10 +12,6 @@ export const tags = css`
   color: #303030;
   font-size: 16px;
   font-weight: 400;
-  
-  &:hover{
-    cursor: pointer;
-  }
 `;
 
 
