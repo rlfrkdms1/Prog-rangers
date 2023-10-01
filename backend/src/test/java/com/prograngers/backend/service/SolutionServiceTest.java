@@ -13,7 +13,6 @@ import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
@@ -57,7 +56,6 @@ import static com.prograngers.backend.support.fixture.ReviewFixture.SECOND_LINE_
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -115,7 +113,7 @@ class SolutionServiceTest {
         Member member1 = 장지담.아이디_지정_생성(1L);
         Member member2 = 장지담.아이디_지정_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 비공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
+        Solution solution = 비공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
 
         // when
         when(solutionRepository.findById(solution.getId())).thenReturn(Optional.ofNullable(solution));
@@ -369,7 +367,7 @@ class SolutionServiceTest {
         return new ScarpSolutionRequest(title, description, level);
     }
 
-    private UpdateSolutionRequest 풀이_수정_요청_생성(
+    private static UpdateSolutionRequest 풀이_수정_요청_생성(
             String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure,
             String code, String description, int level) {
         return new UpdateSolutionRequest(title, algorithm, dataStructure, code, description, level);

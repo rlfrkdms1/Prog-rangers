@@ -60,7 +60,7 @@ class CommentServiceTest {
         // given
         Member member = 장지담.아이디_지정_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Solution solution = 공개_풀이.태그_추가_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
         Comment comment = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 
 
@@ -84,7 +84,7 @@ class CommentServiceTest {
         // given
         Member member = 장지담.아이디_지정_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 공개_풀이.기본_정보_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
+        Solution solution = 공개_풀이.태그_추가_생성(problem,member, LocalDateTime.now(),BFS, LIST,JAVA,1);
         Comment comment = 생성된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
         Comment deleted = 삭제된_댓글.기본_정보_생성(member,solution,LocalDateTime.now());
 

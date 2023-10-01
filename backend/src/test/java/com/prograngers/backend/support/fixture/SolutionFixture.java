@@ -31,7 +31,7 @@ public enum SolutionFixture {
                 .description(description);
     }
 
-    public Solution 기본_정보_생성(
+    public Solution 태그_추가_생성(
             Problem problem, Member member, LocalDateTime createdDate,
             AlgorithmConstant algorithm, DataStructureConstant dataStructure,LanguageConstant language, Integer level){
         return 기본_정보_빌더_생성()
@@ -104,6 +104,18 @@ public enum SolutionFixture {
             LanguageConstant language, Integer level) {
         return 기본_정보_빌더_생성()
                 .id(id)
+                .problem(problem)
+                .member(member)
+                .createdAt(createdDate)
+                .language(language)
+                .level(level)
+                .build();
+    }
+
+    public Solution 풀이_제목_지정_생성(String title, Problem problem, Member member, LocalDateTime createdDate,
+                                LanguageConstant language, Integer level){
+        return 기본_정보_빌더_생성()
+                .title(title)
                 .problem(problem)
                 .member(member)
                 .createdAt(createdDate)
