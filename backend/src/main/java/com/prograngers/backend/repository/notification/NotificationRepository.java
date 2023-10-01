@@ -14,7 +14,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     List<Notification> findTop9ByReceiverOrderByCreatedAtDesc(Member receiver);
 
-    @Query("select n from Notification n where n.receiver.id = :memberId order by n.createdAt desc")
+    @Query("select n from Notification n join fetch n.solution where n.receiver.id = :memberId order by n.createdAt desc")
     Slice<Notification> findPageByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
 }
