@@ -9,7 +9,6 @@ export const Fragment = css`
 export const SelectBox = css`
   display: flex;
   flex-direction: row;
-  width: 230px;
   border: 1px solid #959595;
   box-shadow: 0px 8px 8px 0px rgba(100, 116, 139, 0.1);
   height: 50px;
@@ -18,7 +17,6 @@ export const SelectBox = css`
 export const Wrapper = (props) => css`
   display: ${props.isOpen ? "flex" : "none"}; 
   flex-direction: column; 
-  width: 230px;
   max-height: 200px;
   margin-top: 50px;
   background-color: white;
