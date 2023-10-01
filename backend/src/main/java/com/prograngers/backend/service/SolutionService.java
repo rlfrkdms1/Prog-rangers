@@ -105,6 +105,7 @@ public class SolutionService {
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
         List<Comment> comments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution);
+        List<Review> reviews = reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         List<Solution> scrapedSolutions = solutionRepository.findAllByScrapSolution(solution);
         boolean mine = validSolutionIsMine(memberId, solution);
@@ -113,8 +114,9 @@ public class SolutionService {
         boolean scraped = validScraped(memberId, scrapedSolutions);
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionId(solution));
-        List<CommentWithRepliesResponse> commentWithRepliesResponse = makeCommentsResponse(comments, memberId);
-        return ShowSolutionDetailResponse.from(problemResponse, solutionResponse, commentWithRepliesResponse);
+        List<CommentWithRepliesResponse> commentsResponse = makeCommentsResponse(comments, memberId);
+        List<ReviewWithRepliesResponse> reviewsResponse = makeReviewsResponse(reviews,memberId);
+        return ShowSolutionDetailResponse.from(problemResponse, solutionResponse, commentsResponse,reviewsResponse);
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
