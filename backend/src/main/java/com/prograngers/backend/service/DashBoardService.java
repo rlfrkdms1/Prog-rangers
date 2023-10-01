@@ -36,6 +36,8 @@ public class DashBoardService {
     private final BadgeRepository badgeRepository;
     private final ReviewRepository reviewRepository;
 
+    public static final int DASHBOARD_NOTIFICATION_PAGE_SIZE = 9;
+
 
     public ShowDashBoardResponse createDashBoard(Long memberId, YearMonth date) {
         if (date == null) date = YearMonth.now();
