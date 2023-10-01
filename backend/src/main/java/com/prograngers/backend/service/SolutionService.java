@@ -279,7 +279,7 @@ public class SolutionService {
                 .anyMatch(id -> id.equals(memberId));
     }
 
-    public Problem getProblem(WriteSolutionRequest writeSolutionRequest) {
+    private Problem getProblem(WriteSolutionRequest writeSolutionRequest) {
         Problem recentProblem = problemRepository.findByLink(writeSolutionRequest.getProblemLink());
         if (recentProblem != null) {
             return recentProblem;
