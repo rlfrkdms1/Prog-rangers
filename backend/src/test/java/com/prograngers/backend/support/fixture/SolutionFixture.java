@@ -1,6 +1,5 @@
 package com.prograngers.backend.support.fixture;
 
-import com.prograngers.backend.dto.solution.reqeust.SolutionPostRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
@@ -41,6 +40,18 @@ public enum SolutionFixture {
                 .createdAt(createdDate)
                 .algorithm(algorithm)
                 .dataStructure(dataStructure)
+                .language(language)
+                .level(level)
+                .build();
+    }
+
+    public Solution 기본_정보_생성(
+            Problem problem, Member member, LocalDateTime createdDate,
+            LanguageConstant language, Integer level){
+        return 기본_정보_빌더_생성()
+                .problem(problem)
+                .member(member)
+                .createdAt(createdDate)
                 .language(language)
                 .level(level)
                 .build();

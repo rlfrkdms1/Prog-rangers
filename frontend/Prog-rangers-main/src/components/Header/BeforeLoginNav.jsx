@@ -3,20 +3,22 @@ import { Link } from 'react-router-dom';
 import {
   navStyle,
   linkDefault,
+  StyledLink
 } from './headerStyle';
 
 export const BeforeLoginNav = () => {
+
   return (
     <div className="BeforeLoginNav" css={navStyle}>
-      <Link to="/problems" css={linkDefault}>
+      <StyledLink to="/problems">
         풀이 보러가기
-      </Link>
-      <Link to="signIn" css={linkDefault}>
+      </StyledLink>
+      <StyledLink to="login" >
         로그인
-      </Link>
-      <Link to="signUp" css={linkDefault}>
+      </StyledLink>
+      <StyledLink to="signUp" >
         회원가입
-      </Link>
+      </StyledLink>
     </div>
   );
 };

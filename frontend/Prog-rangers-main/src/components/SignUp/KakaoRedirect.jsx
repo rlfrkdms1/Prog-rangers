@@ -1,17 +1,20 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useContext } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { IsLoginContext } from "../../context/AuthContext";
 
-export const KakaoReirect = () => {
+export const KakaoRedirect = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const KAKAO_CODE = location.search.split('=')[1];
+  let params = new URL(document.location).searchParams;
+  let KAKAO_CODE = params.get("code");
+  const { setIsLogin } = useContext(IsLoginContext);
 
   useEffect(() => {
-    fetch(`http://13.124.131.171:8080/prog-rangers/login/kakao?code=${KAKAO_CODE}`,{
+    fetch(`http://13.124.131.171:8080/api/v1/login/kakao?code=${KAKAO_CODE}`,{
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded;",
+          "Content-Type": "application/json;",
         },
       })
       .then(res =>{
@@ -20,6 +23,8 @@ export const KakaoReirect = () => {
       .then(data => {
         console.log(data);
         localStorage.setItem('token', data.accessToken);
+        localStorage.setItem('nickname', data.nickname);
+        setIsLogin(true);
         navigate("/");
       })
       .catch(error =>{

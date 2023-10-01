@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface LikesRepository extends JpaRepository<Likes,Long> {
     List<Likes> findAllBySolution(Solution solution);
     Optional<Likes> findByMemberAndSolution(Member member, Solution solution);
+    Long countBySolution(Solution solution);
 }

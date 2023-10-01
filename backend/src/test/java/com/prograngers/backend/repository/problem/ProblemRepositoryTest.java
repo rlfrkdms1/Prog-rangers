@@ -30,13 +30,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @RepositoryTest
 class ProblemRepositoryTest {
     @Autowired
-    ProblemRepository problemRepository;
+    private ProblemRepository problemRepository;
 
     @Autowired
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @DisplayName("문제 목록 조회시 가장 최근 풀이의 날짜에 따라 최신순으로 정렬된다")
     @Test
@@ -156,10 +156,10 @@ class ProblemRepositoryTest {
         );
     }
 
-    Member 저장(Member member) {
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
-    Solution 저장(Solution solution) {
+    private Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
 }

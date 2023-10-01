@@ -12,6 +12,7 @@ public enum SortConstant {
     SCRAPS("SCRAPS"),
     LIKES("LIKES"),
     SOLUTIONS("SOLUTIONS");
+
     String value;
 
     @JsonCreator
@@ -27,6 +28,10 @@ public enum SortConstant {
     @JsonValue
     public String getStringValue(){
         return this.value;
+    }
+
+    public static class Name {
+        public static final String NEWEST = "NEWEST";
     }
 
 }
