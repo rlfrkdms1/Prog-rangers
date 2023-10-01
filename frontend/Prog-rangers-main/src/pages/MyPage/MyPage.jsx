@@ -16,8 +16,8 @@ import {
   ojName,
   RecentlyTitle
  } from './MyPageStyle';
- 
- export const MyPage = () => {
+
+export const MyPage = () => {
 
   // API 가져오기
   const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState([]);
@@ -69,7 +69,6 @@ import {
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(value.getFullYear(), value.getMonth(), day);
 
-      const isCurrentDate = currentDate.getDate() === day;
       const studiedData = monthlyStudyCalendar.find(item => item.day === day);
 
       const studyTrue = studiedData && studiedData.studied !== undefined && studiedData.studied;
