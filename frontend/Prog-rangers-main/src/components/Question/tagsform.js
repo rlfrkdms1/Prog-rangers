@@ -5,7 +5,7 @@ export const tags = css`
   background-color: #F0F0F0;
   padding: 8px 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-right: 12px;
