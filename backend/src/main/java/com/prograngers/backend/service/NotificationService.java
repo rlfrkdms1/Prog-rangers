@@ -1,6 +1,7 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.notification.response.ShowNotificationResponse;
+import com.prograngers.backend.dto.notification.response.ShowNotificationsResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.comment.Comment;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -116,10 +116,10 @@ public class NotificationService {
         return emitter;
     }
 
-    public void getNotifications(Long memberId, int page) {
+    public ShowNotificationsResponse getNotifications(Long memberId, int page) {
         validPage(page);
         Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_PAGE_SIZE));
-
+        return ShowNotificationsResponse.from(notifications);
     }
 
     private void validPage(int page) {
