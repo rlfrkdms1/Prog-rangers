@@ -22,11 +22,13 @@ import {
   MySolution,
   MyComment,
   Like,
-  Follow
+  Follow,
+  BoardPage
 } from './pages';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
 import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
+import { AddSolution, Scrap } from './pages/BoardPage';
 
 const router = createBrowserRouter([
   {
@@ -60,6 +62,8 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
+      { path: 'myPage/scrap', element: <Scrap/> },
+      { path: 'myPage/addsolution', element: <AddSolution/> },
     ],
   },
 ]);
