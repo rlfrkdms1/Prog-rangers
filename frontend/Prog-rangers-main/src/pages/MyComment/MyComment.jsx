@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { SideBar } from '../../components/SideBar/SideBar';
-import { fontSize14, fontSize20, fontSize22, solutionBox, align } from './MyCommentStyle'
 import { CommentForm } from '../../components/Comment';
 import { Provider, atom, useAtom } from 'jotai';
 import questions from '../../db/question.json';
