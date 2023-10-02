@@ -44,7 +44,7 @@ public class SolutionController {
     @Login
     @PostMapping("/solutions/{scrapId}")
     public ResponseEntity<Void> scrap(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid ScarpSolutionRequest request) {
-        Long saveId = solutionService.saveScrap(scrapId, request, memberId);
+        Long saveId = solutionService.writeScrap(scrapId, request, memberId);
         return ResponseEntity.created(URI.create("/api/v1/solutions" + saveId)).build();
     }
 

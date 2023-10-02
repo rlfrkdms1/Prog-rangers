@@ -99,7 +99,7 @@ class SolutionServiceTest {
         when(solutionRepository.save(any())).thenReturn(Optional.of(scrapResult).get());
 
         // when
-        solutionService.saveScrap(scrapTarget.getId(), request, member.getId());
+        solutionService.writeScrap(scrapTarget.getId(), request, member.getId());
 
         // then
         verify(solutionRepository, times(1)).save(any());

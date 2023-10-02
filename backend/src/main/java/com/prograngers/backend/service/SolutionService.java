@@ -111,7 +111,7 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long saveScrap(Long scrapTargetId, ScarpSolutionRequest request, Long memberId) {
+    public Long writeScrap(Long scrapTargetId, ScarpSolutionRequest request, Long memberId) {
         Solution solution = request.toSolution(findSolutionById(scrapTargetId), findMemberById(memberId));
         return solutionRepository.save(solution).getId();
     }
