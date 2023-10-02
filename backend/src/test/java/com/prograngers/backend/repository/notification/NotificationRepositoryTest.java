@@ -61,7 +61,7 @@ class NotificationRepositoryTest {
         Notification notification3 = 저장(댓글_알림.생성_안읽음(member1, solution, comment1));
         Notification notification2 = 저장(댓글_알림.생성_안읽음(member1, solution, comment2));
 
-        List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member1);
+        List<Notification> notifications = notificationRepository.findByMemberIdAndLimit(member1.getId(), 3);
 
         assertThat(notifications).containsExactly(notification1, notification2, notification3);
     }
