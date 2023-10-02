@@ -4,6 +4,7 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
     Optional<Member> findBySocialId(Long socialId);
 
     @Query("select m from Member m join Follow f on f.followerId = :memberId order by f.id desc")
-    List<Member> findAllByFollower(Long memberId);
+    List<Member> findAllByFollower(@Param("memberId") Long memberId);
 
     @Query("select m from Member m join Follow f on f.followingId = :memberId order by f.id desc")
-    List<Member> findAllByFollowing(Long memberId);
+    List<Member> findAllByFollowing(@Param("memberId") Long memberId);
 }
