@@ -59,9 +59,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -363,6 +361,33 @@ class SolutionServiceTest {
         ShowSolutionDetailResponse result = solutionService.getSolutionDetail(solutionId, memberId);
         //then
         assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("이미 존재하는 문제로 풀이 생성 시 문제는 저장되지 않는다")
+    void saveTestWhenProblemAlreadyExists(){
+        //given
+        final Long memberId = 1L;
+        final Long solutionId = 1L;
+        final Member member = 장지담.아이디_지정_생성(memberId);
+        final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", "https://www.acmicpc.net/problem/2557", 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
+        final Problem problem = 백준_문제.기본_정보_생성();
+        final Solution expectedSolution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 1);
+
+        when(solutionRepository.save(any(Solution.class))).thenReturn(expectedSolution);
+        when(problemRepository.findByLink(any())).thenReturn(Optional.of(problem));
+        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
+
+        //when
+        Long resultId = solutionService.save(request, memberId);
+
+        //then
+
+        assertAll(
+                ()-> assertThat(resultId).isEqualTo(expectedSolution.getId()),
+                ()-> verify(solutionRepository,times(1)).save(any(Solution.class)),
+                ()-> verify(problemRepository,never()).save(any(Problem.class))
+        );
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){
