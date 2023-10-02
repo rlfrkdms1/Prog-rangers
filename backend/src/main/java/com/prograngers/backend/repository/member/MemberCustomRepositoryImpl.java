@@ -1,6 +1,7 @@
 package com.prograngers.backend.repository.member;
 
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.member.QMember;
 import com.prograngers.backend.entity.problem.Problem;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,12 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
         return jpaQueryFactory.select(member)
                 .from(member)
                 .join(solution)
+                .on(solution.member.eq(member))
                 .join(follow)
                 .on(follow.followingId.eq(member.id))
-                .where(solution.problem.eq(problem))
                 .groupBy(member)
                 .orderBy(follow.count().desc())
                 .limit(limit)
                 .fetch();
     }
-
 }
