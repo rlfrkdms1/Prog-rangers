@@ -25,7 +25,7 @@ import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.NotificationFixture.댓글_알림;
 import static com.prograngers.backend.support.fixture.NotificationFixture.리뷰_알림;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.support.fixture.ReviewFixture.FIRST_LINE_REVIEW;
+import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,7 +53,7 @@ class NotificationRepositoryTest {
 
         Problem problem = 저장(백준_문제.기본_정보_생성());
         Solution solution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
-        Review review = 저장(FIRST_LINE_REVIEW.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(1)));
+        Review review = 저장(생성된_리뷰.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(1)));
         Comment comment1 = 저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(3)));
         Comment comment2 = 저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(2)));
 
@@ -64,6 +64,27 @@ class NotificationRepositoryTest {
         List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member1);
 
         assertThat(notifications).containsExactly(notification1, notification2, notification3);
+    }
+
+    @Test
+    @DisplayName("회원이 주어졌을 때 회원에게 온 알림을 최신순으로 조회할 수 있다.")
+    void 대시보드_알림(){
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        Solution solution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
+        Review review = 저장(생성된_리뷰.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(1)));
+        Comment comment1 = 저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(3)));
+        Comment comment2 = 저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(2)));
+
+        Notification notification1 = 저장(리뷰_알림.생성_안읽음(member1, solution, review));
+        저장(댓글_알림.생성_안읽음(member1, solution, comment1));
+        Notification notification2 = 저장(댓글_알림.생성_안읽음(member1, solution, comment2));
+
+        List<Notification> notifications = notificationRepository.findByMemberIdAndLimit(member1.getId(), 2);
+
+        assertThat(notifications).containsExactly(notification1, notification2);
+
     }
     private Member 저장(Member member) {
         return memberRepository.save(member);
