@@ -1,14 +1,21 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.follow.response.ShowFollowListResponse;
 import com.prograngers.backend.entity.Follow;
+import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.AlreadyFollowingException;
 import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +24,8 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
+    private final SolutionRepository solutionRepository;
+    private final Long RECOMMENDED_MEMBER_COUNT = 10L;
 
     @Transactional
     public void follow(Long followerId, Long followingId) {
@@ -47,5 +56,19 @@ public class FollowService {
 
     private Follow findFollowRecord(Long followerId, Long followingId) {
         return followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
+    }
+
+    public ShowFollowListResponse getFollowList(Long memberId) {
+        List<Follow> followingList = followRepository.findAllByFollowerIdOrderByIdDesc(memberId);
+        List<Follow> followerList = followRepository.findAllByFollowingIdOrderByIdDesc(memberId);
+        List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findByMemberId(memberId));
+        return ShowFollowListResponse.of(followingList,followerList,recommendedFollows);
+    }
+
+    private List<Member> getRecommendedFollows(Optional<Solution> recentSolution) {
+        if (recentSolution.isPresent()){
+            return memberRepository.getLimitRecommendedMembers(recentSolution.get().getProblem(), RECOMMENDED_MEMBER_COUNT);
+        }
+        return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT);
     }
 }
