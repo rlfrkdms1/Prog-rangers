@@ -1,7 +1,6 @@
 package com.prograngers.backend.repository.notification;
 
 import com.prograngers.backend.entity.Notification;
-import com.prograngers.backend.entity.member.Member;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
