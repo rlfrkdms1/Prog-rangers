@@ -345,7 +345,7 @@ class SolutionRepositoryTest {
         저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 7, 2, 12, 0), JAVA, 1));
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member2, LocalDateTime.of(2023, 9, 5, 12, 0), JAVA, 1));
         Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member3, LocalDateTime.of(2023, 9, 4, 12, 0), JAVA, 1));
-        List<Solution> solutionList = solutionRepository.findFollowingsRecentSolutions(member1.getId());
+        List<Solution> solutionList = solutionRepository.findFollowingsRecentSolutions(member1.getId(), 5);
         assertThat(solutionList).containsExactly(solution1, solution2, solution3, solution4, solution5);
     }
 
