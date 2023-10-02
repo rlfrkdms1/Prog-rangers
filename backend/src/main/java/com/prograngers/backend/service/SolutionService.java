@@ -6,6 +6,7 @@ import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.MySolutionResponse;
 import com.prograngers.backend.dto.solution.response.ProblemResponse;
 import com.prograngers.backend.dto.solution.response.ReviewWithRepliesResponse;
+import com.prograngers.backend.dto.solution.response.ShowMyLikeSolutionsResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionListResponse;
 import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
@@ -43,6 +44,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -309,5 +311,12 @@ public class SolutionService {
         if (page < 1) {
             throw new InvalidPageNumberException();
         }
+    }
+
+    private static final int LIKE_SOLUTION_PAGE_SIZE = 3;
+    public ShowMyLikeSolutionsResponse getMyLikes(Long memberId, int page) {
+        validPageNumber(page);
+        Slice<Solution> solutions = solutionRepository.findMyLikesPage(memberId, PageRequest.of(page - 1, LIKE_SOLUTION_PAGE_SIZE));
+        return ShowMyLikeSolutionsResponse.from(solutions);
     }
 }
