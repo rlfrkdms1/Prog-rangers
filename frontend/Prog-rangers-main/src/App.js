@@ -2,17 +2,17 @@
 // React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './components/Header';
-import { AuthProvider } from './context/AuthContext';
+import { IsLoginProvider } from './context/AuthContext';
 import './App.css';
 
 function App() {
   return (
-	  <div>
-    <AuthProvider>
-      <Header />
-      <Outlet />
-    </AuthProvider>
-	  </div>
+    <div>
+      <IsLoginProvider>
+        <Header />
+        <Outlet />
+      </IsLoginProvider>
+    </div>
   );
 }
 

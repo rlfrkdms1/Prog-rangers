@@ -3,7 +3,7 @@ import React from 'react';
 import Kakao from '../../assets/icons/signin-kakao-logo.svg';
 import Naver from '../../assets/icons/signin-naver-logo.svg';
 import Google from '../../assets/icons/signin-google-logo.svg';
-import { KAKAO_AUTH_URL } from './OAuth';
+import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL, NAVER_AUTH_URL } from './OAuth';
 
 const Wrapper = css`
   display: flex;
@@ -21,10 +21,15 @@ const Wrapper = css`
 `;
 
 export const SocialLoginButtons = () => {  
-  
   const onClickKakao = () => {
     window.location.href = KAKAO_AUTH_URL;
-  }
+  };
+  const onClickNaver = () => {
+    window.location.href = NAVER_AUTH_URL;
+  };
+  const onClickGoogle = () => {
+    window.location.href = GOOGLE_AUTH_URL;
+  };
 
   return (
   <div css={css`
@@ -48,11 +53,11 @@ export const SocialLoginButtons = () => {
         <img src={Kakao} alt="kakao_logo" css={css`margin-left: 100px;`}/>
         <div css={css` text-align: center; margin-left: 73px; color: #391E1F;`}>카카오톡으로 로그인</div>
       </div>
-      <div css={css`${Wrapper} background-color: #06BD34;`}>
+      <div css={css`${Wrapper} background-color: #06BD34;`} onClick={onClickNaver}>
         <img src={Naver} alt="naver_logo" css={css`margin-left: 100px;`}/>
         <div css={css` text-align: center; margin-left: 90px; color: #FFF;`}>네이버로 로그인</div>
       </div>
-      <div css={css`${Wrapper} border: 1px solid #F0F0F0;`}>
+      <div css={css`${Wrapper} border: 1px solid #F0F0F0;`} onClick={onClickGoogle}>
         <img src={Google} alt="google_logo" css={css`margin-left: 110px;`}/>
         <div css={css` text-align: center; margin-left: 94px; color: #545454;`}>Google로 로그인</div>
       </div>
