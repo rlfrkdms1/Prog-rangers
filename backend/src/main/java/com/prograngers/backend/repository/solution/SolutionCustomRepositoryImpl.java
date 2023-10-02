@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.prograngers.backend.entity.QLikes.*;
 import static com.prograngers.backend.entity.problem.QProblem.problem;
@@ -27,6 +28,14 @@ import static com.prograngers.backend.entity.solution.QSolution.*;
 public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    public Solution findByMemberId(Long memberId){
+        return jpaQueryFactory
+                .selectFrom(solution)
+                .where(solution.member.id.eq(memberId))
+                .limit(1)
+                .fetchOne();
+    }
 
     @Override
     public PageImpl<Solution> getSolutionList(
