@@ -56,6 +56,7 @@ import static com.prograngers.backend.support.fixture.ReviewFixture.SECOND_LINE_
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -250,7 +251,7 @@ class SolutionServiceTest {
     }
 
     @Test
-    @DisplayName("풀이를 생성한 후 풀이 id를 반환한다")
+    @DisplayName("새로운 문제의 풀이를 생성한 후 풀이 id를 반환한다")
     void saveTest(){
         //given
         final Long memberId = 1L;
@@ -269,7 +270,12 @@ class SolutionServiceTest {
         Long resultId = solutionService.save(request, memberId);
 
         //then
-        Assertions.assertThat(resultId).isEqualTo(expectedSolution.getId());
+
+        assertAll(
+                ()-> assertThat(resultId).isEqualTo(expectedSolution.getId()),
+                ()-> verify(solutionRepository,times(1)).save(any(Solution.class)),
+                ()-> verify(problemRepository,times(1)).save(any(Problem.class))
+        );
     }
 
     @Test
@@ -356,7 +362,7 @@ class SolutionServiceTest {
         //when
         ShowSolutionDetailResponse result = solutionService.getSolutionDetail(solutionId, memberId);
         //then
-        Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(result).usingRecursiveComparison().isEqualTo(expected);
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){
