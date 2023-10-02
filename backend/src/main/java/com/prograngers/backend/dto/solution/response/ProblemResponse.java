@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProblemResponse {
-    private String problemTitle;
+
+    private String title;
     private JudgeConstant ojName;
     public static ProblemResponse from(String problemTitle, JudgeConstant ojName){
         return ProblemResponse.builder()
