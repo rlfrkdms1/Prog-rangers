@@ -10,7 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Long>, NotificationCustomRepository {
+
+    @Query("select n from Notification n where n.receiver.id = :memberId and n.isRead = false")
+    List<Notification> findAllNotReadByMemberId(@Param("memberId") Long memberId);
 
     List<Notification> findTop9ByReceiverOrderByCreatedAtDesc(Member receiver);
 
