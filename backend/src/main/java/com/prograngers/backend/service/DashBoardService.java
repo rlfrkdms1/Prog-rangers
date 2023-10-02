@@ -38,9 +38,15 @@ public class DashBoardService {
 
     public static final int DASHBOARD_NOTIFICATION_PAGE_SIZE = 9;
 
-
-    public ShowDashBoardResponse createDashBoard(Long memberId, YearMonth date) {
+    @Transactional
+    public ShowDashBoardResponse getDashboard(Long memberId, YearMonth date) {
         if (date == null) date = YearMonth.now();
+        ShowDashBoardResponse showDashBoardResponse = create(memberId, date);
+        notificationRepository.findAllNotReadByMemberId(memberId).stream().forEach(Notification::read);
+        return showDashBoardResponse;
+    }
+
+    public ShowDashBoardResponse create(Long memberId, YearMonth date) {
         Member member = findMemberById(memberId);
 
         List<NotificationWithSolutionResponse> notifications = getNotifications(member);
