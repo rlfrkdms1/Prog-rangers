@@ -261,7 +261,8 @@ class SolutionServiceTest {
         final Solution expectedSolution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 1);
 
         when(solutionRepository.save(any(Solution.class))).thenReturn(expectedSolution);
-        when(problemRepository.findByLink(any())).thenReturn(null);
+        when(problemRepository.findByLink(any())).thenReturn(Optional.empty());
+        when(problemRepository.save(any(Problem.class))).thenReturn(problem);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
 
         //when
