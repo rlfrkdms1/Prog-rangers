@@ -65,9 +65,9 @@ public class FollowService {
         return ShowFollowListResponse.of(followingList,followerList,recommendedFollows);
     }
 
-    private List<Member> getRecommendedFollows(Optional<Solution> recentSolution) {
-        if (recentSolution.isPresent()){
-            return memberRepository.getLimitRecommendedMembers(recentSolution.get().getProblem(), RECOMMENDED_MEMBER_COUNT);
+    private List<Member> getRecommendedFollows(Solution recentSolution) {
+        if (recentSolution!=null){
+            return memberRepository.getLimitRecommendedMembers(recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT);
         }
         return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT);
     }
