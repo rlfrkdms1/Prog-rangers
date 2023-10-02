@@ -279,7 +279,7 @@ class SolutionServiceTest {
         final String WRONG_LINK = "wrongLink123";
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",WRONG_LINK, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
 
-        when(problemRepository.findByLink(any())).thenReturn(null);
+        when(problemRepository.findByLink(any())).thenReturn(Optional.empty());
 
         //when, then
         assertThrows(ProblemLinkNotFoundException.class,()->solutionService.save(request,memberId));

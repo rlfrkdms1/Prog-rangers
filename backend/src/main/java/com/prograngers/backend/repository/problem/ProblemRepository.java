@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long>, QueryDslProblemRepository {
-    Problem findByLink(String link);
+    Optional<Problem> findByLink(String link);
 }

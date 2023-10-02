@@ -288,9 +288,9 @@ public class SolutionService {
     }
 
     private Problem getProblem(WriteSolutionRequest writeSolutionRequest) {
-        Problem recentProblem = problemRepository.findByLink(writeSolutionRequest.getProblemLink());
-        if (recentProblem != null) {
-            return recentProblem;
+        Optional<Problem> recentProblem = problemRepository.findByLink(writeSolutionRequest.getProblemLink());
+        if (!recentProblem.isPresent()) {
+            return recentProblem.get();
         }
         JudgeConstant judgeName = validLink(writeSolutionRequest.getProblemLink());
         return writeSolutionRequest.toProblem(judgeName);
