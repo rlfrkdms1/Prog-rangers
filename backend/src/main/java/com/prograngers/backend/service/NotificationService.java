@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
-import static com.prograngers.backend.service.DashBoardService.DASHBOARD_NOTIFICATION_PAGE_SIZE;
+import static com.prograngers.backend.service.DashBoardService.DASHBOARD_NOTIFICATION_LIMIT;
 
 @Transactional
 @Service
@@ -118,7 +118,7 @@ public class NotificationService {
 
     public ShowNotificationsResponse getNotifications(Long memberId, int page) {
         validPage(page);
-        Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_PAGE_SIZE));
+        Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_LIMIT));
         return ShowNotificationsResponse.from(notifications);
     }
 
