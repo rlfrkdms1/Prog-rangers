@@ -70,7 +70,7 @@ public enum SolutionFixture {
                 .build();
     }
 
-    public Solution 스크랩_아아디_지정_생성(Long id, Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
+    public Solution 스크랩_아이디_지정_생성(Long id, Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
         return 기본_정보_빌더_생성()
                 .id(id)
                 .problem(scrapSolution.getProblem())

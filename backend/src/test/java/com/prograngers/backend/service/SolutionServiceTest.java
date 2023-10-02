@@ -189,7 +189,7 @@ class SolutionServiceTest {
         //이 문제에 대한 내풀이 3개, 하나는 다른 사람의 풀이를 스크랩한 풀이다
         final Solution mySolution1 = 공개_풀이.아이디_지정_생성(4L,problem, member1, LocalDateTime.now().plusDays(3), JAVA, 3);
         final Solution mySolution2 = 공개_풀이.아이디_지정_생성(5L,problem, member1, LocalDateTime.now().plusDays(4), JAVA, 3);
-        final Solution mySolution3 = 공개_풀이.스크랩_아아디_지정_생성(6L,member1, LocalDateTime.now().plusDays(5),3,othersSolution1);
+        final Solution mySolution3 = 공개_풀이.스크랩_아이디_지정_생성(6L,member1, LocalDateTime.now().plusDays(5),3,othersSolution1);
 
         //myMainSolution 댓글
         final Comment comment1 = 생성된_댓글.아이디_지정_생성(1L,member1, myMainSolution, LocalDateTime.now().plusDays(10));
@@ -319,7 +319,7 @@ class SolutionServiceTest {
         Member other = 길가은.아이디_지정_생성(2L);
         Problem problem = 백준_문제.아이디_지정_생성(problemId);
         Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 3);
-        Solution scrapSolution = 공개_풀이.스크랩_아아디_지정_생성(2L, other, LocalDateTime.now(), 3, solution);
+        Solution scrapSolution = 공개_풀이.스크랩_아이디_지정_생성(2L, other, LocalDateTime.now(), 3, solution);
 
         Comment comment1 = 생성된_댓글.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
         Comment comment2 = 생성된_댓글.부모_지정_생성(1L,2L, other, solution, LocalDateTime.now().plusDays(2));
