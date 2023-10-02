@@ -9,11 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface SolutionRepository extends JpaRepository<Solution, Long>, SolutionCustomRepository {
     List<Solution> findAllByMember(Member member);
+
+    @Query("select s from Solution s where s.member.id = :memberId limit 1")
+    Optional<Solution> findByMemberId(Long memberId);
 
     List<Solution> findAllByScrapSolution(Solution solution);
 
