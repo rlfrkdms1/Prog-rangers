@@ -21,5 +21,5 @@ public interface SolutionCustomRepository {
 
     Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId);
 
-    List<Solution> findTop6SolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
+    List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
 }

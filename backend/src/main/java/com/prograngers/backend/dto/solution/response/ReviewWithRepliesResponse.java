@@ -17,7 +17,6 @@ public class ReviewWithRepliesResponse {
     private String nickname;
     private String content;
     private List<ReviewWithRepliesResponse> replies;
-
     boolean mine;
 
     public static ReviewWithRepliesResponse from(Review review, ArrayList<ReviewWithRepliesResponse> replies, boolean mine) {

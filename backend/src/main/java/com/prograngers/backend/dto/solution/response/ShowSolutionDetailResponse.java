@@ -20,13 +20,15 @@ public class ShowSolutionDetailResponse {
     private ProblemResponse problem;
     private SolutionResponse solution;
     private List<CommentWithRepliesResponse> comments;
+    private List<ReviewWithRepliesResponse> reviews;
 
     public static ShowSolutionDetailResponse from(ProblemResponse problem, SolutionResponse solution,
-                                                  List<CommentWithRepliesResponse> comments) {
+                                                  List<CommentWithRepliesResponse> comments, List<ReviewWithRepliesResponse> reviews) {
         return ShowSolutionDetailResponse.builder()
                 .problem(problem)
                 .solution(solution)
                 .comments(comments)
+                .reviews(reviews)
                 .build();
     }
 }
