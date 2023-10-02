@@ -15,6 +15,9 @@ import com.prograngers.backend.support.RepositoryTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +31,7 @@ import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문�
 import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @RepositoryTest
 class NotificationRepositoryTest {
@@ -86,6 +90,40 @@ class NotificationRepositoryTest {
         assertThat(notifications).containsExactly(notification1, notification2);
 
     }
+
+    @Test
+    @DisplayName("대시보드에서 알림의 데이터를 추가로 요청할 수 있으며 이는 무한스크롤 형태이다.")
+    void 대시보드_무한_스크롤() {
+        Member member1 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Problem problem = 저장(백준_문제.기본_정보_생성());
+        Solution solution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
+        Review review = 저장(생성된_리뷰.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(1)));
+        Comment comment1 = 저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(3)));
+        Comment comment2 = 저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.now().minusHours(2)));
+
+        Notification notification1 = 저장(리뷰_알림.생성_안읽음(member1, solution, review));
+        Notification notification2 = 저장(댓글_알림.생성_안읽음(member1, solution, comment1));
+        Notification notification3 = 저장(댓글_알림.생성_안읽음(member1, solution, comment2));
+
+        Slice<Notification> notifications1 = notificationRepository.findPageByMemberId(member1.getId(), PageRequest.of(0, 1));
+        Slice<Notification> notifications2 = notificationRepository.findPageByMemberId(member1.getId(), PageRequest.of(1, 1));
+        Slice<Notification> notifications3 = notificationRepository.findPageByMemberId(member1.getId(), PageRequest.of(2, 1));
+        Slice<Notification> notifications4 = notificationRepository.findPageByMemberId(member1.getId(), PageRequest.of(1, 2));
+
+        assertAll(
+                () -> assertThat(notifications1).containsExactly(notification1),
+                () -> assertThat(notifications1.hasNext()).isTrue(),
+                () -> assertThat(notifications2).containsExactly(notification3),
+                () -> assertThat(notifications2.hasNext()).isTrue(),
+                () -> assertThat(notifications3).containsExactly(notification2),
+                () -> assertThat(notifications3.hasNext()).isFalse(),
+                () -> assertThat(notifications4).containsExactly(notification2),
+                () -> assertThat(notifications4.hasNext()).isFalse()
+                );
+    }
+
+
     private Member 저장(Member member) {
         return memberRepository.save(member);
     }
