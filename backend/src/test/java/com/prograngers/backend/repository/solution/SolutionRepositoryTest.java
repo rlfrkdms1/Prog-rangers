@@ -125,10 +125,10 @@ class SolutionRepositoryTest {
         Problem problem1 = 백준_문제.기본_정보_생성();
 
         // 풀이
-        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(1), DFS, QUEUE, JAVA, 1));
-        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(2), BFS, ARRAY, JAVA, 1));
-        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(3), DFS, ARRAY, JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(3), BFS, QUEUE, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(2), DFS, QUEUE, JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(1), BFS, ARRAY, JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), DFS, ARRAY, JAVA, 1));
 
 
         // when
@@ -157,10 +157,10 @@ class SolutionRepositoryTest {
         Problem problem1 = 백준_문제.기본_정보_생성();
 
         // 풀이
-        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(1), DFS, QUEUE, JAVA, 1));
-        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(2), BFS, ARRAY, CPP, 1));
-        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(3), DFS, ARRAY, PYTHON, 1));
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(3), BFS, QUEUE, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(2), DFS, QUEUE, JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(1), BFS, ARRAY, CPP, 1));
+        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), DFS, ARRAY, PYTHON, 1));
 
         // when
         List<Solution> result1 = solutionRepository
@@ -190,15 +190,15 @@ class SolutionRepositoryTest {
 
         // 풀이 : solution9 ~ 1 순서로 최신
         // 풀이
-        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(1), DFS, QUEUE, JAVA, 1));
-        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(2), BFS, ARRAY, CPP, 1));
-        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(3), DFS, ARRAY, PYTHON, 1));
-        Solution solution5 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(4), BFS, QUEUE, JAVA, 1));
-        Solution solution6 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(5), DFS, QUEUE, JAVA, 1));
-        Solution solution7 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(6), BFS, ARRAY, CPP, 1));
-        Solution solution8 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(7), DFS, ARRAY, PYTHON, 1));
-        Solution solution9 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(8), DFS, ARRAY, PYTHON, 1));
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(8), BFS, QUEUE, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(7), DFS, QUEUE, JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(6), BFS, ARRAY, CPP, 1));
+        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(5), DFS, ARRAY, PYTHON, 1));
+        Solution solution5 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(4), BFS, QUEUE, JAVA, 1));
+        Solution solution6 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(3), DFS, QUEUE, JAVA, 1));
+        Solution solution7 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(2), BFS, ARRAY, CPP, 1));
+        Solution solution8 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(1), DFS, ARRAY, PYTHON, 1));
+        Solution solution9 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), DFS, ARRAY, PYTHON, 1));
 
         // when
         List<Solution> result1 = solutionRepository.getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, NEWEST).getContent();
@@ -221,30 +221,18 @@ class SolutionRepositoryTest {
     @DisplayName("스크랩 수에 따라 문제 목록을 정렬해서 조회할 수 있다")
     @Test
     void 스크랩_문제_정렬() {
-        // given
-        // 회원
+        // give
         Member member1 = 저장(장지담.기본_정보_생성());
-
-        // 문제
         Problem problem1 = 백준_문제.기본_정보_생성();
-        // 풀이
-
-        /**
-         *  solution 3 : 스크랩 한 풀이 3개
-         *  solution 2 : 스크랩 한 풀이 2개
-         *  solution 1 : 스크랩 한 풀이 1개
-         *  스크랩 수가 같으면 날짜수느로 정렬 (solution 9~4 순서)
-         */
-        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(1), DFS, QUEUE, JAVA, 1));
-        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(2), BFS, ARRAY, CPP, 1));
-        Solution solution4 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().plusDays(3), 1, solution1));
-        Solution solution5 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().plusDays(4), 1, solution2));
-        Solution solution6 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().plusDays(5), 1, solution2));
-        Solution solution7 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().plusDays(6), 1, solution3));
-        Solution solution8 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().plusDays(7), 1, solution3));
-        Solution solution9 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().plusDays(8), 1, solution3));
-
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(8), BFS, QUEUE, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(7), DFS, QUEUE, JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(6), BFS, ARRAY, CPP, 1));
+        Solution solution4 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().minusDays(5), 1, solution1));
+        Solution solution5 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().minusDays(4), 1, solution2));
+        Solution solution6 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().minusDays(3), 1, solution2));
+        Solution solution7 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().minusDays(2), 1, solution3));
+        Solution solution8 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now().minusDays(1), 1, solution3));
+        Solution solution9 = 저장(공개_풀이.스크랩_생성(member1, LocalDateTime.now(), 1, solution3));
         // when
         List<Solution> result1 = solutionRepository
                 .getSolutionList(PageRequest.of(0, 4), problem1.getId(), null, null, null, SCRAPS)
@@ -255,7 +243,6 @@ class SolutionRepositoryTest {
         List<Solution> result3 = solutionRepository
                 .getSolutionList(PageRequest.of(2, 4), problem1.getId(), null, null, null, SCRAPS)
                 .getContent();
-
         // then
         assertAll(
                 () -> assertThat(result1).containsExactly(solution3, solution2, solution1, solution9),
@@ -268,19 +255,14 @@ class SolutionRepositoryTest {
     @Test
     void 프로필_풀이_찾기() {
         // given
-        // 회원
         Member member1 = 저장(장지담.기본_정보_생성());
-
-        // 문제
         Problem problem1 = 저장(백준_문제.기본_정보_생성());
-
-        //풀이
-        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(1), DFS, LIST, JAVA, 1));
-        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(2), DFS, LIST, JAVA, 1));
-        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(3), DFS, LIST, JAVA, 1));
-        Solution solution5 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(4), DFS, LIST, JAVA, 1));
-        Solution solution6 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().plusDays(5), DFS, LIST, JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(5), DFS, LIST, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(4), DFS, LIST, JAVA, 1));
+        Solution solution3 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(3), DFS, LIST, JAVA, 1));
+        Solution solution4 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(2), DFS, LIST, JAVA, 1));
+        Solution solution5 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(1), DFS, LIST, JAVA, 1));
+        Solution solution6 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
         // when
         List<Solution> profileSolutions1 = solutionRepository.findProfileSolutions(member1.getId(), 9223372036854775807L);

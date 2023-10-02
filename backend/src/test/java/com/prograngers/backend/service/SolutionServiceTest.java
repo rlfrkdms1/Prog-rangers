@@ -183,25 +183,25 @@ class SolutionServiceTest {
         final Solution myMainSolution = 공개_풀이.아이디_지정_생성(1L,problem, member1, LocalDateTime.now().plusDays(2), JAVA, 3);
 
         //이 문제에 대한 다른 사람들의 풀이 2개
-        final Solution othersSolution1 = 공개_풀이.아이디_지정_생성(2L,problem, member2, LocalDateTime.now(), JAVA, 3);
-        final Solution othersSolution2 = 공개_풀이.아이디_지정_생성(3L,problem, member2, LocalDateTime.now().plusDays(1), JAVA, 3);
+        final Solution othersSolution1 = 공개_풀이.아이디_지정_생성(2L,problem, member2, LocalDateTime.now().minusDays(50), JAVA, 3);
+        final Solution othersSolution2 = 공개_풀이.아이디_지정_생성(3L,problem, member2, LocalDateTime.now().minusDays(40), JAVA, 3);
 
         //이 문제에 대한 내풀이 3개, 하나는 다른 사람의 풀이를 스크랩한 풀이다
-        final Solution mySolution1 = 공개_풀이.아이디_지정_생성(4L,problem, member1, LocalDateTime.now().plusDays(3), JAVA, 3);
-        final Solution mySolution2 = 공개_풀이.아이디_지정_생성(5L,problem, member1, LocalDateTime.now().plusDays(4), JAVA, 3);
-        final Solution mySolution3 = 공개_풀이.스크랩_아이디_지정_생성(6L,member1, LocalDateTime.now().plusDays(5),3,othersSolution1);
+        final Solution mySolution1 = 공개_풀이.아이디_지정_생성(4L,problem, member1, LocalDateTime.now().minusDays(30), JAVA, 3);
+        final Solution mySolution2 = 공개_풀이.아이디_지정_생성(5L,problem, member1, LocalDateTime.now().minusDays(20), JAVA, 3);
+        final Solution mySolution3 = 공개_풀이.스크랩_아이디_지정_생성(6L,member1, LocalDateTime.now().minusDays(10),3,othersSolution1);
 
         //myMainSolution 댓글
-        final Comment comment1 = 생성된_댓글.아이디_지정_생성(1L,member1, myMainSolution, LocalDateTime.now().plusDays(10));
-        final Comment comment2 = 생성된_댓글.부모_지정_생성(1L, 2L, member2, myMainSolution, LocalDateTime.now().plusDays(11));
-        final Comment comment3 = 생성된_댓글.아이디_지정_생성(3L,member2, myMainSolution, LocalDateTime.now().plusDays(12));
-        final Comment comment4 = 생성된_댓글.부모_지정_생성(3L, 4L, member1, myMainSolution, LocalDateTime.now().plusDays(13));
+        final Comment comment1 = 생성된_댓글.아이디_지정_생성(1L,member1, myMainSolution, LocalDateTime.now().minusDays(4));
+        final Comment comment2 = 생성된_댓글.부모_지정_생성(1L, 2L, member2, myMainSolution, LocalDateTime.now().minusDays(3));
+        final Comment comment3 = 생성된_댓글.아이디_지정_생성(3L,member2, myMainSolution, LocalDateTime.now().minusDays(2));
+        final Comment comment4 = 생성된_댓글.부모_지정_생성(3L, 4L, member1, myMainSolution, LocalDateTime.now().minusDays(1));
 
         //myMainSolution 리뷰
-        final Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().plusDays(10));
-        final Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
-        final Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().plusDays(10));
-        final Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().plusDays(11));
+        final Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().minusDays(4));
+        final Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().minusDays(3));
+        final Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().minusDays(2));
+        final Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().minusDays(1));
 
         when(solutionRepository.findById(solutionId)).thenReturn(Optional.of(myMainSolution));
         when(solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem)).thenReturn(Arrays.asList(mySolution3,mySolution2,mySolution1,myMainSolution,othersSolution2,othersSolution1));
@@ -292,10 +292,10 @@ class SolutionServiceTest {
         final Long problemId = 1L;
         final Member member = 장지담.기본_정보_생성();
         final Problem problem = 백준_문제.아이디_지정_생성(problemId);
-        Solution solution1 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), JAVA, 1);
-        Solution solution2 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().plusDays(1), JAVA, 1);
-        Solution solution3 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().plusDays(2), JAVA, 1);
-        Solution solution4 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().plusDays(3), JAVA, 1);
+        Solution solution1 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().minusDays(3), JAVA, 1);
+        Solution solution2 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().minusDays(2), JAVA, 1);
+        Solution solution3 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now().minusDays(1), JAVA, 1);
+        Solution solution4 = 공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), JAVA, 1);
 
         when(problemRepository.findById(any())).thenReturn(Optional.of(problem));
         when(solutionRepository.getSolutionList(PageRequest.of(0,4),problemId,null,null,null, NEWEST)).thenReturn(new PageImpl<>(Arrays.asList(solution4,solution3,solution2,solution1), PageRequest.of(0,4), 4L));
@@ -318,13 +318,13 @@ class SolutionServiceTest {
         Member member = 장지담.아이디_지정_생성(memberId);
         Member other = 길가은.아이디_지정_생성(2L);
         Problem problem = 백준_문제.아이디_지정_생성(problemId);
-        Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 3);
+        Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now().minusDays(100), JAVA, 3);
         Solution scrapSolution = 공개_풀이.스크랩_아이디_지정_생성(2L, other, LocalDateTime.now(), 3, solution);
 
-        Comment comment1 = 생성된_댓글.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
-        Comment comment2 = 생성된_댓글.부모_지정_생성(1L,2L, other, solution, LocalDateTime.now().plusDays(2));
-        Comment comment3 = 생성된_댓글.아이디_지정_생성(3L, member, solution, LocalDateTime.now().plusDays(1));
-        Comment comment4 = 생성된_댓글.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now().plusDays(3));
+        Comment comment1 = 생성된_댓글.아이디_지정_생성(1L, member, solution, LocalDateTime.now().minusDays(4));
+        Comment comment2 = 생성된_댓글.부모_지정_생성(1L,2L, other, solution, LocalDateTime.now().minusDays(3));
+        Comment comment3 = 생성된_댓글.아이디_지정_생성(3L, member, solution, LocalDateTime.now().minusDays(2));
+        Comment comment4 = 생성된_댓글.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now().minusDays(1));
         Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
         Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L, 2L,other, solution, LocalDateTime.now());
         Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L, member, solution, LocalDateTime.now());
