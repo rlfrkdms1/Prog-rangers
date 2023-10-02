@@ -16,9 +16,6 @@ import java.util.Optional;
 public interface SolutionRepository extends JpaRepository<Solution, Long>, SolutionCustomRepository {
     List<Solution> findAllByMember(Member member);
 
-    @Query("select s from Solution s where s.member.id = :memberId limit 1")
-    Optional<Solution> findByMemberId(Long memberId);
-
     List<Solution> findAllByScrapSolution(Solution solution);
 
     Long countByScrapSolution(Solution solution);
