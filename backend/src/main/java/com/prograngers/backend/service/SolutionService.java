@@ -301,7 +301,7 @@ public class SolutionService {
 
     public ShowMySolutionListResponse getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, int page, Long memberId) {
         validPageNumber(page);
-        Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(page, MY_SOLUTION_LIST_PAGE_SIZE), keyword, language, algorithm, dataStructure, level, memberId);
+        Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(page - 1, MY_SOLUTION_LIST_PAGE_SIZE), keyword, language, algorithm, dataStructure, level, memberId);
         return ShowMySolutionListResponse.from(solutions);
     }
 
