@@ -278,8 +278,10 @@ class SolutionServiceTest {
         //given
         final Long memberId = 1L;
         final String WRONG_LINK = "wrongLink123";
+        Member member = 장지담.아이디_지정_생성(memberId);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",WRONG_LINK, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
 
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(problemRepository.findByLink(any())).thenReturn(Optional.empty());
 
         //when, then
