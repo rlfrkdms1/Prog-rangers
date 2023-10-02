@@ -36,7 +36,9 @@ public class DashBoardService {
     private final BadgeRepository badgeRepository;
     private final ReviewRepository reviewRepository;
 
-    public static final int DASHBOARD_NOTIFICATION_PAGE_SIZE = 9;
+    public static final int DASHBOARD_NOTIFICATION_LIMIT = 9;
+    private static final int DASHBOARD_RECENT_SOLUTION_LIMIT = 3;
+    private static final int DASHBOARD_RECENT_FOLLOWINGS_SOLUTION_LIMIT = 3;
 
     @Transactional
     public ShowDashBoardResponse getDashboard(Long memberId, YearMonth date) {
@@ -49,8 +51,8 @@ public class DashBoardService {
     public ShowDashBoardResponse create(Long memberId, YearMonth date) {
         Member member = findMemberById(memberId);
 
-        List<NotificationWithSolutionResponse> notifications = getNotifications(member);
-        List<SolutionWithProblemResponse> myRecentSolutions = getMyRecentSolutions(member);
+        List<NotificationWithSolutionResponse> notifications = getNotifications(memberId);
+        List<SolutionWithProblemResponse> myRecentSolutions = getMyRecentSolutions(memberId);
         List<String> badges = getBadges(member);
         List<IsDayOfStudyResponse> monthlyStudyCalendar = getMonthlyStudyCalendar(memberId, date);
         List<SolutionWithProblemResponse> followingRecentSolutions = getFollowingRecentSolutions(memberId);
@@ -58,14 +60,14 @@ public class DashBoardService {
         return ShowDashBoardResponse.of(monthlyStudyCalendar, notifications, myRecentSolutions, badges, followingRecentSolutions);
     }
 
-    private List<NotificationWithSolutionResponse> getNotifications(Member member) {
-        List<Notification> notifications = notificationRepository.findTop9ByReceiverOrderByCreatedAtDesc(member);
+    private List<NotificationWithSolutionResponse> getNotifications(Long memberId) {
+        List<Notification> notifications = notificationRepository.findByMemberIdAndLimit(memberId, DASHBOARD_NOTIFICATION_LIMIT);
         return notifications.stream().map(notification -> NotificationWithSolutionResponse.of(notification, notification.getSolution())).collect(Collectors.toList());
     }
 
-    private List<SolutionWithProblemResponse> getMyRecentSolutions(Member member) {
-        List<Solution> myRecentSolutions = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
-        return myRecentSolutions.stream().map(solution -> SolutionWithProblemResponse.of(solution, solution.getProblem())).collect(Collectors.toList());
+    private List<SolutionWithProblemResponse> getMyRecentSolutions(Long memberId) {
+        List<Solution> myRecentSolutions = solutionRepository.findMyRecentSolutions(memberId, DASHBOARD_RECENT_SOLUTION_LIMIT);
+        return myRecentSolutions.stream().map(SolutionWithProblemResponse::from).collect(Collectors.toList());
     }
 
     private List<String> getBadges(Member member) {
@@ -74,8 +76,8 @@ public class DashBoardService {
     }
 
     private List<SolutionWithProblemResponse> getFollowingRecentSolutions(Long memberId) {
-        List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId);
-        return followingsRecentSolutions.stream().map(solution -> SolutionWithProblemResponse.of(solution, solution.getProblem())).collect(Collectors.toList());
+        List<Solution> followingsRecentSolutions = solutionRepository.findFollowingsRecentSolutions(memberId, DASHBOARD_RECENT_FOLLOWINGS_SOLUTION_LIMIT);
+        return followingsRecentSolutions.stream().map(SolutionWithProblemResponse::from).collect(Collectors.toList());
     }
 
     private List<IsDayOfStudyResponse> getMonthlyStudyCalendar(Long memberId, YearMonth date) {
