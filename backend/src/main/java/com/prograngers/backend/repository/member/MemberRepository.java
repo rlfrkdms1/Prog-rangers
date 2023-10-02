@@ -17,4 +17,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     Optional<Member> findBySocialId(Long socialId);
 
+    @Query("select m from Member m join Follow f on f.followerId = :memberId order by f.id desc")
+    List<Member> findAllByFollower(Long memberId);
+
+    @Query("select m from Member m join Follow f on f.followingId = :memberId order by f.id desc")
+    List<Member> findAllByFollowing(Long memberId);
 }
