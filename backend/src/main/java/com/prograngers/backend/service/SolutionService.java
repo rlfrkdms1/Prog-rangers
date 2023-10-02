@@ -69,8 +69,17 @@ public class SolutionService {
 
     @Transactional
     public Long save(WriteSolutionRequest writeSolutionRequest, Long memberId) {
-        Solution solution = writeSolutionRequest.toSolution(getProblem(writeSolutionRequest), findMemberById(memberId));
+        Solution solution = writeSolutionRequest.toSolution(findMemberById(memberId),writeProblem(writeSolutionRequest));
         return solutionRepository.save(solution).getId();
+    }
+
+    private Problem writeProblem(WriteSolutionRequest writeSolutionRequest) {
+        String problemLink = writeSolutionRequest.getProblemLink();
+        Optional<Problem> problem = problemRepository.findByLink(problemLink);
+        if (problem.isPresent()){
+            return problem.get();
+        }
+        return problemRepository.save(writeSolutionRequest.toProblem(validLink(writeSolutionRequest.getProblemLink())));
     }
 
     @Transactional

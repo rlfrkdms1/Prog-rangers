@@ -55,7 +55,6 @@ public class WriteSolutionRequest {
     private String code;
 
     public Problem toProblem(JudgeConstant judgeName){
-
         return Problem.builder()
                 .link(problemLink)
                 .ojName(judgeName)
@@ -64,7 +63,7 @@ public class WriteSolutionRequest {
                 .build();
     }
 
-    public Solution toSolution(Problem problem, Member member) {
+    public Solution toSolution(Member member, Problem problem) {
 
         Solution solution = Solution.builder()
                 .problem(problem)
