@@ -59,8 +59,8 @@ public class FollowService {
     }
 
     public ShowFollowListResponse getFollowList(Long memberId) {
-        List<Follow> followingList = followRepository.findAllByFollowerIdOrderByIdDesc(memberId);
-        List<Follow> followerList = followRepository.findAllByFollowingIdOrderByIdDesc(memberId);
+        List<Member> followingList = memberRepository.findAllByFollower(memberId);
+        List<Member> followerList = memberRepository.findAllByFollowing(memberId);
         List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findByMemberId(memberId));
         return ShowFollowListResponse.of(followingList,followerList,recommendedFollows);
     }
