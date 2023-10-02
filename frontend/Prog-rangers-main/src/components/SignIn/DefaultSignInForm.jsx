@@ -6,7 +6,9 @@ import ErrorText from '../common/ErrorText';
 import { inputStyle } from '../SignUp/signUpPage';
 import { signIn } from '../../apis/signin';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { IsLoginContext } from '../../context/AuthContext';
+import axios from 'axios';
+import { useContext } from 'react';
 
 const StyledButton = styled.button`
   width: 600px;
@@ -30,19 +32,19 @@ export const DefaultSignInForm = () =>  {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
-  const navigate = useNavigate()
-  const {setAccessToken} = useAuth()
-
+  const navigate = useNavigate();
+  const { setIsLogin } = useContext(IsLoginContext);
 
   const onSubmit = async ({email,password}) => {
     try {
-      const newAccessToken = await signIn({email,password})
-      alert(JSON.stringify(`로그인 성공! accessToken : ${newAccessToken}`));
-      setAccessToken(newAccessToken)
-      navigate('/')
+      const newAccess = await signIn({email,password})
+      alert(JSON.stringify(`로그인 성공!`));
+      setIsLogin(true);
+      localStorage.setItem('token', newAccess.accessToken);
+      localStorage.setItem('nickname', newAccess.nickname);
+      navigate('/');
     } catch (error) {
-      console.error(error)
-      alert(error.response.data.description)
+      console.log('Error:', error);
     }
   };
 

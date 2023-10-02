@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { theme } from './theme';
 import { Link } from 'react-router-dom';
-
 import Logo from '../../assets/logo.svg';
 import { IoSearchOutline } from 'react-icons/io5';
-
-// import BeforeLoginNav from './BeforeLoginNav';
 import { AfterLoginNav } from './AfterLoginNav';
+import { BeforeLoginNav } from './BeforeLoginNav';
+import { useIsLoginState } from '../../context/AuthContext';
 
 const flexAlign = css`
   display: flex;
@@ -15,6 +14,8 @@ const flexAlign = css`
 `;
 
 export const Header = () => {
+  const isLogin = useIsLoginState();
+
   return (
     <div
       className="NavbarWarp"
@@ -117,7 +118,7 @@ export const Header = () => {
             margin-top: 5px;
           `}
         >
-          <AfterLoginNav />
+          { isLogin ? <AfterLoginNav/> : <BeforeLoginNav/> }
         </div>
       </div>
     </div>
