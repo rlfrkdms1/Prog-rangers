@@ -2,6 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
+import com.prograngers.backend.dto.follow.response.ShowFollowListResponse;
 import com.prograngers.backend.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,6 @@ public class FollowController {
     @Login
     @GetMapping("/follows")
     public ResponseEntity<ShowFollowListResponse> followList(@LoggedInMember Long memberId){
-        ShowFollowListResponse response = followService.getFollowList(memberId);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(followService.getFollowList(memberId););
     }
 }
