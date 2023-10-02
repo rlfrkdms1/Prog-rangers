@@ -5,11 +5,7 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,5 +28,12 @@ public class FollowController {
                                          @PathVariable("memberId") Long followingId) {
         followService.unfollow(followerId, followingId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Login
+    @GetMapping("/follows")
+    public ResponseEntity<ShowFollowListResponse> followList(@LoggedInMember Long memberId){
+        ShowFollowListResponse response = followService.getFollowList(memberId);
+        return ResponseEntity.ok().body(response);
     }
 }
