@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -61,7 +60,7 @@ public class FollowService {
     public ShowFollowListResponse getFollowList(Long memberId) {
         List<Member> followingList = memberRepository.findAllByFollower(memberId);
         List<Member> followerList = memberRepository.findAllByFollowing(memberId);
-        List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findByMemberId(memberId),memberId);
+        List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findOneRecentSolutionByMemberId(memberId),memberId);
         return ShowFollowListResponse.of(followingList,followerList,recommendedFollows);
     }
 
