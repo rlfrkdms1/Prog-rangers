@@ -27,21 +27,15 @@ import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀
 
 @RepositoryTest
 class MemberRepositoryTest {
-
     @Autowired
     private SolutionRepository solutionRepository;
-
     @Autowired
     private ProblemRepository problemRepository;
-
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private FollowRepository followRepository;
 
-    @Autowired
-    private LikesRepository likesRepository;
     @Test
     @DisplayName("문제가 주어졌을 때 해당 문제를 푼 회원들을 팔로우가 많은 순으로 정렬해서 가져올 수 있다. 이 때 내가 팔로우하지 않은 회원들을 가져온다")
     void getLimitRecommendedMembersTest(){
@@ -108,9 +102,4 @@ class MemberRepositoryTest {
     private Follow 저장(Follow follow) {
         return followRepository.save(follow);
     }
-
-    private Likes 저장(Likes likes) {
-        return likesRepository.save(likes);
-    }
-
 }
