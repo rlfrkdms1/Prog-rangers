@@ -9,9 +9,10 @@ export const targetAtom = atom("");
 export const nameScope = Symbol();
 export const nameAtom = atom("");
 
-//main-review-write 페이지
+//mypage-my solution-add solution 페이지
+//mypage 정보를 미리 가져와서 추가수정기능
 
-export const WriteSolution = () => {
+export const EditSolution = () => {
   const refresh = () => {
     localStorage.removeItem('algorithm');
     localStorage.removeItem('datastructure');
@@ -19,24 +20,28 @@ export const WriteSolution = () => {
 
   return(
   <div 
+    className='container' 
     css={css`
     width: 1200px;
     height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
     margin: 0 auto;
   ` }
   >
-    <div css={css`height: 100%; width: 810px; display: flex; flex-direction: column;`}>
-      <Provider scope={targetScope}>
-        <AddMySolution />
-      </Provider>
-      {/* <div css={css`${ButtonDiv} margin-bottom: 80px;`}>
-        <button onClick={refresh()} css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
-        <button css={css`${SubmitButton} background-color: #C2DBE3;`}>작성 완료</button>
-      </div> */}
+    <SideBar />
+      <div
+        className='content'
+        css={css`
+        width: 100%;`}
+      >
+      <div css={css`height: 100%; width: 810px; display: flex; flex-direction: column;`}>
+        <Provider scope={targetScope}>
+          <AddMySolution />
+        </Provider>
+      </div>
+
+      </div>
     </div>
-  </div>
   );
 };
