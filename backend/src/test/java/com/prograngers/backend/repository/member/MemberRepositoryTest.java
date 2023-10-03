@@ -24,6 +24,7 @@ import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static org.assertj.core.api.Assertions.*;
 
 @RepositoryTest
 class MemberRepositoryTest {
@@ -42,11 +43,11 @@ class MemberRepositoryTest {
 
         //given
         Member member1 = 저장(장지담.기본_정보_생성());
-        Member member2 = 저장(길가은.기본_정보_생성());
-        Member member3 = 저장(길가은.기본_정보_생성());
-        Member member4 = 저장(길가은.기본_정보_생성());
-        Member member5 = 저장(길가은.기본_정보_생성());
-        Member member6 = 저장(길가은.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Member member4 = 저장(장지담.기본_정보_생성());
+        Member member5 = 저장(장지담.기본_정보_생성());
+        Member member6 = 저장(장지담.기본_정보_생성());
 
         /**
          *  member1: 나
@@ -83,9 +84,56 @@ class MemberRepositoryTest {
         List<Member> result = memberRepository.getLimitRecommendedMembers(problem1, 3L, member1.getId());
 
         //then
-        Assertions.assertThat(result).containsExactly(member4,member3,member5);
+        assertThat(result).containsExactly(member4,member3,member5);
     }
 
+    @Test
+    @DisplayName("팔로워로 팔로우 한 최신순대로 정렬해 회원을 찾을 수 있다")
+    void findAllByFollowerTest(){
+        //given
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Member member4 = 저장(장지담.기본_정보_생성());
+        Member member5 = 저장(장지담.기본_정보_생성());
+        Member member6 = 저장(장지담.기본_정보_생성());
+
+        저장(팔로우_생성(member5.getId(),member1.getId()));
+        저장(팔로우_생성(member4.getId(),member1.getId()));
+        저장(팔로우_생성(member3.getId(),member1.getId()));
+        저장(팔로우_생성(member2.getId(),member1.getId()));
+        저장(팔로우_생성(member1.getId(),member6.getId()));
+
+        //when
+        List<Member> result = memberRepository.findAllByFollower(member1.getId());
+
+        //then
+        assertThat(result).containsExactly(member2,member3,member4,member5);
+    }
+
+    @Test
+    @DisplayName("팔로잉으로 팔로우 한 최신순대로 정렬해 회원을 찾을 수 있다")
+    void findAllByFollowingTest(){
+        //given
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Member member4 = 저장(장지담.기본_정보_생성());
+        Member member5 = 저장(장지담.기본_정보_생성());
+        Member member6 = 저장(장지담.기본_정보_생성());
+
+        저장(팔로우_생성(member1.getId(),member5.getId()));
+        저장(팔로우_생성(member1.getId(),member4.getId()));
+        저장(팔로우_생성(member1.getId(),member3.getId()));
+        저장(팔로우_생성(member1.getId(),member2.getId()));
+        저장(팔로우_생성(member6.getId(),member1.getId()));
+
+        //when
+        List<Member> result = memberRepository.findAllByFollowing(member1.getId());
+
+        //then
+        assertThat(result).containsExactly(member2,member3,member4,member5);
+    }
     private Follow 팔로우_생성(Long followingId, Long followerId){ return Follow.builder().followingId(followingId).followerId(followerId).build(); }
     private Member 저장(Member member) {
         return memberRepository.save(member);
