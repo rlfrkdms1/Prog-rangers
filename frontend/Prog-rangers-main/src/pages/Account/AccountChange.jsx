@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { checkNickname, inquireProfile, settingProfile } from './ProfileApi';
+import { checkNickname, inquireProfile, settingProfile, handleLogin } from './ProfileApi';
 import { css } from '@emotion/react';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { profileContentStyle, profileContentInputStyle, inputBoxStyle, editBtnStyle, blueBtn, grayBtn, alertStyle } from './AccountStyle';
@@ -15,20 +15,32 @@ export const AccountChange = () => {
     github: '',
     introduction: '',
     currentModifiedAt: '',
+    password: '',
     photo: '',
   });
 
+  // 유저 정보 조회 api
   useEffect(() => {
-    const apiUrl = 'http://{{HOST}}:8080/prog-rangers/mypage/account-settings';
-
-    axios.get(apiUrl)
-      .then(response => {
-        const data = response.data;
-        setUserData(data);
+    const token = localStorage.getItem('token');    
+    fetch("http://13.124.131.171:8080/api/v1/mypage/account-settings", {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`},
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      setUserData({
+        nickname: json.nickname || '',
+        email: json.email || '',
+        github: json.github || '',
+        introduction: json.introduction || '',
+        currentModifiedAt: json.currentModifiedAt || '',
+        password: json.password || '',
+        photo: json.photo || '',
       })
-      .catch(error => {
-        console.error('사용자 정보를 가져오는 중 오류 발생:', error);
-      });
+    })
+    .catch((error) => {
+      console.error(error);
+    })
   }, []);
   
   const [photo, setPhoto] = useState("");
@@ -48,7 +60,7 @@ export const AccountChange = () => {
   const [github, setGithub] = useState('');
   const [introduction, setIntroduction] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -56,40 +68,111 @@ export const AccountChange = () => {
   const togglePasswordVisibility2 = () => {
     setShowPassword2(!showPassword2);
   };
-  const [changePassword, setChangePassword] = useState('');
-  const [checkPassword, setCheckPassword] = useState('');
 
-  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
+  const handleNicknameChange = (e) => {
+    setNickname(e.target.value);
+  };
 
-  const nicknameDuplicationCheck = () => {
-    checkNickname(nickname)
-    .then((response) => {
-      if (response.available) {
-        setIsNicknameAvailable(true);
+  // 닉네임 중복확인 api
+  const nicknameDuplicationCheck = async () => {
+    try {
+      const response = await axios.get(`http://13.124.131.171:8080/api/v1/members?nickname=${nickname}`);
+      const errorCode = response.data.errorCode
+      setIsNicknameAvailable(response.data.errorCode);
+
+      if (errorCode === "ALREADY_EXIST_NICKNAME") {
+        setIsNicknameAvailable(false); 
       } else {
-        setIsNicknameAvailable(false);
+        setIsNicknameAvailable(true); 
       }
-    })
-    .catch((error) => {
-      console.error('닉네임 중복 확인 중 오류 발생:', error);
-      setIsNicknameAvailable(false);
-    });
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.errorCode === "ALREADY_EXIST_NICKNAME") {
+        setIsNicknameAvailable(false); 
+      } else {
+        console.error('에러 발생:', error);
+      }
+    }
+  };
+
+  // 기존 비밀번호와 일치하는지 검사
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [isPwCorrect, setIsPwCorrect] = useState(null);
+
+  const handlePasswordChange = (e) => {
+    setCurrentPassword(e.target.value);
   }
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [isPwCorrect, setIsPwCorrect] = useState('false');
-
   const pwCheck = () => {
-    if (currentPassword !== password ) {
+    if (currentPassword !== userData.password ) {
       setIsPwCorrect(false);
     } else {
       setIsPwCorrect(true);
   }
 }
 
+useEffect(() => {
+  pwCheck();
+}, [currentPassword]);
+
+// 변경 비밀번호와 비밀번호 확인이 일치하는지 검사
+const [changePassword, setChangePassword] = useState('');
+const [checkPassword, setCheckPassword] = useState('');
+const [isPasswordSame, setIsPasswordSame] = useState(null);
+
+const handleChangePassword = (e) => {
+  setChangePassword(e.target.value);
+};
+
+const handleCheckPassword = (e) => {
+  setCheckPassword(e.target.value);
+};
+
+const pwSameCheck = () => {
+  if (changePassword !== checkPassword ) {
+    setIsPasswordSame(false);
+  } else {
+    setIsPasswordSame(true);
+}
+}
+
+useEffect(() => {
+  pwSameCheck();
+}, [changePassword, checkPassword]);
+
+// 정보 수정하기
 const changeProfile = () => {
-  if ( isNicknameAvailable == true && isPwCorrect == true && changePassword == checkPassword) {
-    settingProfile()
+
+  const updatedData = {
+    // 수정된 데이터를 추가
+    nickname: nickname,
+    email: email,
+    github: github,
+    introduction: introduction,
+    currentModifiedAt: new Date(),
+    photo: photo,
+  };
+
+  axios.put('http://13.124.131.171:8080/api/v1/mypage/account-settings', updatedData)
+    .then(response => {
+      console.log('프로필이 업데이트되었습니다.');
+    })
+    .catch(error => {
+      console.error('프로필 업데이트 중 오류 발생:', error);
+    });
+}
+
+const handleButtonClick = () => {
+  if(isNicknameAvailable === true || isNicknameAvailable === null){
+    if(isPwCorrect === true || isPwCorrect === null) {
+      if(isPasswordSame === true || (isPwCorrect===null && isPasswordSame === null)) {
+        changeProfile();
+      }
+    }
+  }
+  else {
+    alert('수정불가');
+
   }
 }
 
@@ -149,7 +232,7 @@ const changeProfile = () => {
                   <div css={css`width: 72px`}>닉네임</div>
 
                   <div css={profileContentInputStyle}>
-                    <div>{userData.nickname}rlfrkdms1_API1</div>
+                    <div>{userData.nickname}</div>
                     <div css={css`
                       display: flex;
                       flex-direction: row;`}>
@@ -157,7 +240,8 @@ const changeProfile = () => {
                         <input
                           type="text"
                           value={nickname}
-                          onChange={(e) => setNickname(e.target.value)}
+                          onChange={handleNicknameChange}
+                         // onChange={(e) => setNickname(e.target.value)}
                           placeholder={userData.nickname}
                           css={css`
                             width: 100%;
@@ -169,22 +253,28 @@ const changeProfile = () => {
                       </div>
                     <button type="button" onClick={nicknameDuplicationCheck} css={grayBtn}> 중복확인 </button>
                     </div>
-                    <div id='usableNicknameAlert' css={{display: isNicknameAvailable ? 'block' : 'none'}}>
-                      <div css={alertStyle}>*사용 가능한 닉네임입니다.</div> 
-                    </div>  
+                    {isNicknameAvailable !== null && (
+                      <div>
+                        {isNicknameAvailable ? (
+                          <div css={alertStyle}>*사용 가능한 닉네임입니다.</div>
+                        ) : (
+                          <div css={alertStyle}>*이미 존재하는 닉네임입니다.</div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>{userData.email}rlfrkdms1@gmail.com_API2</div>
+                  <div>{userData.email}</div>
                 </div>
 
                 <div className='github' css={profileContentStyle}>
                  <div css={css`width: 72px`}>깃허브</div>
 
                  <div css={profileContentInputStyle}>
-                  <div>{userData.github}https://github.com/rlfrkdms1_API3</div>
+                  <div css={{display: userData.github ? 'block' : 'none'}}>{userData.github}</div>
                   
                   <div css={css`width: 374px;`}>
                     <div css={inputBoxStyle}>
@@ -192,7 +282,7 @@ const changeProfile = () => {
                         type="text"
                         value={github}
                         onChange={(e) => setGithub(e.target.value)}
-                        placeholder="https://github.com/rlfrkdms1"
+                        placeholder={userData.guthub}
                         css={css`
                           width: 100%;
                           font-size: 16px;
@@ -210,7 +300,7 @@ const changeProfile = () => {
                  <div css={css`width: 72px`}>소개</div>
 
                  <div css={profileContentInputStyle}>
-                  <div>{userData.introduction}가은이의 풀이노트_API4</div>
+                  <div css={{display: userData.introduction ? 'block' : 'none'}}>{userData.introduction}</div>
                 
                   <div css={css`width: 374px;`}>                
                     <div css={inputBoxStyle}>
@@ -218,7 +308,7 @@ const changeProfile = () => {
                           type="text"
                           value={introduction}
                           onChange={(e) => setIntroduction(e.target.value)}
-                          placeholder="풀이노트 겸 오답노트"
+                          placeholder={userData.introduction}
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -241,7 +331,8 @@ const changeProfile = () => {
                       <div css={inputBoxStyle}>
                           <input
                             type="text"
-                            placeholder="rkdms123"
+                            value={currentPassword}
+                            onChange={handlePasswordChange}
                             css={css`
                               width: 100%;
                               font-size: 16px;
@@ -252,7 +343,7 @@ const changeProfile = () => {
                         </div>
                       </div>
                     </div>
-                  <div id='uncorrectPwAlert' css={{display: isPwCorrect ? 'none' : 'block', marginLeft: 150}}>
+                  <div css={{display: isPwCorrect ? 'none' : 'block', marginLeft: 130}}>
                   <div css={alertStyle}>*기존 비밀번호가 틀립니다.</div> 
                   </div>
 
@@ -262,9 +353,8 @@ const changeProfile = () => {
                       <div css={inputBoxStyle}>
                         <input
                           type={showPassword ? 'text' : 'password'}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          // placeholder="rkdms123@"
+                          value={changePassword}
+                          onChange={handleChangePassword}
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -288,7 +378,8 @@ const changeProfile = () => {
                       <div css={inputBoxStyle}>
                         <input
                           type={showPassword2 ? 'text' : 'password'}
-                          // placeholder="*********"
+                          value={checkPassword}
+                          onChange={handleCheckPassword}
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -304,6 +395,9 @@ const changeProfile = () => {
                         />
                       </div>
                     </div>
+                  </div>
+                  <div css={{display: isPasswordSame ? 'none' : 'block', marginLeft: 130}}>
+                  <div css={alertStyle}>*비밀번호가 일치하지 않습니다.</div> 
                   </div>
                 </div>
               </div>
@@ -333,9 +427,9 @@ const changeProfile = () => {
                 취소하기
               </Link>
               <Link
-                to='/account'
+                // to='/account'
                 type="button"
-                onClick={changeProfile}
+                onClick={handleButtonClick}
                 css={blueBtn}>
                 수정하기
               </Link>

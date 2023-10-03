@@ -38,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class LikesRepositoryTest {
 
     @Autowired
-    LikesRepository likesRepository;
+    private LikesRepository likesRepository;
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     @Autowired
-    ProblemRepository problemRepository;
+    private ProblemRepository problemRepository;
     @Autowired
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
 
     @Test
     @DisplayName("풀이로 좋아요를 조회한다")
@@ -52,8 +52,8 @@ class LikesRepositoryTest {
         // given
         Member member = 저장(장지담.기본_정보_생성());
         Problem problem = 저장(백준_문제.기본_정보_생성());
-        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
         Likes like1 = 저장(createLike(member, solution1));
         Likes like2 = 저장(createLike(member, solution1));
@@ -78,8 +78,8 @@ class LikesRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
         Problem problem = 저장(백준_문제.기본_정보_생성());
-        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
+        Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), DFS, LIST, JAVA, 1));
 
         Likes like1 = 저장(createLike(member1, solution1));
         Likes like2 = 저장(createLike(member2, solution1));
@@ -102,19 +102,19 @@ class LikesRepositoryTest {
     }
 
 
-    Member 저장(Member member) {
+    private Member 저장(Member member) {
         return memberRepository.save(member);
     }
 
-    Problem 저장(Problem problem) {
+    private Problem 저장(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    Solution 저장(Solution solution) {
+    private Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
     }
 
-    Likes 저장(Likes like) {return likesRepository.save(like);}
+    private Likes 저장(Likes like) {return likesRepository.save(like);}
 
 
 }

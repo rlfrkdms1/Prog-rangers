@@ -25,6 +25,9 @@ import {
   Follow,
   AccountChange
 } from './pages';
+import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
+import { NaverRedirect } from './components/SignUp/NaverRedirect';
+import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +37,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
-      { path: 'signIn', element: <SignIn /> },
+      { path: 'login', element: <SignIn /> },
+      { path: 'login/kakao', element: <KakaoRedirect/> },
+      { path: 'login/naver', element: <NaverRedirect/> },
+      { path: 'login/google', element: <GoogleRedirect/> },
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',
@@ -64,9 +70,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root')
 );
 root.render(
-  <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

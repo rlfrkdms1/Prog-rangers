@@ -1,10 +1,12 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
+import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
+import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
 import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -15,52 +17,61 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static com.prograngers.backend.entity.comment.CommentStatusConStant.*;
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 @Slf4j
 public class CommentService {
+
     private final SolutionRepository solutionRepository;
-
     private final CommentRepository commentRepository;
-
     private final MemberRepository memberRepository;
 
-    public List<Comment> findBySolution(Solution solution) {
-        return commentRepository.findAllBySolution(solution);
-    }
+    private final int MY_COMMENTS_PAGE_SIZE = 3;
 
-    public Comment findById(Long id) {
+    private Comment findById(Long id) {
         return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
+    public ShowMyCommentsResponse showMyComments(Long memberId, Integer pageNumber) {
+        validPageNumber(pageNumber);
+        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
+        return ShowMyCommentsResponse.from(commentPage);
+    }
+
+    private void validPageNumber(Integer pageNumber) {
+        if (pageNumber < 1) {
+            throw new InvalidPageNumberException();
+        }
+    }
+
+
     // 댓글 작성
     @Transactional
-    public void addComment(Long solutionId, CommentRequest commentRequest, Long memberId) {
+    public void addComment(Long solutionId, WriteCommentRequest writeCommentRequest, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
-        Comment comment = commentRequest.toComment(member,solution);
+        Comment comment = writeCommentRequest.toComment(member,solution);
         commentRepository.save(comment);
     }
 
     @Transactional
-    public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest, Long memberId) {
+    public Long updateComment(Long commentId, UpdateCommentRequest updateCommentRequest, Long memberId) {
         Comment comment = findById(commentId);
         Long targetCommentMemberId = comment.getMember().getId();
 
         Member member = findMemberById(memberId);
-        checkMemberAuthorization(targetCommentMemberId, member);
-        comment.update(commentPatchRequest.getContent());
+        validMemberAuthorization(targetCommentMemberId, member);
+        comment.update(updateCommentRequest.getContent());
         // 리다이렉트 하기 위해 Solution의 Id 반환
-        return commentRepository.save(comment).getId();
+        return comment.getId();
     }
 
     @Transactional
@@ -68,13 +79,13 @@ public class CommentService {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
-        checkMemberAuthorization(targetCommentMemberId, member);
-        checkCommentAlreadyDeleted(comment);
+        validMemberAuthorization(targetCommentMemberId, member);
+        validCommentAlreadyDeleted(comment);
         comment.delete();
         commentRepository.save(comment);
     }
 
-    private static void checkCommentAlreadyDeleted(Comment comment) {
+    private void validCommentAlreadyDeleted(Comment comment) {
         if (comment.getStatus().equals(DELETED)){
             throw new CommentAlreadyDeletedException();
         }
@@ -88,7 +99,7 @@ public class CommentService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private static void checkMemberAuthorization(Long targetCommentMemberId, Member member) {
+    private void validMemberAuthorization(Long targetCommentMemberId, Member member) {
         if (!targetCommentMemberId.equals(member.getId())){
             throw new MemberUnAuthorizedException();
         }

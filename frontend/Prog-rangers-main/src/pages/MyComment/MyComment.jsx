@@ -2,23 +2,8 @@ import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { CommentForm } from '../../components/Comment';
-import { Provider, atom, useAtom } from 'jotai';
-import questions from '../../db/question.json';
-
-const questionAtom = atom(questions);
 
 export const MyComment = () => {
-  const [userData, setUserData] = useState({
-    nickname: '',
-    email: '',
-    github: '',
-    introduction: '',
-    currentModifiedAt: '',
-    photo: '',
-  });
-  
-  const [ Questions, setQuestions ] = useAtom(questionAtom);
-
   return (
     <div 
       className='container' 
@@ -39,7 +24,7 @@ export const MyComment = () => {
         `}
         >
 
-          <div css={css`height: 690px; width: 800px;  margin-top: 20px;`}>
+          <div css={css`height: 690px; width: 800px;`}>
           <CommentForm />
           </div>
       </div>

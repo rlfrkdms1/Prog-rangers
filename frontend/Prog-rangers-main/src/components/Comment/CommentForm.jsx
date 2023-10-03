@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/react";
-import { theme } from '../../components/Header/theme';
 import { ojNameTag, tags } from "../Question/tagsform";
 import axios from "axios";
 
@@ -8,7 +7,7 @@ export const CommentForm = () => {
     const [data, setData] = useState({ contents: [] });
 
     useEffect(() => {
-        const token = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk2MjAwOTk1LCJpYXQiOjE2OTYxNjQ5OTUsImlzcyI6IlByb2dyYW5nZXJzIn0.I9b-_qt3ktwY-0d-2XGEq-vEpzxy8DdsGCvJzuf6TE40tUfO2ob94s5qB7L_G2qsDXN7pSbnZNb8z3tRz5GUsQ";
+        const token = localStorage.getItem('token');
         const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/comments';
 
         axios.get(apiUrl, {

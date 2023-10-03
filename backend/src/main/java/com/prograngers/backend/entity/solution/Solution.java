@@ -41,40 +41,39 @@ public class Solution {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
-    @Nullable
     private Solution scrapSolution;
 
-    @Column(nullable = false, updatable = false)
     @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "algorithm")
     private AlgorithmConstant algorithm;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "data_structure")
     private DataStructureConstant dataStructure;
 
-    @Column(nullable = false)
+    @Column(name = "level", nullable = false)
     private Integer level;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "language", nullable = false)
     private LanguageConstant language;
 
     private void updateTitle(String title) {

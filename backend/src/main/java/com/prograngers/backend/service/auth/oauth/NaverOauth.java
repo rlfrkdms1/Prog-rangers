@@ -1,13 +1,14 @@
 package com.prograngers.backend.service.auth.oauth;
 
-import com.prograngers.backend.dto.response.auth.naver.NaverTokenResponse;
-import com.prograngers.backend.dto.response.auth.naver.NaverUserInfoResponse;
+import com.prograngers.backend.dto.auth.response.naver.GetNaverTokenResponse;
+import com.prograngers.backend.dto.auth.response.naver.GetNaverUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
@@ -16,7 +17,7 @@ public class NaverOauth {
 
     private final static String TOKEN_URI = "https://nid.naver.com/oauth2.0/token";
     private final static String USER_INFO_URI = "https://openapi.naver.com/v1/nid/me";
-    private final static String code = "test_code";
+    private final static String state = "test_code";
     private final String grantType;
     private final String clientId;
     private final String redirectUri;
@@ -35,27 +36,28 @@ public class NaverOauth {
         this.webClient = webClient;
     }
 
-    public NaverTokenResponse getNaverToken(String code, String state) {
+    public GetNaverTokenResponse getNaverToken(String code, String state) {
+        String encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8);
         return webClient.get()
                 .uri(TOKEN_URI + "?client_id=" + clientId + "&grant_type="
-                        + grantType + "&client_secret=" + clientSecret + "&state=" + state
+                        + grantType + "&client_secret=" + clientSecret + "&state=" + encodedState
                         + "&code=" + code)
                 .retrieve()
-                .bodyToMono(NaverTokenResponse.class)
+                .bodyToMono(GetNaverTokenResponse.class)
                 .block();
     }
 
-    public NaverUserInfoResponse getUserInfo(String accessToken) {
+    public GetNaverUserInfoResponse getUserInfo(String accessToken) {
         return webClient.get()
                 .uri(USER_INFO_URI)
                 .header(HttpHeaders.AUTHORIZATION, String.format(BEARER_FORMAT, accessToken))
                 .retrieve()
-                .bodyToMono(NaverUserInfoResponse.class)
+                .bodyToMono(GetNaverUserInfoResponse.class)
                 .block();
     }
 
-    public String getCode() {
-        return code;
+    public String getState() {
+        return state;
     }
 
 }

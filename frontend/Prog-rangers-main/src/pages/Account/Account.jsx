@@ -13,22 +13,50 @@ export const Account = () => {
     email: '',
     github: '',
     introduction: '',
-    currentModifiedAt: '',
+    passwordModifiedAt: '',
     photo: '',
   });
 
+  // 유저 정보 조회 api
   useEffect(() => {
-    const apiUrl = 'http://{{HOST}}:8080/prog-rangers/mypage/account-settings';
-
-    axios.get(apiUrl)
-      .then(response => {
-        const data = response.data;
-        setUserData(data);
+    const token = localStorage.getItem('token');    
+    fetch("http://13.124.131.171:8080/api/v1/mypage/account-settings", {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`},
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      setUserData({
+        nickname: json.nickname || '',
+        email: json.email || '',
+        github: json.github || '',
+        introduction: json.introduction || '',
+        passwordModifiedAt: json.passwordModifiedAt || '',
+        password: json.password || '',
+        photo: json.photo || '',
       })
-      .catch(error => {
-        console.error('사용자 정보를 가져오는 중 오류 발생:', error);
-      });
+    })
+    .catch((error) => {
+      console.error(error);
+    })
   }, []);
+
+  // 날짜 형식 변환
+  const formattedDate = new Date(userData.passwordModifiedAt);
+
+  const year = formattedDate.getFullYear();
+  const month = formattedDate.getMonth() + 1;
+  const day = formattedDate.getDate();
+  const hours = formattedDate.getHours();
+  const minutes = formattedDate.getMinutes();
+  const seconds = formattedDate.getSeconds();
+
+  const formattedHours = hours < 10 ? `0${hours}` : hours;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  const formattedTime = `${year}년 ${month}월 ${day}일 ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+
 
   return (
     <div 
@@ -80,23 +108,23 @@ export const Account = () => {
               `}>
                 <div className='nickname' css={profileContentStyle}>
                   <div css={css`width: 72px`}>닉네임</div>
-                  <div>{userData.nickname}rlfrkdms1_API1</div>
+                  <div>{userData.nickname}</div>
                 </div>
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>{userData.email}rlfrkdms1@hotmail.com_API2</div>
+                  <div>{userData.email}</div>
                 </div>
                 <div className='github' css={profileContentStyle}>
                  <div css={css`width: 72px`}>깃허브</div>
-                 <div>{userData.github}https://github.com/rlfrkdms1_API3</div>
+                 <div>{userData.github}</div>
                 </div>
                 <div className='introduce' css={profileContentStyle}>
                  <div css={css`width: 72px`}>소개</div>
-                 <div>{userData.introduction}가은이의 풀이노트_API4</div>
+                 <div>{userData.introduction}</div>
                 </div>
                 <div className='pw' css={profileContentStyle}>
                  <div css={css`width: 72px`}>비밀번호</div>
-                 <div>최근 변경일: {userData.currentModifiedAt}2023년 1월 1일_API5</div>
+                 <div>최근 변경일: {formattedTime}</div>
                 </div>
               </div>
             
