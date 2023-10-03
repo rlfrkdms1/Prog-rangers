@@ -25,6 +25,7 @@ import {
 } from './pages';
 import { 
   AddSolution,
+  EditSolution,
   Scrap,
   WriteSolution
 } from './pages/BoardPage';
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
       { path: 'myPage/addsolution', element: <AddSolution/> },
+      { path: 'myPage/solutions/:solutionId/editsolution', element: <EditSolution/> },
     ],
   },
 ]);

@@ -6,17 +6,14 @@ import { Provider, atom, useAtom } from 'jotai';
 
 export const targetScope = Symbol();
 export const targetAtom = atom("");
+export const valueScope = Symbol();
+export const valueAtom = atom("");
 export const nameScope = Symbol();
 export const nameAtom = atom("");
 
 //mypage-my solution-add solution 페이지
 
 export const AddSolution = () => {
-  const refresh = () => {
-    localStorage.removeItem('algorithm');
-    localStorage.removeItem('datastructure');
-    // localStorage.clear();
-  }
 
   const APIURL = `http://13.124.131.171:8080/api/v1/solutions`;
   return(
@@ -34,10 +31,6 @@ export const AddSolution = () => {
         <Provider scope={targetScope}>
           <AddMySolution postURL={APIURL} />
         </Provider>
-        {/* <div css={css`${ButtonDiv} margin-bottom: 80px;`}>
-          <button onClick={refresh()} css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
-          <button css={css`${SubmitButton} background-color: #C2DBE3;`} >작성 완료</button>
-        </div> */}
       </div>
     </div>
   );

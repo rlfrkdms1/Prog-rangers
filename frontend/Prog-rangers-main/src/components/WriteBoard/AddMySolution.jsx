@@ -4,6 +4,8 @@ import Public from '../../assets/icons/solution-public.svg';
 import Private from '../../assets/icons/solution-private.svg';
 import Unfilled from '../../assets/icons/solution-unfilled-star.svg';
 import Filled from '../../assets/icons/solution-filled-star.svg';
+import Delete from '../../assets/icons/solution-tag-delete.svg';
+import { tags } from "../Question/tagsform";
 import { 
   StyledInput, 
   TitleBox, 
@@ -14,33 +16,85 @@ import {
 import { FilterBar } from "../FilterBar";
 import sort from '../../db/autocomplete.json';
 import { useAtomValue } from "jotai";
-import { targetAtom, targetScope, nameAtom, nameScope } from "../../pages/BoardPage/AddSolution";
+import { targetAtom, targetScope, nameAtom, nameScope , valueAtom, valueScope} from "../../pages/BoardPage/AddSolution";
+import { ButtonDiv, SubmitButton } from "../../pages/BoardPage/buttonDiv";
 import { TagAction } from "./TagAction";
+import axios from 'axios';
 
-export const AddMySolution = () => {
+export const AddMySolution = ({postURL}) => {
   const [ isPublic, setIsPublic ] = useState(true);
   const [ clickedStar, setClickedStar ] = useState([false, false, false, false, false]);
-  const target = useAtomValue( targetAtom, targetScope);
-  const name = useAtomValue( nameAtom, nameScope );
+  const token = localStorage.getItem('token');
+  const target = useAtomValue(targetAtom, targetScope);
+  const name = useAtomValue(nameAtom, nameScope);
+  const value = useAtomValue(valueAtom, valueScope);
   const array = [0, 1, 2, 3, 4];
+  const [ inputs, setInputs ] = useState({
+    solution: '',
+    link: '',
+    description: '',
+    code: '',
+  });
+  const [ algo, setAlgo ] = useState([]);
+  const [ data, setData ] = useState([]);
+  useEffect(() => {
+    if(name == 'algorithm'){
+      setAlgo({
+        value: value,
+        name: target,
+      });
+    }
+    if(name == 'datastructure'){
+      setData({
+        value: value,
+        name: target,
+      });
+    }
+    TagDisplay1();
+    TagDisplay2();
+  }, [target]);
+
+  const { solution, link, language, description, code } = inputs;
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
 
   const TagDisplay1 = () => {
-    if(name === "algorithm" && target){
-      localStorage.setItem('algorithm', target);
+    const deleteHandler = () => {
+      setAlgo([]);
     }
-    if(!localStorage.getItem('algorithm'))
-      return <div css={css`height: 35px;`}/>
-    return <TagAction data={localStorage.getItem('algorithm')} />
+    return (
+      <>
+        {algo.length !== 0 ?
+          <div css={css`${tags}`} >
+            {algo.name}
+            <img  onClick={deleteHandler} css={css`margin-left: 15px; &:hover{ cursor: pointer; }`} src={Delete} />
+          </div>
+          : ""
+        }
+      </>
+    )
   }
   const TagDisplay2 = () => {
-    if(name === "datastructure" && target){
-      localStorage.setItem('datastructure', target);
+    const deleteHandler = () => {
+      setData([]);
     }
-    if(!localStorage.getItem('datastructure'))
-      return <div css={css`height: 35px;`}/>
-    
-      return <TagAction data={localStorage.getItem('datastructure')} />
-
+    return (
+      <>
+        {data.length !== 0?
+          <div css={css`${tags}`} >
+            {data.name}
+            <img  onClick={deleteHandler} css={css`margin-left: 15px; &:hover{ cursor: pointer; }`} src={Delete} />
+          </div>
+          : ""
+        }
+      </>
+    )
   }
   const publicHandler = () => {
     setIsPublic(!isPublic);
@@ -51,13 +105,63 @@ export const AddMySolution = () => {
       clickStates[i] = i <= index ? true : false;
     }
     setClickedStar(clickStates);
-  }
-  const sendStars = () => {
-    let stars = clickedStar.filter(Boolean).length;
   };
-  useEffect(() => {
-    sendStars();
-  }, [clickedStar]);
+  const postWrite = async() => {
+    let star = clickedStar.filter(Boolean).length;
+    try{
+      if(inputs.solution === ''){
+        alert('제목을 입력해주세요.');
+        return;
+      }
+      if(inputs.link === ''){
+        alert('링크를 입력해주세요.');
+        return;
+      }
+      if(star === 0){
+        alert('난이도를 체크해주세요.');
+        return;
+      }
+      if(algo === ''){
+        alert('원하는 카테고리를 설정해주세요. 없으면 `알고리즘`으로 선택해주세요.');
+        return;
+      }
+      if(data === ''){
+        alert('원하는 카테고리를 설정해주세요. 없으면 `자료구조`로 선택해주세요.');
+        return;
+      }
+     if(inputs.description === ''){
+      alert('풀이설명을 기록해주세요.');
+      return;
+     }
+     if(inputs.code === ''){
+      alert('코드를 작성해주세요.');
+      return;
+     }
+     const body={
+      problemTitle: '몰라요',
+      solutionTitle: inputs.solution,
+      problemLink: inputs.link,
+      level: star.toString(),
+      algorithm: algo.value,
+      dataStructure: data.value,
+      language: "JAVA",
+      description: inputs.description,
+      code: inputs.code,
+      isPublic: isPublic.toString(),
+     };     
+     const response =  await axios
+      .post(`${postURL}`, body,{
+        headers: { Authorization: `Bearer ${token}`}
+      });
+    if(response.status === 201){
+      alert('질문이 등록되었습니다.');
+      window.location.href = `http://localhost:3000/mypage`;
+    }
+    }
+    catch(error){
+      console.log(error);
+    }    
+  }
 
   return(
     <div>
@@ -83,10 +187,10 @@ export const AddMySolution = () => {
             { isPublic ? <img src={Public}/> : <img src={Private}/>}
           </div>
         </div>
-        <input placeholder="풀이 제목을 입력해주세요" css={css`${StyledInput}`} />
+        <input placeholder="풀이 제목을 입력해주세요" css={css`${StyledInput}`} value={inputs.solution} name="solution" onChange={handleInput}/>
 
         <div css={css`${TitleBox} margin-top: 50px;`}>문제링크</div>
-        <input placeholder="문제 링크를 입력해주세요" css={css`${StyledInput}`}/>
+        <input placeholder="문제 링크를 입력해주세요" css={css`${StyledInput}`} value={inputs.link} name="link" onChange={handleInput}/>
 
         <div placeholder="middle" css={css`display: flex; flex-direction: row; margin-top: 20px; align-items: center;`}>
           <div css={css`${TitleBox}`}>난이도</div>
@@ -96,6 +200,7 @@ export const AddMySolution = () => {
                 key={item}
                 src={clickedStar[item] ? Filled : Unfilled}
                 css={css`&:hover{cursor: pointer;}`}
+                value={inputs.level}
                 onClick={() => fillHandler(item)}
               />
             ))}
@@ -115,14 +220,19 @@ export const AddMySolution = () => {
           {TagDisplay2()}
         </div>
 
-        <div css={css`${TitleBox} margin-top: 50px;`}>풀이 설명</div>
+        <div css={css`${TitleBox} margin-top: 50px;`} >풀이 설명</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} />
+          <textarea css={css`${DetailInput}`} value={inputs.description} name="description" onChange={handleInput}/>
         </div>
 
         <div css={css`${TitleBox} margin-top: 50px;`}>코드</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} />
+          <textarea css={css`${DetailInput}`} value={inputs.code} name="code" onChange={handleInput}/>
+        </div>
+        <div css={css`  margin: 100px 30px 80px 40px; justify-content: flex-end; display: flex; flex-direction: row; height: 50px; 
+`}>
+        <button css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
+        <button onClick={postWrite} css={css`${SubmitButton} background-color: #C2DBE3;`} >작성 완료</button>
         </div>
       </div>
     </div>

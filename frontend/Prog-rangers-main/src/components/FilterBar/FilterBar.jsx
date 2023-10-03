@@ -10,14 +10,14 @@ import {
 import ToggleDown from '../../assets/icons/main-toggle-down.svg';
 import ToggleUp from '../../assets/icons/main-toggle-up.svg';
 import { useAtom } from 'jotai';
-import { targetAtom, targetScope, nameAtom, nameScope } from "../../pages/BoardPage/AddSolution";
+import { targetAtom, targetScope, nameAtom, nameScope, valueAtom, valueScope } from "../../pages/BoardPage/AddSolution";
 import { useEffect } from "react";
-
 
 export const FilterBar = ({title, options, width, secondWidth}) => {
   const [ selectedOption, setSelectedOption ] = useState(options[0]); 
   const [ isOpen, setIsOpen ] = useState(false);
   const [ isClicked, setIsClicked ] = useState(false);
+  const [ value, setValue ] = useAtom( valueAtom, valueScope );
   const [ target, setTarget ] = useAtom( targetAtom, targetScope );
   const [ name, setName ] = useAtom( nameAtom, nameScope );
 
@@ -28,6 +28,7 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
     setSelectedOption(e);
     setIsClicked(true);
     setTarget(e.name);
+    setValue(e.value);
     setName(title);
   };
 
@@ -41,6 +42,7 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
         `}
         value={selectedOption ? selectedOption.value : 'ALL'}
         onChange={handleSelect}
+        onClick={handleToggle}
       >
         <div
           css={css`
@@ -69,7 +71,7 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
                 `}
                 key={index}
                 data-value={item.value}
-                onClick={()=>handleSelect(item)}
+                onClick={()=>(handleSelect(item))}
               >
                 {item.name}
               </div> 
