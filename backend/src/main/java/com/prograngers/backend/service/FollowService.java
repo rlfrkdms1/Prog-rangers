@@ -59,16 +59,18 @@ public class FollowService {
     }
 
     public ShowFollowListResponse getFollowList(Long memberId) {
+        // 팔로우 한 사람이 멤버인경우
         List<Member> followingList = memberRepository.findAllByFollower(memberId);
+        // 팔로우 당한 사람이 멤버인경우
         List<Member> followerList = memberRepository.findAllByFollowing(memberId);
-        List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findByMemberId(memberId));
+        List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findByMemberId(memberId),memberId);
         return ShowFollowListResponse.of(followingList,followerList,recommendedFollows);
     }
 
-    private List<Member> getRecommendedFollows(Solution recentSolution) {
+    private List<Member> getRecommendedFollows(Solution recentSolution, Long memberId) {
         if (recentSolution!=null){
-            return memberRepository.getLimitRecommendedMembers(recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT);
+            return memberRepository.getLimitRecommendedMembers(recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT, memberId);
         }
-        return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT);
+        return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT, memberId);
     }
 }

@@ -19,13 +19,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Member> getLimitRecommendedMembers(Problem problem,Long limit){
+    public List<Member> getLimitRecommendedMembers(Problem problem,Long limit, Long memberId){
         return jpaQueryFactory.select(member)
                 .from(member)
                 .join(solution)
                 .on(solution.member.eq(member))
                 .join(follow)
                 .on(follow.followingId.eq(member.id))
+                .where(member.id.ne(memberId))
+                .where(follow.followerId.ne(memberId))
                 .groupBy(member)
                 .orderBy(follow.count().desc())
                 .limit(limit)
