@@ -10,12 +10,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MemberResponse {
+    private Long id;
     private String nickname;
     private String photo;
     private String introduction;
 
     public static MemberResponse from(Member member) {
         return MemberResponse.builder()
+                .id(member.getId())
                 .nickname(member.getNickname())
                 .photo(member.getPhoto())
                 .introduction(member.getIntroduction())
