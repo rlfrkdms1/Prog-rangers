@@ -23,7 +23,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
         return jpaQueryFactory.select(member)
                 .from(member)
                 .join(solution)
-                .on(solution.member.eq(member))
+                .on(solution.problem.eq(problem))
                 .join(follow)
                 .on(follow.followingId.eq(member.id))
                 .where(member.id.ne(memberId))
