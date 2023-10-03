@@ -27,7 +27,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
                 .from(member)
                 .join(solution)
                 .on(solution.member.eq(member))
-                .join(follow)
+                .leftJoin(follow)
                 .on(follow.followingId.eq(member.id))
                 .where(member.id.ne(memberId),solution.problem.eq(problem))
                 .where(member.id.notIn(
