@@ -21,20 +21,6 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
 
-//    public List<Member> getLimitRecommendedMembers(Problem problem,Long limit, Long memberId){
-//        return jpaQueryFactory.select(member)
-//                .from(member)
-//                .join(solution)
-//                .on(solution.member.eq(member))
-//                .leftJoin(follow) // lefJoin 뺄지 말지 테스트
-//                .on(follow.followingId.eq(member.id))
-//                .where(member.id.ne(memberId),solution.problem.eq(problem),follow.followerId.ne(memberId))
-//                .groupBy(member)
-//                .orderBy(follow.count().desc())
-//                .limit(limit)
-//                .fetch();
-//    }
-
     public List<Member> getLimitRecommendedMembers(Problem problem,Long limit, Long memberId){
         QFollow subFollow = new QFollow("subFollow");
         return jpaQueryFactory.select(member)
