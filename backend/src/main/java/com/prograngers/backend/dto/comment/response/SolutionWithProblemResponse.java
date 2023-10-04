@@ -20,6 +20,7 @@ public class SolutionWithProblemResponse {
     private String solutionTitle;
     private String algorithm;
     private String dataStructure;
+    private String language;
     private String problemTitle;
     private JudgeConstant ojName;
     private String authorImageUrl;
@@ -31,6 +32,7 @@ public class SolutionWithProblemResponse {
         SolutionWithProblemResponse response = SolutionWithProblemResponse.builder()
                 .solutionId(solution.getId())
                 .solutionTitle(solution.getTitle())
+                .language(solution.getLanguage().getView())
                 .problemTitle(problem.getTitle())
                 .ojName(problem.getOjName())
                 .authorImageUrl(author.getPhoto())
