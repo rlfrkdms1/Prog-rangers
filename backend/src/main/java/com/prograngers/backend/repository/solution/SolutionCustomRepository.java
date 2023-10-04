@@ -26,4 +26,5 @@ public interface SolutionCustomRepository {
     List<Solution> findMyRecentSolutions(Long memberId, int limit);
 
     List<Solution> findFollowingsRecentSolutions(Long memberId, int limit);
+    List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
 }

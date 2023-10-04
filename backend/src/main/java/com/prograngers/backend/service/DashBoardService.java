@@ -43,12 +43,6 @@ public class DashBoardService {
     @Transactional
     public ShowDashBoardResponse getDashboard(Long memberId, YearMonth date) {
         if (date == null) date = YearMonth.now();
-        ShowDashBoardResponse showDashBoardResponse = create(memberId, date);
-        notificationRepository.findAllNotReadByMemberId(memberId).stream().forEach(Notification::read);
-        return showDashBoardResponse;
-    }
-
-    public ShowDashBoardResponse create(Long memberId, YearMonth date) {
         Member member = findMemberById(memberId);
 
         List<NotificationWithSolutionResponse> notifications = getNotifications(memberId);
@@ -62,7 +56,9 @@ public class DashBoardService {
 
     private List<NotificationWithSolutionResponse> getNotifications(Long memberId) {
         List<Notification> notifications = notificationRepository.findByMemberIdAndLimit(memberId, DASHBOARD_NOTIFICATION_LIMIT);
-        return notifications.stream().map(notification -> NotificationWithSolutionResponse.of(notification, notification.getSolution())).collect(Collectors.toList());
+        List<NotificationWithSolutionResponse> response = notifications.stream().map(notification -> NotificationWithSolutionResponse.of(notification, notification.getSolution())).collect(Collectors.toList());
+        notifications.stream().forEach(Notification::read);
+        return response;
     }
 
     private List<SolutionWithProblemResponse> getMyRecentSolutions(Long memberId) {

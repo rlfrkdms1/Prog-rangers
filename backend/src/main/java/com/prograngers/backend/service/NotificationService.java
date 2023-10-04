@@ -119,7 +119,9 @@ public class NotificationService {
     public ShowNotificationsResponse getNotifications(Long memberId, int page) {
         validPage(page);
         Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_LIMIT));
-        return ShowNotificationsResponse.from(notifications);
+        ShowNotificationsResponse response = ShowNotificationsResponse.from(notifications);
+        notifications.stream().forEach(Notification::read);
+        return response;
     }
 
     private void validPage(int page) {
