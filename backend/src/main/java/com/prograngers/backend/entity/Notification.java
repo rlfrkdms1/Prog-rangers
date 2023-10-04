@@ -64,4 +64,10 @@ public class Notification {
     @JoinColumn(name = "review_id")
     private Review review;
 
+    public void read() {
+        if (!isRead) {
+            this.isRead = true;
+        }
+    }
+
 }
