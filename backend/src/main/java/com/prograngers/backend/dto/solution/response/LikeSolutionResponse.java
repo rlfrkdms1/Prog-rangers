@@ -9,16 +9,16 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class SolutionWithProblemForListResponse {
+public class LikeSolutionResponse {
 
     private ProblemResponse problem;
-    private SolutionForListResponse solution;
+    private SolutionForLikeResponse solution;
 
-    public static SolutionWithProblemForListResponse from(Solution solution) {
+    public static LikeSolutionResponse from(Solution solution) {
         Problem problem = solution.getProblem();
-        return SolutionWithProblemForListResponse.builder()
+        return LikeSolutionResponse.builder()
                 .problem(ProblemResponse.from(problem))
-                .solution(SolutionForListResponse.from(solution))
+                .solution(SolutionForLikeResponse.from(solution))
                 .build();
     }
 
