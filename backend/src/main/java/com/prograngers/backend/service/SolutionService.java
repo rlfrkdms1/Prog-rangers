@@ -69,11 +69,11 @@ public class SolutionService {
 
     @Transactional
     public Long save(WriteSolutionRequest writeSolutionRequest, Long memberId) {
-        Solution solution = writeSolutionRequest.toSolution(findMemberById(memberId),writeProblem(writeSolutionRequest));
+        Solution solution = writeSolutionRequest.toSolution(findMemberById(memberId),save(writeSolutionRequest));
         return solutionRepository.save(solution).getId();
     }
 
-    private Problem writeProblem(WriteSolutionRequest writeSolutionRequest) {
+    private Problem save(WriteSolutionRequest writeSolutionRequest) {
         String problemLink = writeSolutionRequest.getProblemLink();
         Optional<Problem> problem = problemRepository.findByLink(problemLink);
         if (problem.isPresent()){
