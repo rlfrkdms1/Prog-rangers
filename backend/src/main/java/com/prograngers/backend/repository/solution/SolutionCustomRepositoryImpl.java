@@ -13,9 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
-
 import static com.prograngers.backend.entity.QFollow.follow;
 import static com.prograngers.backend.entity.QLikes.*;
 import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
