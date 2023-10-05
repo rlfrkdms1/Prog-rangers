@@ -22,7 +22,6 @@ public enum AlgorithmConstant implements HashTag {
 
     private final String view;
 
-    @JsonCreator
     public static AlgorithmConstant from(String value) {
         for (AlgorithmConstant algorithm : AlgorithmConstant.values()) {
             if (algorithm.getView().equals(value)) {
@@ -32,7 +31,6 @@ public enum AlgorithmConstant implements HashTag {
         throw new AlgorithmNotFoundException();
     }
 
-    @JsonValue
     public String getView() {
         return view;
     }

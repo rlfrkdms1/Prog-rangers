@@ -17,7 +17,6 @@ public enum DataStructureConstant implements HashTag {
 
     private final String view;
 
-    @JsonCreator
     public static DataStructureConstant from(String value) {
         for (DataStructureConstant dataStructure : DataStructureConstant.values()) {
             if (dataStructure.getView().equals(value)) {
@@ -27,7 +26,6 @@ public enum DataStructureConstant implements HashTag {
         throw new DataStructureNotFoundException();
     }
 
-    @JsonValue
     public String getView() {
         return view;
     }

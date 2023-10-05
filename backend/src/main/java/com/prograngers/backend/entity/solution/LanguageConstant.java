@@ -14,7 +14,6 @@ public enum LanguageConstant implements HashTag {
     C("C");
     private final String view;
 
-    @JsonCreator
     public static LanguageConstant from(String value) {
         for (LanguageConstant language : LanguageConstant.values()) {
             if (language.getView().equals(value)) {
@@ -24,7 +23,6 @@ public enum LanguageConstant implements HashTag {
         throw new LanguageNotFoundException();
     }
 
-    @JsonValue
     public String getView() {
         return view;
     }
