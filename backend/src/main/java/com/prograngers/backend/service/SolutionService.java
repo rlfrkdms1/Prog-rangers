@@ -69,8 +69,17 @@ public class SolutionService {
 
     @Transactional
     public Long save(WriteSolutionRequest writeSolutionRequest, Long memberId) {
-        Solution solution = writeSolutionRequest.toSolution(getProblem(writeSolutionRequest), findMemberById(memberId));
+        Solution solution = writeSolutionRequest.toSolution(findMemberById(memberId),save(writeSolutionRequest));
         return solutionRepository.save(solution).getId();
+    }
+
+    private Problem save(WriteSolutionRequest writeSolutionRequest) {
+        String problemLink = writeSolutionRequest.getProblemLink();
+        Optional<Problem> problem = problemRepository.findByLink(problemLink);
+        if (problem.isPresent()){
+            return problem.get();
+        }
+        return problemRepository.save(writeSolutionRequest.toProblem(validLink(writeSolutionRequest.getProblemLink())));
     }
 
     @Transactional
@@ -102,7 +111,7 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long saveScrap(Long scrapTargetId, ScarpSolutionRequest request, Long memberId) {
+    public Long scrap(Long scrapTargetId, ScarpSolutionRequest request, Long memberId) {
         Solution solution = request.toSolution(findSolutionById(scrapTargetId), findMemberById(memberId));
         return solutionRepository.save(solution).getId();
     }
