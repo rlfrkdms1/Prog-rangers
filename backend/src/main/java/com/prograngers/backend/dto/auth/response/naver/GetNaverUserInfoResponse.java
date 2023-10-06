@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public class GetNaverUserInfoResponse {
 
-    private NaverSocialIdResponse naverSocialIdResponse;
+    private NaverSocialIdResponse response;
 
     public Member toMember(){
         return Member.builder()
-                .socialId(Long.valueOf(naverSocialIdResponse.getId().hashCode()))
+                .socialId(Long.valueOf(response.getId().hashCode()))
                 .type(MemberType.NAVER)
                 .build();
     }

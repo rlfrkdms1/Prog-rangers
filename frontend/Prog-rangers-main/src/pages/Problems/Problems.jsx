@@ -7,58 +7,29 @@ import { FilterBar } from '../../components/FilterBar';
 import { QuestionForm } from '../../components/Question';
 import { Pagination } from '../../components/Pagination/Pagination';
 import questions from '../../db/question.json';
+import sort from '../../db/autocomplete.json';
 import { Provider, atom, useAtom } from 'jotai';
-
-const ALGORITHMS = [
-  { value: "ALL", name: "알고리즘" },
-  { value: "BUBBLE_SORT", name: "버블정렬" },
-  { value: "SELECTION_SORT", name: "선택정렬" },
-  { value: "INSERTION_SORT", name: "삽입정렬" },
-  { value: "HEAP_SORT", name: "힙정렬" },
-  { value: "MERGE_SORT", name: "합병정렬" },
-  { value: "QUICK_SORT", name: "퀵정렬" },
-  { value: "LINEAR_SEARCH", name: "선형탐색" },
-  { value: "BINARY_SEARCH", name: "이진탐색" },
-  { value: "BFS", name: "너비우선탐색" },
-  { value: "DFS", name: "깊이우선탐색" },
-  { value: "DIJKSTRA", name: "데이크스트라"}
-];
-
-const DATASTRUCTURE = [
-  { value: "ALL", name: "자료구조" },
-  { value: "LIST", name: "리스트" },
-  { value: "ARRAY", name: "배열" },
-  { value: "STACK", name: "스택" },
-  { value: "QUEUE", name: "큐" },
-  { value: "MAP", name: "맵" },
-  { value: "HEAP", name: "힙" }
-];
-
-const LEVEL = [
-  { value: "LATEST", name: "최신순"},
-  { value: "LIKES", name: "관심순" },
-  { value: "VIEWS", name: "조회순" }
-];
+import axios from 'axios';
 
 const questionAtom = atom(questions);
 
 export const Problems = () => {
   const [ page, setPage ] = useState(1);
   const [ Questions, setQuestions ] = useAtom(questionAtom);
-  const itemsPerPage = 5;
-  // const LAST_PAGE = Questions.length % 5 === 0 ? parseInt(Questions.length / 5) : parseInt(Questions.length / 5) + 1;
-  const totalQuestions = questions.length;
-  const totalPages = Math.ceil(totalQuestions / itemsPerPage);
+  const [ totalPages, setTotalPages ] = useState(1);
+
+  const AllQuestions = async() => {
+    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems?page=${page-1}`);
+    setQuestions(response.data.problems);
+    setTotalPages(response.data.totalCount);
+  }
 
   const handlePageChange = (e, page) => {
     setPage(page);
   };
 
   useEffect(() => {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentQuestions = questions.slice(startIndex, endIndex);
-    setQuestions(currentQuestions);
+    AllQuestions();
   }, [page]);
 
   return (
@@ -90,9 +61,9 @@ export const Problems = () => {
             justify-content: space-between;
             z-index: 2;
         `}>
-          <FilterBar options={ALGORITHMS}/>
-          <FilterBar options={DATASTRUCTURE}/>
-          <FilterBar options={LEVEL}/>
+          <FilterBar options={sort.ALGORITHM}/>
+          <FilterBar options={sort.DATASTRUCTURE}/>
+          <FilterBar options={sort.LEVEL}/>
         </div>
         <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
           <QuestionForm data={Questions}/>

@@ -2,8 +2,8 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
+import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.service.CommentService;
 import jakarta.validation.Valid;
@@ -28,12 +28,9 @@ import java.net.URI;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class CommentController {
-    private final MessageSource messageSource;
+
     private final CommentService commentService;
-
     private static final String PAGE_NUMBER_DEFAULT = "1";
-
-
 
     @Login
     @GetMapping("/mypage/comments")
@@ -43,35 +40,26 @@ public class CommentController {
 
     @Login
     @PostMapping("/solutions/{solutionId}/comments")
-    public ResponseEntity<Void> addComment(@PathVariable Long solutionId, @RequestBody @Valid CommentRequest commentRequest,
-                                           @LoggedInMember Long memberId) {
-        commentService.addComment(solutionId, commentRequest, memberId);
-        return redirect(solutionId);
+    public ResponseEntity<Void> write(@PathVariable Long solutionId, @RequestBody @Valid WriteCommentRequest request,
+                                      @LoggedInMember Long memberId) {
+        commentService.addComment(solutionId, request, memberId);
+        return ResponseEntity.created(URI.create("/api/v1/solutions/" + solutionId)).build();
     }
 
     @Login
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<Void> updateComment(@PathVariable Long commentId,
-                                              @RequestBody @Valid CommentPatchRequest commentPatchRequest,
-                                              @LoggedInMember Long memberId) {
-        Long solutionId = commentService.updateComment(commentId, commentPatchRequest, memberId);
-        return redirect(solutionId);
+    public ResponseEntity<Void> update(@PathVariable Long commentId,
+                                       @RequestBody @Valid UpdateCommentRequest request,
+                                       @LoggedInMember Long memberId) {
+        commentService.updateComment(commentId, request, memberId);
+        return ResponseEntity.noContent().build();
     }
 
     @Login
-    @DeleteMapping("/solutions/{solutionId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long solutionId, @PathVariable Long commentId,
-                                              @LoggedInMember Long memberId) {
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Void> delete(@PathVariable Long commentId,
+                                       @LoggedInMember Long memberId) {
         commentService.deleteComment(commentId, memberId);
-        return redirect(solutionId);
+        return ResponseEntity.noContent().build();
     }
-
-    private ResponseEntity<Void> redirect(Long solutionId) {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(getRedirectPath() + solutionId)).build();
-    }
-
-    private String getRedirectPath() {
-        return messageSource.getMessage("redirect_path", null, null) + "/solutions/";
-    }
-
 }

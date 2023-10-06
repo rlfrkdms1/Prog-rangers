@@ -23,8 +23,6 @@ export const FilterBar = ({options}) => {
     setIsClicked(true);
   };
 
-  // console.log(options[0]);
-
   return(
     <div css={css`${Fragment}`}>
       <div 

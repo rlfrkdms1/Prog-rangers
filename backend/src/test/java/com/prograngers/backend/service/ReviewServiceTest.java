@@ -1,7 +1,6 @@
-/*
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.review.request.ReviewPatchRequest;
+import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.review.Review;
@@ -12,15 +11,12 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -36,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -97,8 +92,8 @@ class ReviewServiceTest {
                 ()->assertThrows(ReviewAlreadyDeletedException.class,()->reviewService.deleteReview(1L,1L))
         );
     }
-    private ReviewPatchRequest 리뷰_수정_요청_생성(){
-        return new ReviewPatchRequest("수정 내용");
+    private UpdateReviewRequest 리뷰_수정_요청_생성(){
+        return new UpdateReviewRequest("수정 내용");
     }
 
-}*/
+}

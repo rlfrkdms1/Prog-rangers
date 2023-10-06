@@ -19,8 +19,7 @@ import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.support.fixture.ReviewFixture.FIRST_LINE_REVIEW;
-import static com.prograngers.backend.support.fixture.ReviewFixture.SECOND_LINE_REVIEW;
+import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,11 +44,11 @@ class ReviewRepositoryTest {
         Problem problem = 저장(백준_문제.기본_정보_생성());
         Solution solution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
 
-        Integer dayOfReview1 = 저장(FIRST_LINE_REVIEW.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 5, 12, 10))).getCreatedAt().getDayOfMonth();
-        Integer dayOfReview2 = 저장(SECOND_LINE_REVIEW.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 3, 12, 10))).getCreatedAt().getDayOfMonth();
-        Integer dayOfReview3 = 저장(FIRST_LINE_REVIEW.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 6, 12, 10))).getCreatedAt().getDayOfMonth();
-        Integer dayOfReview4 = 저장(SECOND_LINE_REVIEW.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 8, 8, 12, 10))).getCreatedAt().getDayOfMonth();
-        Integer dayOfReview5 = 저장(FIRST_LINE_REVIEW.기본_정보_생성(member2, solution, LocalDateTime.of(2023, 9, 10, 12, 10))).getCreatedAt().getDayOfMonth();
+        Integer dayOfReview1 = 저장(생성된_리뷰.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 5, 12, 10))).getCreatedAt().getDayOfMonth();
+        Integer dayOfReview2 = 저장(생성된_리뷰.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 3, 12, 10))).getCreatedAt().getDayOfMonth();
+        Integer dayOfReview3 = 저장(생성된_리뷰.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 6, 12, 10))).getCreatedAt().getDayOfMonth();
+        Integer dayOfReview4 = 저장(생성된_리뷰.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 8, 8, 12, 10))).getCreatedAt().getDayOfMonth();
+        Integer dayOfReview5 = 저장(생성된_리뷰.기본_정보_생성(member2, solution, LocalDateTime.of(2023, 9, 10, 12, 10))).getCreatedAt().getDayOfMonth();
 
         List<Integer> dayOfWriteReview1 = reviewRepository.findAllByMonth(member1.getId(), 9);
         List<Integer> dayOfWriteReview2 = reviewRepository.findAllByMonth(member2.getId(), 9);

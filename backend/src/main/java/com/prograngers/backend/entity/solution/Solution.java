@@ -2,10 +2,13 @@ package com.prograngers.backend.entity.solution;
 
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.member.Member;
-import jakarta.annotation.Nullable;
+import com.prograngers.backend.support.converter.AlgorithmConverter;
+import com.prograngers.backend.support.converter.DataStructureConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -19,7 +22,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,13 +30,14 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Solution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;
 
@@ -41,40 +45,39 @@ public class Solution {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scrap_id")
-    @Nullable
     private Solution scrapSolution;
 
-    @Column(nullable = false, updatable = false)
     @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Convert(converter = AlgorithmConverter.class)
+    @Column(name = "algorithm")
     private AlgorithmConstant algorithm;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Convert(converter = DataStructureConverter.class)
+    @Column(name = "data_structure")
     private DataStructureConstant dataStructure;
 
-    @Column(nullable = false)
+    @Column(name = "level", nullable = false)
     private Integer level;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "language", nullable = false)
     private LanguageConstant language;
 
     private void updateTitle(String title) {

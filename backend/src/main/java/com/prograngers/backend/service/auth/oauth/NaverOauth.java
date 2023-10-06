@@ -7,6 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
@@ -14,7 +17,7 @@ public class NaverOauth {
 
     private final static String TOKEN_URI = "https://nid.naver.com/oauth2.0/token";
     private final static String USER_INFO_URI = "https://openapi.naver.com/v1/nid/me";
-    private final static String code = "test_code";
+    private final static String state = "test_code";
     private final String grantType;
     private final String clientId;
     private final String redirectUri;
@@ -34,9 +37,10 @@ public class NaverOauth {
     }
 
     public GetNaverTokenResponse getNaverToken(String code, String state) {
+        String encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8);
         return webClient.get()
                 .uri(TOKEN_URI + "?client_id=" + clientId + "&grant_type="
-                        + grantType + "&client_secret=" + clientSecret + "&state=" + state
+                        + grantType + "&client_secret=" + clientSecret + "&state=" + encodedState
                         + "&code=" + code)
                 .retrieve()
                 .bodyToMono(GetNaverTokenResponse.class)
@@ -52,8 +56,8 @@ public class NaverOauth {
                 .block();
     }
 
-    public String getCode() {
-        return code;
+    public String getState() {
+        return state;
     }
 
 }

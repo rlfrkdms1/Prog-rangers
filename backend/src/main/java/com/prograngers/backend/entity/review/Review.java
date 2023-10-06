@@ -5,6 +5,7 @@ import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
 import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
@@ -26,6 +30,7 @@ import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Review {
 
     private static final String DELETED_CONTENT = "삭제된 리뷰입니다";
@@ -50,6 +55,7 @@ public class Review {
     @Column(nullable = false)
     private String content;
 
+    @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -57,10 +63,9 @@ public class Review {
     @Enumerated(value = EnumType.STRING)
     private ReviewStatusConstant status;
 
-    public Review update(String content){
+    public void update(String content){
         this.content = content;
         this.status = FIXED;
-        return this;
     }
 
     public void delete() {

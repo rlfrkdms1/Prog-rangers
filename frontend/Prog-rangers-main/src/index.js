@@ -22,9 +22,12 @@ import {
   MySolution,
   MyComment,
   Like,
-  Follow
+  Follow,
+  AccountChange
 } from './pages';
-import { KakaoReirect } from './components/SignUp/KakaoRedirect';
+import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
+import { NaverRedirect } from './components/SignUp/NaverRedirect';
+import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
 
 const router = createBrowserRouter([
   {
@@ -34,8 +37,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
-      { path: 'signIn', element: <SignIn /> },
-      { path: 'signIn/kakao', element: <KakaoReirect/> },
+      { path: 'login', element: <SignIn /> },
+      { path: 'login/kakao', element: <KakaoRedirect/> },
+      { path: 'login/naver', element: <NaverRedirect/> },
+      { path: 'login/google', element: <GoogleRedirect/> },
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',
@@ -56,6 +61,7 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
+      { path: 'accountChange', element: <AccountChange /> },
     ],
   },
 ]);
@@ -64,7 +70,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root')
 );
 root.render(
-  <RouterProvider router={router} />
+    <RouterProvider router={router} />
 );
 
 // If you want to start measuring performance in your app, pass a function

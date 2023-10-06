@@ -1,0 +1,36 @@
+{
+  "LANGUAGE": [
+    {"value": "ALL", "name": "언어"},
+    {"value": "PYTHON", "name": "PYTHON"},
+    {"value": "JAVA", "name": "JAVA"},
+    {"value": "C++", "name": "C++"}
+  ],
+  "ALGORITHM": [
+    { "value": "ALL", "name": "알고리즘" },
+    { "value": "BUBBLE_SORT", "name": "버블정렬" },
+    { "value": "SELECTION_SORT", "name": "선택정렬" },
+    { "value": "INSERTION_SORT", "name": "삽입정렬" },
+    { "value": "HEAP_SORT", "name": "힙정렬" },
+    { "value": "MERGE_SORT", "name": "합병정렬" },
+    { "value": "QUICK_SORT", "name": "퀵정렬" },
+    { "value": "LINEAR_SEARCH", "name": "선형탐색" },
+    { "value": "BINARY_SEARCH", "name": "이진탐색" },
+    { "value": "BFS", "name": "너비우선탐색" },
+    { "value": "DFS", "name": "깊이우선탐색" },
+    { "value": "DIJKSTRA", "name": "데이크스트라"}
+  ],
+  "DATASTRUCTURE": [
+    { "value": "ALL", "name": "자료구조" },
+    { "value": "LIST", "name": "리스트" },
+    { "value": "ARRAY", "name": "배열" },
+    { "value": "STACK", "name": "스택" },
+    { "value": "QUEUE", "name": "큐" },
+    { "value": "MAP", "name": "맵" },
+    { "value": "HEAP", "name": "힙" }
+  ],
+  "LEVEL": [
+    { "value": "LATEST", "name": "최신순"},
+    { "value": "LIKES", "name": "관심순" },
+    { "value": "VIEWS", "name": "조회순" }
+  ]
+}

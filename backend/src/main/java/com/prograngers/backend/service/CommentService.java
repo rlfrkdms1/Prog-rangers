@@ -1,7 +1,7 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.comment.request.CommentPatchRequest;
-import com.prograngers.backend.dto.comment.request.CommentRequest;
+import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
+import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
@@ -55,23 +55,23 @@ public class CommentService {
 
     // 댓글 작성
     @Transactional
-    public void addComment(Long solutionId, CommentRequest commentRequest, Long memberId) {
+    public void addComment(Long solutionId, WriteCommentRequest writeCommentRequest, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
-        Comment comment = commentRequest.toComment(member,solution);
+        Comment comment = writeCommentRequest.toComment(member,solution);
         commentRepository.save(comment);
     }
 
     @Transactional
-    public Long updateComment(Long commentId, CommentPatchRequest commentPatchRequest, Long memberId) {
+    public Long updateComment(Long commentId, UpdateCommentRequest updateCommentRequest, Long memberId) {
         Comment comment = findById(commentId);
         Long targetCommentMemberId = comment.getMember().getId();
 
         Member member = findMemberById(memberId);
         validMemberAuthorization(targetCommentMemberId, member);
-        comment.update(commentPatchRequest.getContent());
+        comment.update(updateCommentRequest.getContent());
         // 리다이렉트 하기 위해 Solution의 Id 반환
-        return commentRepository.save(comment).getSolution().getId();
+        return comment.getId();
     }
 
     @Transactional

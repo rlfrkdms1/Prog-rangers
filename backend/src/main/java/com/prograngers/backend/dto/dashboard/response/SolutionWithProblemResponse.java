@@ -22,7 +22,8 @@ public class SolutionWithProblemResponse {
         this.solutionId = solutionId;
     }
 
-    public static SolutionWithProblemResponse of(Solution solution, Problem problem) {
+    public static SolutionWithProblemResponse from(Solution solution) {
+        Problem problem = solution.getProblem();
         return SolutionWithProblemResponse.builder()
                 .title(solution.getTitle())
                 .ojName(problem.getOjName().name())

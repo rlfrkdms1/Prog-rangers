@@ -11,7 +11,7 @@ import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
-import com.prograngers.backend.exception.unauthorization.IncorrectCodeInNaverLoginException;
+import com.prograngers.backend.exception.unauthorization.IncorrectStateInNaverLoginException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
@@ -48,7 +48,7 @@ public class AuthService {
         Member member = findByEmail(loginRequest.getEmail());
         validPassword(member.getPassword(), loginRequest.getPassword());
         //access token 발급
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     private Member findByEmail(String email) {
@@ -61,11 +61,12 @@ public class AuthService {
         }
     }
 
-    private AuthResult issueToken(Long memberId) {
+    private AuthResult issueToken(Member member) {
+        Long memberId = member.getId();
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
         //refresh token 발급, 저장, 쿠키 생성
         RefreshToken refreshToken = refreshTokenRepository.save(createRefreshToken(memberId));
-        return new AuthResult(accessToken, refreshToken.getRefreshToken(), refreshToken.getExpiredAt());
+        return AuthResult.of(accessToken, refreshToken, member);
     }
 
     private RefreshToken createRefreshToken(Long memberId) {
@@ -80,7 +81,7 @@ public class AuthService {
         member.encodePassword(member.getPassword());
         memberRepository.save(member);
         //access token 발급
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     private void validExistMember(SignUpRequest signUpRequest) {
@@ -95,7 +96,11 @@ public class AuthService {
         RefreshToken findRefreshToken = validRefreshToken(refreshToken);
         Long memberId = findRefreshToken.getMemberId();
         refreshTokenRepository.delete(findRefreshToken);
-        return issueToken(memberId);
+        return issueToken(findMemberById(memberId));
+    }
+
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private RefreshToken validRefreshToken(String refreshToken) {
@@ -109,7 +114,7 @@ public class AuthService {
         GetKakaoUserInfoResponse getKakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(getKakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(getKakaoUserInfoResponse.getId())
                 .orElseGet(() -> socialRegister(getKakaoUserInfoResponse.toMember()));
-        return issueToken(member.getId());
+        return issueToken(member);
     }
     @Transactional
     public AuthResult googleLogin(String code) {
@@ -117,21 +122,21 @@ public class AuthService {
         GetGoogleUserInfoResponse getGoogleUserInfoResponse = googleOauth.googleGetUserInfo(getGoogleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(getGoogleUserInfoResponse.getId().hashCode()))
                 .orElseGet(() -> socialRegister(getGoogleUserInfoResponse.toMember()));
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
     @Transactional
     public AuthResult naverLogin(String code, String state) {
-        validCode(code);
         GetNaverTokenResponse naverToken = naverOauth.getNaverToken(code, state);
+        log.info(naverToken.toString());
         GetNaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
-        Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getNaverSocialIdResponse().getId().hashCode()))
+        Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
                 .orElseGet(() -> socialRegister(userInfo.toMember()));
-        return issueToken(member.getId());
+        return issueToken(member);
     }
 
-    private void validCode(String code) {
-        if(!code.equals(naverOauth.getCode())) throw new IncorrectCodeInNaverLoginException();
+    private void validState(String state) {
+        if(!state.equals(naverOauth.getState())) throw new IncorrectStateInNaverLoginException();
     }
 
     private Member socialRegister(Member member) {
