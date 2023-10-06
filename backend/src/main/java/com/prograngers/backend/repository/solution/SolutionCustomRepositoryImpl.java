@@ -26,6 +26,15 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    public Solution findOneRecentSolutionByMemberId(Long memberId){
+        return jpaQueryFactory
+                .selectFrom(solution)
+                .where(solution.member.id.eq(memberId))
+                .orderBy(solution.createdAt.desc())
+                .limit(1)
+                .fetchOne();
+    }
+
     @Override
     public PageImpl<Solution> getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language,
