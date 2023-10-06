@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class ShowFollowListResponse {
         private List<MemberResponse> followings;
         private List<MemberResponse> followers;
-        private List<MemberResponse> recommendedFollowers;
+        private List<MemberResponse> recommends;
 
     public static ShowFollowListResponse of(List<Member> followingList, List<Member> followerList, List<Member> recommendedFollows) {
         return ShowFollowListResponse.builder()
@@ -25,7 +25,7 @@ public class ShowFollowListResponse {
                 .followers(followerList.stream()
                         .map(MemberResponse::from)
                         .collect(Collectors.toList()))
-                .recommendedFollowers(recommendedFollows.stream()
+                .recommends(recommendedFollows.stream()
                         .map(MemberResponse::from)
                         .collect(Collectors.toList()))
                 .build();
