@@ -1,4 +1,3 @@
-/*
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
@@ -12,14 +11,12 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -35,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -100,4 +96,4 @@ class ReviewServiceTest {
         return new UpdateReviewRequest("수정 내용");
     }
 
-}*/
+}

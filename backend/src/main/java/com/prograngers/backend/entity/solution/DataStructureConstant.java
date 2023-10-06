@@ -8,26 +8,25 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum DataStructureConstant implements HashTag {
-    LIST("LIST"),
-    ARRAY("ARRAY"),
-    STACK("STACK"),
-    QUEUE("QUEUE"),
-    MAP("MAP"),
-    HEAP("HEAP");
-    private final String stringValue;
+    LIST("리스트"),
+    ARRAY("배열"),
+    STACK("스택"),
+    QUEUE("큐"),
+    MAP("맵"),
+    HEAP("힙");
 
-    @JsonCreator
+    private final String view;
+
     public static DataStructureConstant from(String value) {
         for (DataStructureConstant dataStructure : DataStructureConstant.values()) {
-            if (dataStructure.getStringValue().equals(value)) {
+            if (dataStructure.getView().equals(value)) {
                 return dataStructure;
             }
         }
         throw new DataStructureNotFoundException();
     }
 
-    @JsonValue
-    public String getStringValue() {
-        return stringValue;
+    public String getView() {
+        return view;
     }
 }

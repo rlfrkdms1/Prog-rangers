@@ -23,6 +23,6 @@ public class DashBoardController {
     @GetMapping("/mypage/dashboard")
     public ShowDashBoardResponse show(@LoggedInMember Long memberId,
                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth date){
-        return dashBoardService.createDashBoard(memberId, date);
+        return dashBoardService.getDashboard(memberId, date);
     }
 }

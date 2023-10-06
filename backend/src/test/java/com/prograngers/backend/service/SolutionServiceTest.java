@@ -56,11 +56,10 @@ import static com.prograngers.backend.support.fixture.ReviewFixture.SECOND_LINE_
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -100,7 +99,7 @@ class SolutionServiceTest {
         when(solutionRepository.save(any())).thenReturn(Optional.of(scrapResult).get());
 
         // when
-        solutionService.saveScrap(scrapTarget.getId(), request, member.getId());
+        solutionService.writeScrap(scrapTarget.getId(), request, member.getId());
 
         // then
         verify(solutionRepository, times(1)).save(any());
@@ -250,7 +249,7 @@ class SolutionServiceTest {
     }
 
     @Test
-    @DisplayName("풀이를 생성한 후 풀이 id를 반환한다")
+    @DisplayName("새로운 문제의 풀이를 생성한 후 풀이 id를 반환한다")
     void saveTest(){
         //given
         final Long memberId = 1L;
@@ -261,14 +260,20 @@ class SolutionServiceTest {
         final Solution expectedSolution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 1);
 
         when(solutionRepository.save(any(Solution.class))).thenReturn(expectedSolution);
-        when(problemRepository.findByLink(any())).thenReturn(null);
+        when(problemRepository.findByLink(any())).thenReturn(Optional.empty());
+        when(problemRepository.save(any(Problem.class))).thenReturn(problem);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
 
         //when
         Long resultId = solutionService.save(request, memberId);
 
         //then
-        Assertions.assertThat(resultId).isEqualTo(expectedSolution.getId());
+
+        assertAll(
+                ()-> assertThat(resultId).isEqualTo(expectedSolution.getId()),
+                ()-> verify(solutionRepository,times(1)).save(any(Solution.class)),
+                ()-> verify(problemRepository,times(1)).save(any(Problem.class))
+        );
     }
 
     @Test
@@ -277,8 +282,10 @@ class SolutionServiceTest {
         //given
         final Long memberId = 1L;
         final String WRONG_LINK = "wrongLink123";
+        Member member = 장지담.아이디_지정_생성(memberId);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",WRONG_LINK, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
 
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(problemRepository.findByLink(any())).thenReturn(Optional.empty());
 
         //when, then
@@ -353,7 +360,34 @@ class SolutionServiceTest {
         //when
         ShowSolutionDetailResponse result = solutionService.getSolutionDetail(solutionId, memberId);
         //then
-        Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(result).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("이미 존재하는 문제로 풀이 생성 시 문제는 저장되지 않는다")
+    void saveTestWhenProblemAlreadyExists(){
+        //given
+        final Long memberId = 1L;
+        final Long solutionId = 1L;
+        final Member member = 장지담.아이디_지정_생성(memberId);
+        final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", "https://www.acmicpc.net/problem/2557", 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
+        final Problem problem = 백준_문제.기본_정보_생성();
+        final Solution expectedSolution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now(), JAVA, 1);
+
+        when(solutionRepository.save(any(Solution.class))).thenReturn(expectedSolution);
+        when(problemRepository.findByLink(any())).thenReturn(Optional.of(problem));
+        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
+
+        //when
+        Long resultId = solutionService.save(request, memberId);
+
+        //then
+
+        assertAll(
+                ()-> assertThat(resultId).isEqualTo(expectedSolution.getId()),
+                ()-> verify(solutionRepository,times(1)).save(any(Solution.class)),
+                ()-> verify(problemRepository,never()).save(any(Problem.class))
+        );
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){

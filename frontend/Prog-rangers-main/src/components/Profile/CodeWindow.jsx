@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/react";
 import axios from "axios";
-// import hljs from "highlight.js";
+import hljs from "highlight.js";
+import './github-dark-dimmed.css';
 
 export const CodeWindow = () => {
     const [codeData, setCodeData] = useState({ list: [] });
@@ -51,7 +52,8 @@ export const CodeWindow = () => {
             <pre css={css`font-size: 20px; white-space: pre-wrap;`} >
               {item.code.map((line, lineIndex) => (
               <React.Fragment key={lineIndex}>
-                {lineIndex} {' '} {line}
+                 {lineIndex} {'  '}
+                <span dangerouslySetInnerHTML={{ __html: hljs.highlightAuto(line).value }} />
                 <br />
               </React.Fragment>
               ))}

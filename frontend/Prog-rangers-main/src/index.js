@@ -22,7 +22,8 @@ import {
   MySolution,
   MyComment,
   Like,
-  Follow
+  Follow,
+  AccountChange
 } from './pages';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
+      { path: 'accountChange', element: <AccountChange /> },
     ],
   },
 ]);
