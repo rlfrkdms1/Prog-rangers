@@ -23,7 +23,6 @@ import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,8 +50,8 @@ import static com.prograngers.backend.support.fixture.CommentFixture.생성된_�
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.support.fixture.ReviewFixture.FIRST_LINE_REVIEW;
-import static com.prograngers.backend.support.fixture.ReviewFixture.SECOND_LINE_REVIEW;
+import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
+import static com.prograngers.backend.support.fixture.ReviewFixture.수정된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
@@ -99,7 +98,7 @@ class SolutionServiceTest {
         when(solutionRepository.save(any())).thenReturn(Optional.of(scrapResult).get());
 
         // when
-        solutionService.writeScrap(scrapTarget.getId(), request, member.getId());
+        solutionService.scrap(scrapTarget.getId(), request, member.getId());
 
         // then
         verify(solutionRepository, times(1)).save(any());
@@ -197,10 +196,10 @@ class SolutionServiceTest {
         final Comment comment4 = 생성된_댓글.부모_지정_생성(3L, 4L, member1, myMainSolution, LocalDateTime.now().minusDays(1));
 
         //myMainSolution 리뷰
-        final Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().minusDays(4));
-        final Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().minusDays(3));
-        final Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().minusDays(2));
-        final Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().minusDays(1));
+        final Review review1 = 생성된_리뷰.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().minusDays(4));
+        final Review review2 = 생성된_리뷰.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().minusDays(3));
+        final Review review3 = 수정된_리뷰.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().minusDays(2));
+        final Review review4 = 수정된_리뷰.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().minusDays(1));
 
         when(solutionRepository.findById(solutionId)).thenReturn(Optional.of(myMainSolution));
         when(solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem)).thenReturn(Arrays.asList(mySolution3,mySolution2,mySolution1,myMainSolution,othersSolution2,othersSolution1));
@@ -332,10 +331,10 @@ class SolutionServiceTest {
         Comment comment2 = 생성된_댓글.부모_지정_생성(1L,2L, other, solution, LocalDateTime.now().minusDays(3));
         Comment comment3 = 생성된_댓글.아이디_지정_생성(3L, member, solution, LocalDateTime.now().minusDays(2));
         Comment comment4 = 생성된_댓글.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now().minusDays(1));
-        Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
-        Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L, 2L,other, solution, LocalDateTime.now());
-        Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L, member, solution, LocalDateTime.now());
-        Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now());
+        Review review1 = 생성된_리뷰.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
+        Review review2 = 생성된_리뷰.부모_지정_생성(1L, 2L,other, solution, LocalDateTime.now());
+        Review review3 = 수정된_리뷰.아이디_지정_생성(3L, member, solution, LocalDateTime.now());
+        Review review4 = 수정된_리뷰.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now());
 
         Likes likes = 좋아요_생성(other, solution);
 
