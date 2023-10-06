@@ -22,7 +22,7 @@ import {
   MySolution,
   MyComment,
   Like,
-  Follow
+  Follow,
 } from './pages';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
@@ -37,16 +37,16 @@ const router = createBrowserRouter([
       { index: true, path: '/', element: <MainPage /> },
       { path: 'signUp', element: <SignUp /> },
       { path: 'login', element: <SignIn /> },
-      { path: 'login/kakao', element: <KakaoRedirect/> },
-      { path: 'login/naver', element: <NaverRedirect/> },
-      { path: 'login/google', element: <GoogleRedirect/> },
+      { path: 'login/kakao', element: <KakaoRedirect /> },
+      { path: 'login/naver', element: <NaverRedirect /> },
+      { path: 'login/google', element: <GoogleRedirect /> },
       { path: 'problems', element: <Problems /> },
       {
         path: 'solutions/:problemId',
         element: <Solutions />,
       },
       {
-        path: 'solution/detail/:solutionId',
+        path: 'solutions/:solutionId/detail',
         element: <SolutionDetail />,
       },
       {
@@ -67,9 +67,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(
   document.getElementById('root')
 );
-root.render(
-    <RouterProvider router={router} />
-);
+root.render(<RouterProvider router={router} />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
