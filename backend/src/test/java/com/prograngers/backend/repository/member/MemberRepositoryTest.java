@@ -125,15 +125,8 @@ class MemberRepositoryTest {
         저장(공개_풀이.기본_정보_생성(problem1, member5, LocalDateTime.now(), JAVA, 3));
         저장(공개_풀이.기본_정보_생성(problem2, member6, LocalDateTime.now(), JAVA, 3));
 
-
-
-
         //when
         List<Member> result = memberRepository.getLimitRecommendedMembers(null, 4L, member1.getId());
-
-        for (Member m : result){
-            System.out.println(m.getIntroduction());
-        }
 
         //then
         assertThat(result).containsExactly(member6,member4,member3,member5);
