@@ -6,6 +6,8 @@ import { Provider, atom, useAtom } from 'jotai';
 
 export const targetScope = Symbol();
 export const targetAtom = atom("");
+export const valueScope = Symbol();
+export const valueAtom = atom("");
 export const nameScope = Symbol();
 export const nameAtom = atom("");
 
@@ -13,10 +15,6 @@ export const nameAtom = atom("");
 //mypage 정보를 미리 가져와서 추가수정기능
 
 export const EditSolution = () => {
-  const refresh = () => {
-    localStorage.removeItem('algorithm');
-    localStorage.removeItem('datastructure');
-  }
 
   return(
   <div 
