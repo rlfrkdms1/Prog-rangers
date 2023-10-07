@@ -5,6 +5,7 @@ import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.*;
 import com.prograngers.backend.entity.Likes;
+import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
@@ -16,6 +17,7 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -39,6 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.prograngers.backend.entity.badge.BadgeConstant.*;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
@@ -75,6 +78,8 @@ class SolutionServiceTest {
     private LikesRepository likesRepository;
     @Mock
     private ProblemRepository problemRepository;
+    @Mock
+    private BadgeRepository badgeRepository;
     @InjectMocks
     private SolutionService solutionService;
 
@@ -387,6 +392,31 @@ class SolutionServiceTest {
                 ()-> verify(solutionRepository,times(1)).save(any(Solution.class)),
                 ()-> verify(problemRepository,never()).save(any(Problem.class))
         );
+    }
+
+    @Test
+    void 뱃지_생성_테스트(){
+        //given
+        final String problemLink = "https://www.acmicpc.net/problem/2557";
+        final Long memberId = 1L;
+        final Member member = 장지담.아이디_지정_생성(1L);
+        final Problem problem = 백준_문제.아이디_지정_생성(1L);
+        final Solution solution = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
+        final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",problemLink, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
+        final Badge badge = Badge.builder().id(1L).badgeType(새싹).build();
+
+        when(problemRepository.findByLink(problemLink)).thenReturn(Optional.empty());
+        when(problemRepository.save(any(Problem.class))).thenReturn(problem);
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(solutionRepository.save(any(Solution.class))).thenReturn(solution);
+        when(solutionRepository.countByMember(member)).thenReturn(1L);
+        when(badgeRepository.save(any(Badge.class))).thenReturn(badge);
+
+        //when
+        solutionService.save(request, memberId);
+
+        //then
+        verify(badgeRepository,times(1)).save(any(Badge.class));
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){
