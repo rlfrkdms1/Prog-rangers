@@ -46,7 +46,7 @@ const router = createBrowserRouter([
         element: <Solutions />,
       },
       {
-        path: 'solutions/:solutionId/detail',
+        path: 'solutions/:problemId/detail',
         element: <SolutionDetail />,
       },
       {
