@@ -403,14 +403,13 @@ class SolutionServiceTest {
         final Problem problem = 백준_문제.아이디_지정_생성(1L);
         final Solution solution = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",problemLink, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
-        final Badge badge = Badge.builder().id(1L).badgeType(새싹).build();
+        final Badge badge = Badge.builder().badgeType(새싹).build();
 
         when(problemRepository.findByLink(problemLink)).thenReturn(Optional.empty());
         when(problemRepository.save(any(Problem.class))).thenReturn(problem);
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(solutionRepository.save(any(Solution.class))).thenReturn(solution);
         when(solutionRepository.countByMember(member)).thenReturn(1L);
-        when(badgeRepository.save(any(Badge.class))).thenReturn(badge);
 
         //when
         solutionService.save(request, memberId);
