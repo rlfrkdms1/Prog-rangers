@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
-      { path: 'accountChange', element: <AccountChange /> },
+      //{ path: 'accountChange', element: <AccountChange /> },
     ],
   },
 ]);

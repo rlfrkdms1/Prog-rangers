@@ -68,3 +68,35 @@ export const ojName = css`
   border-radius: 20px;
   color: white;
   `;
+
+  export const infoSytle = css`
+  width: 370px;
+  height: 565px;
+  border-radius: 5px;
+  padding-top: 10px;
+
+  flex-direction: column;
+  overflow-y: auto; 
+  max-height: 565px;
+  
+  
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: ${theme.colors.light2};
+    border-radius: 40px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  &::-webkit-scrollbar-corner{
+  background-color: transparent;
+  border-radius: 40px;
+  }
+
+  background-color: ${theme.colors.light4}
+`;

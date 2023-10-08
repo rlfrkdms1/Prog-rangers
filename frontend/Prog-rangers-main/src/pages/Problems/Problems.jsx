@@ -63,7 +63,7 @@ export const Problems = () => {
         `}>
           <FilterBar options={sort.ALGORITHM}/>
           <FilterBar options={sort.DATASTRUCTURE}/>
-          <FilterBar options={sort.LEVEL}/>
+          <FilterBar options={sort.SORT}/>
         </div>
         <div css={css`height: 690px; width: 980px;  margin-top: 20px;`}>
           <QuestionForm data={Questions}/>
