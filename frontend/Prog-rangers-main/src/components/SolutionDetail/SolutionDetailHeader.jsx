@@ -94,12 +94,11 @@ export const SolutionDetailHeader = () => {
             <div
               className="siteName"
               css={css`
-                background-color: ${theme.colors
-                  .programmers};
+                background-color: ${problem.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
                 box-sizing: border-box;
                 padding: 8px 20px;
                 border-radius: 20px;
-                color: ${theme.colors.dark1};
+                color: ${theme.colors.white};
               `}
             >
               {problem.ojName}

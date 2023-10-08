@@ -13,9 +13,9 @@ export const Indicators = () => {
     <div className="indicatorWrap" css={indiLayout}>
       <div className="allIndicators" css={flexLayout}>
         <div className="like" css={flexLayout}>
-          <div className="icon" css={p20}>
+          <button className="icon" css={p20}>
             <FcLikePlaceholder size="25" />
-          </div>
+          </button>
           <div
             css={css`
               padding-right: 20px;
@@ -26,9 +26,9 @@ export const Indicators = () => {
           </div>
         </div>
         <div className="scrap" css={flexLayout}>
-          <div className="icon" css={p20}>
+          <button className="icon" css={p20}>
             <RiShareBoxLine size="25" color="#3486A0" />
-          </div>
+          </button>
           <div>
             <span>5</span>
             <span>회</span>
