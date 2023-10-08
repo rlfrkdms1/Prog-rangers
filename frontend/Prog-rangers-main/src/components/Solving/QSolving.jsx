@@ -5,9 +5,10 @@ import forTags from './fortagsort.json';
 import { useNavigate } from "react-router-dom";
 
 export const QSolving = ({data}) => {
+  
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
-    navigate(`/solution?${solutionId}`);
+    navigate(`/solution?${solutionId}/detail`);
   };
 
   const getRightName = (targetValue) => {
