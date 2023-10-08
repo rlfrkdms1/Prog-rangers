@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { MainBody, RightBody } from './MainBody';
 import { SideBar } from '../../components/SideBar/SideBar';
+import { LikeList } from '../../components/Like/LikeList';
 
 export const Like = () => {
   return (
@@ -13,7 +14,7 @@ export const Like = () => {
 
       <div
         css={css`${RightBody}`}>
-
+          <LikeList />
       </div>
     </div>
   );
