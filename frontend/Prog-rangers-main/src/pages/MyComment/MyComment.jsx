@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css } from '@emotion/react';
+import { SideBar } from '../../components/SideBar/SideBar';
+import { CommentForm } from '../../components/Comment';
 
-import { SideBar } from '../components/SideBar/SideBar';
-
-export const MySolution = () => {
+export const MyComment = () => {
   return (
     <div 
       className='container' 
@@ -19,11 +19,14 @@ export const MySolution = () => {
       <div
         className='content'
         css={css`
-        width: 100%;
-
+        width: 800px;
+        margin: 100px 110px 0;
         `}
         >
-        content
+
+          <div css={css`height: 690px; width: 800px;`}>
+          <CommentForm />
+          </div>
       </div>
     </div>
   );

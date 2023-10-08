@@ -1,25 +1,30 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.notification.response.ShowNotificationResponse;
+import com.prograngers.backend.dto.notification.response.ShowNotificationsResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
+import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
 import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.Map;
 
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
+import static com.prograngers.backend.service.DashBoardService.DASHBOARD_NOTIFICATION_LIMIT;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -109,6 +114,20 @@ public class NotificationService {
                     .forEach(entry -> sendToClient(emitter, emitterId, entry.getValue()));
         }
         return emitter;
+    }
+
+    public ShowNotificationsResponse getNotifications(Long memberId, int page) {
+        validPage(page);
+        Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_LIMIT));
+        ShowNotificationsResponse response = ShowNotificationsResponse.from(notifications);
+        notifications.stream().forEach(Notification::read);
+        return response;
+    }
+
+    private void validPage(int page) {
+        if (page < 2) {
+            throw new InvalidPageNumberException();
+        }
     }
 
 }
