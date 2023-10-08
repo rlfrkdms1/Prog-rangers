@@ -31,7 +31,8 @@ export const CodeWindow = () => {
             <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
               {item.code.map((line, lineIndex) => (
               <React.Fragment key={lineIndex}>
-                {lineIndex} {' '} {line}
+                {lineIndex} {'  '}
+                <span dangerouslySetInnerHTML={{ __html: hljs.highlightAuto(line).value }} />
                 <br />
               </React.Fragment>
               ))}

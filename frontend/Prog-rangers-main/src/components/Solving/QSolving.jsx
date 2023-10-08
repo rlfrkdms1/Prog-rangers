@@ -1,9 +1,14 @@
 import { css } from "@emotion/react";
-import { solveStyle, listStyle, ojNameTag, tags } from "./QSolvingStyle";
+import { tags } from "./QSolvingStyle";
 import sort from '../../db/autocomplete.json';
 import forTags from './fortagsort.json';
+import { useNavigate } from "react-router-dom";
 
 export const QSolving = ({data}) => {
+  const navigate = useNavigate();
+  const onClickSols = (solutionId) => {
+    navigate(`/solution?${solutionId}`);
+  };
 
   const getRightName = (targetValue) => {
     const condition = (element) => element.value === targetValue;
@@ -16,7 +21,9 @@ export const QSolving = ({data}) => {
     <>
       {data.map((item,index) => (
         <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
-          <div css={css`
+          <div 
+          onClick={(e) => onClickSols(item.solutionId)}
+          css={css`
             height: 29px; 
             width: 100%; 
             margin-top: 30px; 
