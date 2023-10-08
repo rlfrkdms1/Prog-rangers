@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { SideBar } from "../../components/SideBar/SideBar";
-import { AddMySolution } from "../../components/WriteBoard";
+import { AddMySolution, Register } from "../../components/WriteBoard";
 import { ButtonDiv, SubmitButton } from "./buttonDiv";
 import { Provider, atom, useAtom } from 'jotai';
 
@@ -28,7 +28,7 @@ export const WriteSolution = () => {
   >
     <div css={css`height: 100%; width: 810px; display: flex; flex-direction: column;`}>
       <Provider scope={targetScope}>
-          <AddMySolution postURL={APIURL} />
+          <Register postURL={APIURL} />
       </Provider>
     </div>
   </div>
