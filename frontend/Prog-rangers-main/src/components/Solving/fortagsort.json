@@ -25,6 +25,13 @@
 
     { "value": "LATEST", "name": "최신순"},
     { "value": "LIKES", "name": "관심순" },
-    { "value": "VIEWS", "name": "조회순" }
+    { "value": "VIEWS", "name": "조회순" },
+
+    
+    { "value": "1", "name": "매우쉬움", "svgPath": "/src/assets/icons/star/star1.svg"},
+    { "value": "2", "name": "쉬움", "svgPath": "/src/assets/icons/star/star2.svg" },
+    { "value": "3", "name": "보통", "svgPath": "/src/assets/icons/star/star3.svg"},
+    { "value": "4", "name": "어려움", "svgPath": "/src/assets/icons/star/star4.svg" },
+    { "value": "5", "name": "매우어려움", "svgPath": "/src/assets/icons/star/star5.svg" }
 
 ]

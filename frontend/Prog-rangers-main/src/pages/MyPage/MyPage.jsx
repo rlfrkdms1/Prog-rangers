@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { SideBar } from '../../components/SideBar/SideBar';
+import { RecentlyList } from '../../components/MyPage/RecentlyList';
+import { FollowingList } from '../../components/MyPage/FollowingList';
+import { InfoList } from '../../components/MyPage/InfoList';
 import { LeftBody, MainBody, RightBody } from './MainBody';
 import axios from 'axios';
 import { 
-  fontSize14,
-  fontSizeBold14,
   fontSize16,
   fontSize20,
   alignCenter, 
   dateStyle,
   gridStyle,
-  Divline,
-  ojName,
-  RecentlyTitle
+  infoSytle
  } from './MyPageStyle';
 
 export const MyPage = () => {
@@ -30,28 +29,26 @@ export const MyPage = () => {
 
   useEffect(() => {
 
-    const token = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJJZCI6MSwiZXhwIjoxNjk2MTc4ODE2LCJpYXQiOjE2OTYxNDI4MTYsImlzcyI6IlByb2dyYW5nZXJzIn0._gtannODO1apM7nhpGLdKEPnucSwIJBO_ERSm7HXi7AA-TA2xuVYeME2ILBuBlHDuLi_WuOFWb7A7I6WQ1x4Sw";
-    fetch("http://13.124.131.171:8080/api/v1/mypage/dashboard", 
-    {
+    const token = localStorage.getItem('token');
+    const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/dashboard';
+
+    axios.get(apiUrl, {
       method: "GET",
-      headers: {Authorization: `Bearer ${token}`},
+      headers: {Authorization: `Bearer ${token}`}
     })
-    .then((response) => response.json())
-    .then((json) => {
-
-         // API 응답이 정상적일 때 데이터를 설정
-        setMonthlyStudyCalendar(json.monthlyStudyCalendar || []);
-        setrecentProblems(json.recentProblems || []);
-        setfollowingRecentSolutions(json.followingRecentSolutions || []);
-        setnotifications(json.notifications || []);
-        setValue(new Date());
-
+    .then((response) => {
+      // API 응답이 정상적일 때 데이터를 설정
+      const data = response.data;
+      setMonthlyStudyCalendar(data.monthlyStudyCalendar || []);
+      setrecentProblems(data.recentProblems || []);
+      setfollowingRecentSolutions(data.followingRecentSolutions || []);
+      setnotifications(data.notifications || []);
+      setValue(new Date());
     })
     .catch((error) => {
-      console.error(error);
+      console.error('API 요청 오류:', error);
     })
-
-  }, []);
+  }, []);  
 
   const sortedData = recentProblems.sort((a, b) => b.solutionId - a.solutionId);
   const top3Data = sortedData.slice(0, 3);
@@ -62,6 +59,17 @@ export const MyPage = () => {
   const daysInMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
   const currentMonth = value.toLocaleString('en-US', { month: 'long' }).toUpperCase();
   const currentYear = value.getFullYear();
+
+  
+  const goToPreviousMonth = () => {
+    const previousMonth = new Date(value.getFullYear(), value.getMonth() - 1, 1);
+    setValue(previousMonth);
+  };
+
+  const goToNextMonth = () => {
+    const nextMonth = new Date(value.getFullYear(), value.getMonth() + 1, 1);
+    setValue(nextMonth);
+  };
 
   const renderCalendar = () => {
     const calendar = [];
@@ -86,95 +94,6 @@ export const MyPage = () => {
     }
     return calendar;
 };
-
-  const goToPreviousMonth = () => {
-    const previousMonth = new Date(value.getFullYear(), value.getMonth() - 1, 1);
-    setValue(previousMonth);
-  };
-
-  const goToNextMonth = () => {
-    const nextMonth = new Date(value.getFullYear(), value.getMonth() + 1, 1);
-    setValue(nextMonth);
-  };
-
-  // 최근 쓴 풀이 리스트업
- const listRecently = top3Data.map((item) => (
-  <div key={item.solutionId}>
-    <div css={css`${Divline} 
-              display: flex; 
-              align-items: center; 
-              justify-content: space-between;`}>
-      <div css={css`${RecentlyTitle}`}> {item.title} </div>
-      <div css={css`
-                ${ojName}
-                font-size: 12px;
-                margin-right: 10px;
-                background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
-                {item.ojName}
-      </div>
-    </div>
-  </div>
- ));
-
-
-  // 팔로우 최근 풀이 리스트업
-  const listFollwingRecently = top5Data.map((item) => (
-    <div key={item.solutionId}>
-      <div css={css` ${Divline} 
-                display: flex; 
-                align-items: center;
-                justify-content: space-between;`}>
-        <div css={css `${RecentlyTitle}`}> {item.title} </div>
-        <div css={css`
-                  ${ojName} 
-                  font-size : 12px;
-                  margin-right: 10px;
-                  background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};`}>
-                  {item.ojName}
-                </div>
-              </div>
-            </div>
-   ));
-
-  const infoList = notifications.map((info) => (
-    <div key={info.solutionId} css={css`overflow-y: auto; max-height: 565px; margin-bottom: 20px;`}>
-      <div css={css`
-              width: 345px;
-              height: 80px;
-              margin-top: 25px;
-              margin-left: 10px;
-              background-color: ${theme.colors.light3}`}>
-        <div css={css`
-            display: flex;
-            align-items: center;
-            margin-top: 9px;
-            margin-left: 10px;
-            padding-top: 10px;
-            gap: 4px;
-            ${fontSizeBold14}
-            `}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="12" viewBox="0 0 18 12" fill="none">
-              <rect width="18" height="12" rx="2" fill="#545454"/>
-              <path d="M0.75 1.875L9 6.375L17.25 1.875" stroke="white" strokeLinecap="round"/>
-            </svg>
-            {info.type}
-        </div>
-        <div css={css`
-            margin-left: 12px;
-            margin-right: 12px;
-            margin-top: 5px;
-            ${fontSize14}
-            `}>
-              <span css={css`font-weight: 700;`}>
-                {info.nickname} </span>
-                님이 {' '}
-              <span css={css` font-weight: 700;`}>
-                {info.solutionTitle} </span>
-                풀이에 {info.type}을 남겼습니다 : {info.content}
-                </div>
-            </div>
-      </div>
-  ));
 
   return(
     <div 
@@ -249,8 +168,8 @@ export const MyPage = () => {
           border-radius: 5px;
           margin-top: 10px;
           background-color: ${theme.colors.light4};
-          `}>
-          {listRecently}
+          `}>          
+          <RecentlyList data={recentProblems}/>
           </div>
 
           <div css={css`
@@ -265,7 +184,7 @@ export const MyPage = () => {
           margin-top: 10px;
           background-color: ${theme.colors.light4};
           `}>
-          {listFollwingRecently}
+          <FollowingList data={followingRecentSolutions}/>
         </div>
     </div>  
      <div css={css`
@@ -291,17 +210,13 @@ export const MyPage = () => {
           height: 604px;
           padding-top: 50px;
           `}>
-            <div css={css`${fontSize20}`}>알림</div>
-            <div css={css`
-            display: flex;
-            width: 365px;
-            height: 565px;
-            border-radius: 5px;
-            margin-top: 10px;
-            background-color: ${theme.colors.light4}
-            `}>
-            {infoList}
-            </div>
+            <div css={css`${fontSize20}`}>알림
+          </div>
+
+
+            <div css={css` ${infoSytle}`}>
+              <InfoList data={notifications}/>
+              </div>
           </div>
         </div>
       </div>
