@@ -1,3 +1,5 @@
+// 마이페이지 대시보드 알림창
+
 import React, { useEffect, useState } from 'react';
 import { css } from "@emotion/react";
 import { theme } from '../Header/theme';

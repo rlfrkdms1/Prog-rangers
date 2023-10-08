@@ -1,3 +1,5 @@
+// 마이페이지 대시보드 팔로우의 최근 풀이
+
 import React from 'react';
 import { css } from "@emotion/react";
 import { useNavigate } from 'react-router-dom';
