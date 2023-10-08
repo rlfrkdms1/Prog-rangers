@@ -41,7 +41,7 @@ export const DetailInput = css`
   width: 100%;
   height :100%;
   border-radius: 50px;
-  border: none;
-  resize: none;
+  display: flex; 
+  flex-direction: column;
   padding: 30px;
 `;
