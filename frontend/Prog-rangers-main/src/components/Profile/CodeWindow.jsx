@@ -1,3 +1,5 @@
+// 프로필 안 코드창
+
 import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/react";
 import axios from "axios";

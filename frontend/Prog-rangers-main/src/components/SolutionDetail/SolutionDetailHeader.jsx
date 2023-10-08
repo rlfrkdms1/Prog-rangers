@@ -11,7 +11,6 @@ import {
 } from './headerStyle';
 
 export const SolutionDetailHeader = () => {
-  // const [data, setData] = useState(null);
   const [problem, setProblem] = useState(null);
   const [solution, setSolution] = useState(null);
 
@@ -21,7 +20,6 @@ export const SolutionDetailHeader = () => {
       .then((res) => {
         setProblem(res.problem || null);
         setSolution(res.solution || null);
-        // setData(res.data || null);
       });
   }, []);
 
@@ -103,11 +101,11 @@ export const SolutionDetailHeader = () => {
             >
               {problem.ojName}
             </div>
-            <div className="dropMenu" css={colFlex}>
+            <button className="dropMenu" css={colFlex}>
               <span css={dot}></span>
               <span css={dot}></span>
               <span css={dot}></span>
-            </div>
+            </button>
           </div>
         </div>
       )}

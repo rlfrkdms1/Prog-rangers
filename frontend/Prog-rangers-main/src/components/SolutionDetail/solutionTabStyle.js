@@ -12,11 +12,14 @@ export const tapLayout = css`
 
 export const contentLayout = css`
   padding: 30px 20px 50px;
+  font-size: 18px;
 `;
 
 export const contentMock = css`
   width: 956px;
   height: 300px;
   margin: 0 20px;
-  background-color: ${theme.colors.dark2};
+  font-size: 16px;
+  color: #FFFFFF;
+  background-color: #2A3746;
 `;
