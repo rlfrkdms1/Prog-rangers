@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SolutionCustomRepository {
 
@@ -21,5 +22,10 @@ public interface SolutionCustomRepository {
 
     Page<Solution> getMyList(Pageable pageable, String keyword, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, Integer level, Long memberId);
 
+    List<Solution> findMyRecentSolutions(Long memberId, int limit);
+
+    List<Solution> findFollowingsRecentSolutions(Long memberId, int limit);
     List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit);
+
+    Solution findOneRecentSolutionByMemberId(Long memberId);
 }

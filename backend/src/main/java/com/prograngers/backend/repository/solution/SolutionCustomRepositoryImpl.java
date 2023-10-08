@@ -13,11 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
-
+import static com.prograngers.backend.entity.QFollow.follow;
 import static com.prograngers.backend.entity.QLikes.*;
-import static com.prograngers.backend.entity.problem.QProblem.problem;
 import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
 import static com.prograngers.backend.entity.solution.QSolution.*;
 
@@ -27,6 +25,15 @@ import static com.prograngers.backend.entity.solution.QSolution.*;
 public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    public Solution findOneRecentSolutionByMemberId(Long memberId){
+        return jpaQueryFactory
+                .selectFrom(solution)
+                .where(solution.member.id.eq(memberId))
+                .orderBy(solution.createdAt.desc())
+                .limit(1)
+                .fetchOne();
+    }
 
     @Override
     public PageImpl<Solution> getSolutionList(
@@ -64,6 +71,26 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
                 .groupBy(solution)
                 .where(solution.problem.eq(problem))
                 .orderBy(likes.count().desc(), solution.createdAt.desc())
+                .limit(limit)
+                .fetch();
+    }
+
+    @Override
+    public List<Solution> findMyRecentSolutions(Long memberId, int limit) {
+        return jpaQueryFactory.selectFrom(solution)
+                .where(solution.member.id.eq(memberId))
+                .orderBy(solution.createdAt.desc())
+                .limit(limit)
+                .fetch();
+    }
+
+    @Override
+    public List<Solution> findFollowingsRecentSolutions(Long memberId, int limit) {
+        return jpaQueryFactory.selectFrom(solution)
+                .join(follow).on(solution.member.id.eq(follow.followingId))
+                .join(solution.problem).fetchJoin()
+                .where(follow.followerId.eq(memberId))
+                .orderBy(solution.createdAt.desc())
                 .limit(limit)
                 .fetch();
     }

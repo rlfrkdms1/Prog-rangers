@@ -5,6 +5,7 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
+import com.prograngers.backend.dto.solution.response.ShowMyLikeSolutionsResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionListResponse;
 import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
@@ -44,7 +45,7 @@ public class SolutionController {
     @Login
     @PostMapping("/solutions/{scrapId}")
     public ResponseEntity<Void> scrap(@LoggedInMember Long memberId, @PathVariable Long scrapId, @RequestBody @Valid ScarpSolutionRequest request) {
-        Long saveId = solutionService.saveScrap(scrapId, request, memberId);
+        Long saveId = solutionService.scrap(scrapId, request, memberId);
         return ResponseEntity.created(URI.create("/api/v1/solutions" + saveId)).build();
     }
 
@@ -93,6 +94,12 @@ public class SolutionController {
                                                  @RequestParam(defaultValue = DEFAULT_PAGE) int page,
                                                  @LoggedInMember Long memberId) {
         return solutionService.getMyList(keyword, language, algorithm, dataStructure, level, page, memberId);
+    }
+
+    @Login
+    @GetMapping("/mypage/likes")
+    public ShowMyLikeSolutionsResponse showMyLikes(@RequestParam(defaultValue = DEFAULT_PAGE) int page, @LoggedInMember Long memberId) {
+        return solutionService.getMyLikes(memberId, page);
     }
 
 }

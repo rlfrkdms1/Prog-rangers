@@ -2,10 +2,13 @@ package com.prograngers.backend.entity.solution;
 
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.member.Member;
-import jakarta.annotation.Nullable;
+import com.prograngers.backend.support.converter.AlgorithmConverter;
+import com.prograngers.backend.support.converter.DataStructureConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -19,7 +22,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,13 +30,14 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Solution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;
 
@@ -61,11 +65,11 @@ public class Solution {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = AlgorithmConverter.class)
     @Column(name = "algorithm")
     private AlgorithmConstant algorithm;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DataStructureConverter.class)
     @Column(name = "data_structure")
     private DataStructureConstant dataStructure;
 

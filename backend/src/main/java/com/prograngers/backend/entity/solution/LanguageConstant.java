@@ -8,24 +8,22 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum LanguageConstant implements HashTag {
-    PYTHON("PYTHON"),
-    JAVA("JAVA"),
-    CPP("CPP"),
+    PYTHON("Python"),
+    JAVA("Java"),
+    CPP("C++"),
     C("C");
-    private final String stringValue;
+    private final String view;
 
-    @JsonCreator
     public static LanguageConstant from(String value) {
         for (LanguageConstant language : LanguageConstant.values()) {
-            if (language.getStringValue().equals(value)) {
+            if (language.getView().equals(value)) {
                 return language;
             }
         }
         throw new LanguageNotFoundException();
     }
 
-    @JsonValue
-    public String getStringValue() {
-        return stringValue;
+    public String getView() {
+        return view;
     }
 }
