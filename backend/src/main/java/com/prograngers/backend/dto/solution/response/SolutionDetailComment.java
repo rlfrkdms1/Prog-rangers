@@ -16,12 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SolutionDetailComment {
-    String photo;
-    Long id;
-    String nickname;
-    String content;
-    CommentStatusConstant status;
-    List<SolutionDetailComment> replies;
+    private String photo;
+    private Long id;
+    private String nickname;
+    private String content;
+    private CommentStatusConstant status;
+    private List<SolutionDetailComment> replies;
 
     boolean mine;
 

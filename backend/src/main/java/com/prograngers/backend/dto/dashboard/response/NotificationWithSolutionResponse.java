@@ -4,6 +4,7 @@ import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.InvalidNotificationTypeException;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,8 @@ import lombok.NoArgsConstructor;
 import static com.prograngers.backend.entity.NotificationType.*;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class NotificationWithSolutionResponse {
 
     private String type;
@@ -19,17 +21,21 @@ public class NotificationWithSolutionResponse {
     private String solutionTitle;
     private String content;
     private Long solutionId;
-
-    @Builder
-    public NotificationWithSolutionResponse(String type, String nickname, String solutionTitle, String content, Long solutionId) {
-        this.type = type;
-        this.nickname = nickname;
-        this.solutionTitle = solutionTitle;
-        this.content = content;
-        this.solutionId = solutionId;
-    }
+    private boolean isRead;
 
     public static NotificationWithSolutionResponse of(Notification notification, Solution solution) {
+        return NotificationWithSolutionResponse.builder()
+                .type(notification.getType().name())
+                .nickname(notification.getWriterNickname())
+                .solutionTitle(solution.getTitle())
+                .solutionId(solution.getId())
+                .content(getContent(notification))
+                .isRead(notification.isRead())
+                .build();
+    }
+
+    public static NotificationWithSolutionResponse from(Notification notification) {
+        Solution solution = notification.getSolution();
         return NotificationWithSolutionResponse.builder()
                 .type(notification.getType().name())
                 .nickname(notification.getWriterNickname())

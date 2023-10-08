@@ -55,7 +55,6 @@ public class WriteSolutionRequest {
     private String code;
 
     public Problem toProblem(JudgeConstant judgeName){
-
         return Problem.builder()
                 .link(problemLink)
                 .ojName(judgeName)
@@ -64,7 +63,7 @@ public class WriteSolutionRequest {
                 .build();
     }
 
-    public Solution toSolution(Problem problem, Member member) {
+    public Solution toSolution(Member member, Problem problem) {
 
         Solution solution = Solution.builder()
                 .problem(problem)
@@ -86,20 +85,5 @@ public class WriteSolutionRequest {
         problem.getSolutions().add(solution);
 
         return solution;
-    }
-
-    public static WriteSolutionRequest from(Solution solution){
-        return WriteSolutionRequest.builder()
-                .algorithm(solution.getAlgorithm())
-                .code(solution.getCode())
-                .level(solution.getLevel())
-                .isPublic(solution.isPublic())
-                .description(solution.getDescription())
-                .dataStructure(solution.getDataStructure())
-                .language(solution.getLanguage())
-                .problemLink(solution.getProblem().getLink())
-                .problemTitle(solution.getProblem().getTitle())
-                .solutionTitle(solution.getTitle())
-                .build();
     }
 }
