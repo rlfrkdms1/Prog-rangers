@@ -5,7 +5,7 @@ import { theme } from "../Header/theme";
 import { wrapStyle } from "./commentsStyle";
 import { FcLike } from 'react-icons/fc';
 
-export const Recommand = ({data}) => {
+export const Recommand = () => {
     
     const [ recoSol, setRecoSol ] = useState({});
 

@@ -1,6 +1,8 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
-
 import {
   wrapStyle,
   flexLayout,
@@ -11,6 +13,24 @@ import {
 import ProfileImg from './profile/default.png';
 
 export const Comments = () => {
+
+  const [ comment, setComment ] = useState([]);
+  const [ commentCount, setCommentCount ] = useState(0);
+
+    useEffect(() => {
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
+
+      axios
+        .get(apiUrl)
+        .then((response) => {
+          setComment(response.data.comments);
+          setCommentCount(response.data.comments.length);
+        })
+        .catch((error) => {
+          console.error('API 요청 오류:', error);
+        });
+    }, []);
+
   return (
     <div className="wrap" css={wrapStyle}>
       <div className="commentArea">
@@ -33,11 +53,14 @@ export const Comments = () => {
               color: ${theme.colors.dark2};
             `}
           >
-            3개
+            <span>{commentCount}</span>
+            <span>개</span>
           </div>
         </div>
         <div className="comments">
-          <div className="comment" css={rowFlex}>
+
+        {comment.map((commentItem) => (
+          <div className="comment" css={rowFlex} key={commentItem.id}>
             <div className="profile">
               <img
                 src={ProfileImg}
@@ -64,47 +87,16 @@ export const Comments = () => {
                   margin-bottom: 5px;
                 `}
               >
-                ddongguri-bing
+                {commentItem.nickname}
               </div>
               <div className="commnetText">
-                이런 부분은 생각도 못했는데 대단하시네요!
+                {commentItem.content}
               </div>
             </div>
           </div>
-          <div className="comment" css={rowFlex}>
-            <div className="profile">
-              <img
-                src={ProfileImg}
-                alt="profile image"
-                css={css`
-                  width: 50px;
-                  height: 50px;
-                  border: 1px solid ${theme.colors.light1};
-                  border-radius: 100%;
-                `}
-              />
-            </div>
-            <div
-              className="text"
-              css={css`
-                margin-left: 20px;
-              `}
-            >
-              <div
-                className="nickname"
-                css={css`
-                  font-size: 14px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                `}
-              >
-                ddongguri-bing
-              </div>
-              <div className="commnetText">
-                이런 부분은 생각도 못했는데 대단하시네요!
-              </div>
-            </div>
-          </div>
+        ))}
+        
+        {comment.replies && Array.isArray(comment.replies) && comment.replies.map((replyItem) => (
           <div className="recomment" css={rowFlexRecomment}>
             <div className="profile">
               <img
@@ -132,7 +124,7 @@ export const Comments = () => {
                   margin-bottom: 5px;
                 `}
               >
-                ddongguri-bing
+                {replyItem.nickname}
               </div>
               <div
                 className="commnetText"
@@ -148,12 +140,13 @@ export const Comments = () => {
                     margin-right: 10px;
                   `}
                 >
-                  @lo_0a
+                  @{comment.nickname}
                 </span>
-                이런 부분은 생각도 못했는데 대단하시네요!
+                {replyItem.content}
               </div>
             </div>
           </div>
+        ))}
         </div>
       </div>
     </div>
