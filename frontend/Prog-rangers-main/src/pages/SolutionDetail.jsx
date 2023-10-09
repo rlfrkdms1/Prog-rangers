@@ -4,6 +4,7 @@ import {
   SolutionDetailHeader,
   SolutionTab,
   Comments,
+  Recommand,
 } from '../components/SolutionDetail';
 
 export const SolutionDetail = () => {
@@ -13,6 +14,7 @@ export const SolutionDetail = () => {
       <SolutionTab />
       <Indicators />
       <Comments />
+      <Recommand />
     </div>
   );
 };
