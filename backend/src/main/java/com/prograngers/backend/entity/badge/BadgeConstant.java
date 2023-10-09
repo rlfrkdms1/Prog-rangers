@@ -10,7 +10,7 @@ public enum BadgeConstant {
     꽃(100L),
     화단(150L);
 
-    private Long count;
+    private final Long count;
 
     public static BadgeConstant getBadge(Long count){
         for (BadgeConstant badge : BadgeConstant.values()){
