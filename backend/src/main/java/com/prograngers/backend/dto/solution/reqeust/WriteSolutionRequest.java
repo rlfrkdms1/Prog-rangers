@@ -37,6 +37,7 @@ public class WriteSolutionRequest {
     private String problemLink;
     @Min(value = 1, message = "레벨 값은 1 미만일 수 없습니다")
     @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
+    @NotBlank(message =  "레벨 값을 입력해주세요")
     private Integer level;
 
     private AlgorithmConstant algorithm;
