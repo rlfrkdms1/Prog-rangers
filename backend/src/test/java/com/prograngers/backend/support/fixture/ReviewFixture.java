@@ -23,22 +23,22 @@ public enum ReviewFixture {
     private final ReviewStatusConstant status;
     private final int codeLineNumber;
 
-    public ReviewBuilder 기본_빌더_생성(Member member, Solution solution, LocalDateTime createdDate){
+    public ReviewBuilder 기본_빌더_생성(Member member, Solution solution, LocalDateTime createdAt){
         return Review.builder()
                 .content(content)
                 .status(status)
                 .codeLineNumber(codeLineNumber)
                 .member(member)
                 .solution(solution)
-                .createdAt(createdDate);
+                .createdAt(createdAt);
     }
 
-    public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdDate){
-        return 기본_빌더_생성(member, solution, createdDate).build();
+    public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdAt){
+        return 기본_빌더_생성(member, solution, createdAt).build();
     }
 
-    public Review 아이디_지정_생성(Long id,Member member, Solution solution, LocalDateTime createdDate){
-        return 기본_빌더_생성(member, solution, createdDate).id(id).build();
+    public Review 아이디_지정_생성(Long id,Member member, Solution solution, LocalDateTime createdAt){
+        return 기본_빌더_생성(member, solution, createdAt).id(id).build();
     }
 
 
