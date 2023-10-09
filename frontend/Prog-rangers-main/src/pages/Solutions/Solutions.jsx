@@ -56,7 +56,7 @@ export const Solutions = () => {
               <FilterBar options={sort.LANGUAGE}/>
               <FilterBar options={sort.ALGORITHM}/>
               <FilterBar options={sort.DATASTRUCTURE}/>
-              <FilterBar options={sort.LEVEL}/>
+              <FilterBar options={sort.SORT}/>
         </div>
         <div css={css`
           display: flex;
