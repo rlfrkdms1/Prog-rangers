@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
-import { fontSize18, fontSize14, fontSize12 } from './FollowStyle';
-import { SideBar } from '../SideBar/SideBar';
+import { fontSize14, fontSize12 } from './FollowStyle';
 import axios from "axios";
 
 export const Following = () => {
