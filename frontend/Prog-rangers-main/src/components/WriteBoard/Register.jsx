@@ -230,12 +230,12 @@ export const Register = ({postURL}) => {
 
         <div css={css`${TitleBox} margin-top: 50px;`} >풀이 설명</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} value={inputs.description} name="description" onChange={handleInput}/>
+          <textarea css={css`${DetailInput} border: none;`} value={inputs.description} name="description" onChange={handleInput}/>
         </div>
 
         <div css={css`${TitleBox} margin-top: 50px;`}>코드</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} value={inputs.code} name="code" onChange={handleInput}/>
+          <textarea css={css`${DetailInput} border:none; `} value={inputs.code} name="code" onChange={handleInput}/>
         </div>
         <div css={css`  margin: 100px 30px 80px 40px; justify-content: flex-end; display: flex; flex-direction: row; height: 50px; 
 `}>
