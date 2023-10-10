@@ -21,6 +21,8 @@ import { ButtonDiv, SubmitButton } from "../../pages/BoardPage/buttonDiv";
 import { TagAction } from "./TagAction";
 import axios from 'axios';
 
+//새로운 문제인 경우 링크를 새로 작성하고, 기존의 풀이에서 링크를 가져올 수도 있다.
+
 export const AddMySolution = ({postURL}) => {
   const [ isPublic, setIsPublic ] = useState(true);
   const [ clickedStar, setClickedStar ] = useState([false, false, false, false, false]);
@@ -222,12 +224,12 @@ export const AddMySolution = ({postURL}) => {
 
         <div css={css`${TitleBox} margin-top: 50px;`} >풀이 설명</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} value={inputs.description} name="description" onChange={handleInput}/>
+          <textarea css={css`${DetailInput} border: none;`} value={inputs.description} name="description" onChange={handleInput}/>
         </div>
 
         <div css={css`${TitleBox} margin-top: 50px;`}>코드</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} value={inputs.code} name="code" onChange={handleInput}/>
+          <textarea css={css`${DetailInput} border:none;`} value={inputs.code} name="code" onChange={handleInput}/>
         </div>
         <div css={css`  margin: 100px 30px 80px 40px; justify-content: flex-end; display: flex; flex-direction: row; height: 50px; 
 `}>
