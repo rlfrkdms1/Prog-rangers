@@ -11,6 +11,15 @@ export const HeaderLayout = css`
   align-items: center;
 `;
 
+export const MyHeaderLayout = css`
+  width: 740px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const rowFlex = css`
   display: flex;
   flex-direction: row;

@@ -1,20 +1,39 @@
 import React from 'react';
+import { css } from '@emotion/react';
+import { SideBar } from '../components/SideBar/SideBar';
 import {
-  Indicators,
-  SolutionDetailHeader,
-  SolutionTab,
-  Comments,
-  Recommand
+  MyIndicators,
+  MySolHeader,
+  MySolutionTab,
+  MyComments,
+  Recommand,
+  LeftBar
 } from '../components/SolutionDetail';
 
 export const MySolutionDetail = () => {
   return (
-    <div>
-      <SolutionDetailHeader />
-      <SolutionTab />
-      <Indicators />
-      <Comments />
-      {/* <Recommand /> */}
+    <div 
+      className='container' 
+      css={css`
+      width: 1200px;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      
+      
+    ` }
+    >
+      <SideBar />
+    <div css={css`margin-left: 40px;`}>
+      <MySolHeader />
+      <MySolutionTab />
+      <MyIndicators />
+      <MyComments />
+      <Recommand />
+      </div>
+      <LeftBar />
+  
     </div>
   );
 };

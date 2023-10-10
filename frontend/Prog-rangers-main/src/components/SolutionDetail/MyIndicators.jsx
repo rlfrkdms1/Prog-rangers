@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 import { FcLikePlaceholder } from 'react-icons/fc';
 import { RiShareBoxLine } from 'react-icons/ri';
-import { flexLayout, indiLayout, Divline } from './indicatorSytle';
+import { flexLayout, MyindiLayout, Divline } from './indicatorSytle';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
-export const Indicators = () => {
-
-  const navigate = useNavigate();
-    const onClickSols = (solutionId) => {
-      navigate(`/solution?${solutionId}`);
-    };
+export const MyIndicators = () => {
 
   const [ solution, setSolution ] = useState({});
 
@@ -32,10 +26,7 @@ export const Indicators = () => {
 
   return (
     <>
-    <div className="indicatorWrap" 
-    css={css`${indiLayout} 
-         border-bottom: 1px solid ${theme.colors.light3};
-         color: ${theme.colors.dark2};`}>
+    <div className="indicatorWrap" css={css`${MyindiLayout} color: ${theme.colors.dark2};`}>
       <div className="allIndicators" css={css`${flexLayout}`}>
         <div className="like" css={flexLayout}>
           <button className="icon" css={css`padding-right: 20px;`}>
@@ -61,6 +52,8 @@ export const Indicators = () => {
         </div>
       </div>
     </div>
+    
+    <div css={css`${Divline} `}></div>
     </>
   );
 };

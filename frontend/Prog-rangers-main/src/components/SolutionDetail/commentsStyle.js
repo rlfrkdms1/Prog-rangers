@@ -6,6 +6,11 @@ export const wrapStyle = css`
   margin: 30px auto;
 `;
 
+export const MywrapStyle = css`
+  widrh: 740px;
+  margin: 30px auto;
+  `;
+
 export const flexLayout = css`
   display: flex;
   flex-direction: row;

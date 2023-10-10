@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { css } from "@mui/material";
 import { theme } from "../Header/theme";
-import { wrapStyle } from "./commentsStyle";
+import { MywrapStyle } from "./commentsStyle";
 import { FcLike } from 'react-icons/fc';
 
 export const Recommand = () => {
+
+  const navigate = useNavigate();
+    const onClickSols = (solutionId) => {
+      navigate(`/solution?${solutionId}`);
+    };
     
-    const [ recoSol, setRecoSol ] = useState({});
+    const [ recoSol, setRecoSol ] = useState([]);
 
     useEffect(() => {
-      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
+
+      const token = localStorage.getItem('token');
+      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/1`;
 
       axios
-        .get(apiUrl)
+        .get(apiUrl, {
+          method: "GET",
+          headers: {Authorization: `Bearer ${token}`}
+        })
         .then((response) => {
           setRecoSol(response.data.recommendedSolutions);
         })
@@ -36,7 +47,7 @@ export const Recommand = () => {
       `
     return(
     
-    <div className="wrap" css={wrapStyle}>
+    <div className="wrap" css={MywrapStyle}>
         <div css={css`
         margin-top: 70px;
         display: flex;            
@@ -49,11 +60,11 @@ export const Recommand = () => {
         </div>
 
         <div css={gridContainerStyles}>
-            {/* {data.map((item) => (
+            {recoSol.map((item) => (
                 // 데이터가 있는 경우에만 렌더링
-                item ? ( */}
+                item ? (
                 <div css={gridItemStyles}
-                // key={recommendedSolutions.id}
+                key={item.id}
                 >
                     <div className="icon" 
                       css={css` 
@@ -65,27 +76,28 @@ export const Recommand = () => {
                       font-size: 12px;
                       color: ${theme.colors.dark2}`}>
                       <FcLike size="16" />
-                      <div>36개</div>
-                      {/* {item.recommendedSolutions.likes} */}
+                      {item.likes}개
                     </div>
 
                     <div css={css`
                       padding : 20px 0 0 20px;
-                      font-size: 16px;`}>
-                        풀이제목
-                    {/* {item.recommendedSolutions.solutionName} */}
+                      font-size: 16px;
+                      max-width: 205px; 
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;`}>
+                      {item.solutionName}
                     </div>
 
                     <div css={css`
                       padding : 10px 0 0 20px;
                       font-size: 14px;
                       color: ${theme.colors.light1}`}>
-                      닉네임
-                    {/* {item.recommendedSolutions.nickname} */}
+                      {item.nickname}
                     </div>
                 </div>
-                {/* ) : null
-            ))} */}
+                ) : null
+            ))}
         </div>
     </div>
     )

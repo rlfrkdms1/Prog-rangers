@@ -8,6 +8,11 @@ export const tapLayout = css`
   margin: 50px auto 0;
 `;
 
+export const MytapLayout = css`
+  width: 740px;
+  margin: 50px auto 0;
+`;
+
 //viewSolution & lineReview
 
 export const contentLayout = css`

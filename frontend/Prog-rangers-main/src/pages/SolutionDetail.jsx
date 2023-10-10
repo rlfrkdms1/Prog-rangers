@@ -14,7 +14,6 @@ export const SolutionDetail = () => {
       <SolutionTab />
       <Indicators />
       <Comments />
-      <Recommand />
     </div>
   );
 };

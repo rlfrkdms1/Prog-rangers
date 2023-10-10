@@ -1,19 +1,43 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
 import { BiSolidLockAlt } from 'react-icons/bi';
 import {
-  HeaderLayout,
+  MyHeaderLayout,
   colFlex,
   dot,
-  rowFlex
+  editStyle,
+  deleteStyle,
+  rowFlex,
+  fontStyle
 } from './headerStyle';
 
-export const SolutionDetailHeader = () => {
+export const MySolHeader = () => {
   // 풀이 API
   const [problem, setProblem] = useState(null);
   const [solution, setSolution] = useState(null);
+
+  // 수정 삭제 버튼
+  const [showEditButtons, setShowEditButtons] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    setShowEditButtons(!showEditButtons); 
+  };
+
+  const handleSelect = (path) => {
+    setIsOpen(false);
+  };
+
+  // 풀이 수정 페이지 이동
+  const navigate = useNavigate();
+
+  const onClickSols = (solutionId) => {
+    navigate(`/EditSolutions/${solutionId}`);
+  };
 
   useEffect(() => {
     fetch('http://13.124.131.171:8080/api/v1/solutions/1')
@@ -27,13 +51,12 @@ export const SolutionDetailHeader = () => {
   return (
     <>
       {problem && solution && (
-        <div className="headerAll" css={HeaderLayout}>
+        <div className="headerAll" css={MyHeaderLayout}>
           <div className="headerLeft">
             <div
               className="problemTitleArea rowFlex"
-              css={css`${rowFlex}
-                  gap : 10px;
-                  `}>
+              css={rowFlex}
+            >
               <div
                 className="problemTitle"
                 css={css`
@@ -103,11 +126,20 @@ export const SolutionDetailHeader = () => {
             >
               {problem.ojName}
             </div>
-              <button className="dropMenu" css={colFlex}>
+              <button onClick={handleToggle} className="dropMenu" css={colFlex}>
                 <span css={dot}></span>
                 <span css={dot}></span>
                 <span css={dot}></span>
               </button>
+          </div>
+          
+            <div className="edit-delete-buttons" 
+              css={css`
+                margin-left: 30px;
+                margin-top: 10px;
+                ${fontStyle}`}>
+              <button css={editStyle(isOpen)} onClick={(e) => onClickSols(solution.id)}>수정하기</button>          
+              <button css={deleteStyle(isOpen)} onClick={(e) => onClickSols(solution.id)}>삭제하기</button>
           </div>
         </div>
       </div>
