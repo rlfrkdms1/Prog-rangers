@@ -32,7 +32,7 @@ export const Stars = css`
 export const DetailBox = css`
   margin-top: 20px; 
   border-radius: 50px; 
-  // border: 1px solid #959595;
+  border: 1px solid #959595;
   vertical-align: top;
   overflow: 'auto';
 `;
