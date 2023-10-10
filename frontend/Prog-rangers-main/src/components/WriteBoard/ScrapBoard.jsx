@@ -17,8 +17,8 @@ export const ScrapBoard = () => {
   const [ Algo, setAlgo ] = useState([]);
   const [ Data, setData ] = useState([]);
   const [ problemTitle, setProblemTitle ] = useState("");
-  const [ level, setLevel ] = useState(0);
-  const [ link, setLink ] = useState("");
+  const [ problemLevel, setLevel ] = useState(0);
+  const [ problemLink, setLink ] = useState("");
   let algo = "";
   let data = "";
   let algoName = "";
@@ -32,13 +32,14 @@ export const ScrapBoard = () => {
   const { solution, description, code } = inputs;
   const currentURL = window.location.href.split('/');
   const indexOfSolution = currentURL.indexOf("solution");
-  const [ id, setId ] = useState(0);
+  // const [ id, setId ] = useState(0);
+  let id = 0;
 
   //주소에서 solution뒤에 id값 나오면 그 id값이 problem 번호가 됨
   useEffect(() => {
     if(indexOfSolution !== -1 && indexOfSolution < currentURL.length - 1){
-      setId(currentURL[indexOfSolution + 1]);
-      console.log(id);
+      // setId(currentURL[indexOfSolution + 1]);
+      id = currentURL[indexOfSolution + 1]
     }else{
       alert("해당되는 문제번호가 없습니다.");
     }
@@ -49,25 +50,38 @@ export const ScrapBoard = () => {
       const response = await axios.get(`http://13.124.131.171:8080/api/v1/solutions/${id}`);
       algo = response.data.solution.algorithmName;
       data = response.data.solution.dataStructureName;
-      algoName = sortArray.ALGORITHM.find(item => item["value"] === algo).name;
-      dataName = sortArray.DATASTRUCTURE.find(item => item["value"] === data).name;
+      // console.log(algo);
+      if(algo!==null){
+        algoName = sortArray.ALGORITHM.find(item => item["value"] === algo).name;
+        setAlgo({
+          value: algo,
+          name: algoName
+        });
+      }
+      if(data!==null){
+        dataName = sortArray.DATASTRUCTURE.find(item => item["value"] === data).name;
+        setData({
+          value: data,
+          name: dataName
+        })
+      }
       let codeText = response.data.solution.code;
       codeText = codeText.join('\n');
-      setAlgo({
-        value: algo,
-        name: algoName
-      });
-      setData({
-        value: data,
-        name: dataName
-      })
-      setProblemTitle(response.data.problem.title);
-      setLink(response.data.solution.link);
-      setLevel(response.data.solution.level);
+      let title = response.data.problem.title
+      let link = response.data.solution.link
+      let level = response.data.solution.level
+      setProblemTitle(title);
+      setLink(link);
+      setLevel(level);
+      console.log(problemTitle);
       setInputs({
         ...inputs,
         code: codeText
       });
+      // console.log(response.data.problem.title);
+      // console.log(response.data.solution.link);
+      // console.log(response.data.solution.level);
+      
     }catch(error){
       console.log(error);
     }
@@ -78,7 +92,7 @@ export const ScrapBoard = () => {
       const body={
         problemTitle: problemTitle,
         solutionTitle: inputs.solution,
-        problemLink: link,
+        problemLink: problemLink,
         algorithm: Algo.value,
         dataStructure: Data.value,
         language: "JAVA",
@@ -86,7 +100,7 @@ export const ScrapBoard = () => {
         code: inputs.code,
         isPublic: true,
       }
-      const response = await axios.post(`http://{{HOST}}:8080/api/v1/solutions/new-form/${id-1}`, body, {
+      const response = await axios.post(`http://{{HOST}}:8080/api/v1/solutions/new-form/${id}`, body, {
         headers: { Authorization: `Bearer ${token}`}
       });
       if(response.status === 201 ) {
@@ -170,7 +184,7 @@ export const ScrapBoard = () => {
 
     <div css={css`${TitleBox} margin-top: 50px;`}>풀이 설명</div>
     <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-      <textarea css={css`${DetailInput}`} value={inputs.description} name="description" onChange={handleInput}/>
+      <textarea css={css`${DetailInput} border: none;`} value={inputs.description} name="description" onChange={handleInput}/>
     </div>
 
     <div css={css`${TitleBox} margin-top: 50px;`}>코드</div>
