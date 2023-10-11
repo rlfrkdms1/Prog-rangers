@@ -27,9 +27,17 @@ export const Recommand = () => {
           method: "GET",
           headers: {Authorization: `Bearer ${token}`}
         })
+
         .then((response) => {
-          setRecoSol(response.data.recommendedSolutions);
+          // 추천풀이 문제제목, 언어 같으면 좋아요 내림차순
+          const sortedSolutions = response.data.recommendedSolutions
+          .sort((a, b) => b.likes - a.likes)
+          .filter((item, index, self) =>
+            index === self.findIndex((t) => t.title === item.title && t.language === item.language)
+          );
+          setRecoSol(sortedSolutions);
         })
+
         .catch((error) => {
           console.error('API 요청 오류:', error);
         });
