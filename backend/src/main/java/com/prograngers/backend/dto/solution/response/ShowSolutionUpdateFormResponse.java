@@ -16,8 +16,8 @@ public class ShowSolutionUpdateFormResponse {
 
     private String title;
     private String link;
-    private AlgorithmConstant algorithmName;
-    private DataStructureConstant dataStructureName;
+    private String algorithm;
+    private String dataStructure;
     private String[] code;
     private String description;
     private int  level;
@@ -27,8 +27,8 @@ public class ShowSolutionUpdateFormResponse {
                 .title(target.getTitle())
                 .link(target.getProblem()
                         .getLink())
-                .algorithmName(target.getAlgorithm())
-                .dataStructureName(target.getDataStructure())
+                .algorithm(target.getAlgorithmView())
+                .dataStructure(target.getDataStructureView())
                 .code(target.getCode().split("\n"))
                 .level(target.getLevel())
                 .description(target.getDescription()).build();

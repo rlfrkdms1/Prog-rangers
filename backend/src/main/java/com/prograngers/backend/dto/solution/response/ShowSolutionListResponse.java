@@ -42,8 +42,8 @@ public class ShowSolutionListResponse {
         solutions.stream()
                         .forEach((solution -> showSolutionListResponse.getSolutions().add(SolutionAtSolutionListResponse.builder()
                                 .solutionName(solution.getTitle())
-                                .algorithm(solution.getAlgorithm())
-                                .dataStructure(solution.getDataStructure())
+                                .algorithm(solution.getAlgorithmView())
+                                .dataStructure(solution.getDataStructureView())
                                 .build())));
     }
 
