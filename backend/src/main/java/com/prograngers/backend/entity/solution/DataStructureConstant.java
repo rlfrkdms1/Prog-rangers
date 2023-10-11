@@ -16,7 +16,7 @@ public enum DataStructureConstant implements HashTag {
     HEAP("힙");
 
     private final String view;
-
+    @JsonCreator
     public static DataStructureConstant from(String value) {
         for (DataStructureConstant dataStructure : DataStructureConstant.values()) {
             if (dataStructure.getView().equals(value)) {

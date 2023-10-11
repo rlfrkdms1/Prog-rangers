@@ -15,6 +15,8 @@ import com.prograngers.backend.dto.solution.response.RecommendedSolutionResponse
 import com.prograngers.backend.dto.solution.response.CommentWithRepliesResponse;
 import com.prograngers.backend.dto.solution.response.SolutionResponse;
 import com.prograngers.backend.dto.solution.response.ShowSolutionListResponse;
+import com.prograngers.backend.entity.badge.Badge;
+import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.problem.JudgeConstant;
@@ -32,6 +34,7 @@ import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -68,11 +71,22 @@ public class SolutionService {
     private final ProblemRepository problemRepository;
     private final MemberRepository memberRepository;
     private final LikesRepository likesRepository;
+    private final BadgeRepository badgeRepository;
 
     @Transactional
     public Long save(WriteSolutionRequest writeSolutionRequest, Long memberId) {
-        Solution solution = writeSolutionRequest.toSolution(findMemberById(memberId),save(writeSolutionRequest));
-        return solutionRepository.save(solution).getId();
+        Member member = findMemberById(memberId);
+        Solution solution = writeSolutionRequest.toSolution(member,save(writeSolutionRequest));
+        Long saved = solutionRepository.save(solution).getId();
+        addBadge(solutionRepository.countByMember(member),member);
+        return saved;
+    }
+
+    private void addBadge(Long solutionCount, Member member){
+        BadgeConstant badge = BadgeConstant.getBadge(solutionCount);
+        if (badge!=null){
+            badgeRepository.save(Badge.builder().member(member).badgeType(badge).build());
+        }
     }
 
     private Problem save(WriteSolutionRequest writeSolutionRequest) {

@@ -11,6 +11,6 @@ import lombok.Setter;
 @Builder
 public class SolutionAtSolutionListResponse {
     private String solutionName;
-    private AlgorithmConstant algorithm;
-    private DataStructureConstant dataStructure;
+    private String algorithm;
+    private String dataStructure;
 }

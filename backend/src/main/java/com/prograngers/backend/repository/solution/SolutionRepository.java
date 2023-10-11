@@ -22,6 +22,8 @@ public interface SolutionRepository extends JpaRepository<Solution, Long>, Solut
 
     Long countByScrapSolution(Solution solution);
 
+    Long countByMember(Member member);
+
     List<Solution> findTop3ByMemberOrderByCreatedAtDesc(Member member);
 
     List<Solution> findAllByProblemOrderByCreatedAtAsc(Problem problem);

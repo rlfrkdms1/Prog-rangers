@@ -20,8 +20,8 @@ public class SolutionResponse {
     private String nickname;
     private String title;
     private String link;
-    private AlgorithmConstant algorithmName;
-    private DataStructureConstant dataStructureName;
+    private String algorithm;
+    private String dataStructure;
     private String[] code;
     private String description;
     private Integer likes;
@@ -38,8 +38,8 @@ public class SolutionResponse {
                 .nickname(nickname)
                 .title(solution.getTitle())
                 .link(problemLink)
-                .algorithmName(solution.getAlgorithm())
-                .dataStructureName(solution.getDataStructure())
+                .algorithm(solution.getAlgorithmView())
+                .dataStructure(solution.getDataStructureView())
                 .code(solution.getCode().split("\n"))
                 .description(solution.getDescription())
                 .likes(likeCount)
