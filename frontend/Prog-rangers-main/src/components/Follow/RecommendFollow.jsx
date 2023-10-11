@@ -58,96 +58,20 @@ export const RecommendFollow = () => {
 
   return (
     <div ref = {containerRef} 
-      css={css`width: 800px; height: 90px; background-color:  ${theme.colors.light3}; padding: 20px; overflow-x: scroll; overflow-y: hidden; &::-webkit-scrollbar {display: none;}`}
+      css={css`width: 800px; height: 90px; background-color:  ${theme.colors.light3}; padding: 20px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap; &::-webkit-scrollbar {display: none;}
+      &::-webkit-user-select:none;
+      &::-moz-user-select:none;
+      &::-ms-user-select:none;
+      user-select: none;`}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       >
 
-      <div css={css`display:inline-flex; `}>
-        {/* 스크롤 테스트용 */}
-        <div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
-                <div css={css`display: flex; align-items: center; gap: 15px;`}>
-                <img
-                    src= 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'               
-                    alt='profileImg'
-                    width='50px'
-                    css={css`
-                    border-radius: 50%;
-                    `}></img>
-                <div css={css`display: flex; flex-direction: column;`}>
-                    <div css={css`${fontSize12}`}>nickname</div>
-                    <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
-                      <div css={css`${fontSize14}`}>intro</div>
-                      <button css={css`${buttonSytle}`}>팔로우</button>
-                    </div>
-                </div>            
-                </div>
-          </div>
-          <div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
-              <div css={css`display: flex; align-items: center; gap: 15px;`}>
-              <img
-                  src= 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'               
-                  alt='profileImg'
-                  width='50px'
-                  css={css`
-                  border-radius: 50%;
-                  `}></img>
-              <div css={css`display: flex; flex-direction: column;`}>
-                  <div css={css`${fontSize12}`}>nickname</div>
-                  <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
-                    <div css={css`${fontSize14}`}>intro</div>
-                    <button css={css`${buttonSytle}`}>팔로우</button>
-                  </div>
-              </div>            
-              </div>
-        </div><div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
-              <div css={css`display: flex; align-items: center; gap: 15px;`}>
-              <img
-                  src= 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'               
-                  alt='profileImg'
-                  width='50px'
-                  css={css`
-                  border-radius: 50%;
-                  `}></img>
-              <div css={css`display: flex; flex-direction: column;`}>
-                  <div css={css`${fontSize12}`}>nickname</div>
-                  <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
-                    <div css={css`${fontSize14}`}>intro</div>
-                    <button css={css`${buttonSytle}`}>팔로우</button>
-                  </div>
-              </div>            
-              </div>
-        </div><div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
-              <div css={css`display: flex; align-items: center; gap: 15px;`}>
-              <img
-                  src= 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'               
-                  alt='profileImg'
-                  width='50px'
-                  css={css`
-                  border-radius: 50%;
-                  `}></img>
-              <div css={css`display: flex; flex-direction: column;`}>
-                  <div css={css`${fontSize12}`}>nickname</div>
-                  <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
-                    <div css={css`${fontSize14}`}>intro</div>
-                    <button css={css`${buttonSytle}`}>팔로우</button>
-                  </div>
-              </div>            
-              </div>
-        </div>
-        </div>
-        {/* 스크롤 테스트용 */}
-
     {data.recommends.map((item, index) => (
     <div key={index} 
-        css={css`
-                 width: 800px; height: 90px; 
-                 background-color: ${theme.colors.light3}; 
-                 padding: 20px;
-                 overflow-x: scroll;
-                 `}>
+        css={css`display: inline-flex; flex-direction: row;`}>
     
     <div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
         <div css={css`display: flex; align-items: center; gap: 15px;`}>
@@ -158,10 +82,10 @@ export const RecommendFollow = () => {
             css={css`
             border-radius: 50%;
             `}></img>
-        <div css={css`display: flex; flex-direction: column;`}>
+        <div css={css`display: flex; flex-direction: column; gap: 4px;`}>
             <div css={css`${fontSize12}`}>{item.nickname}</div>
             <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
-            <div css={css`${fontSize14}`}>{item.introduction}intro</div>
+            <div css={css`${fontSize14} `}>{item.introduction}</div>
             <button css={css`${buttonSytle}`}>팔로우</button>
             </div>
         </div>

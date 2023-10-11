@@ -26,13 +26,9 @@ export const Follower = () => {
 
 return(
     <>
-    {data.followers.map((item, index) => (
-        <div key={index} 
-            css={css`
-                     width: 370px; height: 400px; 
-                     background-color: ${theme.colors.light3}; 
-                     padding: 20px;
-                     `}>
+    <div css={css`width: 370px; height: 400px; 
+                  background-color: ${theme.colors.light3}; 
+                  padding: 20px;`}>
         <div css={css`display: flex; flex-direction: column; 
                      width: 330px; height: 360px;
                      overflow-y: scroll;
@@ -40,14 +36,11 @@ return(
                      &::-webkit-scrollbar {width: 10px; margin-right:20px;}
                      &::-webkit-scrollbar-track {
                         background-color: #D9D9D9;
-                        border-radius: 5px;
-                      }
+                        border-radius: 5px;}
                       &::-webkit-scrollbar-thumb {
                         border-radius: 5px;
-                        background-color: #545454;
-                      }
-                     `}>
-        
+                        background-color: #545454;}`}>
+    {data.followers.map((item, index) => (
         <div css={css`width:300px; max-height: 60px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #959595;`}>           
             <div css={css`display: flex; align-items: center; gap: 15px;`}>
             <img
@@ -59,13 +52,13 @@ return(
                 `}></img>
             <div css={css`display: flex; flex-direction: column;`}>
                 <div css={css`${fontSize12}`}>{item.nickname}</div>
-                <div css={css`${fontSize14}`}>{item.introduction}intro</div>
+                <div css={css`${fontSize14} height: 1em;`}>{item.introduction}</div>
             </div>
             </div>
         </div>
-        </div>
-        </div>
-    ))}
+    ))} 
+    </div>
+  </div>
     </>
 )
 }
