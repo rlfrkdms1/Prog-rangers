@@ -106,12 +106,7 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
               width: 345px;
               height: containerHeight;
               margin-left: 10px;
-              background-color: ${ item.read ? `${theme.colors.light3}` : '#e2e8f0' };
-
-              &:hover{
-                cursor: pointer;
-                text-decoration: border;
-              }
+              background-color: ${ item.read ? `${theme.colors.light3}` : `${theme.colors.main30}` };
               `}>
         <div css={css`
             display: flex;
@@ -132,6 +127,11 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
             margin: 5px 12px 0 12px;
             padding-bottom: 10px;
             ${fontSize14}
+
+            &:hover{
+              cursor: pointer;
+              text-decoration: underline;
+            }
             `}>
               <span css={css`font-weight: 700;`}>
                 {item.nickname} </span>

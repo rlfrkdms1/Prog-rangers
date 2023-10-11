@@ -108,9 +108,4 @@ export const ojName = css`
   }
 
   background-color: ${theme.colors.light4}
-
-  &:hover{
-    cursor: pointer;
-    background-color: red;
-  }
 `;

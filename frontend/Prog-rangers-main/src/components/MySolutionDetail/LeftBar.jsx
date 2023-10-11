@@ -10,7 +10,12 @@ export const LeftBar = () => {
 
     const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution?${solutionId}`); 
+      navigate(`/mySolution/${solutionId}`); 
+    };
+
+    const navigate1 = useNavigate();
+    const onClickScrape = (solutionId) => {
+      navigate1(`/solution/${solutionId}`); 
     };
 
     const { solutionId } = useParams();
@@ -68,9 +73,15 @@ export const LeftBar = () => {
                 <div css={css` 
                      margin-top: 10px;
                      max-width: 170px; 
+
                      overflow: hidden;
                      text-overflow: ellipsis;
-                     white-space: nowrap;`}
+                     white-space: nowrap;
+                     
+                     &:hover{
+                      cursor: pointer;
+                      text-decoration: underline;
+                    }`}
                 onClick={(e) => onClickSols(item.id)}
                 key={item.id}
                 >
@@ -102,10 +113,16 @@ export const LeftBar = () => {
                 <div css={css` 
                      margin-top: 10px;
                      max-width: 170px; 
+
                      overflow: hidden;
                      text-overflow: ellipsis;
-                     white-space: nowrap;`}
-                onClick={(e) => onClickSols(item.id)}
+                     white-space: nowrap
+                     
+                     &:hover{
+                      cursor: pointer;
+                      text-decoration: underline;
+                    };`}
+                onClick={(e) => onClickScrape(item.id)}
                 key={item.id}
                 >
                 {item.title}
