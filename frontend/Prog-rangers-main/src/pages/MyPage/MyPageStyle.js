@@ -66,6 +66,11 @@ export const Divline = css`
   font-weight: bold;
   font-size: 16px;  
   color: ${theme.colors.dark2};
+
+  &:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
 `;
 
 export const ojName = css`
@@ -103,4 +108,9 @@ export const ojName = css`
   }
 
   background-color: ${theme.colors.light4}
+
+  &:hover{
+    cursor: pointer;
+    background-color: red;
+  }
 `;

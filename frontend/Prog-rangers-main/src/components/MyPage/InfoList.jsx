@@ -14,7 +14,7 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
   const navigate = useNavigate();
 
   const onClickSols = (solutionId) => {
-    navigate(`/solution/${solutionId}`);
+    navigate(`/solutions/${solutionId}`);
   };
   
   // SSE 알림 구독
@@ -107,6 +107,11 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
               height: containerHeight;
               margin-left: 10px;
               background-color: ${ item.read ? `${theme.colors.light3}` : '#e2e8f0' };
+
+              &:hover{
+                cursor: pointer;
+                text-decoration: border;
+              }
               `}>
         <div css={css`
             display: flex;

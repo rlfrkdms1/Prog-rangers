@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
@@ -12,10 +14,11 @@ import {
   deleteStyle,
   rowFlex,
   fontStyle
-} from './headerStyle';
+} from '../SolutionDetail/headerStyle';
 
 export const MySolHeader = () => {
   // 풀이 API
+  const { solutionId } = useParams();
   const [problem, setProblem] = useState(null);
   const [solution, setSolution] = useState(null);
 
@@ -40,11 +43,16 @@ export const MySolHeader = () => {
   };
 
   useEffect(() => {
-    fetch('http://13.124.131.171:8080/api/v1/solutions/1')
-      .then((res) => res.json())
-      .then((res) => {
-        setProblem(res.problem || null);
-        setSolution(res.solution || null);
+    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setProblem(response.data.problem);
+        setSolution(response.data.solution);
+      })
+      .catch((error) => {
+        console.error('API 요청 오류:', error);
       });
   }, []);
 

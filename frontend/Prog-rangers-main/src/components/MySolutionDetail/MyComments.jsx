@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
@@ -8,17 +9,18 @@ import {
   flexLayout,
   rowFlex,
   rowFlexRecomment,
-} from './commentsStyle';
+} from '../SolutionDetail/commentsStyle';
 
 import ProfileImg from './profile/default.png';
 
 export const MyComments = () => {
 
+  const { solutionId } = useParams();
   const [ comment, setComment ] = useState([]);
   const [ commentCount, setCommentCount ] = useState(0);
 
     useEffect(() => {
-      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
       axios
         .get(apiUrl)

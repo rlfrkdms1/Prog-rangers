@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { MySolView } from './MySolView';
 import { MyLineReview } from './MyLineReview';
-import { MAIN_DATA } from './MainData';
+import { MAIN_DATA } from '../SolutionDetail/MainData';
 
 import { css } from '@emotion/react';
-import { MytapLayout } from './solutionTabStyle';
+import { MytapLayout } from '../SolutionDetail/solutionTabStyle';
 import { theme } from '../Header/theme';
 
 import beforeClick from './tabIcons/beforeC.svg';

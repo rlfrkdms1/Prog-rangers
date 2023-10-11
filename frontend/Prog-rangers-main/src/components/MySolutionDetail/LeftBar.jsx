@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 import { css } from '@emotion/react';
@@ -9,9 +10,10 @@ export const LeftBar = () => {
 
     const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution?${solutionId}`);
+      navigate(`/solution?${solutionId}`); 
     };
 
+    const { solutionId } = useParams();
     const [ MySolList, setMySolList ] = useState([]);
     const [ MyScrapeList, setScrapeList ] = useState([]);
     
@@ -24,7 +26,7 @@ export const LeftBar = () => {
     useEffect(() => {
 
       const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/1`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
 
       axios
         .get(apiUrl, {
@@ -69,6 +71,7 @@ export const LeftBar = () => {
                      overflow: hidden;
                      text-overflow: ellipsis;
                      white-space: nowrap;`}
+                onClick={(e) => onClickSols(item.id)}
                 key={item.id}
                 >
                 {item.title}
@@ -102,6 +105,7 @@ export const LeftBar = () => {
                      overflow: hidden;
                      text-overflow: ellipsis;
                      white-space: nowrap;`}
+                onClick={(e) => onClickSols(item.id)}
                 key={item.id}
                 >
                 {item.title}

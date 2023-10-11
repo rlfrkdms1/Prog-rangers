@@ -12,7 +12,7 @@ import {
 export const FollowingList = ({data}) => {
     const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution?${solutionId}`);
+      navigate(`/solutions/${solutionId}`);
     };
 
     return(
@@ -23,7 +23,8 @@ export const FollowingList = ({data}) => {
               css={css` ${Divline} 
                         display: flex; 
                         align-items: center;
-                        justify-content: space-between;`}>
+                        justify-content: space-between;
+                        `}>
                 <div css={css `${RecentlyTitle}`}> {item.title} </div>
                 <div css={css`
                           ${ojName} 

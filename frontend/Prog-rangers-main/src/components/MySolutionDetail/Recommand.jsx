@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { css } from "@mui/material";
 import { theme } from "../Header/theme";
-import { MywrapStyle } from "./commentsStyle";
+import { MywrapStyle } from "../SolutionDetail/commentsStyle";
 import { FcLike } from 'react-icons/fc';
 
 export const Recommand = () => {
@@ -13,12 +14,13 @@ export const Recommand = () => {
       navigate(`/solution?${solutionId}`);
     };
     
+    const { solutionId } = useParams();
     const [ recoSol, setRecoSol ] = useState([]);
 
     useEffect(() => {
 
       const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/1`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
 
       axios
         .get(apiUrl, {
@@ -64,6 +66,7 @@ export const Recommand = () => {
                 // 데이터가 있는 경우에만 렌더링
                 item ? (
                 <div css={gridItemStyles}
+                onClick={(e) => onClickSols(item.id)}
                 key={item.id}
                 >
                     <div className="icon" 

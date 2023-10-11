@@ -8,7 +8,7 @@ import {
   MyComments,
   Recommand,
   LeftBar
-} from '../components/SolutionDetail';
+} from '../components/MySolutionDetail';
 
 export const MySolutionDetail = () => {
   return (
@@ -20,9 +20,7 @@ export const MySolutionDetail = () => {
       display: flex;
       justify-content: space-between;
       margin: 0 auto;
-      
-      
-    ` }
+      ` }
     >
       <SideBar />
     <div css={css`margin-left: 40px;`}>

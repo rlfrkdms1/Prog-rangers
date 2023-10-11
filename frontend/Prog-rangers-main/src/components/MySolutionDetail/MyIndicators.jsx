@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 import { FcLikePlaceholder } from 'react-icons/fc';
 import { RiShareBoxLine } from 'react-icons/ri';
-import { flexLayout, MyindiLayout, Divline } from './indicatorSytle';
+import { flexLayout, MyindiLayout, Divline } from '../SolutionDetail/indicatorSytle';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
 export const MyIndicators = () => {
 
+  const { solutionId } = useParams();
   const [ solution, setSolution ] = useState({});
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
+    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
     axios
       .get(apiUrl)
