@@ -2,6 +2,7 @@ package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
+import com.prograngers.backend.entity.solution.Solution;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,4 +15,12 @@ public class SolutionAtSolutionListResponse {
     private String solutionName;
     private String algorithm;
     private String dataStructure;
+    public static SolutionAtSolutionListResponse from(Solution solution){
+        return SolutionAtSolutionListResponse.builder()
+                .solutionId(solution.getId())
+                .solutionName(solution.getTitle())
+                .algorithm(solution.getAlgorithmView())
+                .dataStructure(solution.getDataStructureView())
+                .build();
+    }
 }
