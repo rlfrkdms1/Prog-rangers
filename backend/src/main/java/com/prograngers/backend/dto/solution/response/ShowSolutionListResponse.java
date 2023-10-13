@@ -33,24 +33,21 @@ public class ShowSolutionListResponse {
             return null;
         }
         Problem problem = getProblem(solutions);
-        ShowSolutionListResponse showSolutionListResponse = addProblemNameAndOjNameAtResponse(pages, problem);
+        ShowSolutionListResponse showSolutionListResponse = makeResponse(pages, problem);
         addSolutionAtResponse(solutions, showSolutionListResponse);
         showSolutionListResponse.setPage(page);
         return showSolutionListResponse;
     }
 
     private static void addSolutionAtResponse(List<Solution> solutions, ShowSolutionListResponse showSolutionListResponse) {
-        solutions.stream()
-                        .forEach((solution -> showSolutionListResponse.getSolutions().add(SolutionAtSolutionListResponse.builder()
-                                .solutionName(solution.getTitle())
-                                .algorithm(solution.getAlgorithmView())
-                                .dataStructure(solution.getDataStructureView())
-                                .build())));
+        solutions
+                .stream()
+                .forEach((solution -> showSolutionListResponse.getSolutions().add(SolutionAtSolutionListResponse.from(solution))));
     }
 
-    private static ShowSolutionListResponse addProblemNameAndOjNameAtResponse(PageImpl<Solution> pages, Problem problem) {
-        // 문제이름, 저지명 세팅
+    private static ShowSolutionListResponse makeResponse(PageImpl<Solution> pages, Problem problem) {
         ShowSolutionListResponse showSolutionListResponse = ShowSolutionListResponse.builder()
+                .problemId(problem.getId())
                 .problemName(problem.getTitle())
                 .ojName(problem.getOjName())
                 .solutions(new ArrayList<>())
