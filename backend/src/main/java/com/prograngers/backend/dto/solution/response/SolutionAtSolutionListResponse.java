@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class SolutionAtSolutionListResponse {
+    private Long solutionId;
     private String solutionName;
     private String algorithm;
     private String dataStructure;

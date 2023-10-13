@@ -20,13 +20,14 @@ import java.util.List;
 @NoArgsConstructor
 public class ShowSolutionListResponse {
 
+    private Long problemId;
     private String problemName;
     private JudgeConstant ojName;
     private List<SolutionAtSolutionListResponse> solutions;
     private int totalPages;
     private int page;
 
-    public static ShowSolutionListResponse from(PageImpl<Solution> pages, int page) {
+    public static ShowSolutionListResponse of(PageImpl<Solution> pages, int page) {
         List<Solution> solutions = pages.getContent();
         if (solutions.size()==0){
             return null;
