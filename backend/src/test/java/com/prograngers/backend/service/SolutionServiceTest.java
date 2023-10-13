@@ -311,7 +311,7 @@ class SolutionServiceTest {
         when(problemRepository.findById(any())).thenReturn(Optional.of(problem));
         when(solutionRepository.getSolutionList(PageRequest.of(0,4),problemId,null,null,null, NEWEST)).thenReturn(new PageImpl<>(Arrays.asList(solution4,solution3,solution2,solution1), PageRequest.of(0,4), 4L));
 
-        ShowSolutionListResponse expected = ShowSolutionListResponse.from(new PageImpl<>(Arrays.asList(solution4,solution3,solution2,solution1),PageRequest.of(0,4),4L),0);
+        ShowSolutionListResponse expected = ShowSolutionListResponse.of(new PageImpl<>(Arrays.asList(solution4,solution3,solution2,solution1),PageRequest.of(0,4),4L),0);
         //when
         ShowSolutionListResponse result = solutionService.getSolutionList(PageRequest.of(0, 4), problemId, null, null, null, NEWEST);
         //then

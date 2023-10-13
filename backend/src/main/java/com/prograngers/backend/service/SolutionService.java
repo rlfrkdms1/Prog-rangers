@@ -220,7 +220,7 @@ public class SolutionService {
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm, DataStructureConstant dataStructure, SortConstant sortBy) {
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language, algorithm, dataStructure, sortBy);
-        return ShowSolutionListResponse.from(solutions, pageable.getPageNumber());
+        return ShowSolutionListResponse.of(solutions, pageable.getPageNumber());
     }
 
     private List<ReviewWithRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {
