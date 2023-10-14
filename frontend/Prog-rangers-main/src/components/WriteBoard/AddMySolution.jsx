@@ -20,12 +20,10 @@ import { targetAtom, targetScope, nameAtom, nameScope , valueAtom, valueScope} f
 import { ButtonDiv, SubmitButton } from "../../pages/BoardPage/buttonDiv";
 import { TagAction } from "./TagAction";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 
 //새로운 문제인 경우 링크를 새로 작성하고, 기존의 풀이에서 링크를 가져올 수도 있다.
 
 export const AddMySolution = ({postURL}) => {
-  const navigate = useNavigate();
   const [ isPublic, setIsPublic ] = useState(true);
   const [ clickedStar, setClickedStar ] = useState([false, false, false, false, false]);
   const token = localStorage.getItem('token');
@@ -157,7 +155,6 @@ export const AddMySolution = ({postURL}) => {
       .post(`${postURL}`, body,{
         headers: { Authorization: `Bearer ${token}`}
       });
-      navigate('/mypage');
     if(response.status === 201){
       alert('질문이 등록되었습니다.');
       window.location.href = `http://localhost:3000/mypage`;
