@@ -1,4 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { css } from '@emotion/react';
 import { theme } from './theme';
 import { Link } from 'react-router-dom';
@@ -7,6 +11,8 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { AfterLoginNav } from './AfterLoginNav';
 import { BeforeLoginNav } from './BeforeLoginNav';
 import { useIsLoginState } from '../../context/AuthContext';
+import axios from 'axios';
+import { SearchContext } from '../../context/SearchContext';
 
 const flexAlign = css`
   display: flex;
@@ -15,6 +21,33 @@ const flexAlign = css`
 
 export const Header = () => {
   const isLogin = useIsLoginState();
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        'http://13.124.131.171:8080/prog-rangers/problems'
+      );
+      setData(result.data);
+    };
+
+    fetchData();
+  }, []);
+
+  const { setSearchTerm } = useContext(SearchContext);
+
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const results = !search
+    ? data
+    : data.filter((item) =>
+        item
+          .toLowerCase()
+          .includes(search.toLocaleLowerCase())
+      );
 
   return (
     <div
@@ -69,6 +102,8 @@ export const Header = () => {
             <input
               type="text"
               placeholder="문제 제목을 검색해보세요!"
+              value={search}
+              onChange={handleChange}
               css={css`
                 outline: none;
                 border: none;
@@ -118,7 +153,7 @@ export const Header = () => {
             margin-top: 5px;
           `}
         >
-          { isLogin ? <AfterLoginNav/> : <BeforeLoginNav/> }
+          {isLogin ? <AfterLoginNav /> : <BeforeLoginNav />}
         </div>
       </div>
     </div>
