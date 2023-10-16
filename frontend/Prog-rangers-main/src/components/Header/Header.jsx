@@ -26,7 +26,7 @@ export const Header = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(
+      const result = await axios.get(
         'http://13.124.131.171:8080/prog-rangers/problems'
       );
       setData(result.data);
@@ -38,6 +38,7 @@ export const Header = () => {
   const { setSearchTerm } = useContext(SearchContext);
 
   const handleChange = (event) => {
+    setSearch(event.target.value);
     setSearchTerm(event.target.value);
   };
 
