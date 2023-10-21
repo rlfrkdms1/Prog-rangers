@@ -5,6 +5,7 @@ import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
 import com.prograngers.backend.dto.solution.response.*;
 import com.prograngers.backend.entity.Likes;
+import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
@@ -16,6 +17,7 @@ import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -23,7 +25,6 @@ import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.prograngers.backend.entity.badge.BadgeConstant.*;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.ARRAY;
@@ -51,8 +53,8 @@ import static com.prograngers.backend.support.fixture.CommentFixture.생성된_�
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.support.fixture.ReviewFixture.FIRST_LINE_REVIEW;
-import static com.prograngers.backend.support.fixture.ReviewFixture.SECOND_LINE_REVIEW;
+import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
+import static com.prograngers.backend.support.fixture.ReviewFixture.수정된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static com.prograngers.backend.support.fixture.SolutionFixture.비공개_풀이;
 import static org.assertj.core.api.Assertions.*;
@@ -76,6 +78,8 @@ class SolutionServiceTest {
     private LikesRepository likesRepository;
     @Mock
     private ProblemRepository problemRepository;
+    @Mock
+    private BadgeRepository badgeRepository;
     @InjectMocks
     private SolutionService solutionService;
 
@@ -99,7 +103,7 @@ class SolutionServiceTest {
         when(solutionRepository.save(any())).thenReturn(Optional.of(scrapResult).get());
 
         // when
-        solutionService.writeScrap(scrapTarget.getId(), request, member.getId());
+        solutionService.scrap(scrapTarget.getId(), request, member.getId());
 
         // then
         verify(solutionRepository, times(1)).save(any());
@@ -197,10 +201,10 @@ class SolutionServiceTest {
         final Comment comment4 = 생성된_댓글.부모_지정_생성(3L, 4L, member1, myMainSolution, LocalDateTime.now().minusDays(1));
 
         //myMainSolution 리뷰
-        final Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().minusDays(4));
-        final Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().minusDays(3));
-        final Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().minusDays(2));
-        final Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().minusDays(1));
+        final Review review1 = 생성된_리뷰.아이디_지정_생성(1L, member1, myMainSolution, LocalDateTime.now().minusDays(4));
+        final Review review2 = 생성된_리뷰.부모_지정_생성(1L,2L,member2,myMainSolution,LocalDateTime.now().minusDays(3));
+        final Review review3 = 수정된_리뷰.아이디_지정_생성(3L,member1,myMainSolution,LocalDateTime.now().minusDays(2));
+        final Review review4 = 수정된_리뷰.부모_지정_생성(3L,4L,member2,myMainSolution,LocalDateTime.now().minusDays(1));
 
         when(solutionRepository.findById(solutionId)).thenReturn(Optional.of(myMainSolution));
         when(solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem)).thenReturn(Arrays.asList(mySolution3,mySolution2,mySolution1,myMainSolution,othersSolution2,othersSolution1));
@@ -332,10 +336,10 @@ class SolutionServiceTest {
         Comment comment2 = 생성된_댓글.부모_지정_생성(1L,2L, other, solution, LocalDateTime.now().minusDays(3));
         Comment comment3 = 생성된_댓글.아이디_지정_생성(3L, member, solution, LocalDateTime.now().minusDays(2));
         Comment comment4 = 생성된_댓글.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now().minusDays(1));
-        Review review1 = FIRST_LINE_REVIEW.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
-        Review review2 = FIRST_LINE_REVIEW.부모_지정_생성(1L, 2L,other, solution, LocalDateTime.now());
-        Review review3 = SECOND_LINE_REVIEW.아이디_지정_생성(3L, member, solution, LocalDateTime.now());
-        Review review4 = SECOND_LINE_REVIEW.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now());
+        Review review1 = 생성된_리뷰.아이디_지정_생성(1L, member, solution, LocalDateTime.now());
+        Review review2 = 생성된_리뷰.부모_지정_생성(1L, 2L,other, solution, LocalDateTime.now());
+        Review review3 = 수정된_리뷰.아이디_지정_생성(3L, member, solution, LocalDateTime.now());
+        Review review4 = 수정된_리뷰.부모_지정_생성(3L,4L, other, solution, LocalDateTime.now());
 
         Likes likes = 좋아요_생성(other, solution);
 
@@ -388,6 +392,30 @@ class SolutionServiceTest {
                 ()-> verify(solutionRepository,times(1)).save(any(Solution.class)),
                 ()-> verify(problemRepository,never()).save(any(Problem.class))
         );
+    }
+
+    @Test
+    void 뱃지_생성_테스트(){
+        //given
+        final String problemLink = "https://www.acmicpc.net/problem/2557";
+        final Long memberId = 1L;
+        final Member member = 장지담.아이디_지정_생성(1L);
+        final Problem problem = 백준_문제.아이디_지정_생성(1L);
+        final Solution solution = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
+        final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목",problemLink, 1, JAVA, true, "설명", "import\nmain\nhello\nworld");
+        final Badge badge = Badge.builder().badgeType(새싹).build();
+
+        when(problemRepository.findByLink(problemLink)).thenReturn(Optional.empty());
+        when(problemRepository.save(any(Problem.class))).thenReturn(problem);
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(solutionRepository.save(any(Solution.class))).thenReturn(solution);
+        when(solutionRepository.countByMember(member)).thenReturn(1L);
+
+        //when
+        solutionService.save(request, memberId);
+
+        //then
+        verify(badgeRepository,times(1)).save(any(Badge.class));
     }
 
     private Likes 좋아요_생성(Member member, Solution solution){

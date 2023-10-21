@@ -37,9 +37,10 @@ public class SolutionWithProblemResponse {
                 .ojName(problem.getOjName())
                 .authorImageUrl(author.getPhoto())
                 .authorNickname(author.getNickname())
+                .algorithm(solution.getAlgorithmView())
+                .dataStructure(solution.getDataStructureView())
                 .build();
-        if(solution.getAlgorithm() != null) response.setAlgorithm(solution.getAlgorithm().getView());
-        if(solution.getDataStructure() != null) response.setDataStructure(solution.getDataStructure().getView());
+
         return response;
     }
 
