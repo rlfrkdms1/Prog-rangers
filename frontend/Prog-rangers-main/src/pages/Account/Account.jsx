@@ -3,12 +3,11 @@ import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { Link } from 'react-router-dom';
 import { SideBar } from '../../components/SideBar/SideBar';
-import { Button } from '@mui/material';
 import { profileContentStyle, editBtnStyle, deleteBtnStyle } from './AccountStyle';
-import axios from 'axios';
 
 export const Account = () => {
   const [userData, setUserData] = useState({
+    type: '',
     nickname: '',
     email: '',
     github: '',
@@ -27,6 +26,7 @@ export const Account = () => {
     .then((response) => response.json())
     .then((json) => {
       setUserData({
+        type: json.type || '',
         nickname: json.nickname || '',
         email: json.email || '',
         github: json.github || '',
@@ -43,7 +43,7 @@ export const Account = () => {
 
   // 날짜 형식 변환
   const formattedDate = new Date(userData.passwordModifiedAt);
-
+  
   const year = formattedDate.getFullYear();
   const month = formattedDate.getMonth() + 1;
   const day = formattedDate.getDate();
@@ -124,7 +124,10 @@ export const Account = () => {
                 </div>
                 <div className='pw' css={profileContentStyle}>
                  <div css={css`width: 72px`}>비밀번호</div>
-                 <div>최근 변경일: {formattedTime}</div>
+                 <div>
+                  {userData.passwordModifiedAt && <span>최근 변경일: {formattedTime}</span>}
+                  {!userData.passwordModifiedAt && <span>최근 변경일: 데이터 없음</span>}
+                </div>
                 </div>
               </div>
             

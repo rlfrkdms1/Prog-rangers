@@ -31,7 +31,7 @@ export const inputBoxStyle = css`
 export const editBtnStyle = css`
     width: 120px;
     height: 50px;
-    font-size: 18px;
+    font-size: 14px;
     text-decoration: none;
     color: inherit;
     display: flex;

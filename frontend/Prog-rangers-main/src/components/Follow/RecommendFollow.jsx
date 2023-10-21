@@ -5,6 +5,7 @@ import { buttonSytle, fontSize14, fontSize12 } from './FollowStyle';
 import axios from "axios";
 
 export const RecommendFollow = () => {
+  // 추천 팔로우 api
   const [data, setData] = useState({ recommends: [] });
 
     useEffect(() => {
@@ -24,6 +25,7 @@ export const RecommendFollow = () => {
           });
       }, []);
       
+  // 가로 스크롤    
   const containerRef = useRef(null);
   const [startX, setStartX] = useState(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -48,13 +50,24 @@ export const RecommendFollow = () => {
       }
     }
   };
-
+  
   const handleMouseLeave = () => {
     if (isMouseDown) {
       setIsMouseDown(false);
       containerRef.current.style.scrollBehavior = 'smooth';
     }
   };
+
+  const [isFollowing, setIsFollowing] = useState({});
+  
+  const handleFollowClick = (item) => {
+    setIsFollowing((prevStatus) => ({
+      ...prevStatus,
+      [item.id]: !prevStatus[item.id],
+    }));
+  };
+
+  // 팔로우 기능
 
   return (
     <div ref = {containerRef} 
@@ -86,7 +99,9 @@ export const RecommendFollow = () => {
             <div css={css`${fontSize12}`}>{item.nickname}</div>
             <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
             <div css={css`${fontSize14} `}>{item.introduction}</div>
-            <button css={css`${buttonSytle}`}>팔로우</button>
+            <button onClick={() => handleFollowClick(item)}
+                    css={css`${buttonSytle} background-color:${isFollowing[item.id] ? theme.colors.light2 : theme.colors.main30}`}>
+                     {isFollowing[item.id] ? '팔로잉' : '팔로우'}</button>
             </div>
         </div>
         </div>

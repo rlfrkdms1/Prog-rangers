@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { fontSize14, fontSize12 } from './FollowStyle';
+import { Link, useParams } from 'react-router-dom';
 import axios from "axios";
 
 export const Follower = () => {
@@ -24,6 +25,8 @@ export const Follower = () => {
           });
       }, []);
 
+      data.nickname = useParams();
+
 return(
     <>
     <div css={css`width: 370px; height: 400px; 
@@ -41,6 +44,7 @@ return(
                         border-radius: 5px;
                         background-color: #545454;}`}>
     {data.followers.map((item, index) => (
+      <Link to={`/profile/:${item.nickname}`} css={css`text-decoration: none;`}>
         <div css={css`width:300px; max-height: 60px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #959595;`}>           
             <div css={css`display: flex; align-items: center; gap: 15px;`}>
             <img
@@ -56,6 +60,7 @@ return(
             </div>
             </div>
         </div>
+        </Link>
     ))} 
     </div>
   </div>
