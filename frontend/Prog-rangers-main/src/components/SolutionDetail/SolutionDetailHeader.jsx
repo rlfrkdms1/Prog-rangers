@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 import { css } from '@emotion/react';
@@ -14,6 +15,11 @@ import {
 } from './headerStyle';
 
 export const SolutionDetailHeader = () => {
+
+  const navigate = useNavigate();
+    const onClickName = (nickname) => {
+      navigate(`/profile/${nickname}`); 
+    };
   
   const { solutionId } = useParams();
   const [problem, setProblem] = useState({});
@@ -21,6 +27,7 @@ export const SolutionDetailHeader = () => {
 
   useEffect(() => {
     const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    // const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
 
     axios
       .get(apiUrl)
@@ -76,6 +83,7 @@ export const SolutionDetailHeader = () => {
                 css={css`
                   color: ${theme.colors.light1};
                 `}
+                onClick={() => onClickName(solution.nickname)} 
               >
                 {solution.nickname}
               </span>

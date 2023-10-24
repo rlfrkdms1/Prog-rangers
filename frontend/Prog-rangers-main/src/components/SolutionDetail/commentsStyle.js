@@ -6,8 +6,13 @@ export const wrapStyle = css`
   margin: 30px auto;
 `;
 
+export const MycommentStyle = css`
+  width: 700px;
+  margin: 30px auto;
+  `;
+
 export const MywrapStyle = css`
-  widrh: 740px;
+  width: 720px;
   margin: 30px auto;
   `;
 

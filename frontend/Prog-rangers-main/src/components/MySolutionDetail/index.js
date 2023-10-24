@@ -13,4 +13,4 @@ export { MyComments } from './MyComments';
 
 export { Recommand } from './Recommand';
 
-export { LeftBar } from './LeftBar';
+export { RightBar } from './RightBar';

@@ -4,8 +4,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CodeWindow2 } from '../Profile';
 import {
-  contentLayout,
-  contentMock,
+  contentLayout
 } from '../SolutionDetail/solutionTabStyle';
 
 export const MyLineReview = () => {

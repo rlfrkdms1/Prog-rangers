@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
-export const LeftBar = () => {
+export const RightBar = () => {
 
     const navigate = useNavigate();
     const onClickSols = (solutionId) => {
@@ -23,10 +23,10 @@ export const LeftBar = () => {
     const [ MyScrapeList, setScrapeList ] = useState([]);
     
     const SolData = MySolList.sort((a, b) => b.solutionId - a.solutionId);
-    const top3Sol = SolData.slice(0, 3);
+    const top3Sol = SolData.slice(0, 5);
     
     const ScrapeData = MyScrapeList.sort((a, b) => b.solutionId - a.solutionId);
-    const top3Scrape = ScrapeData.slice(0, 3);
+    const top3Scrape = ScrapeData.slice(0, 5);
 
     useEffect(() => {
 
@@ -48,7 +48,7 @@ export const LeftBar = () => {
     }, []);
 
   return (
-    <div className="LeftbarWarp">
+    <div className="RightbarWarp">
       <div css={css`
         height: 100%;
         alignItems: stretch;
@@ -82,7 +82,7 @@ export const LeftBar = () => {
                       cursor: pointer;
                       text-decoration: underline;
                     }`}
-                onClick={(e) => onClickSols(item.id)}
+                onClick={() => onClickSols(item.id)}
                 key={item.id}
                 >
                 {item.title}
@@ -110,19 +110,19 @@ export const LeftBar = () => {
             {top3Scrape.map((item) => (
                 // 데이터가 있는 경우에만 렌더링
                 item ? (
-                <div css={css` 
-                     margin-top: 10px;
-                     max-width: 170px; 
+                  <div css={css` 
+                  margin-top: 10px;
+                  max-width: 170px; 
 
-                     overflow: hidden;
-                     text-overflow: ellipsis;
-                     white-space: nowrap
-                     
-                     &:hover{
-                      cursor: pointer;
-                      text-decoration: underline;
-                    };`}
-                onClick={(e) => onClickScrape(item.id)}
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  
+                  &:hover{
+                   cursor: pointer;
+                   text-decoration: underline;
+                 }`}
+                onClick={() => onClickScrape(item.id)}
                 key={item.id}
                 >
                 {item.title}

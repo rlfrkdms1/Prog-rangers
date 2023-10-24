@@ -7,7 +7,7 @@ import {
   MySolutionTab,
   MyComments,
   Recommand,
-  LeftBar
+  RightBar
 } from '../components/MySolutionDetail';
 
 export const MySolutionDetail = () => {
@@ -23,14 +23,14 @@ export const MySolutionDetail = () => {
       ` }
     >
       <SideBar />
-    <div css={css`margin-left: 40px;`}>
+    <div css={css`margin-left: 20px;`}>
       <MySolHeader />
       <MySolutionTab />
       <MyIndicators />
       <MyComments />
       <Recommand />
       </div>
-      <LeftBar />
+      <RightBar />
   
     </div>
   );

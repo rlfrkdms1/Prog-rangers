@@ -71,7 +71,6 @@ export const MySolHeader = () => {
                   font-size: 20px;
                   font-weight: bold;
                   color: ${theme.colors.dark1};
-
                 `}
               >
                 {problem.title}

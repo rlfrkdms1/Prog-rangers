@@ -16,6 +16,7 @@ export const LineReview = () => {
 
   useEffect(() => {
     const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    // const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
 
     axios
       .get(apiUrl)

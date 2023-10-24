@@ -11,7 +11,7 @@ export const Recommand = () => {
 
   const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution/${solutionId}`);
+      navigate(`/solutions/${solutionId}`);
     };
     
     const { solutionId } = useParams();
@@ -74,7 +74,7 @@ export const Recommand = () => {
                 // 데이터가 있는 경우에만 렌더링
                 item ? (
                 <div css={gridItemStyles}
-                onClick={(e) => onClickSols(item.id)}
+                onClick={() => onClickSols(item.id)}
                 key={item.id}
                 >
                     <div className="icon" 

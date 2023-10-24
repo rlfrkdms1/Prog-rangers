@@ -4,7 +4,6 @@ import { theme } from '../Header/theme';
 export const HeaderLayout = css`
   width: 996px;
   margin: 50px auto 0;
-
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -12,8 +11,8 @@ export const HeaderLayout = css`
 `;
 
 export const MyHeaderLayout = css`
-  width: 740px;
-  margin-top: 50px;
+  width: 720px;
+  margin: 50px auto 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

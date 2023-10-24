@@ -8,7 +8,7 @@ export const indiLayout = css`
 `;
 
 export const MyindiLayout = css`
-  width: 740px;
+  width: 700px;
   margin: 0 auto;
   padding: 30px 0;
 `;

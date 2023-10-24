@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import {
-  MywrapStyle,
+  MycommentStyle,
   flexLayout,
   rowFlex,
   rowFlexRecomment,
@@ -14,6 +15,11 @@ import {
 import ProfileImg from './profile/default.png';
 
 export const MyComments = () => {
+
+  const navigate = useNavigate();
+  const onClickName = (nickname) => {
+    navigate(`/profile/${nickname}`); 
+  };
 
   const { solutionId } = useParams();
   const [ comment, setComment ] = useState([]);
@@ -34,7 +40,7 @@ export const MyComments = () => {
     }, []);
 
   return (
-    <div className="wrap" css={MywrapStyle}>
+    <div className="wrap" css={MycommentStyle}>
       <div className="commentArea">
         <div className="title" css={flexLayout}>
           <div
@@ -43,7 +49,6 @@ export const MyComments = () => {
               font-size: 20px;
               font-weight: bold;
               color: ${theme.colors.dark1};
-
               margin-right: 10px;
             `}
           >
@@ -88,6 +93,7 @@ export const MyComments = () => {
                   color: ${theme.colors.light1};
                   margin-bottom: 5px;
                 `}
+                onClick={() => onClickName(commentItem.nickname)} 
               >
                 {commentItem.nickname}
               </div>
@@ -125,6 +131,7 @@ export const MyComments = () => {
                   color: ${theme.colors.light1};
                   margin-bottom: 5px;
                 `}
+                onClick={() => onClickName(replyItem.nickname)} 
               >
                 {replyItem.nickname}
               </div>

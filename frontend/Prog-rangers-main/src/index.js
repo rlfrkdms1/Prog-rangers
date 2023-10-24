@@ -43,11 +43,11 @@ const router = createBrowserRouter([
       { path: 'login/google', element: <GoogleRedirect /> },
       { path: 'problems', element: <Problems /> },
       {
-        path: 'solutions/:problemId',
+        path: 'problems/:problemId',
         element: <Solutions />,
       },
       {
-        path: 'solutions/:problemId/detail',
+        path: 'solutions/:solutionId',
         element: <SolutionDetail />,
       },
       {
