@@ -5,6 +5,9 @@ import { profileContentStyle, profileContentInputStyle, inputBoxStyle, blueBtn, 
 import { Link, useNavigate } from 'react-router-dom';
 import eyeOpen from '../../assets/icons/mypage-eye-open.svg';
 import eyeClosed from '../../assets/icons/mypage-eye-closed.svg';
+import Kakao from '../../assets/icons/signin-kakao-logo.svg'
+import Google from '../../assets/icons/signin-google-logo.svg'
+import Naver from '../../assets/icons/signin-naver-logo.svg'
 import axios from 'axios';
 
 export const AccountChange = () => {
@@ -291,6 +294,7 @@ const accountSubmit = () => {
                           value={nickname}
                           onChange={handleNicknameChange}
                           placeholder={userData.nickname}
+                          maxLength={10}
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -315,7 +319,18 @@ const accountSubmit = () => {
                 
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
+                  <div css={css`display: flex; flex-direction: row;`}>
                   <div>{userData.email}</div>
+                  {userData.type === 'KAKAO' && (
+                    <img src={Kakao} alt="kakao_logo" css={css`width:30px; margin-left:10px;`} />
+                  )}
+                  {userData.type === 'NAVER' && (
+                    <img src={Naver} alt="naver_logo" css={css`width:30px; margin-left:10px;`} />
+                  )}
+                  {userData.type === 'GOOGLE' && (
+                    <img src={Google} alt="google_logo" css={css`width:30px; margin-left:10px;`} />
+                  )}
+                  </div>
                 </div>
 
                 <div className='github' css={profileContentStyle}>
@@ -369,6 +384,7 @@ const accountSubmit = () => {
                  </div>
                 </div>
 
+                {userData.type === 'BASIC' && (
                 <div className='pw' css={profileContentStyle}>
                  <div css={css`width: 72px; padding-top: 8px;`}>비밀번호</div>
 
@@ -449,6 +465,7 @@ const accountSubmit = () => {
                   </div>
                 </div>
               </div>
+              )}
             </div>
           </div>
 

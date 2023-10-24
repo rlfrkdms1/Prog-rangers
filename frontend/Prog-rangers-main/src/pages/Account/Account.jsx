@@ -4,6 +4,9 @@ import { theme } from '../../components/Header/theme';
 import { Link } from 'react-router-dom';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { profileContentStyle, editBtnStyle, deleteBtnStyle } from './AccountStyle';
+import Kakao from '../../assets/icons/signin-kakao-logo.svg'
+import Google from '../../assets/icons/signin-google-logo.svg'
+import Naver from '../../assets/icons/signin-naver-logo.svg'
 
 export const Account = () => {
   const [userData, setUserData] = useState({
@@ -112,7 +115,29 @@ export const Account = () => {
                 </div>
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>{userData.email}</div>
+                  <div css={css`display: flex; flex-direction: row;`}>
+                  {userData.type === 'BASIC' && (
+                    <div>{userData.email}</div>
+                  )}
+                  {userData.type === 'KAKAO' && (
+                    <div>
+                      <img src={Kakao} alt="kakao_logo" css={css`width:30px; margin-left:10px;`} />
+                      <div>Kakao 로그인</div>
+                    </div>
+                  )}
+                  {userData.type === 'NAVER' && (
+                    <div>
+                      <img src={Naver} alt="naver_logo" css={css`width:30px; margin-left:10px;`} />
+                      <div>Naver 로그인</div>
+                    </div>
+                  )}
+                  {userData.type === 'GOOGLE' && (
+                    <div>
+                      <img src={Google} alt="google_logo" css={css`width:30px; margin-left:10px;`} />
+                      <div>Google 로그인</div>
+                    </div>
+                  )}
+                  </div>
                 </div>
                 <div className='github' css={profileContentStyle}>
                  <div css={css`width: 72px`}>깃허브</div>
@@ -122,6 +147,7 @@ export const Account = () => {
                  <div css={css`width: 72px`}>소개</div>
                  <div>{userData.introduction}</div>
                 </div>
+                {userData.type === 'BASIC' && (
                 <div className='pw' css={profileContentStyle}>
                  <div css={css`width: 72px`}>비밀번호</div>
                  <div>
@@ -129,6 +155,7 @@ export const Account = () => {
                   {!userData.passwordModifiedAt && <span>최근 변경일: 데이터 없음</span>}
                 </div>
                 </div>
+                )}
               </div>
             
           </div>
