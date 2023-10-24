@@ -26,7 +26,7 @@ return(
     <>
     {data.contents.map((item, index) => (
         <div key={index} 
-            css={css`display: inline-block; width: 100%; height: 220px; background-color: #F0F0F0;`}>
+            css={css`display: inline-block; width: 100%; max-height: 220px; background-color: #F0F0F0; padding-bottom: 20px;`}>
         
         <div css={css`max-width:800px; display: flex; align-items: center; justify-content: space-between;`}>           
             <div css={css`display: flex; align-items: center;`}>
@@ -58,19 +58,10 @@ return(
             {item.solution.solutionTitle}
           </div>
 
-          <div css={css`
-            width: 100%; 
-            height: 39px; 
-            margin-top: 10px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-          `}>
-            <div css={css`display: flex; flex-direction: row; margin-left:30px;`}>
-            <div key={item.solution.algorithm} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.algorithm}</div>
-            <div key={item.solution.dataStructure} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.dataStructure}</div>
+          <div css={css`display: flex; flex-direction: row; margin-left:30px;`}>
+              {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.algorithm}</div>)}
+              {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.dataStructure}</div>)}
             </div>
-          </div>
         </div>
     ))}
 
@@ -97,3 +88,4 @@ return(
     </>
 )
 }
+

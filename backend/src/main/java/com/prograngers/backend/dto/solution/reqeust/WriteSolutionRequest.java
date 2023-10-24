@@ -7,10 +7,8 @@ import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,16 +29,22 @@ public class WriteSolutionRequest {
 
     @NotBlank(message = "문제 제목을 입력해주세요")
     private String problemTitle;
+
     @NotBlank(message = "풀이 제목을 입력해주세요")
     private String solutionTitle;
+
     @NotBlank(message = "문제 링크를 입력해주세요")
     private String problemLink;
+
     @Min(value = 1, message = "레벨 값은 1 미만일 수 없습니다")
     @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
+    @NotNull(message = "레벨 값을 입력해주세요")
     private Integer level;
 
+    @Nullable
     private AlgorithmConstant algorithm;
 
+    @Nullable
     private DataStructureConstant dataStructure;
 
     private LanguageConstant language;
@@ -54,7 +58,7 @@ public class WriteSolutionRequest {
     @NotBlank(message = "소스 코드를 입력해주세요")
     private String code;
 
-    public Problem toProblem(JudgeConstant judgeName){
+    public Problem toProblem(JudgeConstant judgeName) {
         return Problem.builder()
                 .link(problemLink)
                 .ojName(judgeName)

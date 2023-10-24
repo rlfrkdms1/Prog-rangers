@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.badrequest.BlankNicknameException;
+import com.prograngers.backend.exception.badrequest.NotExistOldPasswordException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
@@ -52,8 +53,18 @@ public class MemberService {
             validNicknameBlank(nickname);
             validNicknameDuplication(nickname);
         }
-        if(updateMemberAccountInfoRequest.getOldPassword()!=null){
+
+        if (updateMemberAccountInfoRequest.getNewPassword() != null) {
+            validExistOldPassword(updateMemberAccountInfoRequest);
             validCorrectPassword(updateMemberAccountInfoRequest, member);
+
+        }
+
+    }
+
+    private void validExistOldPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
+        if(updateMemberAccountInfoRequest.getOldPassword()==null){
+            throw new NotExistOldPasswordException();
         }
     }
 
