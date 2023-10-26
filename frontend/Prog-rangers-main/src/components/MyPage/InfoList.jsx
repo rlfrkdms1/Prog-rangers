@@ -6,8 +6,7 @@ import { theme } from '../Header/theme';
 import { useNavigate } from 'react-router-dom';
 import { 
     fontSize14,
-    fontSizeBold14,
-    infoSytle
+    fontSizeBold14
 } from '../../pages/MyPage/MyPageStyle'
 
 export const InfoList = ({ data, loading, isLogin, queryClient }) => {

@@ -30,12 +30,19 @@ export const Recommand = () => {
 
         .then((response) => {
           // 추천풀이 문제제목, 언어 같으면 좋아요 내림차순
-          const sortedSolutions = response.data.recommendedSolutions
-          .sort((a, b) => b.likes - a.likes)
-          .filter((item, index, self) =>
-            index === self.findIndex((t) => t.title === item.title && t.language === item.language)
-          );
-          setRecoSol(sortedSolutions);
+          const recommendedSolutions = [...response.data.recommendedSolutions];
+          
+          recommendedSolutions.sort((a, b) => {
+            if (a.title === b.title) {
+              if (b.language === a.language) {
+                return b.likes - a.likes;
+              }
+              return a.language.localeCompare(b.language);
+            }
+            return a.title.localeCompare(b.title);
+          });
+          
+          setRecoSol(recommendedSolutions);
         })
 
         .catch((error) => {

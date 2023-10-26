@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 import { RiShareBoxLine } from 'react-icons/ri';
-import { flexLayout, indiLayout, Divline } from './indicatorSytle';
+import { flexLayout, indiLayout } from './indicatorSytle';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
@@ -19,52 +18,46 @@ export const Indicators = () => {
 
   useEffect(() => {
     const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
-    // const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/1`;
 
     axios
-      .get(apiUrl)
-      .then((response) => {
-        setSolution(response.data.solution);
-        setLike(response.data.solution.likes);
-      })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, [solutionId, like]);
-
-  const handleLikeClick = () => {
-    
-    const token = localStorage.getItem('token');
-
-    // axios.post(`http://13.124.131.171:8080/api/v1/solutions/${id}`, 
-    
-    axios.post(`http://13.124.131.171:8080/api/v1/solutions/1`, 
-    null, {
-      headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(response => {
-      setLike(response.data.likes);
+    .get(apiUrl)
+    .then((response) => {
+      setSolution(response.data.solution);
+      setLike(response.data.solution.likes);
+      setIsLiked(response.data.solution.pushedLike);
     })
+    .catch((error) => {
+      console.error('API 요청 오류:', error);
+    });
+  }, [solutionId]);
+  
+  const handleLikeClick = () => {
 
-    if (isLiked) {
-      setLike(like - 1);
-    } else {
-      setLike(like + 1);
-    }
-    setIsLiked(!isLiked);
+  const token = localStorage.getItem('token');
+  const method = isLiked ? 'delete' : 'post';
+  axios({
+    method: method, // POST 또는 DELETE를 선택
+    headers: {Authorization: `Bearer ${token}`},
+    url: `http://13.124.131.171:8080/api/v1/solutions/${solutionId}/likes`
+  })
+  .then(()=> {
+      setLike((prevLike) => (isLiked ? prevLike - 1 : prevLike + 1));
+      setIsLiked(!isLiked);
+    })
+    .catch(error => {
+      console.error(`좋아요 ${method} 실패`, error);
+    });
   };
-
-
+  
   return (
     <>
     <div className="indicatorWrap" 
-    css={css`${indiLayout} 
+      css={css`${indiLayout} 
          border-bottom: 1px solid ${theme.colors.light3};
          color: ${theme.colors.dark2};`}>
+
       <div className="allIndicators" css={css`${flexLayout}`}>
+
         <div className="like" css={flexLayout}>
           <button onClick={handleLikeClick} className="icon" css={css`padding-right: 20px;`}>
             {isLiked ? <FcLike size="25" /> : <FcLikePlaceholder size="25" />}
@@ -74,8 +67,7 @@ export const Indicators = () => {
               padding-right: 20px;
             `}
           >
-            {solution.likes}
-            <span>개</span>
+            {like}개
           </div>
         </div>
         <div className="scrap" css={flexLayout}>
@@ -83,8 +75,7 @@ export const Indicators = () => {
             <RiShareBoxLine size="25" color="#3486A0" />
           </button>
           <div>
-            {solution.scraps}
-            <span>회</span>
+            {solution.scraps}회
           </div>
         </div>
       </div>

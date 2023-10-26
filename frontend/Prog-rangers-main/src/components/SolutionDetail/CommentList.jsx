@@ -1,76 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import { css } from '@emotion/react';
-import { theme } from '../Header/theme';
-import {
-  MycommentStyle,
-  flexLayout,
+import { css } from "@emotion/react";
+import { theme } from "../Header/theme";
+import { 
   rowFlex,
-  rowFlexRecomment,
-} from '../SolutionDetail/commentsStyle';
+  rowFlexRecomment 
+} from "./commentsStyle";
 
 import ProfileImg from './profile/default.png';
 
-export const MyComments = () => {
+export const CommentList = ({ comment }) => {
 
-  const navigate = useNavigate();
-  const onClickName = (nickname) => {
-    navigate(`/profile/${nickname}`); 
-  };
+    const navigate = useNavigate();
+    const onClickName = (nickname) => {
+      navigate(`/profile/${nickname}`); 
+    };
 
   const { solutionId } = useParams();
-  const [ comment, setComment ] = useState([]);
-  const [ commentCount, setCommentCount ] = useState(0);
+  const [ comments, setComments ] = useState([]);
 
     useEffect(() => {
-      const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+        const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+        
+        axios
+          .get(apiUrl)
+          .then((response) => {
+            setComments(response.data.comments);
+          })
+          .catch((error) => {
+            console.error('API 요청 오류:', error);
+          });
+      }, []);
 
-    axios
-    .get(apiUrl, {
-      method: "GET",
-      headers: {Authorization: `Bearer ${token}`}
-      })
-        .then((response) => {
-          setComment(response.data.comments);
-          setCommentCount(response.data.comments.length);
-        })
-        .catch((error) => {
-          console.error('API 요청 오류:', error);
-        });
-    }, []);
 
   return (
-    <div className="wrap" css={MycommentStyle}>
-      <div className="commentArea">
-        <div className="title" css={flexLayout}>
-          <div
-            className="titleName"
-            css={css`
-              font-size: 20px;
-              font-weight: bold;
-              color: ${theme.colors.dark1};
-              margin-right: 10px;
-            `}
-          >
-            댓글
-          </div>
-          <div
-            className="count"
-            css={css`
-              color: ${theme.colors.dark2};
-            `}
-          >
-            <span>{commentCount}</span>
-            <span>개</span>
-          </div>
-        </div>
-        <div className="comments">
-
-        {comment.map((commentItem) => (
+    <div className="comments">
+        {comments.map((commentItem) => (
           <div className="comment" css={rowFlex} key={commentItem.id}>
             <div className="profile">
               <img
@@ -108,8 +75,8 @@ export const MyComments = () => {
           </div>
         ))}
         
-        {comment.replies && Array.isArray(comment.replies) && comment.replies.map((replyItem) => (
-          <div className="recomment" css={rowFlexRecomment}>
+        {comments.replies && Array.isArray(comments.replies) && comments.replies.map((replyItem) => (
+          <div key={replyItem.id} className="recomment" css={rowFlexRecomment}>
             <div className="profile">
               <img
                 src={ProfileImg}
@@ -153,15 +120,29 @@ export const MyComments = () => {
                     margin-right: 10px;
                   `}
                 >
-                  @{comment.nickname}
+                  @{comments.nickname}
                 </span>
                 {replyItem.content}
               </div>
             </div>
+
+            // 추가된 댓글
+            <div
+                className="nickname"
+                css={css`
+                  font-size: 14px;
+                  color: ${theme.colors.light1};
+                  margin-bottom: 5px;
+                `}
+                onClick={() => onClickName(comments.nickname)} 
+              >
+                {comments.author}
+              </div>
+              <div className="commnetText">
+                {comments.content}
+              </div>
           </div>
         ))}
-        </div>
-      </div>
     </div>
   );
 };

@@ -27,4 +27,26 @@ export const contentMock = css`
   font-size: 16px;
   color: #FFFFFF;
   background-color: #2A3746;
+
+  overflow-y: auto; 
+  max-height: 300px;
+  
+  &::-webkit-scrollbar {
+    width: 15px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #47556F;
+    border-radius: 40px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  &::-webkit-scrollbar-corner{
+  background-color: transparent;
+  border-radius: 40px;
+  }
+
 `;

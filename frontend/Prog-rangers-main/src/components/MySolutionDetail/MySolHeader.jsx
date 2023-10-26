@@ -43,10 +43,14 @@ export const MySolHeader = () => {
   };
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    const token = localStorage.getItem('token');
+      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
 
-    axios
-      .get(apiUrl)
+      axios
+        .get(apiUrl, {
+          method: "GET",
+          headers: {Authorization: `Bearer ${token}`}
+        })
       .then((response) => {
         setProblem(response.data.problem);
         setSolution(response.data.solution);
