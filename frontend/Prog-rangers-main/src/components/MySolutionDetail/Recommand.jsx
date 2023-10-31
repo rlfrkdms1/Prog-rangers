@@ -60,6 +60,7 @@ export const Recommand = () => {
     const gridItemStyles = css`
       width: 230px;
       height: 126px;
+      cursor: pointer;
       background-color:${theme.colors.light3}
       `
     return(

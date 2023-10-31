@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CodeWindow2 } from '../Profile';
+import { CodeWindow3 } from '../Profile';
 import {
   contentLayout
 } from '../SolutionDetail/solutionTabStyle';
@@ -68,7 +68,7 @@ export const MyLineReview = () => {
           border-bottom: 1px solid #1A2333;
           `}></div>
 
-      <CodeWindow2 />
+      <CodeWindow3 />
       </div>
     </div>
     </>

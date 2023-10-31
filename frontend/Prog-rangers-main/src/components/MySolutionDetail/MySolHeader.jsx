@@ -60,6 +60,28 @@ export const MySolHeader = () => {
       });
   }, []);
 
+  // 풀이 삭제
+  const deleteSolution = (solutionId) => {
+    // 이거 확인한번 해주숑
+    const apiUrl = `http://13.124.131.171:8080/api/v1/problems/${solutionId}/solutions`;
+  
+    axios
+      .delete(apiUrl)
+      .then((response) => {
+        console.log('풀이가 성공적으로 삭제되었습니다.');
+      })
+      .catch((error) => {
+        console.error('풀이 삭제 중 오류 발생:', error);
+      });
+  };
+  
+  // 풀이 삭제 버튼을 클릭할 때 풀이를 삭제하는 함수 호출
+  const handleDeleteSolution = (solutionId) => {
+    if (window.confirm('풀이를 삭제하시겠습니까?')) {
+      deleteSolution(solutionId);
+    }
+  };
+
   return (
     <>
       {problem && solution && (
@@ -75,6 +97,7 @@ export const MySolHeader = () => {
                   font-size: 20px;
                   font-weight: bold;
                   color: ${theme.colors.dark1};
+                  margin-right: 10px;
                 `}
               >
                 {problem.title}
@@ -150,7 +173,7 @@ export const MySolHeader = () => {
                 margin-top: 10px;
                 ${fontStyle}`}>
               <button css={editStyle(isOpen)} onClick={(e) => onClickSols(solution.id)}>수정하기</button>          
-              <button css={deleteStyle(isOpen)} onClick={(e) => onClickSols(solution.id)}>삭제하기</button>
+              <button css={deleteStyle(isOpen)} onClick={(e) => handleDeleteSolution(solution.id)}>삭제하기</button>
           </div>
         </div>
       </div>

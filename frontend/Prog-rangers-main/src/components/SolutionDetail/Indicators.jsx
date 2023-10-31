@@ -16,6 +16,8 @@ export const Indicators = () => {
   const [like, setLike] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
+  // const [scrapData, setScrapData] = useState({});
+
   useEffect(() => {
     const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
@@ -31,6 +33,7 @@ export const Indicators = () => {
     });
   }, [solutionId]);
   
+  // 좋아요 버튼
   const handleLikeClick = () => {
 
   const token = localStorage.getItem('token');
@@ -48,6 +51,27 @@ export const Indicators = () => {
       console.error(`좋아요 ${method} 실패`, error);
     });
   };
+
+  // // 스크랩 버튼
+  // const handleScrape = () => {
+  //   const token = localStorage.getItem('token');
+
+  //   if (!token) {
+  //       alert("풀이를 스크랩하려면 로그인이 필요합니다.");
+  //   } else {
+  //       axios
+  //           .post('http://13.124.131.171:8080/api/v1/mypage/solutions', scrapDataToSend, {
+  //               method: "POST",
+  //               headers: { Authorization: `Bearer ${token}` }
+  //           })
+  //           .then(response => {
+  //             console.log('스크랩 성공', response.data);
+  //           })
+  //           .catch(error => {
+  //             console.error('스크랩 실패:', error);
+  //           });
+  //       }
+  //     }
   
   return (
     <>

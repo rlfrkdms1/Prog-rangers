@@ -96,6 +96,7 @@ export const MyComments = () => {
                   font-size: 14px;
                   color: ${theme.colors.light1};
                   margin-bottom: 5px;
+                  cursor: pointer;
                 `}
                 onClick={() => onClickName(commentItem.nickname)} 
               >
