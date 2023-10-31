@@ -1,3 +1,5 @@
+// 마이페이지 대시보드 알림창
+
 import React, { useEffect, useState } from 'react';
 import { css } from "@emotion/react";
 import { theme } from '../Header/theme';
@@ -11,9 +13,10 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
   const navigate = useNavigate();
 
   const onClickSols = (solutionId) => {
-    navigate(`/solution/${solutionId}`);
+    navigate(`/solutions/${solutionId}`);
   };
   
+  // SSE 알림 구독
   const [newAlarms, setNewAlarms] = useState(false);
   const [scrolling, setScrolling] = useState(false);
 
@@ -73,6 +76,24 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
     }
   }, [loading, isLogin]);
 
+  // 알림 내용이 넘칠 시 각각의 알림창 css 조절
+  const [content, setContent] = useState(''); 
+  const [containerHeight, setContainerHeight] = useState('auto');
+
+  
+  useEffect(() => {
+    const container = document.getElementById('autoResize');
+    if (container) {
+      // 높이 자동 조절
+      setContainerHeight('auto');
+      // 내용이 변경될 때마다 높이 다시 계산
+      const timeoutId = setTimeout(() => {
+        setContainerHeight(`${container.scrollHeight}px`);
+      }, 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [content]);
+
   
   return(
     
@@ -82,9 +103,9 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
       onClick={(e) => onClickSols(item.solutionId)}
       css={css`
               width: 345px;
-              height: 80px;
+              height: containerHeight;
               margin-left: 10px;
-              background-color: ${ item.read ? `${theme.colors.light3}` : '#e2e8f0' };
+              background-color: ${ item.read ? `${theme.colors.light3}` : `${theme.colors.main30}` };
               `}>
         <div css={css`
             display: flex;
@@ -102,10 +123,14 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
             {item.type}
         </div>
         <div css={css`
-            margin-left: 12px;
-            margin-right: 12px;
-            margin-top: 5px;
+            margin: 5px 12px 0 12px;
+            padding-bottom: 10px;
             ${fontSize14}
+
+            &:hover{
+              cursor: pointer;
+              text-decoration: underline;
+            }
             `}>
               <span css={css`font-weight: 700;`}>
                 {item.nickname} </span>

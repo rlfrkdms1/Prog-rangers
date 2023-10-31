@@ -1,19 +1,47 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
-
+import { CommentForm } from './CommentForm';
+import { CommentList } from './CommentList';
 import {
   wrapStyle,
-  flexLayout,
-  rowFlex,
-  rowFlexRecomment,
+  flexLayout
 } from './commentsStyle';
 
-import ProfileImg from './profile/default.png';
-
 export const Comments = () => {
+
+  const { solutionId } = useParams();
+  const [ comment, setComment ] = useState([]);
+  const [ commentCount, setCommentCount ] = useState(0);
+
+    useEffect(() => {
+      
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+      
+      axios
+        .get(apiUrl)
+        .then((response) => {
+          setComment(response.data.comments);
+          setCommentCount(response.data.comments.length);
+        })
+        .catch((error) => {
+          console.error('API 요청 오류:', error);
+        });
+    }, []);
+
+    const addComment = (newComment) => {
+      setComment([...comment, newComment]);
+      setCommentCount(commentCount + 1);
+    }
+
   return (
     <div className="wrap" css={wrapStyle}>
       <div className="commentArea">
+      <CommentForm addComment={addComment} solutionId={solutionId} />
+
         <div className="title" css={flexLayout}>
           <div
             className="titleName"
@@ -21,7 +49,7 @@ export const Comments = () => {
               font-size: 20px;
               font-weight: bold;
               color: ${theme.colors.dark1};
-
+              margin-top: 30px;
               margin-right: 10px;
             `}
           >
@@ -33,128 +61,12 @@ export const Comments = () => {
               color: ${theme.colors.dark2};
             `}
           >
-            3개
+            <span>{commentCount}</span>
+            <span>개</span>
           </div>
         </div>
-        <div className="comments">
-          <div className="comment" css={rowFlex}>
-            <div className="profile">
-              <img
-                src={ProfileImg}
-                alt="profile image"
-                css={css`
-                  width: 50px;
-                  height: 50px;
-                  border: 1px solid ${theme.colors.light1};
-                  border-radius: 100%;
-                `}
-              />
-            </div>
-            <div
-              className="text"
-              css={css`
-                margin-left: 20px;
-              `}
-            >
-              <div
-                className="nickname"
-                css={css`
-                  font-size: 14px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                `}
-              >
-                ddongguri-bing
-              </div>
-              <div className="commnetText">
-                이런 부분은 생각도 못했는데 대단하시네요!
-              </div>
-            </div>
-          </div>
-          <div className="comment" css={rowFlex}>
-            <div className="profile">
-              <img
-                src={ProfileImg}
-                alt="profile image"
-                css={css`
-                  width: 50px;
-                  height: 50px;
-                  border: 1px solid ${theme.colors.light1};
-                  border-radius: 100%;
-                `}
-              />
-            </div>
-            <div
-              className="text"
-              css={css`
-                margin-left: 20px;
-              `}
-            >
-              <div
-                className="nickname"
-                css={css`
-                  font-size: 14px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                `}
-              >
-                ddongguri-bing
-              </div>
-              <div className="commnetText">
-                이런 부분은 생각도 못했는데 대단하시네요!
-              </div>
-            </div>
-          </div>
-          <div className="recomment" css={rowFlexRecomment}>
-            <div className="profile">
-              <img
-                src={ProfileImg}
-                alt="profile image"
-                css={css`
-                  width: 40px;
-                  height: 40px;
-                  border: 1px solid ${theme.colors.light1};
-                  border-radius: 100%;
-                `}
-              />
-            </div>
-            <div
-              className="text"
-              css={css`
-                margin-left: 20px;
-              `}
-            >
-              <div
-                className="nickname"
-                css={css`
-                  font-size: 12px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                `}
-              >
-                ddongguri-bing
-              </div>
-              <div
-                className="commnetText"
-                css={css`
-                  font-size: 14px;
-                `}
-              >
-                <span
-                  className="tag"
-                  css={css`
-                    font-size: 12px;
-                    color: ${theme.colors.main};
-                    margin-right: 10px;
-                  `}
-                >
-                  @lo_0a
-                </span>
-                이런 부분은 생각도 못했는데 대단하시네요!
-              </div>
-            </div>
-          </div>
-        </div>
+
+        <CommentList comments={comment} />
       </div>
     </div>
   );

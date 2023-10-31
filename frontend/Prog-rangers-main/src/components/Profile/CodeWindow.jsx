@@ -1,15 +1,20 @@
+// 프로필 안 코드창
+
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { css } from "@emotion/react";
 import axios from "axios";
 import hljs from "highlight.js";
 import './github-dark-dimmed.css';
 
 export const CodeWindow = () => {
+
+    const { nickname } = useParams();
     const [codeData, setCodeData] = useState({ list: [] });
 
     useEffect(() => {
 
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/members/test';
+        const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
         axios.get(apiUrl)
           .then((response) => {

@@ -1,3 +1,5 @@
+// 마이페이지 대시보드 팔로우의 최근 풀이
+
 import React from 'react';
 import { css } from "@emotion/react";
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +12,7 @@ import {
 export const FollowingList = ({data}) => {
     const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution?${solutionId}`);
+      navigate(`/solutions/${solutionId}`);
     };
 
     return(
@@ -21,7 +23,8 @@ export const FollowingList = ({data}) => {
               css={css` ${Divline} 
                         display: flex; 
                         align-items: center;
-                        justify-content: space-between;`}>
+                        justify-content: space-between;
+                        `}>
                 <div css={css `${RecentlyTitle}`}> {item.title} </div>
                 <div css={css`
                           ${ojName} 

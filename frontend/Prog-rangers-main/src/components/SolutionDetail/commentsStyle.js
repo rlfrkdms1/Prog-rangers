@@ -6,6 +6,16 @@ export const wrapStyle = css`
   margin: 30px auto;
 `;
 
+export const MycommentStyle = css`
+  width: 700px;
+  margin: 30px auto;
+  `;
+
+export const MywrapStyle = css`
+  width: 720px;
+  margin: 30px auto;
+  `;
+
 export const flexLayout = css`
   display: flex;
   flex-direction: row;

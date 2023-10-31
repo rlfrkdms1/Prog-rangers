@@ -12,7 +12,7 @@ import star5 from '../../assets/icons/star/star5.svg';
 export const MySolutionForm = ({data}) => {
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
-    navigate(`/solution?${solutionId}`);
+    navigate(`/mySolution/${solutionId}`);
   };
 
   
@@ -33,8 +33,8 @@ export const MySolutionForm = ({data}) => {
 
   return(
     <>
-      {data.map((item,index) => (
-        <div key={index} css={css`display: inline-block; width: 100%; height: 175px; border-bottom: 1px solid #D9D9D9`}>
+      {data.map((item) => (
+        <div key={item.solution.solutionId} css={css`display: inline-block; width: 100%; height: 175px; border-bottom: 1px solid #D9D9D9`}>
           <div css={css`
             display: flex;
             height: 29px;

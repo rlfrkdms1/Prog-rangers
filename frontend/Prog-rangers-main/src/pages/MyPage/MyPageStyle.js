@@ -58,9 +58,19 @@ export const Divline = css`
   width: 60%;  
   margin-left: 10px;
   padding-top: 3px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   font-weight: bold;
   font-size: 16px;  
   color: ${theme.colors.dark2};
+
+  &:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
 `;
 
 export const ojName = css`
@@ -78,7 +88,6 @@ export const ojName = css`
   flex-direction: column;
   overflow-y: auto; 
   max-height: 565px;
-  
   
   &::-webkit-scrollbar {
     width: 10px;
