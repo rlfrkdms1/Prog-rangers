@@ -127,6 +127,10 @@ public class Member {
         }
     }
 
+    public void delete() {
+        this.usable = false;
+    }
+
     public void update(Member member) {
         updateNickName(member.getNickname());
         updateGitHub(member.getGithub());
