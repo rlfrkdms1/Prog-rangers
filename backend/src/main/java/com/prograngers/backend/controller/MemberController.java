@@ -2,9 +2,10 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
+import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class MemberController {
 
     @Login
     @GetMapping("/members")
-    public ShowMemberAccountInfoResponse showAccount(@LoggedInMember Long memberId) {
+    public ShowMemberAccountResponse showAccount(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 

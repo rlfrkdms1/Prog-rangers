@@ -1,9 +1,12 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
+import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
+import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
 import com.prograngers.backend.entity.badge.Badge;
+import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.badrequest.BlankNicknameException;
@@ -30,14 +33,17 @@ public class MemberService {
     private final SolutionRepository solutionRepository;
     private final FollowRepository followRepository;
 
-    public ShowMemberAccountInfoResponse getMemberAccount(Long memberId){
-        return ShowMemberAccountInfoResponse.from(findById(memberId));
+    public ShowMemberAccountResponse getMemberAccount(Long memberId){
+        Member member = findById(memberId);
+        if(member.getType() == MemberType.BASIC) {
+            return ShowBasicMemberAccountResponse.from(member);
+        }
+        return ShowSocialMemberAccountResponse.from(member);
     }
 
     private Member findById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
-
 
     @Transactional
     public void updateMemberAccount(Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
