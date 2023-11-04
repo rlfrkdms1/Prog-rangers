@@ -43,7 +43,8 @@ public class CommentService {
 
     public ShowMyCommentsResponse showMyComments(Long memberId, Integer pageNumber) {
         validPageNumber(pageNumber);
-        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
+        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(
+                PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
         return ShowMyCommentsResponse.from(commentPage);
     }
 
@@ -53,19 +54,30 @@ public class CommentService {
         }
     }
 
-
-    // 댓글 작성
     @Transactional
     public void addComment(Long solutionId, WriteCommentRequest writeCommentRequest, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
         validParentExists(writeCommentRequest);
-        Comment comment = writeCommentRequest.toComment(member,solution);
+        validSameSolution(writeCommentRequest, solutionId);
+        Comment comment = writeCommentRequest.toComment(member, solution);
         commentRepository.save(comment);
     }
 
+    private void validSameSolution(WriteCommentRequest writeCommentRequest, Long solutionId) {
+        if (writeCommentRequest.getParentId() == null) {
+            return;
+        }
+        if (commentRepository.findById(writeCommentRequest.getParentId()).get().getSolution().getId() != solutionId) {
+            throw new InvalidParentException();
+        }
+    }
+
     private void validParentExists(WriteCommentRequest writeCommentRequest) {
-        if (commentRepository.existsById(writeCommentRequest.getParentId())){
+        if (writeCommentRequest.getParentId() == null) {
+            return;
+        }
+        if (commentRepository.existsById(writeCommentRequest.getParentId())) {
             throw new InvalidParentException();
         }
     }
@@ -78,12 +90,11 @@ public class CommentService {
         Member member = findMemberById(memberId);
         validMemberAuthorization(targetCommentMemberId, member);
         comment.update(updateCommentRequest.getContent());
-        // 리다이렉트 하기 위해 Solution의 Id 반환
         return comment.getId();
     }
 
     @Transactional
-    public void deleteComment(Long commentId,Long memberId) {
+    public void deleteComment(Long commentId, Long memberId) {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
         Long targetCommentMemberId = comment.getMember().getId();
@@ -94,7 +105,7 @@ public class CommentService {
     }
 
     private void validCommentAlreadyDeleted(Comment comment) {
-        if (comment.getStatus().equals(DELETED)){
+        if (comment.getStatus().equals(DELETED)) {
             throw new CommentAlreadyDeletedException();
         }
     }
@@ -108,7 +119,7 @@ public class CommentService {
     }
 
     private void validMemberAuthorization(Long targetCommentMemberId, Member member) {
-        if (!targetCommentMemberId.equals(member.getId())){
+        if (!targetCommentMemberId.equals(member.getId())) {
             throw new MemberUnAuthorizedException();
         }
     }
