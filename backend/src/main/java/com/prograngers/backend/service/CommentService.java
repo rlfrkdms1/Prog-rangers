@@ -7,6 +7,7 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
+import com.prograngers.backend.exception.badrequest.InvalidParentException;
 import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -58,8 +59,15 @@ public class CommentService {
     public void addComment(Long solutionId, WriteCommentRequest writeCommentRequest, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
+        validParentExists(writeCommentRequest);
         Comment comment = writeCommentRequest.toComment(member,solution);
         commentRepository.save(comment);
+    }
+
+    private void validParentExists(WriteCommentRequest writeCommentRequest) {
+        if (commentRepository.existsById(writeCommentRequest.getParentId())){
+            throw new InvalidParentException();
+        }
     }
 
     @Transactional
