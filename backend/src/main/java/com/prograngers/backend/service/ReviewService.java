@@ -10,6 +10,7 @@ import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
+import com.prograngers.backend.exception.badrequest.InvalidCodeLIneNumberException;
 import com.prograngers.backend.exception.badrequest.InvalidParentException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ReviewAlreadyDeletedException;
@@ -41,11 +42,18 @@ public class ReviewService {
 
     @Transactional
     public void writeReview(WriteReviewRequest writeReviewRequest, Long memberId, Long solutionId) {
-        validParentExists(writeReviewRequest);
-        validSameSolution(writeReviewRequest,solutionId);
         Member writer = findMemberById(memberId);
         Solution solution = findSolutionById(solutionId);
+        validParentExists(writeReviewRequest);
+        validSameSolution(writeReviewRequest,solutionId);
+        validCodeLineNumber(writeReviewRequest,solution.getCode().split("\n").length);
         reviewRepository.save(writeReviewRequest.toReview(writer, solution));
+    }
+
+    private void validCodeLineNumber(WriteReviewRequest writeReviewRequest, int length) {
+        if (writeReviewRequest.getCodeLineNumber()>length||writeReviewRequest.getCodeLineNumber()<0){
+            throw new InvalidCodeLIneNumberException();
+        }
     }
 
     private void validSameSolution(WriteReviewRequest writeReviewRequest, Long solutionId) {
