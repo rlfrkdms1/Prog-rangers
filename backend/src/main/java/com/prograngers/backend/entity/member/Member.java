@@ -54,6 +54,9 @@ public class Member {
     @Column(name = "password_modified_at")
     private LocalDateTime passwordModifiedAt;
 
+    @Column(name = "usable", nullable = false)
+    private boolean usable;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
