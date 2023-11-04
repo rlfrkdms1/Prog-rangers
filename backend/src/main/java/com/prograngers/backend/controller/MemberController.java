@@ -7,7 +7,6 @@ import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest
 import com.prograngers.backend.dto.member.response.ShowMemberAccountInfoResponse;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -27,13 +24,13 @@ public class MemberController {
     private final MemberService memberService;
 
     @Login
-    @GetMapping("/mypage/account-settings")
+    @GetMapping("/members")
     public ShowMemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 
     @Login
-    @PatchMapping("/mypage/account-settings")
+    @PatchMapping("members")
     public ResponseEntity<Void> updateMemberAccountInfo(@LoggedInMember Long memberId,@RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         memberService.updateMemberAccountInfo(memberId, updateMemberAccountInfoRequest);
         return ResponseEntity.noContent().build();
