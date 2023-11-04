@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import { theme } from '../../components/Header/theme';
 import sharemark from '../../assets/icons/share-mark.svg'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import {
     fontSize16,
     fontSizewhite16,
@@ -12,8 +13,14 @@ import {
     fontSize14} from '../../pages/Profile/ProfileStyle';
 import hljs from "highlight.js";
 
-export const LikeList = () => {
+export const LikeList = () => {    
+
     const [data, setData] = useState({ solutions: [] });
+
+    const navigate = useNavigate();
+    const onClickName = (nickname) => {
+      navigate(`/profile/${nickname}`); 
+    };  
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -33,7 +40,7 @@ export const LikeList = () => {
 
       if (data.solutions && data.solutions.length > 0) {
         for (let i = 0; i < data.solutions.length; i++) {
-          const item = data.solutions[i];
+          const item = data.solutions[i];    
 
   return(
     <>
@@ -55,8 +62,8 @@ export const LikeList = () => {
         </div>
 
         <div css={css`display:flex; gap:20px; margin-top: 10px;`}>
-        <div css={css`${fontSize16}`}>풀이명</div>
-        <div css={css`${fontSize16} color:${theme.colors.light1}`}>{item.solution.author}</div>
+        <div css={css`${fontSize16}`}>{item.solution.title}</div>
+        <div css={css`${fontSize16} color:${theme.colors.light1}; cursor: pointer;`} onClick={()=>onClickName(item.solution.author)} >{item.solution.author}</div>
         </div>
 
         <div css={css`

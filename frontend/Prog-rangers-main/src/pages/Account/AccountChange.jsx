@@ -8,6 +8,7 @@ import eyeClosed from '../../assets/icons/mypage-eye-closed.svg';
 import Kakao from '../../assets/icons/signin-kakao-logo.svg'
 import Google from '../../assets/icons/signin-google-logo.svg'
 import Naver from '../../assets/icons/signin-naver-logo.svg'
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import axios from 'axios';
 
 export const AccountChange = () => {
@@ -166,6 +167,7 @@ const handleUpdateProfile = () => {
 
   if (isNicknameAvailable && nickname) {
     updatedData.nickname = nickname;
+    localStorage.setItem('nickname', updatedData.nickname);
   }
 
   if (github.trim() !== null) {
@@ -191,12 +193,11 @@ const handleUpdateProfile = () => {
   })
   .then((response) => {
     if (!response.ok) {
-      console.log(updatedData);
       throw new Error('네트워크 응답이 실패했습니다.');
     }
-    console.log(updatedData);
     navigate('/account');
-    return response.json()
+    window.location.reload();
+    return response.json();
   })
     .then((data) => {
       console.log(data);
@@ -263,7 +264,7 @@ const accountSubmit = () => {
               align-items: center;
               `}> 
                 <img
-                src={photo ? photo : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                  
+                src={photo ? photo : ProfileImg}                  
                 alt='profileImg'
                 css={css`
                 height: 250px;

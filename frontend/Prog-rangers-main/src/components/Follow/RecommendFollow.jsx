@@ -3,16 +3,16 @@ import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { buttonSytle, fontSize14, fontSize12 } from './FollowStyle';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 export const RecommendFollow = () => {
   // 추천 팔로우 api
   const [data, setData] = useState({ recommends: [] });
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
         const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/follows';
+        const token = localStorage.getItem('token');
         
-
         axios.get(apiUrl, {
             method: "GET",
             headers: {Authorization: `Bearer ${token}`},
@@ -58,16 +58,33 @@ export const RecommendFollow = () => {
     }
   };
 
-  const [isFollowing, setIsFollowing] = useState({});
-  
-  const handleFollowClick = (item) => {
-    setIsFollowing((prevStatus) => ({
-      ...prevStatus,
-      [item.id]: !prevStatus[item.id],
-    }));
-  };
-
   // 팔로우 기능
+  const [isFollowing, setIsFollowing] = useState(false);
+  
+  const handleFollowClick = (item) => {    
+    const memberId = item.id;
+    const token = localStorage.getItem('token');
+
+    fetch(`http://13.124.131.171/api/v1/members/${memberId}/following`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, },
+    })
+    .then(response => {
+      if (response.status === 200) {
+        // 팔로우 성공 시 상태 업데이트
+        setIsFollowing((prevStatus) => ({
+          ...prevStatus,
+          [item.id]: true,
+        }));
+        console.log('팔로우 성공');
+      } else {
+        console.error('팔로우 실패');
+      }
+    })
+    .catch(error => {
+      console.error('팔로우 실패', error);
+    });
+  };  
 
   return (
     <div ref = {containerRef} 

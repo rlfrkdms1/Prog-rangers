@@ -7,6 +7,7 @@ import { profileContentStyle, editBtnStyle, deleteBtnStyle } from './AccountStyl
 import Kakao from '../../assets/icons/signin-kakao-logo.svg'
 import Google from '../../assets/icons/signin-google-logo.svg'
 import Naver from '../../assets/icons/signin-naver-logo.svg'
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 
 export const Account = () => {
   const [userData, setUserData] = useState({
@@ -95,7 +96,7 @@ export const Account = () => {
               align-items: center;
               `}>
                 <img
-                  src={userData.photo ? userData.photo : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                  
+                  src={userData.photo ? userData.photo : ProfileImg}                  
                   alt='profileImg'
                   width='250px'
                   css={css`
