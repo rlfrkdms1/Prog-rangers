@@ -6,6 +6,7 @@ import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
 import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
 import com.prograngers.backend.exception.badrequest.InvalidParentException;
 import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
@@ -69,7 +70,7 @@ public class CommentService {
             return;
         }
         if (commentRepository.findById(writeCommentRequest.getParentId()).get().getSolution().getId() != solutionId) {
-            throw new InvalidParentException();
+            throw new DifferentSolutionException();
         }
     }
 
