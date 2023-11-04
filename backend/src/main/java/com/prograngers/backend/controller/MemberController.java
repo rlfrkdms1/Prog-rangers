@@ -26,14 +26,14 @@ public class MemberController {
 
     @Login
     @GetMapping("/members")
-    public ShowMemberAccountInfoResponse showAccountInfo(@LoggedInMember Long memberId) {
+    public ShowMemberAccountInfoResponse showAccount(@LoggedInMember Long memberId) {
         return memberService.getMemberAccount(memberId);
     }
 
     @Login
     @PatchMapping("/members")
-    public ResponseEntity<Void> updateMemberAccountInfo(@LoggedInMember Long memberId,@RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
-        memberService.updateMemberAccountInfo(memberId, updateMemberAccountInfoRequest);
+    public ResponseEntity<Void> updateMemberAccount(@LoggedInMember Long memberId, @RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
+        memberService.updateMemberAccount(memberId, updateMemberAccountInfoRequest);
         return ResponseEntity.noContent().build();
     }
 

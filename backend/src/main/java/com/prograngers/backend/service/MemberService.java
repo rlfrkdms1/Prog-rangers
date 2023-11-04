@@ -40,15 +40,16 @@ public class MemberService {
 
 
     @Transactional
-    public void updateMemberAccountInfo(Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
+    public void updateMemberAccount(Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         Member member = findById(memberId);
-        validMemberAccountInfo(updateMemberAccountInfoRequest, member);
+        validMemberAccount(updateMemberAccountInfoRequest, member);
         member.update(updateMemberAccountInfoRequest.toMember());
     }
 
-    private void validMemberAccountInfo(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
+    private void validMemberAccount(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
         String nickname = updateMemberAccountInfoRequest.getNickname();
-        if(nickname !=null){
+
+        if (nickname != null) {
             validNicknameBlank(nickname);
             validNicknameDuplication(nickname);
         }
@@ -56,7 +57,6 @@ public class MemberService {
         if (updateMemberAccountInfoRequest.getNewPassword() != null) {
             validExistOldPassword(updateMemberAccountInfoRequest);
             validCorrectPassword(updateMemberAccountInfoRequest, member);
-
         }
 
     }
