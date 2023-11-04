@@ -30,7 +30,7 @@ public class MemberController {
     }
 
     @Login
-    @PatchMapping("members")
+    @PatchMapping("/members")
     public ResponseEntity<Void> updateMemberAccountInfo(@LoggedInMember Long memberId,@RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         memberService.updateMemberAccountInfo(memberId, updateMemberAccountInfoRequest);
         return ResponseEntity.noContent().build();

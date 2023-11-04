@@ -5,7 +5,6 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
-import com.prograngers.backend.dto.solution.response.ShowMyLikeSolutionsResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionDetailResponse;
 import com.prograngers.backend.dto.solution.response.ShowMySolutionListResponse;
 import com.prograngers.backend.dto.solution.response.ShowSolutionDetailResponse;
@@ -69,7 +68,7 @@ public class SolutionController {
         return solutionService.getSolutionDetail(solutionId, memberId);
     }
 
-    @GetMapping("/mypage/solutions/{solutionId}")
+    @GetMapping("/solutions/{solutionId}/mine")
     public ShowMySolutionDetailResponse showMyDetail(@PathVariable Long solutionId, @LoggedInMember Long memberId) {
         return solutionService.getMySolutionDetail(memberId, solutionId);
     }
@@ -85,7 +84,7 @@ public class SolutionController {
         return solutionService.getSolutionList(pageable, problemId, language, algorithm, dataStructure, sortBy);
     }
     @Login
-    @GetMapping("/mypage/solutions")
+    @GetMapping("/solutions")
     public ShowMySolutionListResponse showMyList(@RequestParam(required = false) String keyword,
                                                  @RequestParam(required = false) LanguageConstant language,
                                                  @RequestParam(required = false) AlgorithmConstant algorithm,
@@ -94,12 +93,6 @@ public class SolutionController {
                                                  @RequestParam(defaultValue = DEFAULT_PAGE) int page,
                                                  @LoggedInMember Long memberId) {
         return solutionService.getMyList(keyword, language, algorithm, dataStructure, level, page, memberId);
-    }
-
-    @Login
-    @GetMapping("/mypage/likes")
-    public ShowMyLikeSolutionsResponse showMyLikes(@RequestParam(defaultValue = DEFAULT_PAGE) int page, @LoggedInMember Long memberId) {
-        return solutionService.getMyLikes(memberId, page);
     }
 
 }
