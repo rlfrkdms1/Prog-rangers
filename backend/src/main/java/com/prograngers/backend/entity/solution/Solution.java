@@ -129,4 +129,11 @@ public class Solution {
         return null;
     }
 
+    public boolean isScrapped() {
+        if (scrapSolution == null) {
+            return false;
+        }
+        return true;
+    }
+
 }
