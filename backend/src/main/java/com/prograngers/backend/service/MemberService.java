@@ -18,7 +18,6 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -72,6 +71,7 @@ public class MemberService {
         if(member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword()))
             throw new IncorrectPasswordException();
     }
+
     private void validNicknameBlank(String nickname) {
         if(nickname.isBlank()) throw new BlankNicknameException();
     }
@@ -93,5 +93,11 @@ public class MemberService {
 
     private Member findByNickname(String memberNickname) {
         return memberRepository.findByNickname(memberNickname).orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional
+    public void delete(Long memberId) {
+        Member member = findById(memberId);
+        member.delete();
     }
 }
