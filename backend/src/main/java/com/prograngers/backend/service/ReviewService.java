@@ -51,7 +51,7 @@ public class ReviewService {
     }
 
     private void validCodeLineNumber(WriteReviewRequest writeReviewRequest, int length) {
-        if (writeReviewRequest.getCodeLineNumber()>length||writeReviewRequest.getCodeLineNumber()<0){
+        if (writeReviewRequest.getCodeLineNumber()>length||writeReviewRequest.getCodeLineNumber()<=0){
             throw new InvalidCodeLIneNumberException();
         }
     }
