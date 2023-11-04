@@ -77,7 +77,7 @@ public class CommentService {
         if (writeCommentRequest.getParentId() == null) {
             return;
         }
-        if (commentRepository.existsById(writeCommentRequest.getParentId())) {
+        if (!commentRepository.existsById(writeCommentRequest.getParentId())) {
             throw new InvalidParentException();
         }
     }

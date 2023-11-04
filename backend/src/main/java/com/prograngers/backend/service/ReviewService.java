@@ -57,7 +57,7 @@ public class ReviewService {
 
     private void validParentExists(WriteReviewRequest writeReviewRequest) {
         if (writeReviewRequest.getParentId()==null) return;
-        if (reviewRepository.existsById(writeReviewRequest.getParentId())){
+        if (!reviewRepository.existsById(writeReviewRequest.getParentId())){
             throw new InvalidParentException();
         }
     }
