@@ -9,6 +9,7 @@ import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.badrequest.DifferentCodeLineNumberException;
 import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
 import com.prograngers.backend.exception.badrequest.InvalidCodeLIneNumberException;
 import com.prograngers.backend.exception.badrequest.InvalidParentException;
@@ -47,7 +48,15 @@ public class ReviewService {
         validParentExists(writeReviewRequest);
         validSameSolution(writeReviewRequest,solutionId);
         validCodeLineNumber(writeReviewRequest,solution.getCode().split("\n").length);
+        validSameCodeLineWithParent(writeReviewRequest);
         reviewRepository.save(writeReviewRequest.toReview(writer, solution));
+    }
+
+    private void validSameCodeLineWithParent(WriteReviewRequest writeReviewRequest) {
+        if (writeReviewRequest.getParentId()==null) return;
+        if (reviewRepository.findById(writeReviewRequest.getParentId()).get().getCodeLineNumber()!=writeReviewRequest.getCodeLineNumber()){
+            throw new DifferentCodeLineNumberException();
+        }
     }
 
     private void validCodeLineNumber(WriteReviewRequest writeReviewRequest, int length) {
