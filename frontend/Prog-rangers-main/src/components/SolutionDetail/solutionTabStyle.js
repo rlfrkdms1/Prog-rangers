@@ -9,7 +9,7 @@ export const tapLayout = css`
 `;
 
 export const MytapLayout = css`
-  width: 720px;
+  width: 740px;
   margin: 50px auto 0;
 `;
 

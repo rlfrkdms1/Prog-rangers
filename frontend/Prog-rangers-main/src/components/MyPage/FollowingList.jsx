@@ -12,7 +12,7 @@ import {
 export const FollowingList = ({data}) => {
     const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution/${solutionId}`);
+      navigate(`/solutions/${solutionId}`);
     };
 
     return(

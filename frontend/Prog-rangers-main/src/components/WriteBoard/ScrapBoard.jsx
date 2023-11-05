@@ -101,7 +101,7 @@ export const ScrapBoard = () => {
         code: inputs.code,
         isPublic: true,
       }
-      const response = await axios.post(`http://13.124.131.171:8080/api/v1/solutions/new-form/${id}`, body, {
+      const response = await axios.post(`http://{{HOST}}:8080/api/v1/solutions/new-form/${id}`, body, {
         headers: { Authorization: `Bearer ${token}`}
       });
       if(response.status === 201 ) {
@@ -119,7 +119,6 @@ export const ScrapBoard = () => {
   const handleGoBack = () => {
     navigate(-1); // 이전 페이지로 이동
   };
-
 
   const handleInput = (e) => {
     const { name, value } = e.target;

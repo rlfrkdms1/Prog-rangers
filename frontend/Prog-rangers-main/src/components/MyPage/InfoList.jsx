@@ -13,7 +13,7 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
   const navigate = useNavigate();
 
   const onClickSols = (solutionId) => {
-    navigate(`/solution/${solutionId}`);
+    navigate(`/solutions/${solutionId}`);
   };
   
   // SSE 알림 구독

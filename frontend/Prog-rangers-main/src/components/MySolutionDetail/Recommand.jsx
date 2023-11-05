@@ -11,7 +11,7 @@ export const Recommand = () => {
 
   const navigate = useNavigate();
     const onClickSols = (solutionId) => {
-      navigate(`/solution/${solutionId}`);
+      navigate(`/solutions/${solutionId}`);
     };
     
     const { solutionId } = useParams();

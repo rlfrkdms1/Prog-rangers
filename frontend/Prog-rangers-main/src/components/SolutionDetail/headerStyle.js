@@ -11,7 +11,7 @@ export const HeaderLayout = css`
 `;
 
 export const MyHeaderLayout = css`
-  width: 720px;
+  width: 740px;
   margin: 50px auto 0;
   display: flex;
   flex-direction: row;

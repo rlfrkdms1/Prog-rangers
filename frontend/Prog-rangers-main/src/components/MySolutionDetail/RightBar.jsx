@@ -15,7 +15,12 @@ export const RightBar = () => {
 
     const navigate1 = useNavigate();
     const onClickScrape = (solutionId) => {
-      navigate1(`/solution/${solutionId}`); 
+      navigate1(`/solutions/${solutionId}`); 
+    };
+
+    const navigate2 = useNavigate();
+    const onClickAddSol = () => {
+      navigate2(`/myPage/addsolution`); 
     };
 
     const { solutionId } = useParams();
@@ -90,14 +95,17 @@ export const RightBar = () => {
             ) : null
             ))}
 
-            <button css={css`
+            <button 
+            css={css`
             width: 170px;
             height: 40px;
             border-radius: 20px;
             margin-top: 30px;
             text-align: center;
             background-color: ${theme.colors.main30}
-            `}> 풀이 추가하기</button>
+            `}
+            onClick={() => onClickAddSol()}
+            > 풀이 추가하기</button>
             
             <div css={css`
             font-weight: 700;

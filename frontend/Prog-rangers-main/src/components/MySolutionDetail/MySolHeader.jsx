@@ -38,8 +38,8 @@ export const MySolHeader = () => {
   // 풀이 수정 페이지 이동
   const navigate = useNavigate();
 
-  const onClickSols = (solutionId) => {
-    navigate(`/EditSolutions/${solutionId}`);
+  const onClickSols = () => {
+    navigate(`/myPage/solutions/${solutionId}/editsolution`);
   };
 
   useEffect(() => {

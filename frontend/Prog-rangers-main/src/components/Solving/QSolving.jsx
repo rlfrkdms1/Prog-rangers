@@ -8,7 +8,7 @@ export const QSolving = ({data}) => {
   
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
-    navigate(`/solution/${solutionId}`);
+    navigate(`/solutions/${solutionId}`);
   };
 
   const getRightName = (targetValue) => {
@@ -39,7 +39,7 @@ export const QSolving = ({data}) => {
             `
           }            
           >
-            {item.solutionName}
+            {item.title}
           </div>
           <div css={css`
             width: 100%; 

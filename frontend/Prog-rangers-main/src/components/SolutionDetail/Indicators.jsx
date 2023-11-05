@@ -61,7 +61,7 @@ export const Indicators = () => {
   // 스크랩 버튼
   const navigate = useNavigate();
   const onClickScrape = () => {
-    navigate(`/solution/${solutionId}/detail/scrap`);
+    navigate(`/solutions/${solutionId}/detail/scrap`);
   };
 
   console.log(solution.pushedLike);
