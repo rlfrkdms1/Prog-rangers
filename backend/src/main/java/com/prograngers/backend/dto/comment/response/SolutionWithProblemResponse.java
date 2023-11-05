@@ -23,32 +23,20 @@ public class SolutionWithProblemResponse {
     private String language;
     private String problemTitle;
     private JudgeConstant ojName;
-    private String authorImageUrl;
-    private String authorNickname;
+    private AuthorResponse author;
 
     public static SolutionWithProblemResponse from(Solution solution) {
         Problem problem = solution.getProblem();
         Member author = solution.getMember();
-        SolutionWithProblemResponse response = SolutionWithProblemResponse.builder()
+        return SolutionWithProblemResponse.builder()
                 .solutionId(solution.getId())
                 .solutionTitle(solution.getTitle())
                 .language(solution.getLanguage().getView())
                 .problemTitle(problem.getTitle())
                 .ojName(problem.getOjName())
-                .authorImageUrl(author.getPhoto())
-                .authorNickname(author.getNickname())
+                .author(AuthorResponse.from(author))
                 .algorithm(solution.getAlgorithmView())
                 .dataStructure(solution.getDataStructureView())
                 .build();
-
-        return response;
-    }
-
-    private void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    private void setDataStructure(String dataStructure) {
-        this.dataStructure = dataStructure;
     }
 }
