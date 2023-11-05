@@ -10,7 +10,7 @@ import lombok.Getter;
 @Builder
 public class SolutionForListResponse {
 
-    private Long solutionId;
+    private Long id;
     private String title;
     private String algorithm;
     private String dataStructure;
@@ -20,7 +20,7 @@ public class SolutionForListResponse {
 
     public static SolutionForListResponse from(Solution solution) {
         SolutionForListResponse response = SolutionForListResponse.builder()
-                .solutionId(solution.getId())
+                .id(solution.getId())
                 .title(solution.getTitle())
                 .language(solution.getLanguage().getView())
                 .level(solution.getLevel())
