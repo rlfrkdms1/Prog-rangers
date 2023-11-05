@@ -130,10 +130,7 @@ public class Solution {
     }
 
     public boolean isScrapped() {
-        if (scrapSolution == null) {
-            return false;
-        }
-        return true;
+        return scrapSolution != null;
     }
 
 }
