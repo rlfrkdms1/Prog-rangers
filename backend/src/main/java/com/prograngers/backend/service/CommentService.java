@@ -58,25 +58,21 @@ public class CommentService {
     public void addComment(Long solutionId, WriteCommentRequest writeCommentRequest, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
-        validParentExists(writeCommentRequest);
-        validSameSolution(writeCommentRequest, solutionId);
+        if (writeCommentRequest.getParentId() != null){
+            validParentExists(writeCommentRequest);
+            validSameSolution(writeCommentRequest, solutionId);
+        }
         Comment comment = writeCommentRequest.toComment(member, solution);
         commentRepository.save(comment);
     }
 
     private void validSameSolution(WriteCommentRequest writeCommentRequest, Long solutionId) {
-        if (writeCommentRequest.getParentId() == null) {
-            return;
-        }
         if (commentRepository.findById(writeCommentRequest.getParentId()).get().getSolution().getId() != solutionId) {
             throw new DifferentSolutionException();
         }
     }
 
     private void validParentExists(WriteCommentRequest writeCommentRequest) {
-        if (writeCommentRequest.getParentId() == null) {
-            return;
-        }
         if (!commentRepository.existsById(writeCommentRequest.getParentId())) {
             throw new InvalidParentException();
         }

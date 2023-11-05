@@ -45,15 +45,16 @@ public class ReviewService {
     public void writeReview(WriteReviewRequest writeReviewRequest, Long memberId, Long solutionId) {
         Member writer = findMemberById(memberId);
         Solution solution = findSolutionById(solutionId);
-        validParentExists(writeReviewRequest);
-        validSameSolution(writeReviewRequest,solutionId);
         validCodeLineNumber(writeReviewRequest,solution.getCode().split("\n").length);
-        validSameCodeLineWithParent(writeReviewRequest);
+        if (writeReviewRequest.getParentId()!=null){
+            validParentExists(writeReviewRequest);
+            validSameSolution(writeReviewRequest,solutionId);
+            validSameCodeLineWithParent(writeReviewRequest);
+        }
         reviewRepository.save(writeReviewRequest.toReview(writer, solution));
     }
 
     private void validSameCodeLineWithParent(WriteReviewRequest writeReviewRequest) {
-        if (writeReviewRequest.getParentId()==null) return;
         if (reviewRepository.findById(writeReviewRequest.getParentId()).get().getCodeLineNumber()!=writeReviewRequest.getCodeLineNumber()){
             throw new DifferentCodeLineNumberException();
         }
@@ -66,7 +67,6 @@ public class ReviewService {
     }
 
     private void validSameSolution(WriteReviewRequest writeReviewRequest, Long solutionId) {
-        if (writeReviewRequest.getParentId()==null) return;
         if (solutionId!=reviewRepository.findById(writeReviewRequest.getParentId())
                 .get()
                 .getSolution()
@@ -76,7 +76,6 @@ public class ReviewService {
     }
 
     private void validParentExists(WriteReviewRequest writeReviewRequest) {
-        if (writeReviewRequest.getParentId()==null) return;
         if (!reviewRepository.existsById(writeReviewRequest.getParentId())){
             throw new InvalidParentException();
         }
