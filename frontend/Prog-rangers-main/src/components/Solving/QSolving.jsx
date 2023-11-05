@@ -8,7 +8,7 @@ export const QSolving = ({data}) => {
   
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
-    navigate(`/solutions/${solutionId}`);
+    navigate(`/solution/${solutionId}`);
   };
 
   const getRightName = (targetValue) => {

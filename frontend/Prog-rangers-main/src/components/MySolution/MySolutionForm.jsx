@@ -69,28 +69,18 @@ export const MySolutionForm = ({data}) => {
             width: 100%; 
             height: 39px; 
             margin-top: 10px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
           `}>
             <div css={css`display: flex; justify-content: space-between;`}>
             <div classname="tags" css={css`display: flex;`}>
-              <span css={css`${tags}`}>
-                {item.solution.algorithm}
-              </span>
-
-              <span css={css`${tags}`}>
-                {item.solution.dataStructure}
-              </span>
-              
-              <span css={css`${tags}`}>
-                {item.solution.language}
-              </span>
+            {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags}`}>{item.solution.algorithm}</div>)}
+            {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags}`}>{item.solution.dataStructure}</div>)}
+            {item.solution.language && (<div key={item.solution.language} css={css`${tags}`}>{item.solution.language}</div>)}
             </div>
             
             
             <div css={css`
               ${ojNameTag}
+              float: right;
               background-color: ${item.problem.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
               color: white;
             `}> 
