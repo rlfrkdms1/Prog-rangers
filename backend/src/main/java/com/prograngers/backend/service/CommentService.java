@@ -44,8 +44,7 @@ public class CommentService {
 
     public ShowMyCommentsResponse showMyComments(Long memberId, Integer pageNumber) {
         validPageNumber(pageNumber);
-        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(
-                PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
+        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
         return ShowMyCommentsResponse.from(commentPage);
     }
 
