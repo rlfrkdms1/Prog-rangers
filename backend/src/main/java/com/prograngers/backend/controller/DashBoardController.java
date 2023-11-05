@@ -20,7 +20,7 @@ public class DashBoardController {
     private final DashBoardService dashBoardService;
 
     @Login
-    @GetMapping("/mypage/dashboard")
+    @GetMapping("/dashboard")
     public ShowDashBoardResponse show(@LoggedInMember Long memberId,
                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth date){
         return dashBoardService.getDashboard(memberId, date);

@@ -32,15 +32,7 @@ public class SolutionForLikeResponse {
                 .algorithm(solution.getAlgorithmView())
                 .dataStructure(solution.getDataStructureView())
                 .build();
-
         return response;
     }
 
-    private void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    private void setDataStructure(String dataStructure) {
-        this.dataStructure = dataStructure;
-    }
 }
