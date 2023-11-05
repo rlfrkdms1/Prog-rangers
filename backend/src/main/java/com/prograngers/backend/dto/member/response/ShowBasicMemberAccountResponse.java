@@ -4,31 +4,25 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.support.Encrypt;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-public class ShowMemberAccountInfoResponse {
-
-    private MemberType type;
-
-    private String nickname;
-
-    private String email;
-
-    private String github;
-
-    private String introduction;
-
-    private LocalDateTime passwordModifiedAt;
+@Getter
+public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse{
 
     private String password;
+    private LocalDateTime passwordModifiedAt;
 
-    private String photo;
+    @Builder
+    public ShowBasicMemberAccountResponse(MemberType type, String nickname, String email, String github, String introduction, String photo, String password, LocalDateTime passwordModifiedAt) {
+        super(type, nickname, email, github, introduction, photo);
+        this.password = password;
+        this.passwordModifiedAt = passwordModifiedAt;
+    }
 
-    public static ShowMemberAccountInfoResponse from(Member member) {
-        return ShowMemberAccountInfoResponse.builder()
+    public static ShowBasicMemberAccountResponse from(Member member) {
+        return ShowBasicMemberAccountResponse.builder()
                 .type(member.getType())
                 .nickname(member.getNickname())
                 .email(member.getEmail())

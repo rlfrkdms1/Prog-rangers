@@ -15,7 +15,6 @@ import {
   Problems,
   Solutions,
   SolutionDetail,
-  RegisterReview,
   Profile,
   MyPage,
   Account,
@@ -24,6 +23,12 @@ import {
   Like,
   Follow,
 } from './pages';
+import { 
+  AddSolution,
+  EditSolution,
+  Scrap,
+  WriteSolution
+} from './pages/BoardPage';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
 import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
@@ -45,13 +50,11 @@ const router = createBrowserRouter([
         path: 'solutions/:problemId',
         element: <Solutions />,
       },
-      {
-        path: 'solutions/:problemId/detail',
-        element: <SolutionDetail />,
-      },
+      { path: 'solution/:solutionId/detail',element: <SolutionDetail /> },
+      { path : 'solution/:solutionId/detail/scrap', element: <Scrap />},
       {
         path: 'registerReview',
-        element: <RegisterReview />,
+        element: <WriteSolution />,
       },
       { path: 'profile/:userId', element: <Profile /> },
       { path: 'myPage', element: <MyPage /> },
@@ -60,7 +63,8 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
-      //{ path: 'accountChange', element: <AccountChange /> },
+      { path: 'myPage/addsolution', element: <AddSolution/> },
+      { path: 'myPage/solutions/:solutionId/editsolution', element: <EditSolution/> },
     ],
   },
 ]);

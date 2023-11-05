@@ -9,6 +9,10 @@ import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.badrequest.DifferentCodeLineNumberException;
+import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
+import com.prograngers.backend.exception.badrequest.InvalidCodeLIneNumberException;
+import com.prograngers.backend.exception.badrequest.InvalidParentException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ReviewAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.ReviewNotFoundException;
@@ -35,15 +39,48 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final SolutionRepository solutionRepository;
-
     private final MemberRepository memberRepository;
 
     @Transactional
     public void writeReview(WriteReviewRequest writeReviewRequest, Long memberId, Long solutionId) {
         Member writer = findMemberById(memberId);
         Solution solution = findSolutionById(solutionId);
-        reviewRepository.save(writeReviewRequest.toReview(writer,solution));
+        validCodeLineNumber(writeReviewRequest,solution.getCode().split("\n").length);
+        if (writeReviewRequest.getParentId()!=null){
+            validParentExists(writeReviewRequest);
+            validSameSolution(writeReviewRequest,solutionId);
+            validSameCodeLineWithParent(writeReviewRequest);
+        }
+        reviewRepository.save(writeReviewRequest.toReview(writer, solution));
     }
+
+    private void validSameCodeLineWithParent(WriteReviewRequest writeReviewRequest) {
+        if (reviewRepository.findById(writeReviewRequest.getParentId()).get().getCodeLineNumber()!=writeReviewRequest.getCodeLineNumber()){
+            throw new DifferentCodeLineNumberException();
+        }
+    }
+
+    private void validCodeLineNumber(WriteReviewRequest writeReviewRequest, int length) {
+        if (writeReviewRequest.getCodeLineNumber()>length||writeReviewRequest.getCodeLineNumber()<=0){
+            throw new InvalidCodeLIneNumberException();
+        }
+    }
+
+    private void validSameSolution(WriteReviewRequest writeReviewRequest, Long solutionId) {
+        if (solutionId!=reviewRepository.findById(writeReviewRequest.getParentId())
+                .get()
+                .getSolution()
+                .getId()){
+            throw new DifferentSolutionException();
+        }
+    }
+
+    private void validParentExists(WriteReviewRequest writeReviewRequest) {
+        if (!reviewRepository.existsById(writeReviewRequest.getParentId())){
+            throw new InvalidParentException();
+        }
+    }
+
     @Transactional
     public void updateReview(UpdateReviewRequest updateReviewRequest, Long memberId, Long reviewId) {
         Review review = findReviewById(reviewId);
@@ -105,20 +142,25 @@ public class ReviewService {
         }
     }
 
-    private void makeReviewResponse(List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse, Review review, Long memberId) {
-        reviewResponseWithRepliesResponse.add(ReviewWithRepliesResponse.from(review, validReviewIsMine(review,memberId)));
+    private void makeReviewResponse(List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse, Review review,
+                                    Long memberId) {
+        reviewResponseWithRepliesResponse.add(
+                ReviewWithRepliesResponse.from(review, validReviewIsMine(review, memberId)));
     }
 
-    private void makeReplyResponse(List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse, Review review, Long memberId) {
+    private void makeReplyResponse(List<ReviewWithRepliesResponse> reviewResponseWithRepliesResponse, Review review,
+                                   Long memberId) {
         for (ReviewWithRepliesResponse r : reviewResponseWithRepliesResponse) {
             if (r.getId().equals(review.getParentId())) {
-                r.getReplies().add(ReplyResponse.from(review,validReviewIsMine(review,memberId)));
+                r.getReplies().add(ReplyResponse.from(review, validReviewIsMine(review, memberId)));
             }
         }
     }
 
     private boolean validReviewIsMine(Review review, Long memberId) {
-        if (review.getMember().getId().equals(memberId)) return true;
+        if (review.getMember().getId().equals(memberId)) {
+            return true;
+        }
         return false;
     }
 
@@ -131,13 +173,13 @@ public class ReviewService {
     }
 
     private void validMemberAuthorization(Review targetReview, Member member) {
-        if (!targetReview.getMember().getId().equals(member.getId())){
+        if (!targetReview.getMember().getId().equals(member.getId())) {
             throw new MemberUnAuthorizedException();
         }
     }
 
     private void validReviewAlreadyDeleted(Review targetReview) {
-        if (targetReview.getStatus().equals(DELETED)){
+        if (targetReview.getStatus().equals(DELETED)) {
             throw new ReviewAlreadyDeletedException();
         }
     }

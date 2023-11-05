@@ -1,6 +1,5 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,31 +10,25 @@ import lombok.Getter;
 @Builder
 public class SolutionForListResponse {
 
-    private Long solutionId;
+    private Long id;
     private String title;
     private String algorithm;
     private String dataStructure;
     private String language;
     private int level;
+    private boolean isScrapped;
 
     public static SolutionForListResponse from(Solution solution) {
         SolutionForListResponse response = SolutionForListResponse.builder()
-                .solutionId(solution.getId())
+                .id(solution.getId())
                 .title(solution.getTitle())
                 .language(solution.getLanguage().getView())
                 .level(solution.getLevel())
                 .algorithm(solution.getAlgorithmView())
                 .dataStructure(solution.getDataStructureView())
+                .isScrapped(solution.isScrapped())
                 .build();
-
         return response;
     }
 
-    private void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    private void setDataStructure(String dataStructure) {
-        this.dataStructure = dataStructure;
-    }
 }

@@ -6,7 +6,6 @@ import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.util.List;
 
 @Getter

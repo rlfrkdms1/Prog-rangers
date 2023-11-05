@@ -16,13 +16,13 @@ public class ShowMySolutionListResponse {
 
     private int page;
     private int totalPage;
-    private List<SolutionWithProblemForListResponse> solutions;
+    private List<SolutionWithProblemForListResponse> contents;
 
     public static ShowMySolutionListResponse from(Page<Solution> solutions) {
         return ShowMySolutionListResponse.builder()
                 .page(solutions.getNumber() +  1)
                 .totalPage(solutions.getTotalPages())
-                .solutions(solutions.getContent().stream().map(SolutionWithProblemForListResponse::from).collect(Collectors.toList()))
+                .contents(solutions.getContent().stream().map(SolutionWithProblemForListResponse::from).collect(Collectors.toList()))
                 .build();
     }
 
