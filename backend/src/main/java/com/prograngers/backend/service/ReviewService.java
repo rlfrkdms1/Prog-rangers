@@ -67,7 +67,10 @@ public class ReviewService {
 
     private void validSameSolution(WriteReviewRequest writeReviewRequest, Long solutionId) {
         if (writeReviewRequest.getParentId()==null) return;
-        if (solutionId!=reviewRepository.findById(writeReviewRequest.getParentId()).get().getSolution().getId()){
+        if (solutionId!=reviewRepository.findById(writeReviewRequest.getParentId())
+                .get()
+                .getSolution()
+                .getId()){
             throw new DifferentSolutionException();
         }
     }
