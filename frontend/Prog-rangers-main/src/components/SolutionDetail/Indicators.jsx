@@ -19,10 +19,16 @@ export const Indicators = () => {
   // const [scrapData, setScrapData] = useState({});
 
   useEffect(() => {
+    
+    const token = localStorage.getItem('token');
+
     const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
     axios
-    .get(apiUrl)
+    .get(apiUrl, {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`}
+    })
     .then((response) => {
       setSolution(response.data.solution);
       setLike(response.data.solution.likes);
@@ -57,6 +63,8 @@ export const Indicators = () => {
   const onClickScrape = () => {
     navigate(`/solution/${solutionId}/detail/scrap`);
   };
+
+  console.log(solution.pushedLike);
   
   return (
     <>
