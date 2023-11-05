@@ -153,6 +153,7 @@ public class SolutionService {
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
         Solution mainSolution = findSolutionById(solutionId);
+        validMemberAuthorization(mainSolution,findMemberById(memberId));
         Problem problem = mainSolution.getProblem();
         List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem);
         List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
