@@ -100,10 +100,18 @@ export const LikeList = () => {
         </div>
 
         <div css={css`
-        ${fontSize18} 
-        margin-top: 50px;
-        margin-left: 10px;`}> 
-        {item.solution.description}
+            ${fontSize18};
+            margin-top: 50px;
+            margin-left: 10px;
+        `}>
+            {item.solution.description
+            .join('\n')
+            .split('\n')
+            .map((paragraph, index) => (
+                <p key={index}>
+                    {paragraph}
+                </p>
+            ))}
         </div>
 
         <div css={css`

@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { fontSize14, fontSize12 } from './FollowStyle';
 import { Link, useParams } from 'react-router-dom';
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import axios from "axios";
 
 export const Follower = () => {
@@ -47,7 +48,7 @@ return(
         <div css={css`width:300px; max-height: 60px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #959595;`}>           
             <div css={css`display: flex; align-items: center; gap: 15px;`}>
             <img
-                src= {item.photo || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                 
+                src= {item.photo || ProfileImg }                 
                 alt='profileImg'
                 width='50px'
                 css={css`

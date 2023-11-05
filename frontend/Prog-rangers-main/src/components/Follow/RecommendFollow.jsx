@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { buttonSytle, fontSize14, fontSize12 } from './FollowStyle';
 import axios from "axios";
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import { useParams } from 'react-router-dom';
 
 export const RecommendFollow = () => {
@@ -71,11 +72,7 @@ export const RecommendFollow = () => {
     })
     .then(response => {
       if (response.status === 200) {
-        // 팔로우 성공 시 상태 업데이트
-        setIsFollowing((prevStatus) => ({
-          ...prevStatus,
-          [item.id]: true,
-        }));
+        setIsFollowing(true);
         console.log('팔로우 성공');
       } else {
         console.error('팔로우 실패');
@@ -84,7 +81,7 @@ export const RecommendFollow = () => {
     .catch(error => {
       console.error('팔로우 실패', error);
     });
-  };  
+  };
 
   return (
     <div ref = {containerRef} 
@@ -106,7 +103,7 @@ export const RecommendFollow = () => {
     <div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
         <div css={css`display: flex; align-items: center; gap: 15px;`}>
         <img
-            src= {item.photo || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                 
+            src= {item.photo || ProfileImg}                 
             alt='profileImg'
             width='50px'
             css={css`
