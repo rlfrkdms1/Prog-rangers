@@ -5,7 +5,6 @@ import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.support.Encrypt;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,15 +14,8 @@ public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse {
     private LocalDateTime passwordModifiedAt;
 
     @Builder
-    public ShowBasicMemberAccountResponse(MemberType type, String nickname, String email, String github,
-                                          String introduction, String photo, String password,
-                                          LocalDateTime passwordModifiedAt) {
-        this.type = type;
-        this.nickname = nickname;
-        this.email = email;
-        this.github = github;
-        this.introduction = introduction;
-        this.photo = photo;
+    public ShowBasicMemberAccountResponse(MemberType type, String nickname, String email, String github, String introduction, String photo, String password, LocalDateTime passwordModifiedAt) {
+        super(type, nickname, email, github, introduction, photo);
         this.password = password;
         this.passwordModifiedAt = passwordModifiedAt;
     }
