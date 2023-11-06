@@ -61,7 +61,7 @@ export const RecommendFollow = () => {
 
   // 팔로우 기능
   const [isFollowing, setIsFollowing] = useState(false);
-  
+  // 맺기
   const handleFollowClick = (item) => {    
     const memberId = item.id;
     const token = localStorage.getItem('token');
@@ -80,6 +80,27 @@ export const RecommendFollow = () => {
     })
     .catch(error => {
       console.error('팔로우 실패', error);
+    });
+  };
+  // 끊기
+  const handleUnFollowClick = (item) => {    
+    const memberId = item.id;
+    const token = localStorage.getItem('token');
+
+    fetch(`http://13.124.131.171/api/v1/members/${memberId}/following`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}`, },
+    })
+    .then(response => {
+      if (response.status === 200) {
+        setIsFollowing(false);
+        console.log('언팔로우 성공');
+      } else {
+        console.error('언팔로우 실패');
+      }
+    })
+    .catch(error => {
+      console.error('언팔로우 실패', error);
     });
   };
 
@@ -113,7 +134,7 @@ export const RecommendFollow = () => {
             <div css={css`${fontSize12}`}>{item.nickname}</div>
             <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
             <div css={css`${fontSize14} `}>{item.introduction}</div>
-            <button onClick={() => handleFollowClick(item)}
+            <button onClick={() => isFollowing[item.id] ? handleFollowClick(item) : handleUnFollowClick(item)}
                     css={css`${buttonSytle} background-color:${isFollowing[item.id] ? theme.colors.light2 : theme.colors.main30}`}>
                      {isFollowing[item.id] ? '팔로잉' : '팔로우'}</button>
             </div>

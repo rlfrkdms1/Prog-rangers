@@ -19,7 +19,7 @@ export const LikeList = () => {
 
     const navigate = useNavigate();
     const onClickName = (nickname) => {
-      navigate(`/profile/${nickname}`); 
+      navigate(`/profile/:${nickname}`); 
     };  
 
     useEffect(() => {
@@ -105,14 +105,13 @@ export const LikeList = () => {
             margin-left: 10px;
         `}>
             {item.solution.description
-            .join('\n')
-            .split('\n')
-            .map((paragraph, index) => (
-                <p key={index}>
-                    {paragraph}
-                </p>
-            ))}
+                .join('\n')
+                .split('\n')
+                .map((paragraph, index) => (
+                    paragraph.trim() ? <p key={index}>{paragraph}</p> : <br key={index} />
+                ))}
         </div>
+
 
         <div css={css`
         width: 809px;

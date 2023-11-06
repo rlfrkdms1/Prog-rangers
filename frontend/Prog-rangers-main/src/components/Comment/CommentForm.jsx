@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/react";
 import { ojNameTag, tags } from "../Question/tagsform";
 import axios from "axios";
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
+import { useNavigate } from 'react-router-dom';
+
 
 export const CommentForm = () => {
     const [data, setData] = useState({ contents: [] });
@@ -22,15 +25,20 @@ export const CommentForm = () => {
           });
       }, []);
 
+    const navigate = useNavigate();
+    const onClickSolution = (solutionId) => {
+      navigate(`/solution/${solutionId}`); 
+    };  
+
 return(
     <>
    {data.contents.map((item, index) => (
     <div key={index}>
-    <div css={css`display: inline-block; width: 100%; max-height: 220px; background-color: #F0F0F0; padding-bottom: 20px;`}>
+    <div css={css`display: inline-block; width: 100%; max-height: 220px; background-color: #F0F0F0; padding-bottom: 20px; cursor: pointer`}  onClick={()=>onClickSolution(item.solution.solutionId)}>
     <div css={css`max-width:800px; display: flex; align-items: center; justify-content: space-between;`}>           
         <div css={css`display: flex; align-items: center;`}>
         <img
-            src= {item.solution.authorImageUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                 
+            src= {item.solution.authorImageUrl || ProfileImg}                 
             alt='profileImg'
             width='50px'
             css={css`
@@ -67,7 +75,7 @@ return(
           
           <div css={css`display: flex; align-items: center; padding: 20px;`}>
           <img
-              src= {item.comment.authorImageUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                 
+              src= {item.comment.authorImageUrl || ProfileImg}                 
               alt='profileImg'
               width='80px'
               css={css`
