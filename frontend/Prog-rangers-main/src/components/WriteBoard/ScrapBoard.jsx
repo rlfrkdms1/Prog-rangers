@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { tags } from "../Question/tagsform";
 import Delete from '../../assets/icons/solution-tag-delete.svg';
 import sortArray from '../../db/autocomplete.json';
@@ -110,8 +111,15 @@ export const ScrapBoard = () => {
     }catch(error){
       console.log(error);
     }
-
   }
+
+  // 작성취소 버튼
+  const navigate = useNavigate();
+  
+  const handleGoBack = () => {
+    navigate(-1); // 이전 페이지로 이동
+  };
+
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInputs({
@@ -215,7 +223,7 @@ export const ScrapBoard = () => {
         flex-direction: row;
         justify-content: flex-end;
       `}>
-        <button css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
+        <button css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`} onClick={handleGoBack}>작성 취소</button>
         <button css={css`${SubmitButton} background-color: #C2DBE3;`} onClick={postWrite}>작성 완료</button>
       </div>
   </div>

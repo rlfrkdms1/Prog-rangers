@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { ViewSolution } from './ViewSolution';
-import { LineReview } from './LineReview';
-import { MAIN_DATA } from './MainData';
+import { MySolView } from './MySolView';
+import { MyLineReview } from './MyLineReview';
+import { MAIN_DATA } from '../SolutionDetail/MainData';
 
 import { css } from '@emotion/react';
-import { tapLayout } from './solutionTabStyle';
+import { MytapLayout } from '../SolutionDetail/solutionTabStyle';
 import { theme } from '../Header/theme';
 
 import beforeClick from './tabIcons/beforeC.svg';
 import afterClick from './tabIcons/afterC.svg';
 
-export const SolutionTab = () => {
+export const MySolutionTab = () => {
   const [active, setActive] = useState('viewSolution'); //content 내용 변경
   const [isActive, setIsActive] = useState('viewSolution'); //background-image 변경
 
@@ -21,15 +21,16 @@ export const SolutionTab = () => {
   };
 
   const selectComponent = {
-    viewSolution: <ViewSolution />,
-    lineReview: <LineReview />,
+    viewSolution: <MySolView />,
+    lineReview: <MyLineReview />,
   };
 
   return (
-    <div css={tapLayout}>
+    <div css={MytapLayout}>
       <div
         className="tabArea"
         css={css`
+          width: 740px;
           border-bottom: 1px solid ${theme.colors.light3};
         `}
       >

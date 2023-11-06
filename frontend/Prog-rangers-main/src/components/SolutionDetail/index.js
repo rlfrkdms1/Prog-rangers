@@ -10,3 +10,5 @@ export { SolutionDetailHeader } from './SolutionDetailHeader';
 export { Indicators } from './Indicators';
 
 export { Comments } from './Comments';
+export { CommentForm } from './CommentForm';
+export { CommentList } from './CommentList';

@@ -4,6 +4,7 @@ import { AddMySolution } from "../../components/WriteBoard";
 import { ButtonDiv, SubmitButton } from "./buttonDiv";
 import { Provider, atom, useAtom } from 'jotai';
 import { useState, useEffect } from 'react';
+import { RightBar } from "../../components/MySolutionDetail";
 
 export const targetScope = Symbol();
 export const targetAtom = atom("");
@@ -44,8 +45,6 @@ export const EditSolution = () => {
     <SideBar />
       <div
         className='content'
-        css={css`
-        width: 100%;`}
       >
       <div css={css`height: 100%; width: 810px; display: flex; flex-direction: column;`}>
         <Provider scope={targetScope}>
@@ -54,6 +53,7 @@ export const EditSolution = () => {
       </div>
 
       </div>
+    <RightBar/>
     </div>
   );
 };

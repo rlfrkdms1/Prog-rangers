@@ -2,22 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CodeWindow3 } from '../Profile';
+import { CodeWindow2 } from '../Profile';
 import {
-  contentLayout,
-  contentMock,
-} from './solutionTabStyle';
+  contentLayout
+} from '../SolutionDetail/solutionTabStyle';
 
-export const LineReview = () => {
+export const MySolView = () => {
 
   const { solutionId } = useParams();
   const [ problem, setProblem ] = useState({});
   const [ solution, setSolution ] = useState({});
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
-    axios
-      .get(apiUrl)
+    const token = localStorage.getItem('token');
+    const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+
+      axios
+        .get(apiUrl, {
+          method: "GET",
+          headers: {Authorization: `Bearer ${token}`}
+        })
       .then((response) => {
         setProblem(response.data.problem);
         setSolution(response.data.solution);
@@ -30,7 +34,10 @@ export const LineReview = () => {
   return (
     <>
     <div className="contentWrap">
-      <div className="contentText" css={contentLayout}>
+      <div className="contentText" 
+        css={css`${contentLayout}
+            max-width: 740px;
+            white-space: wrap; `}>
         {solution && solution.description && (
           solution.description.split('\n').map((line, index) => (
           <p key={index}>{line}</p>
@@ -38,7 +45,13 @@ export const LineReview = () => {
         )}
       </div>
 
-      <div className="codeArea" css={contentMock}>
+      <div className="codeArea" 
+      css={css`        
+      width: 740px;
+      height: 370px;
+      color: #FFFFFF;
+      background-color: #2A3746;`}
+      >
       <div css={css`
           padding: 15px 0 15px 80px;
           font-weight: 700;`}>
@@ -55,10 +68,9 @@ export const LineReview = () => {
           border-bottom: 1px solid #1A2333;
           `}></div>
 
-      <CodeWindow3 />
+      <CodeWindow2 />
       </div>
     </div>
     </>
   );
 };
-
