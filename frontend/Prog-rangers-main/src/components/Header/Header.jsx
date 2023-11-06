@@ -1,4 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { css } from '@emotion/react';
 import { theme } from './theme';
 import { Link } from 'react-router-dom';
@@ -7,6 +11,9 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { AfterLoginNav } from './AfterLoginNav';
 import { BeforeLoginNav } from './BeforeLoginNav';
 import { useIsLoginState } from '../../context/AuthContext';
+import axios from 'axios';
+import { SearchContext } from '../../context/SearchContext';
+import { useNavigate } from 'react-router-dom';
 
 const flexAlign = css`
   display: flex;
@@ -15,6 +22,47 @@ const flexAlign = css`
 
 export const Header = () => {
   const isLogin = useIsLoginState();
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get(
+        'http://13.124.131.171:8080/prog-rangers/problems'
+      );
+      setData(result.data);
+    };
+
+    fetchData();
+  }, []);
+
+  const { setSearchTerm } = useContext(SearchContext);
+
+  const navigate = useNavigate();
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    navigate('/problems');
+  };
+
+  const handleChange = (event) => {
+    setSearch(event.target.value);
+    setSearchTerm(event.target.value);
+  };
+
+  const handleReset = (event) => {
+    setSearch('');
+    setSearchTerm('');
+    navigate('/problems');
+  };
+
+  const results = !search
+    ? data
+    : data.filter((item) =>
+        item
+          .toLowerCase()
+          .includes(search.toLocaleLowerCase())
+      );
 
   return (
     <div
@@ -66,35 +114,41 @@ export const Header = () => {
               padding-left: 20px;
             `}
           >
-            <input
-              type="text"
-              placeholder="문제 제목을 검색해보세요!"
-              css={css`
-                outline: none;
-                border: none;
-
-                width: 420px;
-              `}
-            />
-            <button
-              type="submit"
-              css={css`
-                line-height: 50px;
-              `}
-            >
-              <IoSearchOutline
-                size="25"
-                color="#303030"
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                placeholder="문제 제목을 검색해보세요!"
+                value={search}
+                onChange={handleChange}
                 css={css`
-                  vertical-align: middle;
-                  margin-left: 10px;
+                  outline: none;
+                  border: none;
+
+                  width: 420px;
                 `}
               />
-            </button>
+              <button
+                type="submit"
+                onClick={handleSearch}
+                css={css`
+                  line-height: 50px;
+                `}
+              >
+                <IoSearchOutline
+                  size="25"
+                  color="#303030"
+                  css={css`
+                    vertical-align: middle;
+                    margin-left: 10px;
+                  `}
+                />
+              </button>
+            </form>
           </div>
           <Link to="/problems">
             <button
               type="button"
+              onClick={handleReset}
               css={css`
                 width: 100px;
                 height: 50px;
@@ -118,7 +172,7 @@ export const Header = () => {
             margin-top: 5px;
           `}
         >
-          { isLogin ? <AfterLoginNav/> : <BeforeLoginNav/> }
+          {isLogin ? <AfterLoginNav /> : <BeforeLoginNav />}
         </div>
       </div>
     </div>

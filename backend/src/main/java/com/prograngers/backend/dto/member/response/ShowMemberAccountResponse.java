@@ -1,11 +1,10 @@
 package com.prograngers.backend.dto.member.response;
 
 import com.prograngers.backend.entity.member.MemberType;
-import lombok.Builder;
 
 public abstract class ShowMemberAccountResponse {
 
-    private MemberType type;
+  private MemberType type;
     private String nickname;
     private String email;
     private String github;
@@ -20,4 +19,5 @@ public abstract class ShowMemberAccountResponse {
         this.introduction = introduction;
         this.photo = photo;
     }
+
 }
