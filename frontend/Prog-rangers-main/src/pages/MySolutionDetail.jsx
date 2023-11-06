@@ -23,7 +23,7 @@ export const MySolutionDetail = () => {
       ` }
     >
       <SideBar />
-    <div css={css`margin-left: 40px;`}>
+    <div css={css`margin: 0 40px 0 35px;`}>
       <MySolHeader />
       <MySolutionTab />
       <MyIndicators />

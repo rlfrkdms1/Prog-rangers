@@ -97,6 +97,7 @@ export const SolutionDetailHeader = () => {
                 text-align: center;
                 line-height: 36px;
                 color: ${theme.colors.dark1};
+                ${solution.algorithmName === null ? 'display: none;' : ''}
               `}
             >
               {solution.algorithmName}
@@ -119,11 +120,11 @@ export const SolutionDetailHeader = () => {
             >
               {problem.ojName}
             </div>
-              <button className="dropMenu" css={colFlex}>
+              <div className="dropMenu" css={colFlex}>
                 <span css={dot}></span>
                 <span css={dot}></span>
                 <span css={dot}></span>
-              </button>
+              </div>
           </div>
         </div>
       </div>

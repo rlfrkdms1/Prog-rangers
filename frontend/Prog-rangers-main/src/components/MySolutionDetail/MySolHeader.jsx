@@ -138,9 +138,10 @@ export const MySolHeader = () => {
                 text-align: center;
                 line-height: 36px;
                 color: ${theme.colors.dark1};
+                ${solution.tags[0] === null && solution.tags[1] === null ? 'display: none;' : ''}
               `}
             >
-              {solution.algorithmName}
+              {solution.tags}
             </div>
           </div>
           <div css={colFlex}>

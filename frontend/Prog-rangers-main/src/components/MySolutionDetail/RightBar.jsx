@@ -57,7 +57,6 @@ export const RightBar = () => {
       <div css={css`
         height: 100%;
         alignItems: stretch;
-        margin-left: 35px;
         border-left: 1px solid ${theme.colors.light3};
       `}>
         <div css={css`

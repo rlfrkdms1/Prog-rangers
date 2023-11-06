@@ -63,8 +63,6 @@ export const Indicators = () => {
   const onClickScrape = () => {
     navigate(`/solutions/${solutionId}/detail/scrap`);
   };
-
-  console.log(solution.pushedLike);
   
   return (
     <>
