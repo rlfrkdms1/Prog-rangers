@@ -1,7 +1,9 @@
 package com.prograngers.backend.dto.member.response;
 
 import com.prograngers.backend.entity.member.MemberType;
+import lombok.Getter;
 
+@Getter
 public abstract class ShowMemberAccountResponse {
 
   private MemberType type;
