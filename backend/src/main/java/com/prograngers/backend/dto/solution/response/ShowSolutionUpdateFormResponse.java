@@ -1,7 +1,5 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.solution.AlgorithmConstant;
-import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +18,7 @@ public class ShowSolutionUpdateFormResponse {
     private String dataStructure;
     private String[] code;
     private String description;
-    private int  level;
+    private int level;
 
     public static ShowSolutionUpdateFormResponse from(Solution solution) {
         return ShowSolutionUpdateFormResponse.builder()
