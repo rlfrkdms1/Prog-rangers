@@ -13,9 +13,9 @@ import lombok.Getter;
 public class SolutionWithProblemResponse {
 
     private String problemName;
-    private DataStructureConstant dataStructure;
-    private AlgorithmConstant algorithm;
-    private LanguageConstant language;
+    private String dataStructure;
+    private String algorithm;
+    private String language;
     private JudgeConstant ojName;
     private String description;
     private String[] code;
@@ -23,9 +23,9 @@ public class SolutionWithProblemResponse {
     public static SolutionWithProblemResponse from(Solution solution){
         return SolutionWithProblemResponse.builder()
                 .problemName(solution.getProblem().getTitle())
-                .dataStructure(solution.getDataStructure())
-                .algorithm(solution.getAlgorithm())
-                .language(solution.getLanguage())
+                .dataStructure(solution.getDataStructure().getView())
+                .algorithm(solution.getAlgorithm().getView())
+                .language(solution.getLanguage().getView())
                 .ojName(solution.getProblem().getOjName())
                 .description(solution.getDescription())
                 .code(solution.getCode().split("\n"))
