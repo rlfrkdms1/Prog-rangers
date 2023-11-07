@@ -23,8 +23,8 @@ public class SolutionWithProblemResponse {
     public static SolutionWithProblemResponse from(Solution solution){
         return SolutionWithProblemResponse.builder()
                 .problemName(solution.getProblem().getTitle())
-                .dataStructure(solution.getDataStructure().getView())
-                .algorithm(solution.getAlgorithm().getView())
+                .dataStructure(solution.getDataStructureView())
+                .algorithm(solution.getAlgorithmView())
                 .language(solution.getLanguage().getView())
                 .ojName(solution.getProblem().getOjName())
                 .description(solution.getDescription())
