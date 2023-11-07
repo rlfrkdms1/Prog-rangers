@@ -5,11 +5,10 @@ import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.support.Encrypt;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 @Getter
-public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse{
+public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse {
 
     private String password;
     private LocalDateTime passwordModifiedAt;
