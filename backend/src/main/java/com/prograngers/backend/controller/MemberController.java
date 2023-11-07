@@ -5,7 +5,6 @@ import com.prograngers.backend.controller.auth.Login;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
-import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

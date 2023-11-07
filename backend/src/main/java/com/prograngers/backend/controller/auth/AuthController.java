@@ -31,7 +31,7 @@ public class AuthController {
     private final AuthService authService;
     private final RefreshCookieProvider refreshCookieProvider;
 
-    @GetMapping("/members")
+    @GetMapping("/auth")
     public ResponseEntity<Void> checkNicknameDuplication(@RequestParam String nickname) {
         authService.validNicknameDuplication(nickname);
         return ResponseEntity.noContent().build();
