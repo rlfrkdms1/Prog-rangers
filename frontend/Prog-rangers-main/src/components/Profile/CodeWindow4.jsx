@@ -1,4 +1,4 @@
-// 기본 풀이 한줄리뷰 코드창
+// 내 풀이 한줄리뷰 코드창
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,7 +8,7 @@ import hljs from "highlight.js";
 import './github-dark-dimmed.css';
 import plusmark from '../../assets/icons/plus-mark.svg';
 
-export const CodeWindow3 = () => {
+export const CodeWindow4 = () => {
   const { solutionId } = useParams();
   const [codeData, setData] = useState({ solution: { code: [] } });
 
@@ -41,10 +41,15 @@ export const CodeWindow3 = () => {
   };
 
   useEffect(() => {
+    
+    const token = localStorage.getItem('token');
     const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
     axios
-      .get(apiUrl)
+      .get(apiUrl, {
+          method: "GET",
+          headers: {Authorization: `Bearer ${token}`}
+        })
       .then((response) => {
         setData(response.data);
 
@@ -54,7 +59,6 @@ export const CodeWindow3 = () => {
       });
 
     // 사용자 닉네임을 가져오는 API 요청 추가
-    const token = localStorage.getItem('token');
     if (token) {
       axios
         .get("http://13.124.131.171:8080/api/v1/members", {
@@ -68,31 +72,6 @@ export const CodeWindow3 = () => {
         });
     }
   }, []);
-
-  const handleSaveReviews = () => {
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      alert("한줄리뷰를 작성하려면 로그인이 필요합니다.");
-    } else if (reviews[clickedLineId] && reviews[clickedLineId].trim() !== '') {
-      const newReview = {
-        nickname: nickname,
-        codeLineNumber: clickedLineId,
-        content: reviews[clickedLineId],
-      };
-
-      axios
-        .post(`http://13.124.131.171:8080/api/v1/solutions/${solutionId}/reviews`, newReview, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          console.log('리뷰가 저장되었습니다.'); 
-        })
-        .catch((error) => {
-          console.error('리뷰 저장 중 오류 발생:', error);
-        });
-    }
-  };
 
   function ReviewDisplay({ reviews, codeLineNumber }) {
     const review = reviews[codeLineNumber];
@@ -109,13 +88,13 @@ export const CodeWindow3 = () => {
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' } }>
       {codeData.solution.code.map((line, codeLineNumber) => (
-        <div key={codeLineNumber} css={css`padding-left: 45px; margin: 6px;`}
+        <div key={codeLineNumber} css={css`padding-left: 25px; margin: 6px;`}
              onMouseEnter={() => handleMouseEnter(codeLineNumber)}
              onMouseLeave={handleMouseLeave}
         >
-          <pre css={css`font-size: 18px;`} >
+          <pre>
             <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
               {hoveredLine === codeLineNumber && (
                 <div>
@@ -131,7 +110,7 @@ export const CodeWindow3 = () => {
               {/* 한줄리뷰 */}
               {clickedLineId === codeLineNumber && isBoxVisible && (
                 <div style={{
-                  width: '820px',
+                  width: '750px',
                   height: 'auto',    
                   borderRadius: '20px',
                   background: '#CCDEF2',
@@ -139,42 +118,28 @@ export const CodeWindow3 = () => {
                   display: 'flex',
                   margin: '5px',
                 }}>
-                  <input type="text"
-                  placeholder={`${codeLineNumber}번째 줄 코드 리뷰를 입력하세요`}
-                  value={reviews[codeLineNumber]}
+                  <div
+                  
                   onChange={(e) => handleReviewChange(codeLineNumber, e.target.value)}
                   
                   style={{
-                    width: '90%',
+                    width: '87%',
                     border: 'none',
                     background: 'transparent',
                     outline: 'none',
-                    padding: '10px 20px',
+                    padding: '11px 20px',
                   }}
                   />
                   
-                  <button
-                  type="button"
-                  onClick={handleSaveReviews}
-                  css={css`
-                    width: 75px;
-                    height: 28px;
-                    border-radius: 15px;
-                    align-items: center;
-                    background-color: #F0F0F0;
-                    margin-top: 6px;
-                  `}>
-                  등록
-                  </button>
-                  <br/>
+                  
+                  
                 <div>
                   {reviews[codeLineNumber] && (
                   <ReviewDisplay reviews={reviews} codeLineNumber={codeLineNumber} />
                   )}
                 </div>
-                </div>
-                
-              )}
+              </div>
+)}
             </span>
           </pre>
         </div>

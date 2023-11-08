@@ -20,7 +20,7 @@ export const Recommand = () => {
     useEffect(() => {
 
       const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
       axios
         .get(apiUrl, {

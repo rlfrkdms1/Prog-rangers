@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { LeftBody, MainBody, RightBody } from './MainBody';
@@ -17,6 +18,7 @@ import {
 
 export const Profile = () => {
 
+  const { nickname } = useParams();
   const [data, setData] = useState([]);
 
   //팔로우 버튼
@@ -29,7 +31,7 @@ export const Profile = () => {
 
   useEffect(() => {
 
-    const apiUrl = 'http://13.124.131.171:8080/api/v1/members/test';
+    const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
     axios.get(apiUrl)
       .then((response) => {

@@ -39,12 +39,12 @@ export const MySolHeader = () => {
   const navigate = useNavigate();
 
   const onClickSols = () => {
-    navigate(`/myPage/solutions/${solutionId}/editsolution`);
+    navigate(`/solutions/${solutionId}/editsolution`);
   };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
       axios
         .get(apiUrl, {
@@ -62,7 +62,6 @@ export const MySolHeader = () => {
 
   // 풀이 삭제
   const deleteSolution = (solutionId) => {
-    // 이거 확인한번 해주숑
     const apiUrl = `http://13.124.131.171:8080/api/v1/problems/${solutionId}/solutions`;
   
     axios
@@ -138,10 +137,13 @@ export const MySolHeader = () => {
                 text-align: center;
                 line-height: 36px;
                 color: ${theme.colors.dark1};
-                ${solution.tags[0] === null && solution.tags[1] === null ? 'display: none;' : ''}
+                ${solution.algorithm === null ? 'display: none;' : ''}
+                ${solution.dataStructure === null ? 'display: none;' : ''}
               `}
             >
-              {solution.tags}
+              {solution.algorithm}
+              {solution.dataStructure}
+              
             </div>
           </div>
           <div css={colFlex}>

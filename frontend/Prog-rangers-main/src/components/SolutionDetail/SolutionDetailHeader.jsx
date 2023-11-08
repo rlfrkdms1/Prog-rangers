@@ -97,10 +97,10 @@ export const SolutionDetailHeader = () => {
                 text-align: center;
                 line-height: 36px;
                 color: ${theme.colors.dark1};
-                ${solution.algorithmName === null ? 'display: none;' : ''}
+                ${solution.algorithm === null ? 'display: none;' : ''}
               `}
             >
-              {solution.algorithmName}
+              {solution.algorithm}
             </div>
           </div>
           <div css={colFlex}>

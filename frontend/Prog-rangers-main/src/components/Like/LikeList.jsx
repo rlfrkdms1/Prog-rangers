@@ -17,7 +17,7 @@ export const LikeList = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/likes';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/likes';
 
         axios.get(apiUrl, {
             method: "GET",

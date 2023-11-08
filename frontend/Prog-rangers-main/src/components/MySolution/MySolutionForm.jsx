@@ -9,13 +9,13 @@ import star3 from '../../assets/icons/star/star3.svg';
 import star4 from '../../assets/icons/star/star4.svg';
 import star5 from '../../assets/icons/star/star5.svg';
 
-export const MySolutionForm = ({data}) => {
+export const MySolutionForm = ({data, isScrapped}) => {
+
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
     navigate(`/mySolution/${solutionId}`);
   };
 
-  
   const getRightName = (targetValue) => {
     const condition = (element) => element.value === targetValue;
     const foundIndex = forTags.findIndex(condition) ;
@@ -34,7 +34,7 @@ export const MySolutionForm = ({data}) => {
   return(
     <>
       {data.map((item) => (
-        <div key={item.solution.solutionId} css={css`display: inline-block; width: 100%; height: 175px; border-bottom: 1px solid #D9D9D9`}>
+        <div key={item.solution.id} css={css`display: inline-block; width: 100%; height: 175px; border-bottom: 1px solid #D9D9D9`}>
           <div css={css`
           height: 29px;
           margin-top: 30px;
@@ -48,7 +48,7 @@ export const MySolutionForm = ({data}) => {
             gap: 10px;
             `}>
               <div
-              onClick={(e) => onClickSols(item.solution.solutionId)}
+              onClick={(e) => onClickSols(item.solution.id)}
               css={css`
                 font-weight: bold;
                 font-size: 20px;
@@ -77,6 +77,7 @@ export const MySolutionForm = ({data}) => {
               align-items: center;
               gap: 5px;
               float: right;
+              ${isScrapped ? 'display: block;' : 'display: none;'}
               `}>
                 스크랩한 풀이
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">

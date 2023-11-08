@@ -30,7 +30,7 @@ export const MyPage = () => {
   useEffect(() => {
 
     const token = localStorage.getItem('token');
-    const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/dashboard';
+    const apiUrl = 'http://13.124.131.171:8080/api/v1/dashboard';
 
     axios.get(apiUrl, {
       method: "GET",

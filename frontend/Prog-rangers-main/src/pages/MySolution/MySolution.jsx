@@ -17,19 +17,21 @@ export const MySolution = () => {
 
   const [ page, setPage ] = useState(1);
   const [ solutions, setSolutions ] = useState([]);
+  const [ isScrapped, setIsScrapped ] = useState(false);
   const [ totalPages, setTotalPages ] = useState(1);
 
   const Solutionpages = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://13.124.131.171:8080/api/v1/mypage/solutions?page=${page}`, 
+      const response = await axios.get(`http://13.124.131.171:8080/api/v1/solutions?page=${page}`, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setTotalPages(response.data.totalPage);
-      setSolutions(response.data.solutions);
+      setSolutions(response.data.contents);
+      setIsScrapped(response.data.contents.solution.scrapped);
     } catch (error) {
       console.error('API 요청 오류:', error);
     }
@@ -96,7 +98,7 @@ export const MySolution = () => {
         </div>
 
         <div css={css`width: 800px; margin-top: 20px; margin-right: 111px;`}>
-          <MySolutionForm data={solutions}/>
+          <MySolutionForm data={solutions} isScrapped={isScrapped}/>
         </div>
 
         <div css={css`

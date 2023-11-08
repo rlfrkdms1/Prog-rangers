@@ -11,13 +11,22 @@ import {
     boxStyle, 
     fontSize14} from '../../pages/Profile/ProfileStyle';
 import { CodeWindow } from './CodeWindow';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ProfileContentMock } from '../SolutionDetail/solutionTabStyle';
 
 export const SolvingList = () => {
+
+    const { nickname } = useParams();
     const [data, setData] = useState({ list: [] });
+
+    const navigate = useNavigate();
+      const onClickSols = (solutionId) => {
+        navigate(`/solutions/${solutionId}`);
+      };
 
     useEffect(() => {
 
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/members/test';
+        const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
         axios.get(apiUrl)
           .then((response) => {
@@ -44,22 +53,29 @@ export const SolvingList = () => {
         `}>
         <div
         css={css`
-        ${fontSizedark20}`}> 
+        ${fontSizedark20}
+        cursor: pointer;`}
+        onClick={() => onClickSols(item.solutionId)}> 
         {item.problemName}
         </div>
+
 
         <div css={css`
         ${boxStyle}
         ${fontSize16}
-        background-color: ${theme.colors.light3}`}>
-        {item.dataStructure}
+        margin-top: 10px;
+        background-color: ${theme.colors.light3}
+        ${item.language === null ? 'display: none;' : ''}
+        `}>
+        {item.language}
         </div>
+
 
         <button css={css`
         width: 30px;
         height: 30px;
         float: right;
-        padding-top: 13px;     
+        padding-top: 4px;     
         `}>
         <img src={sharemark} alt="share_mark"/>
         </button>
@@ -88,15 +104,11 @@ export const SolvingList = () => {
         {item.description}
         </div>
 
-        <div css={css`
-        width: 809px;
-        height: 370px;
-        margin-top: 50px;
-        color: #FFFFFF;
-        background-color: #2A3746;
+        <div css={css`${ProfileContentMock}
         `}>
           <div css={css`
-          padding: 20px;
+          padding: 20px 40px 20px;
+          font-size: 16px;
           font-weight: 700;`}>
           {item.problemName + index}
           </div>
@@ -105,18 +117,14 @@ export const SolvingList = () => {
           width: 100%;
           border-bottom: 1px solid #1A2333;
           `}></div>
+
           <div css={css`
           margin-top: 3px;
           width: 100%;
           border-bottom: 1px solid #1A2333;
           `}></div>
-
-          <div css={css`
-          ${fontSize14}
-          padding: 20px;
-          `}>
-            <CodeWindow/>
-          </div>
+          
+          <CodeWindow/>
 
         </div>
 

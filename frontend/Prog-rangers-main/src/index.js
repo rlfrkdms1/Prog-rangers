@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         path: 'registerReview',
         element: <WriteSolution />,
       },
-      { path: 'profile/:userId', element: <Profile /> },
+      { path: 'profile/:nickname', element: <Profile /> },
       { path: 'myPage', element: <MyPage /> },
       { path: 'account', element: <Account /> },
       { path: 'mySolution', element: <MySolution /> },
