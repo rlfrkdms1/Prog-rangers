@@ -1,10 +1,9 @@
 package com.prograngers.backend.entity.solution;
 
-import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.support.converter.AlgorithmConverter;
 import com.prograngers.backend.support.converter.DataStructureConverter;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -17,13 +16,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -98,7 +97,7 @@ public class Solution {
         }
     }
 
-    private void updateLevel(Integer level){
+    private void updateLevel(Integer level) {
         this.level = level;
     }
 
@@ -110,7 +109,8 @@ public class Solution {
         this.dataStructure = dataStructure;
     }
 
-    public void update(String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure, int level, String code, String description){
+    public void update(String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure, int level,
+                       String code, String description) {
         updateTitle(title);
         updateAlgorithm(algorithm);
         updateDataStructure(dataStructure);
@@ -119,13 +119,24 @@ public class Solution {
         updateDescription(description);
     }
 
-    public String getAlgorithmView(){
-        if (algorithm!=null) return algorithm.getView();
+    public String getAlgorithmView() {
+        if (algorithm != null) {
+            return algorithm.getView();
+        }
         return null;
     }
 
-    public String getDataStructureView(){
-        if (dataStructure!=null) return dataStructure.getView();
+    public String getDataStructureView() {
+        if (dataStructure != null) {
+            return dataStructure.getView();
+        }
+        return null;
+    }
+
+    public String getLanguageView() {
+        if (algorithm != null) {
+            return algorithm.getView();
+        }
         return null;
     }
 
