@@ -10,6 +10,7 @@ import lombok.Getter;
 public class SolutionWithProblemResponse {
 
     private String problemName;
+    private Long id;
     private String dataStructure;
     private String algorithm;
     private String language;
@@ -20,6 +21,7 @@ public class SolutionWithProblemResponse {
     public static SolutionWithProblemResponse from(Solution solution) {
         return SolutionWithProblemResponse.builder()
                 .problemName(solution.getProblem().getTitle())
+                .id(solution.getId())
                 .dataStructure(solution.getDataStructureView())
                 .algorithm(solution.getAlgorithmView())
                 .language(solution.getLanguage().getView())
