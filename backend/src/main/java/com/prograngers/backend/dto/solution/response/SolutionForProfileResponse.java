@@ -24,7 +24,7 @@ public class SolutionForProfileResponse {
                 .id(solution.getId())
                 .dataStructure(solution.getDataStructureView())
                 .algorithm(solution.getAlgorithmView())
-                .language(solution.getLanguageView())
+                .language(solution.getLanguage().getView())
                 .ojName(solution.getProblem().getOjName())
                 .description(solution.getDescription())
                 .code(solution.getCode().split(REGEX))

@@ -133,12 +133,6 @@ public class Solution {
         return null;
     }
 
-    public String getLanguageView() {
-        if (algorithm != null) {
-            return algorithm.getView();
-        }
-        return null;
-    }
 
     public boolean isScrapped() {
         return scrapSolution != null;
