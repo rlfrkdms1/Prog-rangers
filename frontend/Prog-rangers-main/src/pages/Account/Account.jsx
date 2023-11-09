@@ -23,7 +23,7 @@ export const Account = () => {
   // 유저 정보 조회 api
   useEffect(() => {
     const token = localStorage.getItem('token');    
-    fetch("http://13.124.131.171:8080/api/v1/mypage/account-settings", {
+    fetch("http://13.124.131.171:8080/api/v1/members", {
       method: "GET",
       headers: {Authorization: `Bearer ${token}`},
     })

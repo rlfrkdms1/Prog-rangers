@@ -15,7 +15,7 @@ import hljs from "highlight.js";
 
 export const LikeList = () => {    
 
-    const [data, setData] = useState({ solutions: [] });
+    const [data, setData] = useState({ contents: [] });
 
     const navigate = useNavigate();
     const onClickName = (nickname) => {
@@ -24,7 +24,7 @@ export const LikeList = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/likes';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/likes';
 
         axios.get(apiUrl, {
             method: "GET",
@@ -38,13 +38,13 @@ export const LikeList = () => {
           });
       }, []);
 
-      if (data.solutions && data.solutions.length > 0) {
-        for (let i = 0; i < data.solutions.length; i++) {
-          const item = data.solutions[i];    
+      if (data.contents && data.contents.length > 0) {
+        for (let i = 0; i < data.contents.length; i++) {
+          const item = data.contents[i];    
 
   return(
     <>
-    {data.solutions.map((item, index) => (
+    {data.contents.map((item, index) => (
       <div key={index}
        css={css`
         width: 835px;     

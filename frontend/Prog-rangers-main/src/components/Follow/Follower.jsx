@@ -5,13 +5,14 @@ import { fontSize14, fontSize12 } from './FollowStyle';
 import { Link, useParams } from 'react-router-dom';
 import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import axios from "axios";
+import followStatus from '../../components/Follow/RecommendFollow';
 
 export const Follower = () => {
   const [data, setData] = useState({ followers: [] });
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/follows';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/follows';
         
 
         axios.get(apiUrl, {

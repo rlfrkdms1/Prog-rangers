@@ -11,7 +11,7 @@ export const CommentForm = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/comments';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/comments';
 
         axios.get(apiUrl, {
             method: "GET",

@@ -8,10 +8,11 @@ import { useParams } from 'react-router-dom';
 
 export const RecommendFollow = () => {
   // 추천 팔로우 api
+  const [followStatus, setFollowStatus] = useState({});
   const [data, setData] = useState({ recommends: [] });
 
     useEffect(() => {
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/follows';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/follows';
         const token = localStorage.getItem('token');
         
         axios.get(apiUrl, {
@@ -20,6 +21,12 @@ export const RecommendFollow = () => {
           })
           .then((response) => {
             setData(response.data);
+
+            const initialFollowStatus = {};
+            response.data.recommends.forEach(item => {
+              initialFollowStatus[item.id] = false;
+            });
+            setFollowStatus(initialFollowStatus);
           })
           .catch((error) => {
             console.error('API 요청 오류:', error);
@@ -60,48 +67,57 @@ export const RecommendFollow = () => {
   };
 
   // 팔로우 기능
-  const [isFollowing, setIsFollowing] = useState(false);
-  // 맺기
+  const [followedAccounts, setFollowedAccounts] = useState([]); // 팔로우한 계정 목록
+  const [recommendedAccounts, setRecommendedAccounts] = useState(data.recommends); // 추천 팔로우 계정 목록
+
   const handleFollowClick = (item) => {    
     const memberId = item.id;
     const token = localStorage.getItem('token');
 
-    fetch(`http://13.124.131.171/api/v1/members/${memberId}/following`, {
-      method: "POST",
+    fetch(`http://13.124.131.171:8080/api/v1/members/${memberId}/following`, {
+      method: followStatus[memberId] ? 'DELETE' : 'POST',
       headers: { Authorization: `Bearer ${token}`, },
     })
     .then(response => {
-      if (response.status === 200) {
-        setIsFollowing(true);
-        console.log('팔로우 성공');
-      } else {
-        console.error('팔로우 실패');
-      }
+      const updatedFollowStatus = { ...followStatus };
+        updatedFollowStatus[memberId] = !followStatus[memberId];
+        setFollowStatus(updatedFollowStatus);
+        if (followStatus[memberId]) {
+          console.log('언팔로우 성공');
+        } else {
+          console.log('팔로우 성공');
+        }        
     })
     .catch(error => {
-      console.error('팔로우 실패', error);
+      console.error('API 요청 실패', error);
     });
-  };
-  // 끊기
-  const handleUnFollowClick = (item) => {    
-    const memberId = item.id;
-    const token = localStorage.getItem('token');
 
-    fetch(`http://13.124.131.171/api/v1/members/${memberId}/following`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}`, },
-    })
-    .then(response => {
-      if (response.status === 200) {
-        setIsFollowing(false);
-        console.log('언팔로우 성공');
+      // 클릭한 계정이 이미 팔로우한 계정 목록에 있는지 확인
+      const isAlreadyFollowed = followedAccounts.some(account => account.id === item.id);
+
+      // 팔로우한 계정 목록을 업데이트
+      if (isAlreadyFollowed) {
+        // 이미 팔로우한 경우, 해당 계정을 제거
+        const updatedFollowedAccounts = followedAccounts.filter(account => account.id !== item.id);
+        setFollowedAccounts(updatedFollowedAccounts);
       } else {
-        console.error('언팔로우 실패');
+        // 아직 팔로우하지 않은 경우, 해당 계정을 추가
+        const updatedFollowedAccounts = [...followedAccounts, item];
+        setFollowedAccounts(updatedFollowedAccounts);
       }
-    })
-    .catch(error => {
-      console.error('언팔로우 실패', error);
-    });
+
+      // 팔로우 버튼 클릭 시 팔로우 상태를 토글
+      const updatedRecommendedAccounts = recommendedAccounts.map(account => {
+        if (account.id === item.id) {
+          return {
+            ...account,
+            isFollowing: !isAlreadyFollowed,
+          };
+        }
+        return account;
+      });
+
+      setRecommendedAccounts(updatedRecommendedAccounts);
   };
 
   return (
@@ -134,9 +150,9 @@ export const RecommendFollow = () => {
             <div css={css`${fontSize12}`}>{item.nickname}</div>
             <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
             <div css={css`${fontSize14} `}>{item.introduction}</div>
-            <button onClick={() => isFollowing[item.id] ? handleFollowClick(item) : handleUnFollowClick(item)}
-                    css={css`${buttonSytle} background-color:${isFollowing[item.id] ? theme.colors.light2 : theme.colors.main30}`}>
-                     {isFollowing[item.id] ? '팔로잉' : '팔로우'}</button>
+            <button onClick={() => handleFollowClick(item)}
+                    css={css`${buttonSytle} background-color:${followStatus[item.id] ? theme.colors.light2 : theme.colors.main30}`}>
+                     {followStatus[item.id] ? '팔로잉' : '팔로우'}</button>
             </div>
         </div>
         </div>
