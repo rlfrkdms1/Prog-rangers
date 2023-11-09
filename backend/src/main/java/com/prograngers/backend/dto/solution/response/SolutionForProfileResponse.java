@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SolutionForProfileResponse {
-    private static final String REGEX = "\n";
+    private static final String REGEX = System.lineSeparator();
     private String title;
     private Long id;
     private String dataStructure;
