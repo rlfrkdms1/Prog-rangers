@@ -20,6 +20,7 @@ import { targetAtom, targetScope, nameAtom, nameScope , valueAtom, valueScope} f
 import { ButtonDiv, SubmitButton } from "../../pages/BoardPage/buttonDiv";
 import { TagAction } from "./TagAction";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export const EditMySolution = ({postURL}) => {
   const [ isPublic, setIsPublic ] = useState(true);
@@ -37,6 +38,7 @@ export const EditMySolution = ({postURL}) => {
   });
   const [ algo, setAlgo ] = useState([]);
   const [ data, setData ] = useState([]);
+
   useEffect(() => {
     if(name == 'algorithm'){
       setAlgo({
@@ -163,6 +165,13 @@ export const EditMySolution = ({postURL}) => {
     }    
   }
 
+    // 작성취소 버튼
+    const navigate = useNavigate();
+
+    const handleGoBack = () => {
+      navigate(-1); // 이전 페이지로 이동
+    };
+
   return(
     <div>
       <div css={css`
@@ -231,7 +240,7 @@ export const EditMySolution = ({postURL}) => {
         </div>
         <div css={css`  margin: 100px 30px 80px 40px; justify-content: flex-end; display: flex; flex-direction: row; height: 50px; 
 `}>
-        <button css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
+        <button onClick={handleGoBack} css={css`${SubmitButton} margin-right: 20px; background-color: #F0F0F0;`}>작성 취소</button>
         <button onClick={postWrite} css={css`${SubmitButton} background-color: #C2DBE3;`} >작성 완료</button>
         </div>
       </div>

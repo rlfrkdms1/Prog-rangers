@@ -4,20 +4,24 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CodeWindow3 } from '../Profile';
 import {
-  contentLayout,
-  contentMock,
-} from './solutionTabStyle';
+  contentLayout
+} from '../SolutionDetail/solutionTabStyle';
 
-export const LineReview = () => {
+export const MyLineReview = () => {
 
   const { solutionId } = useParams();
   const [ problem, setProblem ] = useState({});
   const [ solution, setSolution ] = useState({});
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    const token = localStorage.getItem('token');
+    const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+
     axios
-      .get(apiUrl)
+    .get(apiUrl, {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`}
+      })
       .then((response) => {
         setProblem(response.data.problem);
         setSolution(response.data.solution);
@@ -30,7 +34,10 @@ export const LineReview = () => {
   return (
     <>
     <div className="contentWrap">
-      <div className="contentText" css={contentLayout}>
+      <div className="contentText" 
+        css={css`${contentLayout}
+        max-width: 740px;
+        white-space: wrap; `}>
         {solution && solution.description && (
           solution.description.split('\n').map((line, index) => (
           <p key={index}>{line}</p>
@@ -38,12 +45,18 @@ export const LineReview = () => {
         )}
       </div>
 
-      <div className="codeArea" css={contentMock}>
-      <div css={css`
-          padding: 15px 0 15px 80px;
-          font-weight: 700;`}>
-          {problem.title}
-          </div>
+      <div className="codeArea"
+        css={css`
+          width: 740px;
+          height: 370px;
+          color: #FFFFFF;
+          background-color: #2A3746;
+          `}>
+            <div css={css`
+            padding: 15px 0 15px 80px;
+            font-weight: 700;`}>
+            {problem.title}
+            </div>
 
           <div css={css`
           width: 100%;

@@ -100,7 +100,7 @@ export const MySolution = () => {
         </div>
 
         <div css={css`
-          width: 800px
+          width: 800px;
           height: 50px; 
           display: flex; 
           margin-top: 50px;
