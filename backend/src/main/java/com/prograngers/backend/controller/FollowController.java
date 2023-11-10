@@ -32,7 +32,7 @@ public class FollowController {
     }
 
     @Login
-    @GetMapping("mypage/follows")
+    @GetMapping("/follows")
     public ResponseEntity<ShowFollowListResponse> followList(@LoggedInMember Long memberId){
         return ResponseEntity.ok().body(followService.getFollowList(memberId));
     }

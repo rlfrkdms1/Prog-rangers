@@ -1,7 +1,5 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.solution.AlgorithmConstant;
-import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,17 +18,17 @@ public class ShowSolutionUpdateFormResponse {
     private String dataStructure;
     private String[] code;
     private String description;
-    private int  level;
+    private int level;
 
-    public static ShowSolutionUpdateFormResponse toDto(Solution target) {
+    public static ShowSolutionUpdateFormResponse from(Solution solution) {
         return ShowSolutionUpdateFormResponse.builder()
-                .title(target.getTitle())
-                .link(target.getProblem()
+                .title(solution.getTitle())
+                .link(solution.getProblem()
                         .getLink())
-                .algorithm(target.getAlgorithmView())
-                .dataStructure(target.getDataStructureView())
-                .code(target.getCode().split("\n"))
-                .level(target.getLevel())
-                .description(target.getDescription()).build();
+                .algorithm(solution.getAlgorithmView())
+                .dataStructure(solution.getDataStructureView())
+                .code(solution.getCode().split("\n"))
+                .level(solution.getLevel())
+                .description(solution.getDescription()).build();
     }
 }

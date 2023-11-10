@@ -22,6 +22,7 @@ public class SolutionResponse {
     private String link;
     private String algorithm;
     private String dataStructure;
+    private String language;
     private String[] code;
     private String description;
     private Integer likes;
@@ -40,6 +41,7 @@ public class SolutionResponse {
                 .link(problemLink)
                 .algorithm(solution.getAlgorithmView())
                 .dataStructure(solution.getDataStructureView())
+                .language(solution.getLanguage().getView())
                 .code(solution.getCode().split("\n"))
                 .description(solution.getDescription())
                 .likes(likeCount)

@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 public class ShowMyLikeSolutionsResponse {
 
     private boolean hasNext;
-    private List<LikeSolutionResponse> solutions;
+    private List<LikeSolutionResponse> contents;
 
     public static ShowMyLikeSolutionsResponse from(Slice<Solution> solutions) {
         return ShowMyLikeSolutionsResponse.builder()
                 .hasNext(solutions.hasNext())
-                .solutions(solutions.getContent().stream().map(LikeSolutionResponse::from).collect(Collectors.toList()))
+                .contents(solutions.getContent().stream().map(LikeSolutionResponse::from).collect(Collectors.toList()))
                 .build();
     }
 }

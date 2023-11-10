@@ -33,7 +33,7 @@ public class CommentController {
     private static final String PAGE_NUMBER_DEFAULT = "1";
 
     @Login
-    @GetMapping("/mypage/comments")
+    @GetMapping("/comments")
     public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId, @RequestParam(defaultValue = PAGE_NUMBER_DEFAULT) Integer pageNumber) {
         return commentService.showMyComments(memberId, pageNumber);
     }
