@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export const QuestionForm = ({data}) => {
   const navigate = useNavigate();
   const onClickSols = (index) => {
-    navigate(`/solutions/${index}`);
+    navigate(`/problems/${index}`);
   }
 
   const getRightName = (targetValue) => {
