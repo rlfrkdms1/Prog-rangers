@@ -42,6 +42,7 @@ export const AccountChange = () => {
         password: json.password || '',
         // photo: json.photo || '',
       })
+      console.log(token);
     })
     .catch((error) => {
       console.error(error);
@@ -320,16 +321,27 @@ const accountSubmit = () => {
                 
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div css={css`display: flex; flex-direction: row;`}>
-                  <div>{userData.email}</div>
+                  <div css={css`display: flex; flex-direction: row; align-items: center`}>
+                  {userData.type === 'BASIC' && (
+                    <div>{userData.email}</div>
+                  )}
                   {userData.type === 'KAKAO' && (
-                    <img src={Kakao} alt="kakao_logo" css={css`width:30px; margin-left:10px;`} />
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Kakao} alt="kakao_logo" css={css`width:30px;`} />
+                      <div>Kakao 로그인</div>
+                    </div>
                   )}
                   {userData.type === 'NAVER' && (
-                    <img src={Naver} alt="naver_logo" css={css`width:30px; margin-left:10px;`} />
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Naver} alt="naver_logo" css={css`width:30px;`} />
+                      <div>Naver 로그인</div>
+                    </div>
                   )}
                   {userData.type === 'GOOGLE' && (
-                    <img src={Google} alt="google_logo" css={css`width:30px; margin-left:10px;`} />
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Google} alt="google_logo" css={css`width:30px;`} />
+                      <div>Google 로그인</div>
+                    </div>
                   )}
                   </div>
                 </div>

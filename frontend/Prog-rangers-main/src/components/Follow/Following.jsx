@@ -43,7 +43,7 @@ return(
                         border-radius: 5px;
                         background-color: #545454;}`}>
                           
-    {data.followings.map((item, index) => (
+    {data.followings.length > 0 && data.followings.map((item, index) => (
       <Link to={`/profile/:${item.nickname}`} css={css`text-decoration: none;`} key={index}>
         <div css={css`width:300px; max-height: 60px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #959595;`}>           
             <div css={css`display: flex; align-items: center; gap: 15px;`}>

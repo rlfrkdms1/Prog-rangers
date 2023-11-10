@@ -116,25 +116,25 @@ export const Account = () => {
                 </div>
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div css={css`display: flex; flex-direction: row;`}>
+                  <div css={css`display: flex; flex-direction: row; align-items: center`}>
                   {userData.type === 'BASIC' && (
                     <div>{userData.email}</div>
                   )}
                   {userData.type === 'KAKAO' && (
-                    <div>
-                      <img src={Kakao} alt="kakao_logo" css={css`width:30px; margin-left:10px;`} />
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Kakao} alt="kakao_logo" css={css`width:30px;`} />
                       <div>Kakao 로그인</div>
                     </div>
                   )}
                   {userData.type === 'NAVER' && (
-                    <div>
-                      <img src={Naver} alt="naver_logo" css={css`width:30px; margin-left:10px;`} />
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Naver} alt="naver_logo" css={css`width:30px;`} />
                       <div>Naver 로그인</div>
                     </div>
                   )}
                   {userData.type === 'GOOGLE' && (
-                    <div>
-                      <img src={Google} alt="google_logo" css={css`width:30px; margin-left:10px;`} />
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Google} alt="google_logo" css={css`width:30px;`} />
                       <div>Google 로그인</div>
                     </div>
                   )}
