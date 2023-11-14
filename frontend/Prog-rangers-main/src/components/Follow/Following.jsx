@@ -8,23 +8,28 @@ import axios from "axios";
 
 export const Following = () => {
   const [data, setData] = useState({ followings: [] });
+  const token = localStorage.getItem('token');
+  const api = axios.create({
+    baseURL: 'http://13.124.131.171:8080/api/v1/follows',
+  })
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/follows';
-        
-
-        axios.get(apiUrl, {
-            method: "GET",
-            headers: {Authorization: `Bearer ${token}`},
-          })
-          .then((response) => {
-            setData(response.data);
-          })
-          .catch((error) => {
-            console.error('API 요청 오류:', error);
+      const fetchData = async () => {
+        try {
+          const response = await api.get("http://13.124.131.171:8080/api/v1/follows", {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
-      }, []);
+          setData(response.data);
+        } catch (error) {
+          console.error("Error fetching following data:", error);
+        }
+      };
+      // 컴포넌트가 처음 마운트될 때와 팔로우가 변경될 때마다 데이터를 다시 불러옴
+      fetchData();
+    }, [data]); // data가 변경될 때마다 useEffect 재실행
 
 return(
     <>
