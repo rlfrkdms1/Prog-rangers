@@ -61,6 +61,50 @@ export const Account = () => {
 
   const formattedTime = `${year}년 ${month}월 ${day}일 ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 
+   // 계정 탈퇴
+   const [inputValue, setInputValue] = useState('');
+   const [deleteSuccess, setDeleteSuccess] = useState(false);
+
+   const handleInputChange = (e) => {
+     setInputValue(e.target.value);
+   };
+
+   const handleDeleteAccount = async () => {
+    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+  
+    if (isConfirmed) {
+      if (inputValue === "계정 삭제시 작성한 리뷰가 전부 사라집니다.") {
+        const token = localStorage.getItem('token');
+  
+        try {
+          // 계정 삭제 요청
+          const response = await fetch("http://13.124.131.171:8080/api/v1/members", {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          if (response.ok) {
+            // 계정 삭제 성공
+            setDeleteSuccess(true);
+            
+            // 로그아웃 (토큰 삭제 혹은 무효화)
+            localStorage.removeItem('token');
+            
+            // 메인 페이지로 이동
+            window.location.href = "/"; // 적절한 경로로 변경
+          } else {
+            // 계정 삭제 실패
+            alert("계정 삭제에 실패했습니다.");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("입력값이 일치하지 않습니다. 다시 확인해주세요.");
+      }
+    }
+  };
+  
 
   return (
     <div 
@@ -168,10 +212,22 @@ export const Account = () => {
             margin-top: 132px;
             `}>
             <div css={css`
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            `}>
+            <div css={css`
             font-size: 20px;
             font-weight: 700;
             padding: 0 0 10px 30px;
             `}>계정삭제</div>
+            <div css={css`
+             user-select: none;
+             -moz-user-select: none;
+             -ms-user-select: none;
+             -webkit-user-select: none;
+             `}>계정 삭제시 작성한 리뷰가 전부 사라집니다.</div>
+            </div>
 
             <div css={css`
             height: 60px;
@@ -187,7 +243,9 @@ export const Account = () => {
           >
             <input
               type="text"
-              placeholder="계정 삭제시 작성한 리뷰가 전부 사라집니다."
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder='"계정 삭제시 작성한 리뷰가 전부 사라집니다."를 입력해주세요.'
               css={css`
                 width: 100%;
                 font-size: 16px;
@@ -197,7 +255,8 @@ export const Account = () => {
             />
             <button
               type="button"
-              css={deleteBtnStyle}>
+              css={deleteBtnStyle}
+              onClick={handleDeleteAccount}>
               삭제하기
             </button>
           </div>
