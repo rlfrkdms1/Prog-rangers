@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { css } from "@emotion/react";
 
-export const CommentForm = ({ addComment, focusCommentList }) => {
+export const CommentForm = ({ addComment }) => {
   
   const commentInputRef = useRef(null);
 
@@ -20,7 +20,7 @@ export const CommentForm = ({ addComment, focusCommentList }) => {
   // 로그인한 사용자 닉네임 API 요청
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/account-settings`;
+    const apiUrl = `http://13.124.131.171:8080/api/v1/members`;
 
     axios
       .get(apiUrl, {
@@ -58,7 +58,7 @@ export const CommentForm = ({ addComment, focusCommentList }) => {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((response) => {
-          addComment(response.data);
+          addComment(...response.data);
           setContent('');
           focusCommentInput(); // 댓글 리스트로 포커스 이동
         })

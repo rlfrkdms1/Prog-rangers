@@ -54,8 +54,6 @@ export const alignCenter = css`
 
 export const boxStyle = css`
   display: inline-flex;
-  padding: 8px 20px;
-  border-radius: 20px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

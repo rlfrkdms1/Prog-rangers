@@ -10,16 +10,20 @@ import plusmark from '../../assets/icons/plus-mark.svg';
 
 export const CodeWindow4 = () => {
   const { solutionId } = useParams();
-  const [codeData, setData] = useState({ solution: { code: [] } });
+  const [ codeData, setData ] = useState({ solution: { code: [] } });
 
   // 한줄리뷰 추가 버튼
-  const [hoveredLine, setHoveredLine] = useState(null);
-  const [isBoxVisible, setIsBoxVisible] = useState(false);
+  const [ hoveredLine, setHoveredLine ] = useState(null);
+  const [ isBoxVisible, setIsBoxVisible ] = useState(false);
 
   // 한줄리뷰
-  const [clickedLineId, setClickedLineId] = useState(null);
-  const [reviews, setReviews] = useState(Array(10).fill(''));
-  const [nickname, setNickname] = useState('');
+  const [ clickedLineId, setClickedLineId ] = useState(null);
+  const [ isReviewVisible, setIsReviewVisible ] = useState(true);
+  const [ nickname, setNickname ] = useState('');
+  const [ content, setContent ] = useState('');
+
+  // 한줄리뷰 더보기
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   const handleMouseEnter = (codeLineNumber) => {
     setHoveredLine(codeLineNumber);
@@ -32,12 +36,23 @@ export const CodeWindow4 = () => {
   const handleLineClick = (codeLineNumber) => {
     setClickedLineId(codeLineNumber);
     setIsBoxVisible(!isBoxVisible);
+  
+    // 해당 코드 줄에 대한 리뷰 정보 찾기
+    const reviewForLine = codeData.reviews.find((review) => review.codeLineNumber === codeLineNumber);
+  
+    // 찾은 리뷰 정보의 닉네임을 가져와서 설정
+    if (reviewForLine) {
+      setNickname(reviewForLine.nickname);
+      setContent(reviewForLine.content);
+      setIsReviewVisible(true); // 리뷰가 있으면 렌더링
+    } else {
+      setIsReviewVisible(false); // 리뷰가 없으면 숨김
+    }
   };
 
-  const handleReviewChange = (codeLineNumber, value) => {
-    const updatedReviews = [...reviews];
-    updatedReviews[codeLineNumber] = value;
-    setReviews(updatedReviews);
+  const handleToggleReviews = () => {
+    setShowAllReviews(!showAllReviews);
+    setIsReviewVisible(!isReviewVisible);
   };
 
   useEffect(() => {
@@ -57,40 +72,13 @@ export const CodeWindow4 = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
+    }, []);
 
-    // 사용자 닉네임을 가져오는 API 요청 추가
-    if (token) {
-      axios
-        .get("http://13.124.131.171:8080/api/v1/members", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setNickname(response.data.nickname);
-        })
-        .catch((error) => {
-          console.error('API 요청 오류:', error);
-        });
-    }
-  }, []);
-
-  function ReviewDisplay({ reviews, codeLineNumber }) {
-    const review = reviews[codeLineNumber];
-
-    if (!review) {
-      return null;
-    }
-
-    return (
-      <div>
-        {review.nickname} : {review.content}
-      </div>
-    );
-  }
 
   return (
     <div style={{ position: 'relative' } }>
       {codeData.solution.code.map((line, codeLineNumber) => (
-        <div key={codeLineNumber} css={css`padding-left: 25px; margin: 6px;`}
+        <div css={css`padding-left: 25px; margin: 6px;`}
              onMouseEnter={() => handleMouseEnter(codeLineNumber)}
              onMouseLeave={handleMouseLeave}
         >
@@ -107,43 +95,66 @@ export const CodeWindow4 = () => {
               <span dangerouslySetInnerHTML={{ __html: hljs.highlightAuto(line).value }} />
               <br />
 
+
               {/* 한줄리뷰 */}
               {clickedLineId === codeLineNumber && isBoxVisible && (
                 <div style={{
-                  width: '750px',
+                  width: '640px',
                   height: 'auto',    
                   borderRadius: '20px',
                   background: '#CCDEF2',
                   color: '#000000',
-                  display: 'flex',
                   margin: '5px',
+                  padding: '5px 15px 7px'
                 }}>
                   <div
-                  
-                  onChange={(e) => handleReviewChange(codeLineNumber, e.target.value)}
-                  
                   style={{
-                    width: '87%',
                     border: 'none',
                     background: 'transparent',
-                    outline: 'none',
-                    padding: '11px 20px',
-                  }}
-                  />
-                  
-                  
-                  
-                <div>
-                  {reviews[codeLineNumber] && (
-                  <ReviewDisplay reviews={reviews} codeLineNumber={codeLineNumber} />
-                  )}
+                    outline: 'none'
+                  }}>
+
+                    <div>
+                      
+                      {showAllReviews && (
+                        <div>
+                          {codeData.reviews
+                          .filter((review) => review.codeLineNumber === codeLineNumber)
+                          .map((review) => (
+                            <div key={review.codeLineNumber}>
+                              <div css={css`display: flex; align-items: center; font-family: Noto Sans KR; font-size: 16px;`}>
+                                <div css={css`font-size: 14px; color: #545454;`}> @{review.nickname}   </div>
+                                {review.content}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {isReviewVisible && (
+                      <div css={css`display: flex; align-items: center; font-family: Noto Sans KR; font-size: 16px;`}>
+                        <div css={css`font-size: 14px; color: #545454;`}> @{nickname}   </div>
+                        {content}
+                      </div>          
+                      )}
+                      
+                      {codeData.reviews.filter((review) => review.codeLineNumber === codeLineNumber).length > 1 &&  (
+                      <div css={css`display: flex; align-items: center; font-family: Noto Sans KR; font-size: 16px;`}>
+                        <button onClick={handleToggleReviews} css={css`font-size: 14px; color: #959595; padding: 4px 0 0 20px;`}>
+                          {showAllReviews ? '접기' : '더보기...'}
+                        </button>
+                      </div>
+                      )}
+                        
+                    </div>
+
+                  </div>
                 </div>
-              </div>
-)}
+              )}
             </span>
           </pre>
         </div>
       ))}
-    </div>
-  );
+     </div>
+   );
 };

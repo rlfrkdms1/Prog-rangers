@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         element: <Solutions />,
       },
       { path: 'solutions/:solutionId',element: <SolutionDetail /> },
-      { path : 'solutions/:solutionId/detail/scrap', element: <Scrap />},
+      { path : 'solutions/:id/detail/scrap', element: <Scrap />},
       {
         path: 'registerReview',
         element: <WriteSolution />,
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
       { path: 'myPage/addsolution', element: <AddSolution/> },
-      { path: 'myPage/solutions/:solutionId/editsolution', element: <EditSolution/> },
+      { path: 'solutions/:solutionId/editsolution', element: <EditSolution/> },
     ],
   },
 ]);

@@ -12,7 +12,7 @@ import {
 } from "./commentsStyle";
 
 import ProfileImg from './profile/default.png';
-import dot from '../../assets/icons/dot.svg'
+import dot from '../../assets/icons/dotLight.svg'
 
 export const CommentList = () => {
 
@@ -49,6 +49,7 @@ export const CommentList = () => {
       })
           .then((response) => {
             setComments(response.data.comments);
+            setNewComment(response.data.newComment);
           })
           .catch((error) => {
             console.error('API 요청 오류:', error);
@@ -72,7 +73,7 @@ export const CommentList = () => {
           .catch((error) => {
             console.error('댓글 삭제 오류:', error);
           });
-      }; 
+      };
     
       // 댓글 수정
       const handleEditComment = (commentId, editValue) => {
@@ -122,12 +123,22 @@ export const CommentList = () => {
           }
           return comment;
         });
-        setComments(updatedComments);
-      };
+
+      // 새로운 댓글도 업데이트
+      if (newComment && newComment.id === commentId) {
+        setNewComment({
+          ...newComment,
+          content: newContent,
+        });
+      }
+      setComments(updatedComments);
+    };
 
   return (
     <div className="comments">
-        {comments.map((commentItem) => (
+        {comments
+        .filter((commentItem) => commentItem.content !== '삭제된 댓글입니다')
+        .map((commentItem) => (
           <div className="comment" css={rowFlex} key={commentItem.id}>
             <div className="profile">
               <img
@@ -230,7 +241,7 @@ export const CommentList = () => {
                     }}
                     >
                       {commentItem.editing ? '수정 완료' : '수정'} 
-                      </button>         
+                    </button>         
                        
                     <button 
                     css={deleteStyle(isOpen[commentItem.id])} 

@@ -8,8 +8,9 @@ import {
     fontSizewhite16,
     fontSize18,
     fontSizedark20,
-    boxStyle, 
-    fontSize14} from '../../pages/Profile/ProfileStyle';
+    boxStyle
+  } from '../../pages/Profile/ProfileStyle';
+import { tags } from '../MySolution/tagsform';
 import { CodeWindow } from './CodeWindow';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ProfileContentMock } from '../SolutionDetail/solutionTabStyle';
@@ -40,10 +41,10 @@ export const SolvingList = () => {
   return(
     <>
     {data.list.map((item, index) => (
-      <div key={item.problemName + index}
+      <div key={item.problemTitle + index}
        css={css`
         width: 835px;
-        height: 660px;        
+        height: auto;        
         margin-top: 50px;
         `}>
 
@@ -55,27 +56,36 @@ export const SolvingList = () => {
         css={css`
         ${fontSizedark20}
         cursor: pointer;`}
-        onClick={() => onClickSols(item.solutionId)}> 
-        {item.problemName}
+        onClick={() => onClickSols(item.solution.id)}> 
+        {item.problemTitle}
         </div>
 
+        <div
+        css={css`
+        ${fontSize16}
+        margin-top: 15px;
+        cursor: pointer;`}
+        onClick={() => onClickSols(item.solution.id)}> 
+        {item.solution.title}
+        </div>
 
         <div css={css`
-        ${boxStyle}
-        ${fontSize16}
-        margin-top: 10px;
-        background-color: ${theme.colors.light3}
-        ${item.language === null ? 'display: none;' : ''}
+          ${boxStyle}
+          margin-top: 15px;
         `}>
-        {item.language}
+          <div classname="tags" css={css`display: flex;`}>
+            {item.solution.language && (<div key={item.solution.language} css={css`${tags}`}>{item.solution.language}</div>)}
+            {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags}`}>{item.solution.algorithm}</div>)}
+            {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags}`}>{item.solution.dataStructure}</div>)}
+          </div>
         </div>
-
-
+        
         <button css={css`
         width: 30px;
         height: 30px;
         float: right;
-        padding-top: 4px;     
+        padding-top: 4px;
+        margin-top: 15px;
         `}>
         <img src={sharemark} alt="share_mark"/>
         </button>
@@ -83,11 +93,13 @@ export const SolvingList = () => {
         <div css={css`
         ${boxStyle}
         ${fontSizewhite16}
+        padding: 8px 20px;
+        border-radius: 20px;
         float: right;
-        margin-right: 30px;
-        background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"}
+        margin: 15px 30px;
+        background-color: ${item.solution.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"}
         `}>
-        {item.ojName} 
+        {item.solution.ojName} 
         </div>
 
         <div css={css`
@@ -99,9 +111,13 @@ export const SolvingList = () => {
 
         <div css={css`
         ${fontSize18} 
-        margin-top: 50px;
-        margin-left: 10px;`}> 
-        {item.description}
+        margin: 30px 10px;`}> 
+        {item.solution.description
+                // .join('\n')
+                .split('\n')
+                .map((paragraph, index) => (
+                    paragraph.trim() ? <p key={index}>{paragraph}</p> : <br key={index} />
+                ))}
         </div>
 
         <div css={css`${ProfileContentMock}
@@ -110,7 +126,7 @@ export const SolvingList = () => {
           padding: 20px 40px 20px;
           font-size: 16px;
           font-weight: 700;`}>
-          {item.problemName + index}
+          {item.problemTitle + index}
           </div>
 
           <div css={css`

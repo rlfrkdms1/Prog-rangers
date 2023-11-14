@@ -12,12 +12,10 @@ import{
   filterStyle
 } from './MySolutionStyle'
 
-
 export const MySolution = () => {
 
   const [ page, setPage ] = useState(1);
   const [ solutions, setSolutions ] = useState([]);
-  const [ isScrapped, setIsScrapped ] = useState(false);
   const [ totalPages, setTotalPages ] = useState(1);
 
   const Solutionpages = async () => {
@@ -31,7 +29,6 @@ export const MySolution = () => {
       });
       setTotalPages(response.data.totalPage);
       setSolutions(response.data.contents);
-      setIsScrapped(response.data.contents.solution.scrapped);
     } catch (error) {
       console.error('API 요청 오류:', error);
     }
@@ -98,7 +95,7 @@ export const MySolution = () => {
         </div>
 
         <div css={css`width: 800px; margin-top: 20px; margin-right: 111px;`}>
-          <MySolutionForm data={solutions} isScrapped={isScrapped}/>
+          <MySolutionForm data={solutions}/>
         </div>
 
         <div css={css`

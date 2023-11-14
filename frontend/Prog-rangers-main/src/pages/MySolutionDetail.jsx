@@ -28,7 +28,7 @@ export const MySolutionDetail = () => {
       <MySolutionTab />
       <MyIndicators />
       <MyComments />
-      {/* <Recommand /> */}
+      <Recommand />
       </div>
       <RightBar />
   

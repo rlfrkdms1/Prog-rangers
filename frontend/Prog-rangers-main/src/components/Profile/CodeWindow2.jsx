@@ -33,7 +33,7 @@ export const CodeWindow2 = () => {
   return (
     <>
       {codeData.solution.code.map((line, lineIndex) => (
-        <div key={lineIndex} css={css`padding-left: 60px; margin: 6px; `}>
+        <div key={lineIndex} css={css`font-size: 18px; padding-left: 60px; margin: 6px; `}>
           <pre>
             <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
               {lineIndex} {'  '}
