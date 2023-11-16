@@ -72,18 +72,22 @@ public class FollowService {
             List<Member> limitRecommendedMembers = memberRepository.getLimitRecommendedMembers(
                     recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT, memberId);
             if (limitRecommendedMembers.size() < RECOMMENDED_MEMBER_COUNT) {
-                List<Member> left = memberRepository.getOtherMembersOrderByFollow(memberId);
-                for (int index = 1; index <= left.size(); index++) {
-                    if (!limitRecommendedMembers.contains(left.get(index))) {
-                        limitRecommendedMembers.add(left.get(index));
-                    }
-                    if (limitRecommendedMembers.size() == RECOMMENDED_MEMBER_COUNT) {
-                        break;
-                    }
-                }
+                addScarceMembers(memberId, limitRecommendedMembers);
             }
             return limitRecommendedMembers;
         }
         return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT, memberId);
+    }
+
+    private void addScarceMembers(Long memberId, List<Member> limitRecommendedMembers) {
+        List<Member> membersOrderByFollow = memberRepository.getOtherMembersOrderByFollow(memberId);
+        for (int index = 1; index <= membersOrderByFollow.size(); index++) {
+            if (!limitRecommendedMembers.contains(membersOrderByFollow.get(index))) {
+                limitRecommendedMembers.add(membersOrderByFollow.get(index));
+            }
+            if (limitRecommendedMembers.size() == RECOMMENDED_MEMBER_COUNT) {
+                break;
+            }
+        }
     }
 }
