@@ -1,5 +1,10 @@
 package com.prograngers.backend.repository.problem;
 
+import static com.prograngers.backend.entity.problem.QProblem.problem;
+import static com.prograngers.backend.entity.solution.QSolution.solution;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.NEWEST;
+import static com.prograngers.backend.entity.sortconstant.SortConstant.SOLUTIONS;
+
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
@@ -8,17 +13,12 @@ import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-import static com.prograngers.backend.entity.sortconstant.SortConstant.*;
-import static com.prograngers.backend.entity.problem.QProblem.*;
-import static com.prograngers.backend.entity.solution.QSolution.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -45,7 +45,8 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
         return size;
     }
 
-    private List<Problem> getResults(Pageable pageable, DataStructureConstant dataStructure, AlgorithmConstant algorithm, SortConstant orderBy) {
+    private List<Problem> getResults(Pageable pageable, DataStructureConstant dataStructure,
+                                     AlgorithmConstant algorithm, SortConstant orderBy) {
         List<Problem> results = jpaQueryFactory
                 .selectFrom(problem).distinct()
                 // solution을 조회해서 자료구조, 알고리즘을 알아내야 해서 성능을 위해 패치조인

@@ -1,5 +1,7 @@
 package com.prograngers.backend.service.auth;
 
+import com.prograngers.backend.dto.auth.request.LoginRequest;
+import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.dto.auth.response.google.GetGoogleTokenResponse;
 import com.prograngers.backend.dto.auth.response.google.GetGoogleUserInfoResponse;
 import com.prograngers.backend.dto.auth.response.kakao.GetKakaoTokenResponse;
@@ -7,26 +9,24 @@ import com.prograngers.backend.dto.auth.response.kakao.GetKakaoUserInfoResponse;
 import com.prograngers.backend.dto.auth.response.naver.GetNaverTokenResponse;
 import com.prograngers.backend.dto.auth.response.naver.GetNaverUserInfoResponse;
 import com.prograngers.backend.dto.auth.result.AuthResult;
-import com.prograngers.backend.dto.auth.request.LoginRequest;
-import com.prograngers.backend.support.Encrypt;
+import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
-import com.prograngers.backend.exception.unauthorization.IncorrectStateInNaverLoginException;
-import com.prograngers.backend.repository.RefreshTokenRepository;
-import com.prograngers.backend.dto.auth.request.SignUpRequest;
-import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
+import com.prograngers.backend.exception.unauthorization.IncorrectStateInNaverLoginException;
 import com.prograngers.backend.exception.unauthorization.RefreshTokenNotFoundException;
-import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.service.auth.oauth.GoogleOauth;
 import com.prograngers.backend.service.auth.oauth.KakaoOauth;
 import com.prograngers.backend.service.auth.oauth.NaverOauth;
+import com.prograngers.backend.support.Encrypt;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -85,7 +85,7 @@ public class AuthService {
     }
 
     private void validExistMember(SignUpRequest signUpRequest) {
-        if(memberRepository.findByEmail(signUpRequest.getEmail()).isPresent()){
+        if (memberRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
             throw new AlreadyExistMemberException();
         }
     }
@@ -111,15 +111,18 @@ public class AuthService {
     @Transactional
     public AuthResult kakaoLogin(String code) {
         GetKakaoTokenResponse getKakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
-        GetKakaoUserInfoResponse getKakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(getKakaoTokenResponse.getAccess_token());
+        GetKakaoUserInfoResponse getKakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(
+                getKakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(getKakaoUserInfoResponse.getId())
                 .orElseGet(() -> socialRegister(getKakaoUserInfoResponse.toMember()));
         return issueToken(member);
     }
+
     @Transactional
     public AuthResult googleLogin(String code) {
         GetGoogleTokenResponse getGoogleTokenResponse = googleOauth.googleGetToken(code);
-        GetGoogleUserInfoResponse getGoogleUserInfoResponse = googleOauth.googleGetUserInfo(getGoogleTokenResponse.getAccess_token());
+        GetGoogleUserInfoResponse getGoogleUserInfoResponse = googleOauth.googleGetUserInfo(
+                getGoogleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(getGoogleUserInfoResponse.getId().hashCode()))
                 .orElseGet(() -> socialRegister(getGoogleUserInfoResponse.toMember()));
         return issueToken(member);
@@ -136,7 +139,9 @@ public class AuthService {
     }
 
     private void validState(String state) {
-        if(!state.equals(naverOauth.getState())) throw new IncorrectStateInNaverLoginException();
+        if (!state.equals(naverOauth.getState())) {
+            throw new IncorrectStateInNaverLoginException();
+        }
     }
 
     private Member socialRegister(Member member) {

@@ -3,12 +3,10 @@ package com.prograngers.backend.service.auth;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Value;
 
 public class FakeJwtTokenProvider {
 
@@ -18,12 +16,12 @@ public class FakeJwtTokenProvider {
     private static final String ISSUER = "Prograngers";
 
     public FakeJwtTokenProvider(@Value("${security-secret-key}") String key,
-                            @Value("${security-valid-time-access}") long validTimeInMillisecond) {
+                                @Value("${security-valid-time-access}") long validTimeInMillisecond) {
         this.key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         this.validTimeInMillisecond = validTimeInMillisecond;
     }
 
-    public String createAccessToken(Long memberId){
+    public String createAccessToken(Long memberId) {
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()
@@ -35,7 +33,7 @@ public class FakeJwtTokenProvider {
                 .compact();
     }
 
-    public String createAccessToken(String memberId){
+    public String createAccessToken(String memberId) {
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()
@@ -59,7 +57,7 @@ public class FakeJwtTokenProvider {
                 .compact();
     }
 
-    public String createAccessTokenWithoutIssuer(Long memberId){
+    public String createAccessTokenWithoutIssuer(Long memberId) {
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()

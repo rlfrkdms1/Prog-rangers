@@ -3,13 +3,11 @@ package com.prograngers.backend.dto.review.response;
 
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.review.ReviewStatusConstant;
-
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 @Getter
@@ -24,8 +22,8 @@ public class ReviewWithRepliesResponse {
     private boolean mine;
 
     private ReviewStatusConstant status;
-    public static ReviewWithRepliesResponse from(Review review, boolean reviewIsMine){
 
+    public static ReviewWithRepliesResponse from(Review review, boolean reviewIsMine) {
 
         ReviewWithRepliesResponse reviewResponseWithRepliesResponse = ReviewWithRepliesResponse.builder()
                 .id(review.getId())

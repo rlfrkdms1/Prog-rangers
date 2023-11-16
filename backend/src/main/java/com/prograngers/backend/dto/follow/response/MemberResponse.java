@@ -1,6 +1,5 @@
 package com.prograngers.backend.dto.follow.response;
 
-import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

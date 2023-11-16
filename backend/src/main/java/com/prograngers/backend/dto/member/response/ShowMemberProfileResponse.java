@@ -1,12 +1,12 @@
 package com.prograngers.backend.dto.member.response;
 
 import com.prograngers.backend.entity.badge.Badge;
-import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import java.util.List;
 
 @Getter
 @Builder
@@ -22,11 +22,14 @@ public class ShowMemberProfileResponse {
     private List<SolutionWithProblemResponse> list;
     private Long cursor;
 
-    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions, Long follow, Long following) {
+    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions,
+                                                 Long follow, Long following) {
 
         // 무한스크롤 isLast, 커서
         Long cursor = -1L;
-        if (!isLastScroll(solutions)) cursor = getCursor(solutions);
+        if (!isLastScroll(solutions)) {
+            cursor = getCursor(solutions);
+        }
 
         return ShowMemberProfileResponse.builder()
                 .photo(member.getPhoto())
@@ -55,8 +58,8 @@ public class ShowMemberProfileResponse {
 
     private static Long getCursor(List<Solution> solutions) {
         Long cursor;
-        cursor = solutions.get(SIZE_PER_SCROLL-1).getId();
-        solutions.remove(SIZE_PER_SCROLL-1);
+        cursor = solutions.get(SIZE_PER_SCROLL - 1).getId();
+        solutions.remove(SIZE_PER_SCROLL - 1);
         return cursor;
     }
 }

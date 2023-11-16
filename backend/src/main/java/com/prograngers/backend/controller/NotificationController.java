@@ -29,7 +29,7 @@ public class NotificationController {
 
     @GetMapping
     public ShowNotificationsResponse show(@LoggedInMember Long memberId,
-                                          @RequestParam(defaultValue = DASHBOARD_NOTIFICATION_DEFAULT_PAGE_NUMBER) int page){
+                                          @RequestParam(defaultValue = DASHBOARD_NOTIFICATION_DEFAULT_PAGE_NUMBER) int page) {
         return notificationService.getNotifications(memberId, page);
     }
 }

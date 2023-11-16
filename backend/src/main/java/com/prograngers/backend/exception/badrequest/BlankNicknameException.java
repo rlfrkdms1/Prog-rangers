@@ -1,7 +1,5 @@
 package com.prograngers.backend.exception.badrequest;
 
-import com.prograngers.backend.exception.ErrorCode;
-
 import static com.prograngers.backend.exception.ErrorCode.BLANK_NICKNAME;
 
 public class BlankNicknameException extends InvalidValueException {

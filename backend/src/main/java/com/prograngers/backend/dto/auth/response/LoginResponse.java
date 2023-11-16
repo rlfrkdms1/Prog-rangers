@@ -11,7 +11,7 @@ public class LoginResponse {
     private String nickname;
     private String accessToken;
 
-    public static LoginResponse from(AuthResult authResult){
+    public static LoginResponse from(AuthResult authResult) {
         return LoginResponse.builder()
                 .accessToken(authResult.getAccessToken())
                 .nickname(authResult.getNickname())

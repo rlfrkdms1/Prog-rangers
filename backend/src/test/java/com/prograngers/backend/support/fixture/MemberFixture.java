@@ -1,14 +1,15 @@
 package com.prograngers.backend.support.fixture;
 
+import static com.prograngers.backend.entity.member.Member.MemberBuilder;
+import static com.prograngers.backend.entity.member.MemberType.BASIC;
+import static com.prograngers.backend.entity.member.MemberType.GOOGLE;
+import static com.prograngers.backend.entity.member.MemberType.NAVER;
+
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import lombok.AllArgsConstructor;
-
-import static com.prograngers.backend.entity.member.Member.*;
-import static com.prograngers.backend.entity.member.MemberType.*;
-import static com.prograngers.backend.entity.member.MemberType.GOOGLE;
 
 @AllArgsConstructor
 public enum MemberFixture {
@@ -20,16 +21,17 @@ public enum MemberFixture {
     private final String nickname;
     private final MemberType type;
 
-    public MemberBuilder 기본_정보_빌더_생성(){
+    public MemberBuilder 기본_정보_빌더_생성() {
         return Member.builder()
                 .nickname(nickname)
                 .type(type);
     }
-    public Member 기본_정보_생성(){
+
+    public Member 기본_정보_생성() {
         return 기본_정보_빌더_생성().build();
     }
 
-    public Member 아이디_지정_생성(Long id){
+    public Member 아이디_지정_생성(Long id) {
         return 기본_정보_빌더_생성()
                 .id(id)
                 .build();
@@ -40,7 +42,7 @@ public enum MemberFixture {
                 .email(email).build();
     }
 
-    public Member 일반_회원_생성(Long id, String email, String password){
+    public Member 일반_회원_생성(Long id, String email, String password) {
         return 기본_정보_빌더_생성()
                 .id(id)
                 .email(email)
@@ -48,7 +50,7 @@ public enum MemberFixture {
                 .build();
     }
 
-    public Member 일반_회원_생성(String email, String password){
+    public Member 일반_회원_생성(String email, String password) {
         return 일반_회원_생성(null, email, password);
     }
 

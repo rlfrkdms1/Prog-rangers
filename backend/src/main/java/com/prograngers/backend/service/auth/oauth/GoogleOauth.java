@@ -1,5 +1,8 @@
 package com.prograngers.backend.service.auth.oauth;
 
+import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
+import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.convertToMultiValueMap;
+
 import com.prograngers.backend.dto.auth.response.google.GetGoogleTokenResponse;
 import com.prograngers.backend.dto.auth.response.google.GetGoogleUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,9 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.convertToMultiValueMap;
-import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
 public class GoogleOauth {
@@ -23,10 +23,10 @@ public class GoogleOauth {
     private final WebClient webClient;
 
     public GoogleOauth(@Value("${google.grant.type}") String grantType,
-                      @Value("${google.client.id}") String clientId,
-                      @Value("${google.redirect.uri}") String redirectUri,
-                      @Value("${google.client.secret}") String clientSecret,
-                      WebClient webClient) {
+                       @Value("${google.client.id}") String clientId,
+                       @Value("${google.redirect.uri}") String redirectUri,
+                       @Value("${google.client.secret}") String clientSecret,
+                       WebClient webClient) {
         this.grantType = grantType;
         this.clientId = clientId;
         this.redirectUri = redirectUri;

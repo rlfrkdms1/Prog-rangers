@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface MemberCustomRepository {
     List<Member> getLimitRecommendedMembers(Problem problem, Long limit, Long memberId);
+
     List<Member> getOtherMembersOrderByFollow(Long memberId);
 }

@@ -1,5 +1,11 @@
 package com.prograngers.backend.repository.follow;
 
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
+import static com.prograngers.backend.support.fixture.MemberFixture.이수빈;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -8,12 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
-import static com.prograngers.backend.support.fixture.MemberFixture.이수빈;
-import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @RepositoryTest
@@ -27,7 +27,7 @@ class FollowRepositoryTest {
 
     @DisplayName("회원으로 팔로우, 팔로잉 찾기")
     @Test
-    void 회원_팔로우_찾기(){
+    void 회원_팔로우_찾기() {
         // given
         Member member1 = 저장(장지담.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
@@ -45,14 +45,14 @@ class FollowRepositoryTest {
 
         // then
         assertAll(
-                ()->assertThat(follow).isEqualTo(3L),
-                ()->assertThat(following).isEqualTo(4L)
+                () -> assertThat(follow).isEqualTo(3L),
+                () -> assertThat(following).isEqualTo(4L)
         );
     }
 
     @Test
     @DisplayName("팔로우를 하면 팔로워와 팔로잉의 아이디로 팔로우 내역을 찾을 수 있다.")
-    void 팔로우_내역_찾기(){
+    void 팔로우_내역_찾기() {
         Member member1 = 저장(길가은.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
         Member member3 = 저장(이수빈.기본_정보_생성());
@@ -71,7 +71,7 @@ class FollowRepositoryTest {
 
     @Test
     @DisplayName("팔로워, 팔로잉 아이디가 주어졌을 때 팔로우 내역이 존재하는지 알 수 있다.")
-    void 팔로우_내역_존재성_확인(){
+    void 팔로우_내역_존재성_확인() {
 
         Member member1 = 저장(길가은.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
@@ -95,6 +95,9 @@ class FollowRepositoryTest {
     private Member 저장(Member member) {
         return memberRepository.save(member);
     }
-    private Follow 저장(Follow follow) {return followRepository.save(follow);}
+
+    private Follow 저장(Follow follow) {
+        return followRepository.save(follow);
+    }
 
 }

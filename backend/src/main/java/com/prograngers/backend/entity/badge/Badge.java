@@ -22,11 +22,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Badge {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="member_id",nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Enumerated(EnumType.STRING)

@@ -12,16 +12,16 @@ public enum BadgeConstant {
 
     private final Long count;
 
-    public static BadgeConstant getBadge(Long count){
-        for (BadgeConstant badge : BadgeConstant.values()){
-            if (badge.getCount().equals(count)){
+    public static BadgeConstant getBadge(Long count) {
+        for (BadgeConstant badge : BadgeConstant.values()) {
+            if (badge.getCount().equals(count)) {
                 return badge;
             }
         }
         return null;
     }
 
-    private Long getCount(){
+    private Long getCount() {
         return count;
     }
 }

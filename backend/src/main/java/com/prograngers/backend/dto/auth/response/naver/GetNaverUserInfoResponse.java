@@ -9,7 +9,7 @@ public class GetNaverUserInfoResponse {
 
     private NaverSocialIdResponse response;
 
-    public Member toMember(){
+    public Member toMember() {
         return Member.builder()
                 .socialId(Long.valueOf(response.getId().hashCode()))
                 .type(MemberType.NAVER)

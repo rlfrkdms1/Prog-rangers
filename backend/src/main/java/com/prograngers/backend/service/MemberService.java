@@ -1,14 +1,14 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
-import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
+import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
 import com.prograngers.backend.entity.badge.Badge;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.badrequest.BlankNicknameException;
 import com.prograngers.backend.exception.badrequest.NotExistOldPasswordException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -18,10 +18,10 @@ import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +33,9 @@ public class MemberService {
     private final SolutionRepository solutionRepository;
     private final FollowRepository followRepository;
 
-    public ShowMemberAccountResponse getMemberAccount(Long memberId){
+    public ShowMemberAccountResponse getMemberAccount(Long memberId) {
         Member member = findById(memberId);
-        if(member.getType() == MemberType.BASIC) {
+        if (member.getType() == MemberType.BASIC) {
             return ShowBasicMemberAccountResponse.from(member);
         }
         return ShowSocialMemberAccountResponse.from(member);
@@ -68,23 +68,27 @@ public class MemberService {
     }
 
     private void validExistOldPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
-        if(updateMemberAccountInfoRequest.getOldPassword()==null){
+        if (updateMemberAccountInfoRequest.getOldPassword() == null) {
             throw new NotExistOldPasswordException();
         }
     }
 
     private void validCorrectPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
-        if(member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword()))
+        if (member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword())) {
             throw new IncorrectPasswordException();
+        }
     }
 
     private void validNicknameBlank(String nickname) {
-        if(nickname.isBlank()) throw new BlankNicknameException();
+        if (nickname.isBlank()) {
+            throw new BlankNicknameException();
+        }
     }
 
     private void validNicknameDuplication(String nickname) {
-        if(memberRepository.findByNickname(nickname).isPresent())
+        if (memberRepository.findByNickname(nickname).isPresent()) {
             throw new AlreadyExistNicknameException();
+        }
     }
 
     public ShowMemberProfileResponse getMemberProfile(String memberNickname, Long page) {
@@ -94,7 +98,7 @@ public class MemberService {
         Long followCount = followRepository.getFollowCount(member);
         Long followingCount = followRepository.getFollowingCount(member);
 
-        return ShowMemberProfileResponse.from(member,badges,solutions,followCount,followingCount);
+        return ShowMemberProfileResponse.from(member, badges, solutions, followCount, followingCount);
     }
 
     private Member findByNickname(String memberNickname) {

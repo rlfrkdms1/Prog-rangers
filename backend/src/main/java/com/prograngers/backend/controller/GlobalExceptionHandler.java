@@ -1,25 +1,23 @@
 package com.prograngers.backend.controller;
 
+import static com.prograngers.backend.exception.ErrorCode.INVALID_REQUEST_BODY;
+import static com.prograngers.backend.exception.ErrorCode.TYPE_MISMATCH;
+
 import com.prograngers.backend.dto.error.ErrorResponse;
-import com.prograngers.backend.exception.ErrorCode;
 import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
 import com.prograngers.backend.exception.badrequest.InvalidValueException;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.prograngers.backend.exception.ErrorCode.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -30,8 +28,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception) {
         List<ErrorResponse> errorList = new ArrayList<>();
         exception.getBindingResult().getAllErrors().stream()
-                .map((error)->ErrorResponse.builder().errorCode(INVALID_REQUEST_BODY).description(error.getDefaultMessage()).build())
-                .forEach((errorResponse)->errorList.add(errorResponse));
+                .map((error) -> ErrorResponse.builder().errorCode(INVALID_REQUEST_BODY)
+                        .description(error.getDefaultMessage()).build())
+                .forEach((errorResponse) -> errorList.add(errorResponse));
         return new ResponseEntity(errorList, HttpStatus.BAD_REQUEST);
     }
 
@@ -42,6 +41,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
         return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(UnAuthorizationException.class)
     public ResponseEntity<ErrorResponse> unAuthorizationException(UnAuthorizationException exception) {
         String message = exception.getMessage();
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> typeMismatchException(MethodArgumentTypeMismatchException exception){
+    public ResponseEntity<ErrorResponse> typeMismatchException(MethodArgumentTypeMismatchException exception) {
         String message = "쿼리 스트링 타입을 확인해주세요";
         ErrorResponse errorResponse = new ErrorResponse(TYPE_MISMATCH, message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);

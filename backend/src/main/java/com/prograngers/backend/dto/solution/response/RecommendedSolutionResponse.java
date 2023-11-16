@@ -16,7 +16,8 @@ public class RecommendedSolutionResponse {
     private int likes;
     private String solutionName;
     private String nickname;
-    public static RecommendedSolutionResponse from(Long id, int likes, String solutionName, String nickname){
+
+    public static RecommendedSolutionResponse from(Long id, int likes, String solutionName, String nickname) {
         return RecommendedSolutionResponse.builder()
                 .id(id)
                 .likes(likes)
