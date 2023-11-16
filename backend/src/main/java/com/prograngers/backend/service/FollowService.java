@@ -10,15 +10,16 @@ import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class FollowService {
 
     private final FollowRepository followRepository;
@@ -41,7 +42,7 @@ public class FollowService {
     }
 
     private void validFollowerAndFollowingExist(Long followerId, Long followingId) {
-        if(!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
+        if (!memberRepository.existsById(followerId) || !memberRepository.existsById(followingId)) {
             throw new MemberNotFoundException();
         }
     }
@@ -54,19 +55,34 @@ public class FollowService {
     }
 
     private Follow findFollowRecord(Long followerId, Long followingId) {
-        return followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElseThrow(FollowNotFoundException::new);
+        return followRepository.findByFollowerIdAndFollowingId(followerId, followingId)
+                .orElseThrow(FollowNotFoundException::new);
     }
 
     public ShowFollowListResponse getFollowList(Long memberId) {
         List<Member> followingList = memberRepository.findAllByFollower(memberId);
         List<Member> followerList = memberRepository.findAllByFollowing(memberId);
-        List<Member> recommendedFollows = getRecommendedFollows(solutionRepository.findOneRecentSolutionByMemberId(memberId),memberId);
-        return ShowFollowListResponse.of(followingList,followerList,recommendedFollows);
+        List<Member> recommendedFollows = getRecommendedFollows(
+                solutionRepository.findOneRecentSolutionByMemberId(memberId), memberId);
+        return ShowFollowListResponse.of(followingList, followerList, recommendedFollows);
     }
 
     private List<Member> getRecommendedFollows(Solution recentSolution, Long memberId) {
-        if (recentSolution!=null){
-            return memberRepository.getLimitRecommendedMembers(recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT, memberId);
+        if (recentSolution != null) {
+            List<Member> limitRecommendedMembers = memberRepository.getLimitRecommendedMembers(
+                    recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT, memberId);
+            if (limitRecommendedMembers.size() < RECOMMENDED_MEMBER_COUNT) {
+                List<Member> left = memberRepository.getOtherMembersOrderByFollow(memberId);
+                for (int index = 1; index <= left.size(); index++) {
+                    if (!limitRecommendedMembers.contains(left.get(index))) {
+                        limitRecommendedMembers.add(left.get(index));
+                    }
+                    if (limitRecommendedMembers.size() == RECOMMENDED_MEMBER_COUNT) {
+                        break;
+                    }
+                }
+            }
+            return limitRecommendedMembers;
         }
         return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT, memberId);
     }
