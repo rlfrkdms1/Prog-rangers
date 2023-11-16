@@ -4,10 +4,10 @@ import { theme } from '../Header/theme';
 import { buttonSytle, fontSize14, fontSize12 } from './FollowStyle';
 import axios from "axios";
 import ProfileImg from '../../components/SolutionDetail/profile/default.png';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const RecommendFollow = () => {
-  // 추천 팔로우 api
+  // 추천 팔로우
   const [followStatus, setFollowStatus] = useState({});
   const [data, setData] = useState({ recommends: [] });
 
@@ -67,9 +67,8 @@ export const RecommendFollow = () => {
   };
 
   // 팔로우 기능
-  const [followedAccounts, setFollowedAccounts] = useState([]); // 팔로우한 계정 목록
-  const [recommendedAccounts, setRecommendedAccounts] = useState(data.recommends); // 추천 팔로우 계정 목록
-
+  const [followedAccounts, setFollowedAccounts] = useState([]);
+  const [recommendedAccounts, setRecommendedAccounts] = useState(data.recommends);
   const handleFollowClick = (item) => {    
     const memberId = item.id;
     const token = localStorage.getItem('token');
@@ -120,6 +119,11 @@ export const RecommendFollow = () => {
       setRecommendedAccounts(updatedRecommendedAccounts);
   };
 
+  const navigate = useNavigate();
+    const onClickName = (nickname) => {
+      navigate(`/profile/:${nickname}`); 
+    };  
+
   return (
     <div ref = {containerRef} 
       css={css`width: 800px; height: 90px; background-color:  ${theme.colors.light3}; padding: 20px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap; &::-webkit-scrollbar {display: none;}
@@ -136,7 +140,6 @@ export const RecommendFollow = () => {
     {data.recommends.map((item, index) => (
     <div key={index} 
         css={css`display: inline-flex; flex-direction: row;`}>
-    
     <div css={css`width:252px; max-height: 50px; display: flex; align-items: center; justify-content: space-between; margin-right:20px; border-right: 1px solid #959595;`}>           
         <div css={css`display: flex; align-items: center; gap: 15px;`}>
         <img
@@ -147,7 +150,7 @@ export const RecommendFollow = () => {
             border-radius: 50%;
             `}></img>
         <div css={css`display: flex; flex-direction: column; gap: 4px;`}>
-            <div css={css`${fontSize12}`}>{item.nickname}</div>
+            <div onClick={()=>onClickName(item.nickname)} css={css`${fontSize12} cursor: pointer;`}>{item.nickname}</div>
             <div css={css`width: 165px; display: flex; justify-content: space-between;`}>
             <div css={css`${fontSize14} `}>{item.introduction}</div>
             <button onClick={() => handleFollowClick(item)}

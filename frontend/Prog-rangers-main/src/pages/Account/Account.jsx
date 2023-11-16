@@ -77,23 +77,16 @@ export const Account = () => {
         const token = localStorage.getItem('token');
   
         try {
-          // 계정 삭제 요청
           const response = await fetch("http://13.124.131.171:8080/api/v1/members", {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
           });
   
           if (response.ok) {
-            // 계정 삭제 성공
             setDeleteSuccess(true);
-            
-            // 로그아웃 (토큰 삭제 혹은 무효화)
             localStorage.removeItem('token');
-            
-            // 메인 페이지로 이동
-            window.location.href = "/"; // 적절한 경로로 변경
+            window.location.href = "/"; 
           } else {
-            // 계정 삭제 실패
             alert("계정 삭제에 실패했습니다.");
           }
         } catch (error) {
@@ -211,23 +204,13 @@ export const Account = () => {
             height: 100px;
             margin-top: 132px;
             `}>
-            <div css={css`
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            `}>
+
             <div css={css`
             font-size: 20px;
             font-weight: 700;
             padding: 0 0 10px 30px;
+            cursor: default;
             `}>계정삭제</div>
-            <div css={css`
-             user-select: none;
-             -moz-user-select: none;
-             -ms-user-select: none;
-             -webkit-user-select: none;
-             `}>계정 삭제시 작성한 리뷰가 전부 사라집니다.</div>
-            </div>
 
             <div css={css`
             height: 60px;
@@ -241,18 +224,15 @@ export const Account = () => {
             border-radius: 30px;
             `}
           >
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder='"계정 삭제시 작성한 리뷰가 전부 사라집니다."를 입력해주세요.'
+            <div
               css={css`
                 width: 100%;
                 font-size: 16px;
                 outline: none;
                 border: none;
-              `}
-            />
+                color: ${theme.colors.light1};
+                cursor: default;
+              `}>계정 삭제시 이 계정으로 작성한 글, 댓글 및 리뷰에 대한 접근이 불가능합니다.</div>
             <button
               type="button"
               css={deleteBtnStyle}
