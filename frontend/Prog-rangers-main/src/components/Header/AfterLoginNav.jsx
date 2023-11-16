@@ -39,6 +39,29 @@ export const AfterLoginNav = () => {
     setShowDropdown(false);
   };
 
+  const handleMyPageClick = (e) => {
+    e.stopPropagation();
+    hideDropdown();
+    navigate('/myPage');
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.AfterLoginNav')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener(
+        'click',
+        handleClickOutside
+      );
+    };
+  }, []);
+
   return (
     <div className="AfterLoginNav" css={navStyle}>
       <StyledLink to="problems" onClick={hideDropdown}>
@@ -63,7 +86,10 @@ export const AfterLoginNav = () => {
         <span>{nickname}님</span>
         {showDropdown && (
           <div css={DropdownStyle}>
-            <StyledLink to="myPage" onClick={hideDropdown}>
+            <StyledLink
+              to="myPage"
+              onClick={handleMyPageClick}
+            >
               마이페이지
             </StyledLink>
             <StyledLink to="" onClick={logoutAction}>

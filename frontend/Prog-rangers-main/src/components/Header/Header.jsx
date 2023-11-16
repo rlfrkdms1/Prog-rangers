@@ -24,6 +24,7 @@ export const Header = () => {
   const isLogin = useIsLoginState();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +44,7 @@ export const Header = () => {
   const handleSearch = (event) => {
     event.preventDefault();
     navigate('/problems');
+    setShowDropdown(false);
   };
 
   const handleChange = (event) => {
@@ -54,6 +56,7 @@ export const Header = () => {
     setSearch('');
     setSearchTerm('');
     navigate('/problems');
+    setShowDropdown(false);
   };
 
   const results = !search
@@ -63,6 +66,23 @@ export const Header = () => {
           .toLowerCase()
           .includes(search.toLocaleLowerCase())
       );
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.searchAll')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener(
+        'click',
+        handleClickOutside
+      );
+    };
+  }, []);
 
   return (
     <div
@@ -91,6 +111,8 @@ export const Header = () => {
             css={css`
               height: 65px;
             `}
+            onClick={() => setShowDropdown(false)}
+            className="navbar-logo"
           />
         </Link>
         <div
@@ -113,6 +135,10 @@ export const Header = () => {
 
               padding-left: 20px;
             `}
+            onClick={(event) => {
+              event.stopPropagation(); // 클릭 이벤트의 버블링 중단
+              setShowDropdown(false);
+            }}
           >
             <form onSubmit={handleSearch}>
               <input
@@ -133,6 +159,7 @@ export const Header = () => {
                 css={css`
                   line-height: 50px;
                 `}
+                className="search-button"
               >
                 <IoSearchOutline
                   size="25"
@@ -141,6 +168,7 @@ export const Header = () => {
                     vertical-align: middle;
                     margin-left: 10px;
                   `}
+                  className="search-icon"
                 />
               </button>
             </form>
@@ -160,6 +188,7 @@ export const Header = () => {
 
                 margin-left: 10px;
               `}
+              className="advanced-search"
             >
               상세검색
             </button>
