@@ -35,7 +35,6 @@ export const CodeWindow3 = () => {
   const [editValue, setEditValue] = useState('');
 
 
-
   const handleMouseEnter = (codeLineNumber) => {
     setHoveredLine(codeLineNumber);
   };
@@ -60,7 +59,7 @@ export const CodeWindow3 = () => {
       setIsReviewVisible(false); // 리뷰가 없으면 숨김
     }
     // 리뷰 클릭 시에 해당 리뷰의 편집 모드를 토글
-    toggleEditReview(reviewForLine.id);
+    toggleEditReview();
   };
   
 

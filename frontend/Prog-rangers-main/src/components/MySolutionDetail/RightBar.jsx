@@ -27,10 +27,10 @@ export const RightBar = () => {
     const [ MySolList, setMySolList ] = useState([]);
     const [ MyScrapeList, setScrapeList ] = useState([]);
     
-    // const SolData = MySolList.sort((a, b) => b.solutionId - a.solutionId);
+    // const SolData = MySolList.sort((a, b) => b.id - a.id);
     // const top3Sol = SolData.slice(0, 5);
     
-    // const ScrapeData = MyScrapeList.sort((a, b) => b.solutionId - a.solutionId);
+    // const ScrapeData = MyScrapeList.sort((a, b) => b.id - a.id);
     // const top3Scrape = ScrapeData.slice(0, 5);
 
     useEffect(() => {

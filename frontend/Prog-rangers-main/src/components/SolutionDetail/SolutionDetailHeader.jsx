@@ -36,6 +36,8 @@ export const SolutionDetailHeader = () => {
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
+        alert("비공개 풀이를 열람할 수 없습니다.");
+        navigate(-1);
       });
   }, []);
 

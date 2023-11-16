@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { CommentReplyForm } from './CommentReplyForm';
+
 import { css } from "@emotion/react";
 import { theme } from "../Header/theme";
 import { 
@@ -13,6 +15,7 @@ import {
 
 import ProfileImg from './profile/default.png';
 import dot from '../../assets/icons/dotLight.svg'
+const token = localStorage.getItem('token');
 
 export const CommentList = () => {
 
@@ -23,43 +26,84 @@ export const CommentList = () => {
 
     const { solutionId } = useParams();
     const [ comments, setComments ] = useState([]);
+    const [ replies, setReplies ] = useState([]);
     const [ commentIdToDelete, setCommentIdToDelete ] = useState(null);
     const [ newComment, setNewComment ] = useState(null);
 
     // 수정 삭제 버튼
     const [isOpen, setIsOpen] = useState(false);
 
+    // 답글 버튼
+    const [ replyFormVisible, setReplyFormVisible ] = useState(false);
+    const [ selectedCommentId, setSelectedCommentId ] = useState(null);
+  
     const handleToggle = (commentId) => {
       setIsOpen((prevState) => {
         const updatedState = { ...prevState };
-        updatedState[commentId] = !prevState[commentId];
+        updatedState[commentId] = !updatedState[commentId];
         return updatedState;
       });
     };
 
-    useEffect(() => {
-      const token = localStorage.getItem('token');
+    // useEffect(() => {
 
-      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    //   const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
   
-      axios
-      .get(apiUrl, {
-        method: "GET",
-        headers: {Authorization: `Bearer ${token}`}
-      })
-          .then((response) => {
-            setComments(response.data.comments);
-            setNewComment(response.data.newComment);
-          })
-          .catch((error) => {
-            console.error('API 요청 오류:', error);
+    //   axios
+    //   .get(apiUrl, {
+    //     method: "GET",
+    //     headers: {Authorization: `Bearer ${token}`}
+    //   })
+    //       .then((response) => {
+    //         setComments(response.data.comments);
+    //         setNewComment(response.data.newComment);            
+    //         setReplies(response.data.comments.replies);
+    //       })
+    //       .catch((error) => {
+    //         console.error('API 요청 오류:', error);
+    //       });
+    //   }, [solutionId]); 
+
+    const api = axios.create({
+      baseURL: 'http://13.124.131.171:8080/api/v1',  // API의 기본 URL
+    });
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // API 호출하여 팔로잉 데이터를 받아옴
+          const response = await api.get(`/solutions/${solutionId}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
-      }, [solutionId]); 
+          
+          const { comments, newComment } = response.data;
+          
+          setComments(comments);
+          setNewComment(newComment);
+          
+          // 만약 댓글과 관련된 replies가 있다면 설정
+          if (comments && comments.replies) {
+            setReplies(comments.replies);
+          } else {
+            setReplies([]);
+          }   
+            
+        } catch (error) {
+          console.error("Error fetching following data:", error);
+        }
+      };
+  
+      fetchData();
+    }, [
+      // comments
+    ]); // comments가 변경될 때마다 useEffect 재실행
 
       // 댓글 삭제
       const handleDeleteComment = (commentId) => {
         
-        const token = localStorage.getItem('token');
         axios
           .delete((`http://13.124.131.171:8080/api/v1/comments/${commentId}`),{
             method: "DELETE",
@@ -78,7 +122,6 @@ export const CommentList = () => {
       // 댓글 수정
       const handleEditComment = (commentId, editValue) => {
         
-        const token = localStorage.getItem('token');
         axios
         .patch(`http://13.124.131.171:8080/api/v1/comments/${commentId}`, 
         { content: editValue },
@@ -134,12 +177,40 @@ export const CommentList = () => {
       setComments(updatedComments);
     };
 
+    // 답글 달기
+    const handleReplyClick = (commentId) => {
+      // 클릭 시 CommentReplyForm 보이도록 상태 업데이트
+      setSelectedCommentId(commentId);
+      setReplyFormVisible(!replyFormVisible);
+    };
+    // const addReply = (newReply) => {
+    //   setReplies([...comments, newReply]);
+    // }
+
+    const addReply = (newReply, commentId) => {
+      // comments 배열 복사
+      const updatedComments = [...comments];
+    
+      // commentId에 해당하는 댓글 찾기
+      const targetComment = updatedComments.find(comment => comment.id === commentId);
+    
+      if (targetComment) {
+        // commentId에 해당하는 댓글이 있으면 그 댓글의 replies에 새로운 답글 추가
+        targetComment.replies = [...targetComment.replies, newReply];
+    
+        // 상태 업데이트
+        setComments(updatedComments);
+      }
+    };
+    
+
   return (
     <div className="comments">
         {comments
         .filter((commentItem) => commentItem.content !== '삭제된 댓글입니다')
         .map((commentItem) => (
           <div className="comment" css={rowFlex} key={commentItem.id}>
+            {/* 댓글 작성자 프로필 */}
             <div className="profile">
               <img
                 src={ProfileImg}
@@ -152,7 +223,7 @@ export const CommentList = () => {
                 `}
               />
             </div>
-
+            {/* 댓글 텍스트 */}
             <div>
               <div
               className="text"
@@ -197,19 +268,19 @@ export const CommentList = () => {
                 margin-left: 20px;
                 gap: 15px;
                 display: flex;
-                align-items: center;
+                align-items: center;       
               `}>
-                <div
+                <button
                   className="addReply"
                   css={css`
                   font-size: 14px;
                   color: ${theme.colors.light1};
-                  cursor: pointer;
                   `}
+                  onClick={() => handleReplyClick(commentItem.id)}
                 >
                   답글 달기
-                </div>
-
+                </button>
+                                
                 <div>
                   <button onClick={() => handleToggle(commentItem.id)}
                     css={css`
@@ -252,13 +323,25 @@ export const CommentList = () => {
                     >
                       삭제
                     </button>
-                  </div>
                 </div>
+                
               </div>
+              <div css={css` margin-left: 20px;`}>
+              {replyFormVisible && selectedCommentId === commentItem.id && (
+              <CommentReplyForm onAddReply={addReply} parentId={commentItem.id} setComments={setComments} comments={comments} />
+              )}
+              </div>
+              
             </div>
+          </div>
+          
         ))}
         
-        {comments.replies && Array.isArray(comments.replies) && comments.replies.map((replyItem) => (
+          {comments
+          .filter((commentItem) => commentItem.replies && Array.isArray(commentItem.replies))
+          .map((commentItem) =>
+          commentItem.replies.map((replyItem) => (
+
           <div key={replyItem.id} className="recomment" css={rowFlexRecomment}>
             <div className="profile">
               <img
@@ -278,6 +361,8 @@ export const CommentList = () => {
                 margin-left: 20px;
               `}
             >
+              {replyItem && (
+              <>
               <div
                 className="nickname"
                 css={css`
@@ -289,6 +374,7 @@ export const CommentList = () => {
               >
                 {replyItem.nickname}
               </div>
+              
               <div
                 className="commnetText"
                 css={css`
@@ -307,27 +393,13 @@ export const CommentList = () => {
                 </span>
                 {replyItem.content}
               </div>
+              </>
+              )}
             </div>
 
-            // 추가된 댓글
-            <div
-                className="nickname"
-                css={css`
-                  font-size: 14px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                  cursor: pointer;
-                `}
-                onClick={() => onClickName(newComment.nickname)} 
-              >
-                {newComment.nickname}
-              </div>
-              <div className="commnetText">
-                {newComment.content}
-              </div>
 
           </div>
-        ))}
+        )))}
     
     </div>
   );

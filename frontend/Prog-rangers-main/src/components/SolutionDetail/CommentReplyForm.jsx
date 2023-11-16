@@ -3,16 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { css } from "@emotion/react";
 
-export const CommentForm = ({ addComment }) => {
-  
-  const commentInputRef = useRef(null);
-
-  const focusCommentInput = () => {
-    if (commentInputRef.current) {
-      commentInputRef.current.focus();
-    }
-  };
-
+export const CommentReplyForm = ({ onAddReply, parentId, comments, setComments }) => {
   const { solutionId } = useParams();
   const [nickname, setNickname] = useState('');
   const [content, setContent] = useState('');
@@ -45,22 +36,39 @@ export const CommentForm = ({ addComment }) => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      alert("댓글을 작성하려면 로그인이 필요합니다.");
+      alert("답글을 작성하려면 로그인이 필요합니다.");
     } else if (content.trim() !== '') {
-      const newComment = {
+      const newReply = {
         nickname: nickname,
         content,
+        parentId,
       };
 
       axios
-        .post(`http://13.124.131.171:8080/api/v1/solutions/${solutionId}/comments`, newComment, {
+        .post(`http://13.124.131.171:8080/api/v1/solutions/${solutionId}/comments`, newReply, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((response) => {
-          addComment(...response.data);
+          const commentId = response.data.id; // 새로 추가된 댓글의 ID
+          const newReply = response.data.replies[0]; // 새로 추가된 댓글의 첫 번째 답글
+
+          // 이 부분에서 onAddReply 함수를 호출하여 부모 컴포넌트에 전달
+          onAddReply(parentId, newReply);
+
+          // 댓글 목록 업데이트
+          setComments((prevComments) => {
+            const updatedComments = [...prevComments];
+            const targetComment = updatedComments.find(comment => comment.id === parentId);
+
+            if (targetComment) {
+              targetComment.replies = [...targetComment.replies, newReply];
+            }
+
+            return updatedComments;
+          });
+
           setContent('');
-          focusCommentInput(); // 댓글 리스트로 포커스 이동
         })
         .catch((error) => {
           console.error('댓글 등록 저장 API 요청 오류:', error);
@@ -71,12 +79,12 @@ export const CommentForm = ({ addComment }) => {
   return (
     <div className="search"
       css={css`
-        width: 996px;
-        height: 50px;
+        width: 650px;
+        height: 40px;
         border: 1px solid #111;
         border-radius: 25px;
-        margin-top: 30px;
-        padding-top: 10px;
+        margin-top: 20px;
+        padding-top: 5px;
         padding-left: 30px;
       `}
     >
@@ -84,11 +92,10 @@ export const CommentForm = ({ addComment }) => {
         placeholder="댓글을 입력해주세요"
         value={content}
         onChange={handleChange}
-        ref={commentInputRef}
         css={css`
           outline: none;
           border: none;
-          width: 90%;
+          width: 87%;
         `}
       />
 
@@ -96,8 +103,8 @@ export const CommentForm = ({ addComment }) => {
         type="submit"
         onClick={handleSubmit}
         css={css`
-          width: 80px;
-          height: 30px;
+          width: 70px;
+          height: 28px;
           border-radius: 15px;
           align-items: center;
           background-color: #C2DBE3
