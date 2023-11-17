@@ -11,13 +11,15 @@ import {
     boxStyle, 
     fontSize14} from '../../pages/Profile/ProfileStyle';
 import { CodeWindow } from './CodeWindow';
+import { useParams } from 'react-router-dom';
 
 export const SolvingList = () => {
+    const {nickname} = useParams();
     const [data, setData] = useState({ list: [] });
 
     useEffect(() => {
 
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/members/test';
+        const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname.substring(1)}`;
 
         axios.get(apiUrl)
           .then((response) => {
@@ -26,7 +28,7 @@ export const SolvingList = () => {
           .catch((error) => {
             console.error('API 요청 오류:', error);
           });
-      }, []);
+      }, [nickname]);
 
   return(
     <>

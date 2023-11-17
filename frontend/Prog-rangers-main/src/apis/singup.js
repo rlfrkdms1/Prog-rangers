@@ -8,6 +8,6 @@ export const signup= async (data)=>{
     console.log(response)
 }
 
-export const checkNicknameDuplication = async (params)=>{
-    await axios.get(`${API_END_POINT}/check-nickname-duplication`,{params});
-}
+export const checkNicknameDuplication = async (params) => {
+    await axios.get(`${API_END_POINT}/auth?nickname=${params.nickname}`, { params });
+  };  

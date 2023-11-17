@@ -1,65 +1,80 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { checkNickname, inquireProfile, settingProfile, handleLogin } from './ProfileApi';
 import { css } from '@emotion/react';
 import { SideBar } from '../../components/SideBar/SideBar';
-import { profileContentStyle, profileContentInputStyle, inputBoxStyle, editBtnStyle, blueBtn, grayBtn, alertStyle } from './AccountStyle';
-import { Link } from 'react-router-dom';
+import { profileContentStyle, profileContentInputStyle, inputBoxStyle, blueBtn, grayBtn, alertStyle } from './AccountStyle';
+import { Link, useNavigate } from 'react-router-dom';
 import eyeOpen from '../../assets/icons/mypage-eye-open.svg';
 import eyeClosed from '../../assets/icons/mypage-eye-closed.svg';
+import Kakao from '../../assets/icons/signin-kakao-logo.svg'
+import Google from '../../assets/icons/signin-google-logo.svg'
+import Naver from '../../assets/icons/signin-naver-logo.svg'
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import axios from 'axios';
 
 export const AccountChange = () => {
   const [userData, setUserData] = useState({
+    type: '',
     nickname: '',
     email: '',
     github: '',
     introduction: '',
-    currentModifiedAt: '',
+    passwordModifiedAt: '',
     password: '',
-    photo: '',
+    // photo: '',
   });
 
   // 유저 정보 조회 api
   useEffect(() => {
     const token = localStorage.getItem('token');    
-    fetch("http://13.124.131.171:8080/api/v1/mypage/account-settings", {
+    fetch("http://13.124.131.171:8080/api/v1/members", {
       method: "GET",
       headers: {Authorization: `Bearer ${token}`},
     })
     .then((response) => response.json())
     .then((json) => {
       setUserData({
+        type: json.type || '',
         nickname: json.nickname || '',
         email: json.email || '',
         github: json.github || '',
         introduction: json.introduction || '',
-        currentModifiedAt: json.currentModifiedAt || '',
+        passwordModifiedAt: json.passwordModifiedAt || '',
         password: json.password || '',
-        photo: json.photo || '',
+        // photo: json.photo || '',
       })
+      console.log(token);
     })
     .catch((error) => {
       console.error(error);
     })
   }, []);
-  
+
+  // 사진 업로드
   const [photo, setPhoto] = useState("");
   const imgRef = useRef();
 
-  const savephoto = () => {
-    const file = imgRef.current.files[0];
-    const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-          setPhoto(reader.result);
-      };
-  };
+  // const savephoto = () => {
+  //   const file = imgRef.current.files[0];
+
+  //   const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onloadend = () => {
+  //         setPhoto(reader.result);
+  //     };
+  // };
 
   const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
-  const [github, setGithub] = useState('');
-  const [introduction, setIntroduction] = useState('');
-  const [password, setPassword] = useState('');
+  const [github, setGithub] = useState(userData.github);
+  const [introduction, setIntroduction] = useState(userData.introduction);
+
+  useEffect(() => {
+    setGithub(userData.github);
+  }, [userData.github]);
+  
+  useEffect(() => {
+    setIntroduction(userData.introduction);
+  }, [userData.introduction]);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const togglePasswordVisibility = () => {
@@ -104,16 +119,18 @@ export const AccountChange = () => {
   }
 
   const pwCheck = () => {
-    if (currentPassword !== userData.password ) {
+    if (currentPassword === '') {
+      setIsPwCorrect(true);
+    } else if (currentPassword !== userData.password) {
       setIsPwCorrect(false);
     } else {
       setIsPwCorrect(true);
-  }
+    }
 }
 
-useEffect(() => {
-  pwCheck();
-}, [currentPassword]);
+  useEffect(() => {
+    pwCheck();
+  }, [currentPassword]);
 
 // 변경 비밀번호와 비밀번호 확인이 일치하는지 검사
 const [changePassword, setChangePassword] = useState('');
@@ -133,6 +150,7 @@ const pwSameCheck = () => {
     setIsPasswordSame(false);
   } else {
     setIsPasswordSame(true);
+    //setPasswordModifiedAt(new Date().toISOString());
 }
 }
 
@@ -141,38 +159,74 @@ useEffect(() => {
 }, [changePassword, checkPassword]);
 
 // 정보 수정하기
-const changeProfile = () => {
+const navigate = useNavigate();
 
-  const updatedData = {
-    // 수정된 데이터를 추가
-    nickname: nickname,
-    email: email,
-    github: github,
-    introduction: introduction,
-    currentModifiedAt: new Date(),
-    photo: photo,
-  };
+const handleUpdateProfile = () => {
+  const token = localStorage.getItem('token');
 
-  axios.put('http://13.124.131.171:8080/api/v1/mypage/account-settings', updatedData)
-    .then(response => {
-      console.log('프로필이 업데이트되었습니다.');
-    })
-    .catch(error => {
-      console.error('프로필 업데이트 중 오류 발생:', error);
-    });
-}
+  const updatedData = {};
 
-const handleButtonClick = () => {
-  if(isNicknameAvailable === true || isNicknameAvailable === null){
-    if(isPwCorrect === true || isPwCorrect === null) {
-      if(isPasswordSame === true || (isPwCorrect===null && isPasswordSame === null)) {
-        changeProfile();
-      }
-    }
+  if (isNicknameAvailable && nickname) {
+    updatedData.nickname = nickname;
+    localStorage.setItem('nickname', updatedData.nickname);
   }
-  else {
-    alert('수정불가');
 
+  if (github.trim() !== null) {
+    updatedData.github = github;
+  }
+
+  if (introduction.trim() !== null) {
+    updatedData.introduction = introduction;
+  }
+
+  if (changePassword) {
+    updatedData.newPassword = changePassword;
+    updatedData.oldPassword = userData.password;
+  }
+
+  fetch("http://13.124.131.171:8080/api/v1/members", {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedData),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('네트워크 응답이 실패했습니다.');
+    }
+    navigate('/account');
+    window.location.reload();
+    return response.json();
+  })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+};
+
+const accountSubmit = () => {
+  if(isNicknameAvailable === false) {
+    alert('중복된 닉네임입니다.');
+  } else if (nickname && isNicknameAvailable === null) {
+    alert('닉네임 중복 확인을 해주세요.')
+  } else if (isPwCorrect === false) {
+    alert('기존 비밀번호가 일치하지 않습니다.');
+  } else if (isPasswordSame === false) {
+    alert('변경 비밀번호가 일치하지 않습니다.');
+  } else {
+    const isNicknameEmpty = nickname === null;
+    const isChangePasswordEmpty = changePassword === null;
+
+    if (!isNicknameEmpty || !isChangePasswordEmpty) {
+      handleUpdateProfile();
+    } else {
+      alert('변경된 사항이 없습니다.');
+    }
   }
 }
 
@@ -211,16 +265,16 @@ const handleButtonClick = () => {
               align-items: center;
               `}> 
                 <img
-                src={photo ? photo : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}                  
+                src={photo ? photo : ProfileImg}                  
                 alt='profileImg'
                 css={css`
                 height: 250px;
                 border-radius: 50%;
                 object-fit: cover;
                 `}></img>
-                <label htmlFor='uploadProfileImg' css={editBtnStyle}>사진선택</label>
+                {/* <label htmlFor='uploadProfileImg' css={editBtnStyle}>사진선택</label>
                 <input type='file' accept='image/*' id='uploadProfileImg' onChange={savephoto} ref={imgRef}
-                css={css`display: none;`}></input>
+                css={css`display: none;`}></input> */}
               </div>
 
               <div  className='contentEdit'
@@ -241,8 +295,8 @@ const handleButtonClick = () => {
                           type="text"
                           value={nickname}
                           onChange={handleNicknameChange}
-                         // onChange={(e) => setNickname(e.target.value)}
                           placeholder={userData.nickname}
+                          maxLength={10}
                           css={css`
                             width: 100%;
                             font-size: 16px;
@@ -267,7 +321,29 @@ const handleButtonClick = () => {
                 
                 <div className='email' css={profileContentStyle}>
                   <div css={css`width: 72px`}>이메일</div>
-                  <div>{userData.email}</div>
+                  <div css={css`display: flex; flex-direction: row; align-items: center`}>
+                  {userData.type === 'BASIC' && (
+                    <div>{userData.email}</div>
+                  )}
+                  {userData.type === 'KAKAO' && (
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Kakao} alt="kakao_logo" css={css`width:30px;`} />
+                      <div>Kakao 로그인</div>
+                    </div>
+                  )}
+                  {userData.type === 'NAVER' && (
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Naver} alt="naver_logo" css={css`width:30px;`} />
+                      <div>Naver 로그인</div>
+                    </div>
+                  )}
+                  {userData.type === 'GOOGLE' && (
+                    <div css={css`display: flex; align-items: center; gap:10px;`}>
+                      <img src={Google} alt="google_logo" css={css`width:30px;`} />
+                      <div>Google 로그인</div>
+                    </div>
+                  )}
+                  </div>
                 </div>
 
                 <div className='github' css={profileContentStyle}>
@@ -282,7 +358,7 @@ const handleButtonClick = () => {
                         type="text"
                         value={github}
                         onChange={(e) => setGithub(e.target.value)}
-                        placeholder={userData.guthub}
+                        placeholder={userData.github}
                         css={css`
                           width: 100%;
                           font-size: 16px;
@@ -321,8 +397,9 @@ const handleButtonClick = () => {
                  </div>
                 </div>
 
+                {userData.type === 'BASIC' && (
                 <div className='pw' css={profileContentStyle}>
-                 <div css={css`width: 72px`}>비밀번호</div>
+                 <div css={css`width: 72px; padding-top: 8px;`}>비밀번호</div>
 
                  <div css={profileContentInputStyle}>
                   <div css={css `gap: 20px; display: flex; align-items: center;`}>
@@ -401,6 +478,7 @@ const handleButtonClick = () => {
                   </div>
                 </div>
               </div>
+              )}
             </div>
           </div>
 
@@ -427,9 +505,8 @@ const handleButtonClick = () => {
                 취소하기
               </Link>
               <Link
-                // to='/account'
                 type="button"
-                onClick={handleButtonClick}
+                onClick={accountSubmit}
                 css={blueBtn}>
                 수정하기
               </Link>

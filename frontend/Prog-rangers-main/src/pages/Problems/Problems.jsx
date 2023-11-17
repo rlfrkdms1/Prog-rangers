@@ -87,9 +87,9 @@ export const Problems = () => {
             z-index: 2;
           `}
         >
-          <FilterBar options={sort.ALGORITHM} />
-          <FilterBar options={sort.DATASTRUCTURE} />
-          <FilterBar options={sort.SORT} />
+          <FilterBar title="algorithm" options={sort.ALGORITHM} />
+          <FilterBar title="datastructure" options={sort.DATASTRUCTURE} />
+          <FilterBar title="sort" options={sort.SORT} />
         </div>
         <div
           css={css`

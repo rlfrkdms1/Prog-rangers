@@ -13,10 +13,11 @@ import {
   fontSize20,
   fontSize24
 } from './ProfileStyle';
+import { useParams } from 'react-router-dom';
 
 
 export const Profile = () => {
-
+  const {nickname} = useParams();
   const [data, setData] = useState([]);
 
   //팔로우 버튼
@@ -28,8 +29,7 @@ export const Profile = () => {
   };
 
   useEffect(() => {
-
-    const apiUrl = 'http://13.124.131.171:8080/api/v1/members/test';
+    const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname.substring(1)}`;
 
     axios.get(apiUrl)
       .then((response) => {
@@ -38,7 +38,8 @@ export const Profile = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
+  }, [nickname]);
+  
 
     return (
     <div css={css`
