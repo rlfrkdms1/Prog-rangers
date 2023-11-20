@@ -81,9 +81,10 @@ public class FollowService {
 
     private void addScarceMembers(Long memberId, List<Member> limitRecommendedMembers) {
         List<Member> membersOrderByFollow = memberRepository.getOtherMembersOrderByFollow(memberId);
-        for (int index = 1; index <= membersOrderByFollow.size(); index++) {
-            if (!limitRecommendedMembers.contains(membersOrderByFollow.get(index))) {
-                limitRecommendedMembers.add(membersOrderByFollow.get(index));
+        for (int memberNumber = 0; memberNumber < membersOrderByFollow.size(); memberNumber++) {
+            Member member = membersOrderByFollow.get(memberNumber);
+            if (!limitRecommendedMembers.contains(member)) {
+                limitRecommendedMembers.add(member);
             }
             if (limitRecommendedMembers.size() == RECOMMENDED_MEMBER_COUNT) {
                 break;
