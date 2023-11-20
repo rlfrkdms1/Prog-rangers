@@ -17,11 +17,13 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import com.prograngers.backend.support.RepositoryTest;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @RepositoryTest
+@Slf4j
 class MemberRepositoryTest {
     @Autowired
     private SolutionRepository solutionRepository;
@@ -177,6 +179,47 @@ class MemberRepositoryTest {
 
         //then
         assertThat(result).containsExactly(member2, member3, member4, member5);
+    }
+
+    @DisplayName("나를 제외한 회원들 중 내가 팔로우하지 않은 회원을 팔로워가 많은 순서대로 가져올 수 있다.")
+    @Test
+    void getOtherMembersOrderByFollow() {
+        //given
+        Member member1 = 저장(장지담.기본_정보_생성());
+        Member member2 = 저장(장지담.기본_정보_생성());
+        Member member3 = 저장(장지담.기본_정보_생성());
+        Member member4 = 저장(장지담.기본_정보_생성());
+        Member member5 = 저장(장지담.기본_정보_생성());
+        Member member6 = 저장(장지담.기본_정보_생성());
+
+        /**
+         *  member1: 나
+         *  member2: 내가 이미 팔로우함(결과에 포함 X)
+         *  member3(1명), member4(2명): 내가 팔로우하지 않음, 다른 팔로워는 있음
+         *  member5 : 팔로워가 없음(결과의 마지막에 포함되어야함)
+         *  member6: 팔로워가 제일 많음
+         */
+        저장(팔로우_생성(member1.getId(), member2.getId()));
+        저장(팔로우_생성(member1.getId(), member3.getId()));
+        저장(팔로우_생성(member2.getId(), member1.getId()));
+
+        저장(팔로우_생성(member4.getId(), member2.getId()));
+        저장(팔로우_생성(member4.getId(), member3.getId()));
+
+        저장(팔로우_생성(member3.getId(), member5.getId()));
+
+        저장(팔로우_생성(member6.getId(), member2.getId()));
+        저장(팔로우_생성(member6.getId(), member3.getId()));
+        저장(팔로우_생성(member6.getId(), member4.getId()));
+        저장(팔로우_생성(member6.getId(), member5.getId()));
+
+        List<Member> expected = List.of(member6, member4, member3, member5);
+
+        //when
+        List<Member> result = memberRepository.getOtherMembersOrderByFollow(member1.getId());
+
+        //then
+        assertThat(result).isEqualTo(expected);
     }
 
     private Follow 팔로우_생성(Long followingId, Long followerId) {
