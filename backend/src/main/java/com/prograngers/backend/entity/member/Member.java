@@ -145,7 +145,7 @@ public class Member {
     }
 
     public String getNickname() {
-        if (usable == false) {
+        if (!usable) {
             return 탈퇴한_사용자;
         }
         return nickname;
