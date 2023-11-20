@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `comment`
     `parent_id`   BIGINT,
     `member_id`   BIGINT NOT NULL,
     `solution_id` BIGINT NOT NULL,
+    'usable'      TINYINT(1) NOT NULL,
     PRIMARY KEY ( `id` )
 )
     engine = innodb
