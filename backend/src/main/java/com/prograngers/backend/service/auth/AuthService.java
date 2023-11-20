@@ -47,9 +47,6 @@ public class AuthService {
     public AuthResult login(LoginRequest loginRequest) {
         //회원 검증
         Member member = findByEmail(loginRequest.getEmail());
-        if (!member.isUsable()) {
-            throw new DeletedMemberException();
-        }
         validPassword(member.getPassword(), loginRequest.getPassword());
         //access token 발급
         return issueToken(member);
