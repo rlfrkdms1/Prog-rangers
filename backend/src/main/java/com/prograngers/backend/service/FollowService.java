@@ -59,34 +59,34 @@ public class FollowService {
                 .orElseThrow(FollowNotFoundException::new);
     }
 
-    public ShowFollowListResponse getFollowList(Long memberId) {
+    public ShowFollowListResponse getFollowList(Long memberId, Long recommendMemberCount) {
         List<Member> followingList = memberRepository.findAllByFollower(memberId);
         List<Member> followerList = memberRepository.findAllByFollowing(memberId);
         List<Member> recommendedFollows = getRecommendedFollows(
-                solutionRepository.findOneRecentSolutionByMemberId(memberId), memberId);
+                solutionRepository.findOneRecentSolutionByMemberId(memberId), memberId, recommendMemberCount);
         return ShowFollowListResponse.of(followingList, followerList, recommendedFollows);
     }
 
-    private List<Member> getRecommendedFollows(Solution recentSolution, Long memberId) {
+    private List<Member> getRecommendedFollows(Solution recentSolution, Long memberId, Long recommendMemberCount) {
         if (recentSolution != null) {
             List<Member> limitRecommendedMembers = memberRepository.getLimitRecommendedMembers(
-                    recentSolution.getProblem(), RECOMMENDED_MEMBER_COUNT, memberId);
-            if (limitRecommendedMembers.size() < RECOMMENDED_MEMBER_COUNT) {
-                addScarceMembers(memberId, limitRecommendedMembers);
+                    recentSolution.getProblem(), recommendMemberCount, memberId);
+            if (limitRecommendedMembers.size() < recommendMemberCount) {
+                addScarceMembers(memberId, limitRecommendedMembers, recommendMemberCount);
             }
             return limitRecommendedMembers;
         }
-        return memberRepository.getLimitRecommendedMembers(null, RECOMMENDED_MEMBER_COUNT, memberId);
+        return memberRepository.getLimitRecommendedMembers(null, recommendMemberCount, memberId);
     }
 
-    private void addScarceMembers(Long memberId, List<Member> limitRecommendedMembers) {
+    private void addScarceMembers(Long memberId, List<Member> limitRecommendedMembers, Long recommendMemberCount) {
         List<Member> membersOrderByFollow = memberRepository.getOtherMembersOrderByFollow(memberId);
         for (int memberNumber = 0; memberNumber < membersOrderByFollow.size(); memberNumber++) {
             Member member = membersOrderByFollow.get(memberNumber);
             if (!limitRecommendedMembers.contains(member)) {
                 limitRecommendedMembers.add(member);
             }
-            if (limitRecommendedMembers.size() == RECOMMENDED_MEMBER_COUNT) {
+            if (limitRecommendedMembers.size() == recommendMemberCount) {
                 break;
             }
         }

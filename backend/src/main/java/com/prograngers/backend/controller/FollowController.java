@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class FollowController {
 
     private final FollowService followService;
+    private static final Long RECOMMEND_MEMBER_COUNT = 10L;
+
 
     @Login
     @PostMapping("/members/{memberId}/following")
@@ -39,6 +41,6 @@ public class FollowController {
     @Login
     @GetMapping("/follows")
     public ResponseEntity<ShowFollowListResponse> followList(@LoggedInMember Long memberId) {
-        return ResponseEntity.ok().body(followService.getFollowList(memberId));
+        return ResponseEntity.ok().body(followService.getFollowList(memberId, RECOMMEND_MEMBER_COUNT));
     }
 }
