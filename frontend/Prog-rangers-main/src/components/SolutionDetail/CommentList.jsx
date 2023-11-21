@@ -45,61 +45,59 @@ export const CommentList = () => {
       });
     };
 
-    // useEffect(() => {
-
-    //   const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
-  
-    //   axios
-    //   .get(apiUrl, {
-    //     method: "GET",
-    //     headers: {Authorization: `Bearer ${token}`}
-    //   })
-    //       .then((response) => {
-    //         setComments(response.data.comments);
-    //         setNewComment(response.data.newComment);            
-    //         setReplies(response.data.comments.replies);
-    //       })
-    //       .catch((error) => {
-    //         console.error('API 요청 오류:', error);
-    //       });
-    //   }, [solutionId]); 
-
-    const api = axios.create({
-      baseURL: 'http://13.124.131.171:8080/api/v1',  // API의 기본 URL
-    });
-
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          // API 호출하여 팔로잉 데이터를 받아옴
-          const response = await api.get(`/solutions/${solutionId}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          
-          const { comments, newComment } = response.data;
-          
-          setComments(comments);
-          setNewComment(newComment);
-          
-          // 만약 댓글과 관련된 replies가 있다면 설정
-          if (comments && comments.replies) {
-            setReplies(comments.replies);
-          } else {
-            setReplies([]);
-          }   
-            
-        } catch (error) {
-          console.error("Error fetching following data:", error);
-        }
-      };
+
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
   
-      fetchData();
-    }, [
-      // comments
-    ]); // comments가 변경될 때마다 useEffect 재실행
+      axios
+      .get(apiUrl, {
+        method: "GET",
+        headers: {Authorization: `Bearer ${token}`}
+      })
+          .then((response) => {
+            setComments(response.data.comments);
+            setNewComment(response.data.newComment);            
+            setReplies(response.data.comments.replies);
+          })
+          .catch((error) => {
+            console.error('API 요청 오류:', error);
+          });
+      }, []); 
+
+    // const api = axios.create({
+    //   baseURL: 'http://13.124.131.171:8080/api/v1',  // API의 기본 URL
+    // });
+
+    // useEffect(() => {
+    //   const fetchData = async () => {
+    //     try {
+    //       // API 호출하여 팔로잉 데이터를 받아옴
+    //       const response = await api.get(`/solutions/${solutionId}`, {
+    //         method: 'GET',
+    //         headers: {
+    //           Authorization: `Bearer ${token}`,
+    //         },
+    //       });
+          
+    //       const { comments, newComment } = response.data;
+          
+    //       setComments(comments);
+    //       setNewComment(newComment);
+          
+    //       // 만약 댓글과 관련된 replies가 있다면 설정
+    //       if (comments && comments.replies) {
+    //         setReplies(comments.replies);
+    //       } else {
+    //         setReplies([]);
+    //       }   
+            
+    //     } catch (error) {
+    //       console.error("Error fetching following data:", error);
+    //     }
+    //   };
+  
+    //   fetchData();
+    // }, []);
 
       // 댓글 삭제
       const handleDeleteComment = (commentId) => {
@@ -183,9 +181,6 @@ export const CommentList = () => {
       setSelectedCommentId(commentId);
       setReplyFormVisible(!replyFormVisible);
     };
-    // const addReply = (newReply) => {
-    //   setReplies([...comments, newReply]);
-    // }
 
     const addReply = (newReply, commentId) => {
       // comments 배열 복사
@@ -201,15 +196,16 @@ export const CommentList = () => {
         // 상태 업데이트
         setComments(updatedComments);
       }
-    };
-    
+    };    
 
   return (
     <div className="comments">
         {comments
         .filter((commentItem) => commentItem.content !== '삭제된 댓글입니다')
         .map((commentItem) => (
-          <div className="comment" css={rowFlex} key={commentItem.id}>
+          <div className="comment" key={commentItem.id}>
+            <div css={rowFlex}>
+            
             {/* 댓글 작성자 프로필 */}
             <div className="profile">
               <img
@@ -223,6 +219,7 @@ export const CommentList = () => {
                 `}
               />
             </div>
+
             {/* 댓글 텍스트 */}
             <div>
               <div
@@ -295,7 +292,6 @@ export const CommentList = () => {
                   css={css`
                   display: flex;
                   margin-left: -10px;
-                  font-size: 10px
                   text-align: center;`}>
                     <button 
                     css={editStyle(isOpen[commentItem.id])} 
@@ -324,83 +320,103 @@ export const CommentList = () => {
                       삭제
                     </button>
                 </div>
-                
               </div>
-              <div css={css` margin-left: 20px;`}>
-              {replyFormVisible && selectedCommentId === commentItem.id && (
-              <CommentReplyForm onAddReply={addReply} parentId={commentItem.id} setComments={setComments} comments={comments} />
-              )}
-              </div>
-              
-            </div>
-          </div>
-          
-        ))}
-        
-          {comments
-          .filter((commentItem) => commentItem.replies && Array.isArray(commentItem.replies))
-          .map((commentItem) =>
-          commentItem.replies.map((replyItem) => (
 
-          <div key={replyItem.id} className="recomment" css={rowFlexRecomment}>
-            <div className="profile">
-              <img
-                src={ProfileImg}
-                alt="profile image"
-                css={css`
-                  width: 40px;
-                  height: 40px;
-                  border: 1px solid ${theme.colors.light1};
-                  border-radius: 100%;
-                `}
-              />
-            </div>
-            <div
-              className="text"
-              css={css`
-                margin-left: 20px;
-              `}
-            >
-              {replyItem && (
-              <>
-              <div
-                className="nickname"
-                css={css`
-                  font-size: 12px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                `}
-                onClick={() => onClickName(replyItem.nickname)} 
-              >
-                {replyItem.nickname}
+              <div css={css` margin-left: 20px;`}>
+                {replyFormVisible && selectedCommentId === (commentItem && commentItem.id) && (
+                <CommentReplyForm 
+                onAddReply={addReply}
+                parentId={(commentItem && commentItem.id)} 
+                setComments={setComments} 
+                comments={comments} 
+                />
+                )}
               </div>
-              
-              <div
-                className="commnetText"
-                css={css`
-                  font-size: 14px;
-                `}
-              >
-                <span
-                  className="tag"
+            </div>
+
+            </div>
+            
+            {/* 답글 렌더링 */}
+            {commentItem.replies && Array.isArray(commentItem.replies) && (
+            <div className="repliesSection">
+              {commentItem.replies
+              .filter((reply) => reply && reply.content !== '삭제된 댓글입니다')
+              .map((reply) => (
+                <div key={reply && reply.id} className="recomment" css={rowFlexRecomment}>
+                 
+                <div className="profile">
+                  <img
+                  src={reply.photo || ProfileImg}
+                  alt="profile image"
                   css={css`
-                    font-size: 12px;
-                    color: ${theme.colors.main};
-                    margin-right: 10px;
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid ${theme.colors.light1};
+                    border-radius: 100%;
+                    `}
+                  />
+                </div>
+
+                <div
+                  className="text"
+                  css={css`
+                    margin-left: 20px;
                   `}
                 >
-                  @{comments.nickname}
-                </span>
-                {replyItem.content}
-              </div>
-              </>
-              )}
+                  <div
+                    className="nickname"
+                    css={css`
+                      font-size: 12px;
+                      color: ${theme.colors.light1};
+                      margin-bottom: 5px;
+                    `}
+                    onClick={() => onClickName(reply.nickname)}
+                  >
+                    {reply.nickname}
+                  </div>
+              
+                  <div
+                  className="commnetText"
+                  css={css`
+                    font-size: 14px;
+                  `}
+                >
+                  <span
+                    className="tag"
+                    css={css`
+                      font-size: 12px;
+                      color: ${theme.colors.main};
+                      margin-right: 10px;
+                    `}
+                  >
+                    @{commentItem.nickname}
+                  </span>
+                  {reply.content}
+                  </div>
+                
+                  <div className="edit-delete-buttons" 
+                    css={css`
+                    display: flex;
+                    margin-top: 10px;
+                    font-size: 12px;
+                    text-align: center;`}>
+                    <button 
+                      css={css`color: ${theme.colors.light1};`} 
+                      onClick={() => {
+                        handleDeleteComment(reply.id);  // 댓글 삭제 함수 호출
+                      }}
+                      >
+                        삭제
+                    </button>
+                  </div>
+                </div>
+                
+                </div>
+              ))}
             </div>
-
-
+            )}
           </div>
-        )))}
-    
+        ))}
     </div>
   );
 };

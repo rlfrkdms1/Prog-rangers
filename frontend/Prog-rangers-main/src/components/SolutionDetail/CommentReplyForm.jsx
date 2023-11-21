@@ -5,8 +5,9 @@ import { css } from "@emotion/react";
 
 export const CommentReplyForm = ({ onAddReply, parentId, comments, setComments }) => {
   const { solutionId } = useParams();
-  const [nickname, setNickname] = useState('');
-  const [content, setContent] = useState('');
+  const [ nickname, setNickname ] = useState('');
+  const [ content, setContent ] = useState('');
+  const [ showReplyForm, setShowReplyForm ] = useState(true); 
 
   // 로그인한 사용자 닉네임 API 요청
   useEffect(() => {
@@ -51,7 +52,7 @@ export const CommentReplyForm = ({ onAddReply, parentId, comments, setComments }
         })
         .then((response) => {
           const commentId = response.data.id; // 새로 추가된 댓글의 ID
-          const newReply = response.data.replies[0]; // 새로 추가된 댓글의 첫 번째 답글
+          const newReply = response.data.replies && response.data.replies.length > 0 ? response.data.replies[0] : null;
 
           // 이 부분에서 onAddReply 함수를 호출하여 부모 컴포넌트에 전달
           onAddReply(parentId, newReply);
@@ -67,7 +68,9 @@ export const CommentReplyForm = ({ onAddReply, parentId, comments, setComments }
 
             return updatedComments;
           });
-
+          
+          // 댓글이 등록되면 replyForm 숨기기
+          setShowReplyForm(false);
           setContent('');
         })
         .catch((error) => {
@@ -77,7 +80,9 @@ export const CommentReplyForm = ({ onAddReply, parentId, comments, setComments }
   };
 
   return (
-    <div className="search"
+  <>
+    {showReplyForm && ( // showReplyForm이 true인 경우에만 replyForm 렌더링
+    <div className="replyForm"
       css={css`
         width: 650px;
         height: 40px;
@@ -113,5 +118,7 @@ export const CommentReplyForm = ({ onAddReply, parentId, comments, setComments }
         등록
       </button>
     </div>  
+    )}
+  </>
   );
 };

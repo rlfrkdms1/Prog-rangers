@@ -67,7 +67,6 @@ export const CodeWindow4 = () => {
         })
       .then((response) => {
         setData(response.data);
-
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
@@ -101,7 +100,7 @@ export const CodeWindow4 = () => {
                 <div style={{
                   width: '640px',
                   height: 'auto',    
-                  borderRadius: '20px',
+                  // borderRadius: '20px',
                   background: '#CCDEF2',
                   color: '#000000',
                   margin: '5px',
@@ -119,7 +118,7 @@ export const CodeWindow4 = () => {
                       {showAllReviews && (
                         <div>
                           {codeData.reviews
-                          .filter((review) => review.codeLineNumber === codeLineNumber)
+                          .filter((review) => review.codeLineNumber === codeLineNumber && review.content !== '삭제된 리뷰입니다')
                           .map((review) => (
                             <div key={review.codeLineNumber}>
                               <div css={css`display: flex; align-items: center; font-family: Noto Sans KR; font-size: 16px;`}>
