@@ -11,7 +11,6 @@ import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
-import com.prograngers.backend.exception.unauthorization.IncorrectStateInNaverLoginException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
@@ -64,7 +63,6 @@ public class AuthService {
     private AuthResult issueToken(Member member) {
         Long memberId = member.getId();
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
-        //refresh token 발급, 저장, 쿠키 생성
         RefreshToken refreshToken = refreshTokenRepository.save(createRefreshToken(memberId));
         return AuthResult.of(accessToken, refreshToken, member);
     }
@@ -80,7 +78,6 @@ public class AuthService {
         Member member = signUpRequest.toMember();
         member.encodePassword(member.getPassword());
         memberRepository.save(member);
-        //access token 발급
         return issueToken(member);
     }
 
@@ -133,10 +130,6 @@ public class AuthService {
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
                 .orElseGet(() -> socialRegister(userInfo.toMember()));
         return issueToken(member);
-    }
-
-    private void validState(String state) {
-        if(!state.equals(naverOauth.getState())) throw new IncorrectStateInNaverLoginException();
     }
 
     private Member socialRegister(Member member) {
