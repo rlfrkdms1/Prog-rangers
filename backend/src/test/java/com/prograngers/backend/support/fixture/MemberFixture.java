@@ -22,6 +22,7 @@ public enum MemberFixture {
 
     public MemberBuilder 기본_정보_빌더_생성(){
         return Member.builder()
+                .usable(true)
                 .nickname(nickname)
                 .type(type);
     }
