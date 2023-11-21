@@ -79,7 +79,7 @@ public class AuthService {
 
     @Transactional
     public AuthResult signUp(SignUpRequest signUpRequest) {
-        validExistMember(signUpRequest);
+        validAlreadyExistEmail(signUpRequest.getEmail());
         validNicknameDuplication(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
         member.encodePassword(member.getPassword());
@@ -87,8 +87,8 @@ public class AuthService {
         return issueToken(member);
     }
 
-    private void validExistMember(SignUpRequest signUpRequest) {
-        if(memberRepository.existsByEmail(signUpRequest.getEmail())){
+    private void validAlreadyExistEmail(String email) {
+        if(memberRepository.existsByEmail(email)){
             throw new AlreadyExistMemberException();
         }
     }
@@ -148,7 +148,7 @@ public class AuthService {
     }
 
     private boolean isDuplicateNickname(String nickname) {
-        return memberRepository.findByNickname(nickname).isPresent();
+        return memberRepository.existsByNickname(nickname);
     }
 
     public void validNicknameDuplication(String nickname) {
