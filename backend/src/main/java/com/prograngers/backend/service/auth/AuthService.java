@@ -45,8 +45,8 @@ public class AuthService {
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
         Member member = findByEmail(loginRequest.getEmail());
-        validPassword(member.getPassword(), loginRequest.getPassword());
         validQuit(member);
+        validPassword(member.getPassword(), loginRequest.getPassword());
         return issueToken(member);
     }
 
