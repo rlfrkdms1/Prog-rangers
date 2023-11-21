@@ -8,6 +8,7 @@ import com.prograngers.backend.dto.auth.response.naver.GetNaverTokenResponse;
 import com.prograngers.backend.dto.auth.response.naver.GetNaverUserInfoResponse;
 import com.prograngers.backend.dto.auth.result.AuthResult;
 import com.prograngers.backend.dto.auth.request.LoginRequest;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
@@ -43,11 +44,16 @@ public class AuthService {
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
-        //회원 검증
         Member member = findByEmail(loginRequest.getEmail());
         validPassword(member.getPassword(), loginRequest.getPassword());
-        //access token 발급
+        validQuit(member);
         return issueToken(member);
+    }
+
+    private void validQuit(Member member) {
+        if (!member.isUsable()) {
+            throw new QuitMemberException();
+        }
     }
 
     private Member findByEmail(String email) {
