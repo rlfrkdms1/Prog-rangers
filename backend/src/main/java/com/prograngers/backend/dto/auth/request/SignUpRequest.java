@@ -32,6 +32,7 @@ public class SignUpRequest {
                 .password(password)
                 .nickname(nickname)
                 .type(BASIC)
+                .usable(true)
                 .build();
     }
 }
