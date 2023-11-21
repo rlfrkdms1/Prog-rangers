@@ -88,7 +88,7 @@ public class AuthService {
     }
 
     private void validExistMember(SignUpRequest signUpRequest) {
-        if(memberRepository.findByEmail(signUpRequest.getEmail()).isPresent()){
+        if(memberRepository.existsByEmail(signUpRequest.getEmail())){
             throw new AlreadyExistMemberException();
         }
     }
