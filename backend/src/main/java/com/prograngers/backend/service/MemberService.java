@@ -104,6 +104,13 @@ public class MemberService {
     @Transactional
     public void delete(Long memberId) {
         Member member = findById(memberId);
+        validAlreadyDeleted(member);
         member.delete();
+    }
+
+    private void validAlreadyDeleted(Member member) {
+        if (!member.isUsable()) {
+            throw new AlreadyExistNicknameException();
+        }
     }
 }

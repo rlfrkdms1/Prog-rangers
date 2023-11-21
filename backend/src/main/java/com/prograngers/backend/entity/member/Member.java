@@ -131,6 +131,10 @@ public class Member {
         this.usable = false;
     }
 
+    public boolean isUsable() {
+        return usable;
+    }
+
     public void update(Member member) {
         updateNickName(member.getNickname());
         updateGitHub(member.getGithub());
