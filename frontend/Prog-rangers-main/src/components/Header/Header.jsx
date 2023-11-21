@@ -19,6 +19,7 @@ const flexAlign = css`
   display: flex;
   align-items: center;
 `;
+// 수정
 
 export const Header = () => {
   const isLogin = useIsLoginState();
