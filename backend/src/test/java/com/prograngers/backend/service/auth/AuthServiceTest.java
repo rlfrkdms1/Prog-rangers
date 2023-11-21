@@ -3,6 +3,7 @@ package com.prograngers.backend.service.auth;
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
@@ -113,6 +114,21 @@ class AuthServiceTest {
         */
         );
 
+    }
+
+    @Test
+    void 회원가입_진행_금지_닉네임_사용시_예외() {
+        String wrongNickname = "탈퇴한 사용자";
+        String email = "notExist@naver.com";
+        SignUpRequest wrongRequest = new SignUpRequest("password", email, wrongNickname);
+        given(memberRepository.existsByEmail(email)).willReturn(false);
+        given(memberRepository.existsByNickname(wrongNickname)).willReturn(false);
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.signUp(wrongRequest))
+                        .isExactlyInstanceOf(ProhibitionNicknameException.class),
+                () -> verify(memberRepository).existsByEmail(email),
+                () -> verify(memberRepository).existsByNickname(wrongNickname)
+        );
     }
 
     @Test
