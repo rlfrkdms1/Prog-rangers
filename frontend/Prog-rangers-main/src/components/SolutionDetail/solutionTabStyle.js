@@ -22,17 +22,18 @@ export const contentLayout = css`
 
 export const contentMock = css`
   width: 956px;
-  height: 300px;
+  height: 500px;
   margin: 0 20px;
   font-size: 16px;
   color: #FFFFFF;
   background-color: #2A3746;
 
-  overflow-y: auto; 
-  max-height: 300px;
+  overflow-y: auto;
+  max-height: 500px;
   
   &::-webkit-scrollbar {
     width: 15px;
+    height: 15px;
   }
   
   &::-webkit-scrollbar-thumb {
@@ -48,5 +49,66 @@ export const contentMock = css`
   background-color: transparent;
   border-radius: 40px;
   }
+`;
 
+export const LineContentMock = css`
+width: 740x;
+height: 370px;
+margin: 20px 10px ;
+font-size: 17px;
+color: #FFFFFF;
+background-color: #2A3746;
+
+overflow-y: auto;
+max-height: 370px;
+
+&::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+&::-webkit-scrollbar-thumb {
+  background-color: #47556F;
+  border-radius: 40px;
+}
+
+&::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+&::-webkit-scrollbar-corner{
+background-color: transparent;
+border-radius: 40px;
+}
+`;
+
+export const ProfileContentMock = css`
+  width: 807x;
+  height: 370px;
+  margin: 20px 10px ;
+  font-size: 16px;
+  color: #FFFFFF;
+  background-color: #2A3746;
+
+  overflow-y: auto;
+  max-height: 370px;
+  
+  &::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #47556F;
+    border-radius: 40px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  &::-webkit-scrollbar-corner{
+  background-color: transparent;
+  border-radius: 40px;
+  }
 `;

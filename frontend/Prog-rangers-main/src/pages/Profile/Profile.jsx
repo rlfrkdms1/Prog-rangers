@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { LeftBody, MainBody, RightBody } from './MainBody';
@@ -17,7 +18,8 @@ import { useParams } from 'react-router-dom';
 
 
 export const Profile = () => {
-  const {nickname} = useParams();
+
+  const { nickname } = useParams();
   const [data, setData] = useState([]);
 
   //팔로우 버튼

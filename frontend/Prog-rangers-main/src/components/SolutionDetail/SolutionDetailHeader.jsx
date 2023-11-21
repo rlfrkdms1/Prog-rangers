@@ -36,6 +36,8 @@ export const SolutionDetailHeader = () => {
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
+        alert("비공개 풀이를 열람할 수 없습니다.");
+        navigate(-1);
       });
   }, []);
 
@@ -97,10 +99,10 @@ export const SolutionDetailHeader = () => {
                 text-align: center;
                 line-height: 36px;
                 color: ${theme.colors.dark1};
-                ${solution.algorithmName === null ? 'display: none;' : ''}
+                ${solution.algorithm === null ? 'display: none;' : ''}
               `}
             >
-              {solution.algorithmName}
+              {solution.algorithm}
             </div>
           </div>
           <div css={colFlex}>

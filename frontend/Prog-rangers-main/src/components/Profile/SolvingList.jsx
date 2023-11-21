@@ -8,18 +8,26 @@ import {
     fontSizewhite16,
     fontSize18,
     fontSizedark20,
-    boxStyle, 
-    fontSize14} from '../../pages/Profile/ProfileStyle';
+    boxStyle
+  } from '../../pages/Profile/ProfileStyle';
+import { tags } from '../MySolution/tagsform';
 import { CodeWindow } from './CodeWindow';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ProfileContentMock } from '../SolutionDetail/solutionTabStyle';
 
 export const SolvingList = () => {
-    const {nickname} = useParams();
+
+    const { nickname } = useParams();
     const [data, setData] = useState({ list: [] });
+
+    const navigate = useNavigate();
+      const onClickSols = (solutionId) => {
+        navigate(`/solutions/${solutionId}`);
+      };
 
     useEffect(() => {
 
-        const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname.substring(1)}`;
+        const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
         axios.get(apiUrl)
           .then((response) => {
@@ -33,10 +41,10 @@ export const SolvingList = () => {
   return(
     <>
     {data.list.map((item, index) => (
-      <div key={item.problemName + index}
+      <div key={item.problemTitle + index}
        css={css`
         width: 835px;
-        height: 660px;        
+        height: auto;        
         margin-top: 50px;
         `}>
 
@@ -46,22 +54,38 @@ export const SolvingList = () => {
         `}>
         <div
         css={css`
-        ${fontSizedark20}`}> 
-        {item.problemName}
+        ${fontSizedark20}
+        cursor: pointer;`}
+        onClick={() => onClickSols(item.solution.id)}> 
+        {item.problemTitle}
+        </div>
+
+        <div
+        css={css`
+        ${fontSize16}
+        margin-top: 15px;
+        cursor: pointer;`}
+        onClick={() => onClickSols(item.solution.id)}> 
+        {item.solution.title}
         </div>
 
         <div css={css`
-        ${boxStyle}
-        ${fontSize16}
-        background-color: ${theme.colors.light3}`}>
-        {item.dataStructure}
+          ${boxStyle}
+          margin-top: 15px;
+        `}>
+          <div classname="tags" css={css`display: flex;`}>
+            {item.solution.language && (<div key={item.solution.language} css={css`${tags}`}>{item.solution.language}</div>)}
+            {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags}`}>{item.solution.algorithm}</div>)}
+            {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags}`}>{item.solution.dataStructure}</div>)}
+          </div>
         </div>
-
+        
         <button css={css`
         width: 30px;
         height: 30px;
         float: right;
-        padding-top: 13px;     
+        padding-top: 4px;
+        margin-top: 15px;
         `}>
         <img src={sharemark} alt="share_mark"/>
         </button>
@@ -69,11 +93,13 @@ export const SolvingList = () => {
         <div css={css`
         ${boxStyle}
         ${fontSizewhite16}
+        padding: 8px 20px;
+        border-radius: 20px;
         float: right;
-        margin-right: 30px;
-        background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"}
+        margin: 15px 30px;
+        background-color: ${item.solution.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"}
         `}>
-        {item.ojName} 
+        {item.solution.ojName} 
         </div>
 
         <div css={css`
@@ -85,40 +111,36 @@ export const SolvingList = () => {
 
         <div css={css`
         ${fontSize18} 
-        margin-top: 50px;
-        margin-left: 10px;`}> 
-        {item.description}
+        margin: 30px 10px;`}> 
+        {item.solution.description
+                // .join('\n')
+                .split('\n')
+                .map((paragraph, index) => (
+                    paragraph.trim() ? <p key={index}>{paragraph}</p> : <br key={index} />
+                ))}
         </div>
 
-        <div css={css`
-        width: 809px;
-        height: 370px;
-        margin-top: 50px;
-        color: #FFFFFF;
-        background-color: #2A3746;
+        <div css={css`${ProfileContentMock}
         `}>
           <div css={css`
-          padding: 20px;
+          padding: 20px 40px 20px;
+          font-size: 16px;
           font-weight: 700;`}>
-          {item.problemName + index}
+          {item.problemTitle + index}
           </div>
 
           <div css={css`
           width: 100%;
           border-bottom: 1px solid #1A2333;
           `}></div>
+
           <div css={css`
           margin-top: 3px;
           width: 100%;
           border-bottom: 1px solid #1A2333;
           `}></div>
-
-          <div css={css`
-          ${fontSize14}
-          padding: 20px;
-          `}>
-            <CodeWindow/>
-          </div>
+          
+          <CodeWindow/>
 
         </div>
 

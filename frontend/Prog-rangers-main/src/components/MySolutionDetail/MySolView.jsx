@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CodeWindow2 } from '../Profile';
 import {
+  LineContentMock,
   contentLayout
 } from '../SolutionDetail/solutionTabStyle';
 
@@ -15,7 +16,7 @@ export const MySolView = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
       axios
         .get(apiUrl, {
@@ -45,15 +46,9 @@ export const MySolView = () => {
         )}
       </div>
 
-      <div className="codeArea" 
-      css={css`        
-      width: 740px;
-      height: 370px;
-      color: #FFFFFF;
-      background-color: #2A3746;`}
-      >
+      <div className="codeArea" css={LineContentMock}>
       <div css={css`
-          padding: 15px 0 15px 80px;
+          padding: 15px 0 15px 60px;
           font-weight: 700;`}>
           {problem.title}
           </div>
