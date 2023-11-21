@@ -8,6 +8,7 @@ import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.support.Encrypt;
@@ -185,5 +186,16 @@ class AuthServiceTest {
             );
 
         }
+    }
+
+    @Test
+    void 탈퇴한_회원은_로그인_할_수_없다() {
+        Member member = 길가은.탈퇴_회원_생성();
+        LoginRequest request = 길가은.로그인_요청_생성();
+        given(memberRepository.findByEmail(member.getEmail())).willReturn(Optional.of(member));
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.login(request)).isExactlyInstanceOf(QuitMemberException.class),
+                () -> verify(memberRepository).findByEmail(member.getEmail())
+        );
     }
 }
