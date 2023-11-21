@@ -72,7 +72,7 @@ public class Member {
         return Objects.hash(id);
     }
 
-    @Bu증ilder
+    @Builder
     public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt, boolean usable) {
         validProhibitionNickname(nickname);
         this.id = id;
