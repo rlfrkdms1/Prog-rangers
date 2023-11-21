@@ -18,6 +18,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     Optional<Member> findByNickname(String nickname);
 
+    boolean existsByNickname(String nickname);
+
     Optional<Member> findBySocialId(Long socialId);
 
     @Query("select m from Member m join Follow f on f.followingId = m.id where f.followerId = :memberId order by f.id desc")
