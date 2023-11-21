@@ -7,7 +7,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import static com.prograngers.backend.entity.member.MemberType.*;
+
+import static com.prograngers.backend.entity.member.MemberType.BASIC;
 
 @Getter
 @AllArgsConstructor
