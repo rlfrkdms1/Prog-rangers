@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.member;
 
+import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
 import com.prograngers.backend.support.Encrypt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,15 +10,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -26,6 +26,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
+
+    private static final List<String> prohibitionNickname = List.of("탈퇴한 사용자");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,8 +72,9 @@ public class Member {
         return Objects.hash(id);
     }
 
-    @Builder
+    @Bu증ilder
     public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt, boolean usable) {
+        validProhibitionNickname(nickname);
         this.id = id;
         this.socialId = socialId;
         this.type = type;
@@ -85,7 +88,14 @@ public class Member {
         this.usable = usable;
     }
 
+    private void validProhibitionNickname(String nickname) {
+        if (prohibitionNickname.contains(nickname)) {
+            throw new ProhibitionNicknameException();
+        }
+    }
+
     private void updateNickName(String nickname) {
+        validProhibitionNickname(nickname);
         if (nickname != null) {
             this.nickname = nickname;
         }
