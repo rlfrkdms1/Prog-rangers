@@ -86,7 +86,6 @@ public class Member {
         this.password = password;
         this.photo = photo;
         this.passwordModifiedAt = passwordModifiedAt;
-        this.usable = true;
     }
 
     private void updateNickName(String nickname) {
