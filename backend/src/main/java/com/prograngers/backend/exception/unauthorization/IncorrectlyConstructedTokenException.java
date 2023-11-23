@@ -5,6 +5,6 @@ import static com.prograngers.backend.exception.ErrorCode.INCORRECTLY_CONSTRUCTE
 public class IncorrectlyConstructedTokenException extends UnAuthorizationException {
 
     public IncorrectlyConstructedTokenException() {
-        super(INCORRECTLY_CONSTRUCTED_TOKEN, "잘못된 구조의 토큰입니다.");
+        super(INCORRECTLY_CONSTRUCTED_TOKEN);
     }
 }

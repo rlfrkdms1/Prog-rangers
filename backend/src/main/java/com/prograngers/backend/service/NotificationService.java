@@ -8,7 +8,7 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
-import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageNumberException;
 import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;

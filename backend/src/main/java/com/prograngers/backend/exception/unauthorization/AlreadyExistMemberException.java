@@ -1,9 +1,9 @@
 package com.prograngers.backend.exception.unauthorization;
 
-import com.prograngers.backend.exception.ErrorCode;
+import static com.prograngers.backend.exception.ErrorCode.ALREADY_EXIST_MEMBER;
 
-public class AlreadyExistMemberException extends UnAuthorizationException{
+public class AlreadyExistMemberException extends UnAuthorizationException {
     public AlreadyExistMemberException() {
-        super(ErrorCode.ALREADY_EXIST_MEMBER, "이미 존재하는 회원입니다.");
+        super(ALREADY_EXIST_MEMBER);
     }
 }

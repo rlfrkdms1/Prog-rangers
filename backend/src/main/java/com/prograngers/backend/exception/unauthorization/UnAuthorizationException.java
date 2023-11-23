@@ -4,7 +4,7 @@ import com.prograngers.backend.exception.CustomException;
 import com.prograngers.backend.exception.ErrorCode;
 
 public class UnAuthorizationException extends CustomException {
-    public UnAuthorizationException(ErrorCode errorCode, String message) {
-        super(errorCode,message);
+    public UnAuthorizationException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

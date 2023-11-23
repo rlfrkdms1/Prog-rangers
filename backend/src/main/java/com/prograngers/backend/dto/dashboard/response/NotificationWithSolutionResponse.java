@@ -2,12 +2,10 @@ package com.prograngers.backend.dto.dashboard.response;
 
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.InvalidNotificationTypeException;
-import lombok.AccessLevel;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidNotificationTypeException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import static com.prograngers.backend.entity.NotificationType.*;
 

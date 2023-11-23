@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class EnumTypeException extends CustomException {
 
-    public EnumTypeException(ErrorCode errorCode, String message) {
-        super(errorCode, message);
+    public EnumTypeException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

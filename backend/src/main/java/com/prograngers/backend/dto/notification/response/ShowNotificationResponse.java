@@ -1,7 +1,7 @@
 package com.prograngers.backend.dto.notification.response;
 
 import com.prograngers.backend.entity.Notification;
-import com.prograngers.backend.exception.badrequest.InvalidNotificationTypeException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidNotificationTypeException;
 import lombok.Builder;
 import lombok.Getter;
 

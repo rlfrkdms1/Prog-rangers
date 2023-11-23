@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class NotFoundException extends CustomException {
 
-    public NotFoundException(ErrorCode errorCode, String message) {
-        super(errorCode, message);
+    public NotFoundException(ErrorCode errorCode) {
+        super(errorCode);
     }
 
 }

@@ -1,16 +1,14 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.dto.error.ErrorResponse;
-import com.prograngers.backend.exception.ErrorCode;
-import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
-import com.prograngers.backend.exception.badrequest.InvalidValueException;
+import com.prograngers.backend.exception.badrequest.alreadyexist.AlreadyExistsException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidValueException;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
