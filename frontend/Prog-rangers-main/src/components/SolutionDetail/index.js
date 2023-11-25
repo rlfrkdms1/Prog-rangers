@@ -11,4 +11,5 @@ export { Indicators } from './Indicators';
 
 export { Comments } from './Comments';
 export { CommentForm } from './CommentForm';
+export { CommentReplyForm } from './CommentReplyForm';
 export { CommentList } from './CommentList';

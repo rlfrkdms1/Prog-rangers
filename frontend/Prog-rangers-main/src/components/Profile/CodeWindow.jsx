@@ -31,10 +31,10 @@ export const CodeWindow = () => {
 
       return(
         <>
-          <div key={i} css={css`overflow-y: auto; max-height: 270px; margin-bottom: 20px;`}>
-            <pre css={css`font-size: 20px; white-space: pre-wrap;`} >
+          <div key={item.description} css={css`padding-left: 40px; margin: 6px; `}>
+            <pre css={css`font-size: 18px;`} >
             <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
-              {item.code.map((line, lineIndex) => (
+              {item.solution.code.map((line, lineIndex) => (
               <React.Fragment key={lineIndex}>
                 {lineIndex} {'  '}
                 <span dangerouslySetInnerHTML={{ __html: hljs.highlightAuto(line).value }} />

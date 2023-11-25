@@ -141,7 +141,7 @@ export const EditMySolution = ({postURL}) => {
      }
      const body={
       problemTitle: '몰라요',
-      solutionTitle: inputs.solution,
+      title: inputs.solution,
       problemLink: inputs.link,
       level: star.toString(),
       algorithm: algo.value,
@@ -151,13 +151,17 @@ export const EditMySolution = ({postURL}) => {
       code: inputs.code,
       isPublic: isPublic.toString(),
      };     
+
+     console.log('inputs.title:', inputs.title);
+     console.log('inputs.link:', inputs.link);
+
      const response =  await axios
-      .post(`${postURL}`, body,{
+      .patch(`http://13.124.131.171:8080/api/v1/solutions/${id}`, body,{
         headers: { Authorization: `Bearer ${token}`}
       });
     if(response.status === 201){
       alert('질문이 등록되었습니다.');
-      window.location.href = `http://localhost:3000/mypage`;
+      window.location.href = `http://localhost:3000/solutions/${id}`;
     }
     }
     catch(error){
@@ -196,10 +200,10 @@ export const EditMySolution = ({postURL}) => {
             { isPublic ? <img src={Public}/> : <img src={Private}/>}
           </div>
         </div>
-        <input placeholder="풀이 제목을 입력해주세요" css={css`${StyledInput}`} value={inputs.solution} name="solution" onChange={handleInput}/>
+        <input placeholder="풀이 제목을 입력해주세요" css={css`${StyledInput}`} value={inputs.solution} name="solution" onChange={handleInput} readOnly/>
 
         <div css={css`${TitleBox} margin-top: 50px;`}>문제링크</div>
-        <input placeholder="문제 링크를 입력해주세요" css={css`${StyledInput}`} value={inputs.link} name="link" onChange={handleInput}/>
+        <input placeholder="문제 링크를 입력해주세요" css={css`${StyledInput}`} value={inputs.link} name="link" onChange={handleInput} readOnly/>
 
         <div placeholder="middle" css={css`display: flex; flex-direction: row; margin-top: 20px; align-items: center;`}>
           <div css={css`${TitleBox}`}>난이도</div>
@@ -231,12 +235,12 @@ export const EditMySolution = ({postURL}) => {
 
         <div css={css`${TitleBox} margin-top: 50px;`} >풀이 설명</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} value={inputs.description} name="description" onChange={handleInput}/>
+          <textarea css={css`${DetailInput}`} value={inputs.description} name="description" onChange={handleInput} readOnly/>
         </div>
 
         <div css={css`${TitleBox} margin-top: 50px;`}>코드</div>
         <div css={css`${DetailBox} height: 250px; width: 100%;`}>
-          <textarea css={css`${DetailInput}`} value={inputs.code} name="code" onChange={handleInput}/>
+          <textarea css={css`${DetailInput}`} value={inputs.code} name="code" onChange={handleInput} readOnly/>
         </div>
         <div css={css`  margin: 100px 30px 80px 40px; justify-content: flex-end; display: flex; flex-direction: row; height: 50px; 
 `}>
