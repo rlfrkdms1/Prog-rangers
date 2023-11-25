@@ -10,7 +10,7 @@ import {
     fontSize18,
     fontSizedark20,
     boxStyle, 
-    fontSize14} from '../../pages/Profile/ProfileStyle';
+    fontSize14} from './LikeStyle.js';
 import hljs from "highlight.js";
 
 export const LikeList = () => {    
