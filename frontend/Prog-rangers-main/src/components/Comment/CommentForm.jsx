@@ -38,14 +38,14 @@ return(
     <div css={css`max-width:800px; display: flex; align-items: center; justify-content: space-between;`}>           
         <div css={css`display: flex; align-items: center;`}>
         <img
-            src= {item.solution.authorImageUrl || ProfileImg}                 
+            src= {item.solution.author.imageUrl || ProfileImg}                 
             alt='profileImg'
             width='50px'
             css={css`
             border-radius: 50%;
             margin : 20px 10px 10px 20px;
             `}></img>
-        <div css={css`font-size:20px`}>{item.solution.authorNickname}</div>
+        <div css={css`font-size:20px`}>{item.solution.author.nickname}</div>
         </div>
         <div css={css`
           ${ojNameTag}
@@ -75,14 +75,14 @@ return(
           
           <div css={css`display: flex; align-items: center; padding: 20px;`}>
           <img
-              src= {item.comment.authorImageUrl || ProfileImg}                 
+              src= {item.comment.author.imageUrl || ProfileImg}                 
               alt='profileImg'
               width='80px'
               css={css`
               border-radius: 50%;
               `}></img>
               <div css={css`display:flex; flex-direction: column; margin-left:20px;`}>
-              <div css={css`font-size:14px; margin-bottom:10px;`}>{item.comment.authorNickname}</div>
+              <div css={css`font-size:14px; margin-bottom:10px;`}>{item.comment.author.nickname}</div>
               <div css={css`font-size:20px`}>{item.comment.content}</div>
               </div>
           </div>

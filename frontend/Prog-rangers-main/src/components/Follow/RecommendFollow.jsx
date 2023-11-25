@@ -121,7 +121,7 @@ export const RecommendFollow = () => {
 
   const navigate = useNavigate();
     const onClickName = (nickname) => {
-      navigate(`/profile/:${nickname}`); 
+      navigate(`/profile/${nickname}`); 
     };  
 
   return (
