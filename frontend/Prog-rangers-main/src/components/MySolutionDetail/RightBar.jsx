@@ -27,16 +27,16 @@ export const RightBar = () => {
     const [ MySolList, setMySolList ] = useState([]);
     const [ MyScrapeList, setScrapeList ] = useState([]);
     
-    const SolData = MySolList.sort((a, b) => b.solutionId - a.solutionId);
-    const top3Sol = SolData.slice(0, 5);
+    // const SolData = MySolList.sort((a, b) => b.id - a.id);
+    // const top3Sol = SolData.slice(0, 5);
     
-    const ScrapeData = MyScrapeList.sort((a, b) => b.solutionId - a.solutionId);
-    const top3Scrape = ScrapeData.slice(0, 5);
+    // const ScrapeData = MyScrapeList.sort((a, b) => b.id - a.id);
+    // const top3Scrape = ScrapeData.slice(0, 5);
 
     useEffect(() => {
 
       const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
       axios
         .get(apiUrl, {
@@ -71,7 +71,7 @@ export const RightBar = () => {
              풀이목록 
             </div>
             
-            {top3Sol.map((item) => (
+            {/* {top3Sol.map((item) => (
                 // 데이터가 있는 경우에만 렌더링
                 item ? (
                 <div css={css` 
@@ -92,7 +92,7 @@ export const RightBar = () => {
                 {item.title}
             </div>
             ) : null
-            ))}
+            ))} */}
 
             <button 
             css={css`
@@ -114,7 +114,7 @@ export const RightBar = () => {
                 스크랩한 풀이
             </div>
 
-            {top3Scrape.map((item) => (
+            {/* {top3Scrape.map((item) => (
                 // 데이터가 있는 경우에만 렌더링
                 item ? (
                   <div css={css` 
@@ -135,7 +135,7 @@ export const RightBar = () => {
                 {item.title}
             </div>
             ) : null
-            ))}
+            ))} */}
         </div>        
       </div>      
     </div>

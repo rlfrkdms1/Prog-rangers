@@ -27,7 +27,7 @@ export const MyComments = () => {
 
     useEffect(() => {
       const token = localStorage.getItem('token');
-      const apiUrl = `http://13.124.131.171:8080/api/v1/mypage/solutions/${solutionId}`;
+      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
 
     axios
     .get(apiUrl, {
@@ -70,8 +70,13 @@ export const MyComments = () => {
         </div>
         <div className="comments">
 
-        {comment.map((commentItem) => (
-          <div className="comment" css={rowFlex} key={commentItem.id}>
+        {comment
+        .filter((commentItem) => commentItem.content !== '삭제된 댓글입니다')
+        .map((commentItem) => (
+          <div className="comment" key={commentItem.id}>
+            <div css={rowFlex}>
+            
+            {/* 댓글 작성자 프로필 */}
             <div className="profile">
               <img
                 src={ProfileImg}
@@ -84,84 +89,104 @@ export const MyComments = () => {
                 `}
               />
             </div>
-            <div
+            {/* 댓글 텍스트 */}
+            <div>
+              <div
               className="text"
               css={css`
                 margin-left: 20px;
+                gap: 10px;
+                display: flex;
               `}
-            >
-              <div
+              >    
+                <div
                 className="nickname"
                 css={css`
-                  font-size: 14px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                  cursor: pointer;
-                `}
-                onClick={() => onClickName(commentItem.nickname)} 
+                font-size: 14px;
+                color: ${theme.colors.light1};
+                margin-bottom: 5px;
+                cursor: pointer;
+              `}
+              onClick={() => onClickName(commentItem.nickname)} 
               >
                 {commentItem.nickname}
-              </div>
-              <div className="commnetText">
-                {commentItem.content}
-              </div>
-            </div>
-          </div>
-        ))}
+                </div>
         
-        {comment.replies && Array.isArray(comment.replies) && comment.replies.map((replyItem) => (
-          <div className="recomment" css={rowFlexRecomment}>
-            <div className="profile">
-              <img
-                src={ProfileImg}
-                alt="profile image"
-                css={css`
-                  width: 40px;
-                  height: 40px;
-                  border: 1px solid ${theme.colors.light1};
-                  border-radius: 100%;
-                `}
-              />
-            </div>
-            <div
-              className="text"
-              css={css`
-                margin-left: 20px;
-              `}
-            >
-              <div
-                className="nickname"
-                css={css`
-                  font-size: 12px;
-                  color: ${theme.colors.light1};
-                  margin-bottom: 5px;
-                `}
-                onClick={() => onClickName(replyItem.nickname)} 
-              >
-                {replyItem.nickname}
+                <div className="commnetText">   
+                {commentItem.content}
+                </div>
               </div>
-              <div
-                className="commnetText"
-                css={css`
-                  font-size: 14px;
-                `}
-              >
-                <span
-                  className="tag"
+            </div>
+
+            </div>
+        
+        
+        {/* 답글 렌더링 */}
+        {commentItem.replies && Array.isArray(commentItem.replies) && (
+            <div className="repliesSection">
+              {commentItem.replies
+              .filter((reply) => reply && reply.content !== '삭제된 댓글입니다')
+              .map((reply) => (
+                <div key={reply && reply.id} className="recomment" css={rowFlexRecomment}>
+                 
+                <div className="profile">
+                  <img
+                  src={reply.photo || ProfileImg}
+                  alt="profile image"
                   css={css`
-                    font-size: 12px;
-                    color: ${theme.colors.main};
-                    margin-right: 10px;
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid ${theme.colors.light1};
+                    border-radius: 100%;
+                    `}
+                  />
+                </div>
+
+                <div
+                  className="text"
+                  css={css`
+                    margin-left: 20px;
                   `}
                 >
-                  @{comment.nickname}
-                </span>
-                {replyItem.content}
-              </div>
+                  <div
+                    className="nickname"
+                    css={css`
+                      font-size: 12px;
+                      color: ${theme.colors.light1};
+                      margin-bottom: 5px;
+                    `}
+                    onClick={() => onClickName(reply.nickname)}
+                  >
+                    {reply.nickname}
+                  </div>
+              
+                  <div
+                  className="commnetText"
+                  css={css`
+                    font-size: 14px;
+                  `}
+                >
+                  <span
+                    className="tag"
+                    css={css`
+                      font-size: 12px;
+                      color: ${theme.colors.main};
+                      margin-right: 10px;
+                    `}
+                  >
+                    @{commentItem.nickname}
+                  </span>
+                  {reply.content}
+                  </div>
+                  </div>
+                
+                </div>
+              ))}
             </div>
-          </div>
+            )}
+         </div>
         ))}
-        </div>
+    </div>
       </div>
     </div>
   );
