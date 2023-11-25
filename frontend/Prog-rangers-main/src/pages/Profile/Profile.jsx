@@ -14,8 +14,6 @@ import {
   fontSize20,
   fontSize24
 } from './ProfileStyle';
-import { useParams } from 'react-router-dom';
-
 
 export const Profile = () => {
 
