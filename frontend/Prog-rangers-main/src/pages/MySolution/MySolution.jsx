@@ -12,7 +12,6 @@ import{
   filterStyle
 } from './MySolutionStyle'
 
-
 export const MySolution = () => {
 
   const [ page, setPage ] = useState(1);
@@ -22,14 +21,14 @@ export const MySolution = () => {
   const Solutionpages = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://13.124.131.171:8080/api/v1/mypage/solutions?page=${page}`, 
+      const response = await axios.get(`http://13.124.131.171:8080/api/v1/solutions?page=${page}`, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setTotalPages(response.data.totalPage);
-      setSolutions(response.data.solutions);
+      setSolutions(response.data.contents);
     } catch (error) {
       console.error('API 요청 오류:', error);
     }
@@ -100,7 +99,7 @@ export const MySolution = () => {
         </div>
 
         <div css={css`
-          width: 800px
+          width: 800px;
           height: 50px; 
           display: flex; 
           margin-top: 50px;

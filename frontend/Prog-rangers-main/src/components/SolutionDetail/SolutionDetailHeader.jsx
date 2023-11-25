@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
@@ -7,21 +11,33 @@ import {
   HeaderLayout,
   colFlex,
   dot,
-  rowFlex,
+  rowFlex
 } from './headerStyle';
 
 export const SolutionDetailHeader = () => {
-  // const [data, setData] = useState(null);
-  const [problem, setProblem] = useState(null);
-  const [solution, setSolution] = useState(null);
+
+  const navigate = useNavigate();
+    const onClickName = (nickname) => {
+      navigate(`/profile/${nickname}`); 
+    };
+  
+  const { solutionId } = useParams();
+  const [problem, setProblem] = useState({});
+  const [solution, setSolution] = useState({});
 
   useEffect(() => {
-    fetch('http://13.124.131.171:8080/api/v1/solutions/1')
-      .then((res) => res.json())
-      .then((res) => {
-        setProblem(res.problem || null);
-        setSolution(res.solution || null);
-        // setData(res.data || null);
+    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setProblem(response.data.problem);
+        setSolution(response.data.solution);
+      })
+      .catch((error) => {
+        console.error('API 요청 오류:', error);
+        alert("비공개 풀이를 열람할 수 없습니다.");
+        navigate(-1);
       });
   }, []);
 
@@ -32,8 +48,9 @@ export const SolutionDetailHeader = () => {
           <div className="headerLeft">
             <div
               className="problemTitleArea rowFlex"
-              css={rowFlex}
-            >
+              css={css`${rowFlex}
+                  gap : 10px;
+                  `}>
               <div
                 className="problemTitle"
                 css={css`
@@ -41,7 +58,6 @@ export const SolutionDetailHeader = () => {
                   font-weight: bold;
                   color: ${theme.colors.dark1};
 
-                  padding-right: 10px;
                 `}
               >
                 {problem.title}
@@ -53,7 +69,7 @@ export const SolutionDetailHeader = () => {
             <div
               className="solutionTitle"
               css={css`
-                padding: 15px 0 15px 5px;
+                padding: 15px 0 15px 0;
               `}
             >
               <span
@@ -68,6 +84,7 @@ export const SolutionDetailHeader = () => {
                 css={css`
                   color: ${theme.colors.light1};
                 `}
+                onClick={() => onClickName(solution.nickname)} 
               >
                 {solution.nickname}
               </span>
@@ -82,11 +99,13 @@ export const SolutionDetailHeader = () => {
                 text-align: center;
                 line-height: 36px;
                 color: ${theme.colors.dark1};
+                ${solution.algorithm === null ? 'display: none;' : ''}
               `}
             >
-              {solution.algorithmName}
+              {solution.algorithm}
             </div>
           </div>
+          <div css={colFlex}>
           <div
             className="headerRight rowFlex"
             css={rowFlex}
@@ -94,24 +113,24 @@ export const SolutionDetailHeader = () => {
             <div
               className="siteName"
               css={css`
-                background-color: ${theme.colors
-                  .programmers};
+                background-color: ${problem.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
                 box-sizing: border-box;
                 padding: 8px 20px;
                 border-radius: 20px;
-                color: ${theme.colors.dark1};
+                color: ${theme.colors.white};
               `}
             >
               {problem.ojName}
             </div>
-            <div className="dropMenu" css={colFlex}>
-              <span css={dot}></span>
-              <span css={dot}></span>
-              <span css={dot}></span>
-            </div>
+              <div className="dropMenu" css={colFlex}>
+                <span css={dot}></span>
+                <span css={dot}></span>
+                <span css={dot}></span>
+              </div>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    )}
+  </>
   );
 };

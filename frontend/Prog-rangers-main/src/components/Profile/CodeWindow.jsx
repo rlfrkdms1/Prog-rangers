@@ -1,15 +1,20 @@
+// 프로필 안 코드창
+
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { css } from "@emotion/react";
 import axios from "axios";
 import hljs from "highlight.js";
 import './github-dark-dimmed.css';
 
 export const CodeWindow = () => {
+
+    const { nickname } = useParams();
     const [codeData, setCodeData] = useState({ list: [] });
 
     useEffect(() => {
 
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/members/test';
+        const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
         axios.get(apiUrl)
           .then((response) => {
@@ -26,10 +31,10 @@ export const CodeWindow = () => {
 
       return(
         <>
-          <div key={i} css={css`overflow-y: auto; max-height: 270px; margin-bottom: 20px;`}>
-            <pre css={css`font-size: 20px; white-space: pre-wrap;`} >
+          <div key={item.description} css={css`padding-left: 40px; margin: 6px; `}>
+            <pre css={css`font-size: 18px;`} >
             <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
-              {item.code.map((line, lineIndex) => (
+              {item.solution.code.map((line, lineIndex) => (
               <React.Fragment key={lineIndex}>
                 {lineIndex} {'  '}
                 <span dangerouslySetInnerHTML={{ __html: hljs.highlightAuto(line).value }} />

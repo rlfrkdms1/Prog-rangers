@@ -46,8 +46,8 @@ export const SolutionTab = () => {
                 width: 125px;
                 height: 40px;
 
-                margin-right: 5px;
-                padding-left: 30px;
+                margin-right: 1px;
+                padding-left: 25px;
 
                 text-align: left;
                 line-height: 40px;
