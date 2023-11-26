@@ -13,17 +13,22 @@ import static com.prograngers.backend.entity.member.MemberType.GOOGLE;
 @AllArgsConstructor
 public enum MemberFixture {
 
-    장지담("jidam99", NAVER),
-    길가은("rlfrkdms1", BASIC),
-    이수빈("bingbing", GOOGLE);
+    장지담("jidam99", NAVER, "jidam@dgu.ac.kr", "testPassword"),
+    길가은("rlfrkdms1", BASIC, "rlfrkdms@dgu.ac.kr", "testPassword"),
+    이수빈("bingbing", GOOGLE, "bingbing@dgu.ac.kr", "testPassord");
 
     private final String nickname;
     private final MemberType type;
+    private final String email;
+    private final String password;
 
     public MemberBuilder 기본_정보_빌더_생성(){
         return Member.builder()
+                .usable(true)
                 .nickname(nickname)
-                .type(type);
+                .type(type)
+                .email(email)
+                .password(password);
     }
     public Member 기본_정보_생성(){
         return 기본_정보_빌더_생성().build();
@@ -59,4 +64,16 @@ public enum MemberFixture {
     public LoginRequest 로그인_요청_생성(String email, String password) {
         return new LoginRequest(email, password);
     }
+
+    public LoginRequest 로그인_요청_생성() {
+        return new LoginRequest(email, password);
+    }
+
+    public Member 탈퇴_회원_생성() {
+        return 기본_정보_빌더_생성()
+                .usable(false)
+                .build();
+    }
+
+
 }
