@@ -27,7 +27,7 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
-    private static final List<String> prohibitionNickname = List.of("탈퇴한 사용자");
+    private static final List<String> PROHIBITED_NICKNAMES = List.of("탈퇴한 사용자");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,7 +89,7 @@ public class Member {
     }
 
     private void validProhibitionNickname(String nickname) {
-        if (prohibitionNickname.contains(nickname)) {
+        if (PROHIBITED_NICKNAMES.contains(nickname)) {
             throw new ProhibitionNicknameException();
         }
     }
