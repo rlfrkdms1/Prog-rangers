@@ -9,6 +9,7 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.AlreadyDeletedMemberException;
 import com.prograngers.backend.exception.badrequest.BlankNicknameException;
 import com.prograngers.backend.exception.badrequest.NotExistOldPasswordException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -110,7 +111,7 @@ public class MemberService {
 
     private void validAlreadyDeleted(Member member) {
         if (!member.isUsable()) {
-            throw new AlreadyExistNicknameException();
+            throw new AlreadyDeletedMemberException();
         }
     }
 }
