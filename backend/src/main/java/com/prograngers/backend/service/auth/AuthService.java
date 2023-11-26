@@ -80,7 +80,7 @@ public class AuthService {
     @Transactional
     public AuthResult signUp(SignUpRequest signUpRequest) {
         validAlreadyExistEmail(signUpRequest.getEmail());
-        validNicknameDuplication(signUpRequest.getNickname());
+        validAlreadyExistNickname(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
         member.encodePassword(member.getPassword());
         memberRepository.save(member);
@@ -142,17 +142,17 @@ public class AuthService {
         String nickname = "";
         do {
             nickname = nicknameGenerator.getRandomNickname().getNickname();
-        } while (isDuplicateNickname(nickname));
+        } while (alreadyExistNickname(nickname));
         member.updateRandomNickname(nickname);
         return memberRepository.save(member);
     }
 
-    private boolean isDuplicateNickname(String nickname) {
+    private boolean alreadyExistNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
 
-    public void validNicknameDuplication(String nickname) {
-        if (isDuplicateNickname(nickname)) {
+    public void validAlreadyExistNickname(String nickname) {
+        if (alreadyExistNickname(nickname)) {
             throw new AlreadyExistNicknameException();
         }
     }

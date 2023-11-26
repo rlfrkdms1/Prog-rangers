@@ -45,7 +45,7 @@ class AuthServiceTest {
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
-                () -> assertThatThrownBy(() -> authService.validNicknameDuplication(nickname)).isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> assertThatThrownBy(() -> authService.validAlreadyExistNickname(nickname)).isExactlyInstanceOf(AlreadyExistNicknameException.class),
                 () -> verify(memberRepository).findByNickname(nickname)
         );
     }
@@ -54,7 +54,7 @@ class AuthServiceTest {
     void 닉네임_중복검사를_할_수_있다() {
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.empty());
-        authService.validNicknameDuplication(nickname);
+        authService.validAlreadyExistNickname(nickname);
         verify(memberRepository).findByNickname(nickname);
     }
 
