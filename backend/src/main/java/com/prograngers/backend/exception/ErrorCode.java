@@ -1,5 +1,8 @@
 package com.prograngers.backend.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorCode {
     INVALID_REQUEST_BODY("검증을 통과하지 못한 요청입니다."),
     SOLUTION_NOT_FOUND("풀이를 찾을 수 없습니다."),
@@ -49,14 +52,9 @@ public enum ErrorCode {
     DIFFERENT_CODE_LINE_NUMBER("존재하지 않는 코드 줄번호 입니다."),
     DELETED_MEMBER("탈퇴한 사용자입니다.");
 
-    private String errorMessage;
+    private final String errorMessage;
 
-    private ErrorCode(String errorMessage) {
+    ErrorCode(String errorMessage) {
         this.errorMessage = errorMessage;
     }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
 }
