@@ -24,7 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
-    private static final String 탈퇴한_사용자 = "탈퇴한 사용자";
+    private static final String QUIT_MEMBER = "탈퇴한 사용자";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -145,7 +145,7 @@ public class Member {
 
     public String getNickname() {
         if (!usable) {
-            return 탈퇴한_사용자;
+            return QUIT_MEMBER;
         }
         return nickname;
     }
