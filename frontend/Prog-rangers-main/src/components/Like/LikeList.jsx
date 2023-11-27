@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import { theme } from '../../components/Header/theme';
 import sharemark from '../../assets/icons/share-mark.svg'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import {
     fontSize16,
     fontSizewhite16,
@@ -12,12 +13,18 @@ import {
     fontSize14} from '../../pages/Profile/ProfileStyle';
 import hljs from "highlight.js";
 
-export const LikeList = () => {
-    const [data, setData] = useState({ solutions: [] });
+export const LikeList = () => {    
+
+    const [data, setData] = useState({ contents: [] });
+
+    const navigate = useNavigate();
+    const onClickName = (nickname) => {
+      navigate(`/profile/:${nickname}`); 
+    };  
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const apiUrl = 'http://13.124.131.171:8080/api/v1/mypage/likes';
+        const apiUrl = 'http://13.124.131.171:8080/api/v1/likes';
 
         axios.get(apiUrl, {
             method: "GET",
@@ -31,13 +38,13 @@ export const LikeList = () => {
           });
       }, []);
 
-      if (data.solutions && data.solutions.length > 0) {
-        for (let i = 0; i < data.solutions.length; i++) {
-          const item = data.solutions[i];
+      if (data.contents && data.contents.length > 0) {
+        for (let i = 0; i < data.contents.length; i++) {
+          const item = data.contents[i];    
 
   return(
     <>
-    {data.solutions.map((item, index) => (
+    {data.contents.map((item, index) => (
       <div key={index}
        css={css`
         width: 835px;     
@@ -55,8 +62,8 @@ export const LikeList = () => {
         </div>
 
         <div css={css`display:flex; gap:20px; margin-top: 10px;`}>
-        <div css={css`${fontSize16}`}>풀이명</div>
-        <div css={css`${fontSize16} color:${theme.colors.light1}`}>{item.solution.author}</div>
+        <div css={css`${fontSize16}`}>{item.solution.title}</div>
+        <div css={css`${fontSize16} color:${theme.colors.light1}; cursor: pointer;`} onClick={()=>onClickName(item.solution.author)} >{item.solution.author}</div>
         </div>
 
         <div css={css`
@@ -93,11 +100,18 @@ export const LikeList = () => {
         </div>
 
         <div css={css`
-        ${fontSize18} 
-        margin-top: 50px;
-        margin-left: 10px;`}> 
-        {item.solution.description}
+            ${fontSize18};
+            margin-top: 50px;
+            margin-left: 10px;
+        `}>
+            {item.solution.description
+                .join('\n')
+                .split('\n')
+                .map((paragraph, index) => (
+                    paragraph.trim() ? <p key={index}>{paragraph}</p> : <br key={index} />
+                ))}
         </div>
+
 
         <div css={css`
         width: 809px;

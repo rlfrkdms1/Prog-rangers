@@ -41,7 +41,8 @@ export const ViewSolution = () => {
 
       <div className="codeArea" css={contentMock}>
       <div css={css`
-          padding: 15px 0 15px 80px;
+          padding: 15px 0 15px 60px;
+          font-size: 18px;
           font-weight: 700;`}>
           {problem.title}
           </div>

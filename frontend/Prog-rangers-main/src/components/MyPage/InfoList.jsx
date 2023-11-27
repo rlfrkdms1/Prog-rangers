@@ -23,7 +23,7 @@ export const InfoList = ({ data, loading, isLogin, queryClient }) => {
   useEffect(() => {
     if (loading && isLogin) {
       const eventSource = new EventSource(
-        'http://13.124.131.171:8080/api/v1/notifications/subscribe',
+        'http://13.124.131.171:8080/api/v1/notifications',
         {
           headers: {
             'Accept': 'text/event-stream'

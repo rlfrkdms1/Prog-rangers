@@ -14,26 +14,46 @@ import { targetAtom, targetScope, nameAtom, nameScope, valueAtom, valueScope } f
 import { useEffect } from "react";
 
 export const FilterBar = ({title, options, width, secondWidth}) => {
-  const [ selectedOption, setSelectedOption ] = useState(options[0]); 
-  const [ isOpen, setIsOpen ] = useState(false);
+  const [ selectedOption, setSelectedOption ] = React.useState(options[0]); 
+  const [ isOpen, setIsOpen ] = React.useState(false);
   const [ isClicked, setIsClicked ] = useState(false);
   const [ value, setValue ] = useAtom( valueAtom, valueScope );
   const [ target, setTarget ] = useAtom( targetAtom, targetScope );
   const [ name, setName ] = useAtom( nameAtom, nameScope );
 
+  const filterBarId = `filterbar${title}`;
+
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
+
   const handleSelect = (e) => {
     setSelectedOption(e);
     setIsClicked(true);
     setTarget(e.name);
     setValue(e.value);
     setName(title);
+    setIsOpen(false); 
   };
 
+  const closeFilterBarOnOutsideClick = (e) => {
+    if (isOpen) {
+      const filterBar = document.getElementById(filterBarId);
+      if (filterBar && !filterBar.contains(e.target)) {
+        setIsOpen(false);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('click', closeFilterBarOnOutsideClick);
+    return () => {
+      window.removeEventListener('click', closeFilterBarOnOutsideClick);
+    };
+  }, [isOpen]);
+
   return(
-    <div css={css`${Fragment}`}>
+    <div id={filterBarId} css={css`${Fragment}`}>
       <div 
         css={css`
         ${SelectBox};
@@ -62,7 +82,8 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
           <img css={css`width: 18px; height: 100%; &:hover{cursor: pointer;}`} src={ToggleDown} alt="toggle_down" onClick={handleToggle}/>
         )
         }
-      </div>  
+      </div>
+      {isOpen && ( 
       <div css={css`${Wrapper({isOpen})} width: ${width || '230px'};`}>
           {options.map((item, index) => (
               <div
@@ -76,7 +97,8 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
                 {item.name}
               </div> 
             ))}
-      </div>  
+      </div>
+      )}   
     </div>
   );
 };
