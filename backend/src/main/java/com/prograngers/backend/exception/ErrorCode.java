@@ -1,7 +1,7 @@
 package com.prograngers.backend.exception;
 
 public enum ErrorCode {
-    INVALID_REQUEST_BODY("검증을 통과하지 못한 요청."),
+    INVALID_REQUEST_BODY("검증을 통과하지 못한 요청입니다."),
     SOLUTION_NOT_FOUND("풀이를 찾을 수 없습니다."),
     PROBLEM_NOT_FOUND("문제를 찾을 수 없습니다."),
     PROBLEM_LINK_NOT_FOUND("문제 링크가 유효하지 않습니다."),
@@ -45,7 +45,7 @@ public enum ErrorCode {
     NOT_FOUND_FOLLOW("팔로우 하지 않은 회원입니다."),
     NOT_EXIST_OLD_PASSWORD("비밀번호 변경시, 기존 비밀번호 또한 입력해야 합니다."),
     INVALID_PARENT("부모가 존재하지 않습니다."),
-    DIFFERENT_SOLUTION("생성하려는 자식과 부모의 푸링가 다릅니다."),
+    DIFFERENT_SOLUTION("생성하려는 자식과 부모의 풀이가 다릅니다."),
     DIFFERENT_CODE_LINE_NUMBER("존재하지 않는 코드 줄번호 입니다."),
     DELETED_MEMBER("탈퇴한 사용자입니다.");
 
