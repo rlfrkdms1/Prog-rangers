@@ -24,8 +24,11 @@ export const Comments = () => {
       axios
         .get(apiUrl)
         .then((response) => {
-          setComment(response.data.comments);
+          // 댓글 갯수          
           setCommentCount(response.data.comments.length);
+          // 삭제된 댓글 제외
+          const newComments = response.data.comments;
+          setCommentsWithCountCheck(newComments);
         })
         .catch((error) => {
           console.error('API 요청 오류:', error);
@@ -36,6 +39,17 @@ export const Comments = () => {
       setComment([...comment, newComment]);
       setCommentCount(commentCount + 1);
     }
+
+    const setCommentsWithCountCheck = (newComments) => {
+      const deletedCommentsCount = newComments.reduce((count, comment) => {
+        return comment.status === "DELETED" ? count + 1 : count;
+      }, 0);
+  
+      setCommentCount((prevCount) => prevCount - deletedCommentsCount);
+  
+      const nonDeletedComments = newComments.filter(comment => comment.status !== "DELETED");
+      setComment(nonDeletedComments);
+    };
 
   return (
     <div className="wrap" css={wrapStyle}>

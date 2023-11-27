@@ -44,7 +44,7 @@ export const rowFlexRecomment = css`
 export const editStyle = (isOpen) => css`
   display: ${isOpen ? "flex" : "none"}; 
   flex-direction: column; 
-  width: 90px;
+  width: 80px;
   height: 30px;
   padding-top: 8px;
   background-color: ${theme.colors.light3};
@@ -65,7 +65,7 @@ export const editStyle = (isOpen) => css`
 export const deleteStyle = (isOpen) => css`
   display: ${isOpen ? "flex" : "none"}; 
   flex-direction: column; 
-  width: 90px;
+  width: 80px;
   height: 30px;
   margin-top: 30px;
   padding-top: 8px;

@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.member;
 
+import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
 import com.prograngers.backend.support.Encrypt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,14 +18,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @Entity
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
+
     private static final String QUIT_MEMBER = "탈퇴한 사용자";
+    private static final List<String> PROHIBITED_NICKNAMES = List.of("탈퇴한 사용자");
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,8 +77,9 @@ public class Member {
     }
 
     @Builder
-    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github,
-                  String introduction, String password, String photo, LocalDateTime passwordModifiedAt) {
+    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt, boolean usable) {
+        validProhibitionNickname(nickname);
+
         this.id = id;
         this.socialId = socialId;
         this.type = type;
@@ -86,9 +90,17 @@ public class Member {
         this.password = password;
         this.photo = photo;
         this.passwordModifiedAt = passwordModifiedAt;
+        this.usable = usable;
+    }
+
+    private void validProhibitionNickname(String nickname) {
+        if (PROHIBITED_NICKNAMES.contains(nickname)) {
+            throw new ProhibitionNicknameException();
+        }
     }
 
     private void updateNickName(String nickname) {
+        validProhibitionNickname(nickname);
         if (nickname != null) {
             this.nickname = nickname;
         }
@@ -133,6 +145,10 @@ public class Member {
 
     public void delete() {
         this.usable = false;
+    }
+
+    public boolean isUsable() {
+        return usable;
     }
 
     public void update(Member member) {

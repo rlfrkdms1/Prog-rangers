@@ -50,7 +50,10 @@ public enum ErrorCode {
     INVALID_PARENT("부모가 존재하지 않습니다."),
     DIFFERENT_SOLUTION("생성하려는 자식과 부모의 풀이가 다릅니다."),
     DIFFERENT_CODE_LINE_NUMBER("존재하지 않는 코드 줄번호 입니다."),
-    DELETED_MEMBER("탈퇴한 사용자입니다.");
+    DELETED_MEMBER("탈퇴한 사용자입니다."),
+    ALREADY_DELETED_MEMBER("이미 탈퇴한 회원 입니다."),
+    PROHIBITION_NICKNAME("사용할 수 없는 사용자 닉네임입니다."),
+    QUIT_MEMBER("탈퇴한 사용자의 접근입니다.");
 
     private final String errorMessage;
 
