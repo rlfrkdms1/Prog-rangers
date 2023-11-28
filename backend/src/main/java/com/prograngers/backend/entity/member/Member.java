@@ -10,15 +10,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
 
 @Entity
@@ -27,6 +26,7 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
+    private static final String QUIT_NICKNAME = "탈퇴한 사용자";
     private static final List<String> PROHIBITED_NICKNAMES = List.of("탈퇴한 사용자");
 
     @Id
@@ -61,8 +61,12 @@ public class Member {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Member member = (Member) o;
         return Objects.equals(id, member.id);
     }
@@ -73,7 +77,9 @@ public class Member {
     }
 
     @Builder
-    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt, boolean usable) {
+    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github,
+                  String introduction, String password, String photo, LocalDateTime passwordModifiedAt,
+                  boolean usable) {
         validProhibitionNickname(nickname);
         this.id = id;
         this.socialId = socialId;
@@ -132,8 +138,8 @@ public class Member {
         }
     }
 
-    private void updatePhoto(String photo){
-        if (photo!=null){
+    private void updatePhoto(String photo) {
+        if (photo != null) {
             this.photo = photo;
         }
     }
@@ -152,5 +158,12 @@ public class Member {
         updateIntroduction(member.getIntroduction());
         updatePassword(member.getPassword());
         updatePhoto(member.getPhoto());
+    }
+
+    public String getNickname() {
+        if (isUsable()) {
+            return nickname;
+        }
+        return QUIT_NICKNAME;
     }
 }
