@@ -1,10 +1,9 @@
 package com.prograngers.backend.dto.solution.response;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Builder
 @Getter
@@ -16,9 +15,10 @@ public class MySolutionResponse {
     private String description;
     private String[] code;
     private Long likes;
-    private Long  scraps;
+    private Long scraps;
 
-    public static MySolutionResponse from(String title, List<Object> tags, String description, String[] code, Long likes, Long scraps){
+    public static MySolutionResponse from(String title, List<Object> tags, String description, String[] code,
+                                          Long likes, Long scraps) {
         return MySolutionResponse.builder()
                 .title(title)
                 .tags(tags)

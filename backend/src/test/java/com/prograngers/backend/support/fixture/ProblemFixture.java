@@ -1,13 +1,12 @@
 package com.prograngers.backend.support.fixture;
 
-import com.prograngers.backend.entity.problem.JudgeConstant;
-import com.prograngers.backend.entity.problem.Problem;
-import lombok.AllArgsConstructor;
-
-import java.util.ArrayList;
-
 import static com.prograngers.backend.entity.problem.JudgeConstant.백준;
 import static com.prograngers.backend.entity.problem.JudgeConstant.프로그래머스;
+
+import com.prograngers.backend.entity.problem.JudgeConstant;
+import com.prograngers.backend.entity.problem.Problem;
+import java.util.ArrayList;
+import lombok.AllArgsConstructor;
 
 
 @AllArgsConstructor
@@ -28,12 +27,12 @@ public enum ProblemFixture {
                 .solutions(new ArrayList<>());
     }
 
-    public Problem 기본_정보_생성(){
+    public Problem 기본_정보_생성() {
         return 기본_정보_빌더_생성()
                 .build();
     }
 
-    public Problem 아이디_지정_생성(Long id){
+    public Problem 아이디_지정_생성(Long id) {
         return 기본_정보_빌더_생성()
                 .id(id)
                 .build();

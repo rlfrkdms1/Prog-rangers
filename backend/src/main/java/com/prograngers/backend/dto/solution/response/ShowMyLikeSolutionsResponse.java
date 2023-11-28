@@ -1,12 +1,12 @@
 package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.solution.Solution;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Slice;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor

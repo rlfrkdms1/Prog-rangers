@@ -1,5 +1,8 @@
 package com.prograngers.backend.entity.review;
 
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.FIXED;
+
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.persistence.CascadeType;
@@ -14,16 +17,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Entity
 @Getter
@@ -40,11 +40,11 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id",nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "solution_id",nullable = false)
+    @JoinColumn(name = "solution_id", nullable = false)
     private Solution solution;
 
     @Column(nullable = false)
@@ -63,7 +63,7 @@ public class Review {
     @Enumerated(value = EnumType.STRING)
     private ReviewStatusConstant status;
 
-    public void update(String content){
+    public void update(String content) {
         this.content = content;
         this.status = FIXED;
     }

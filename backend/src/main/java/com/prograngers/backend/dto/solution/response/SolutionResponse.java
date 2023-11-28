@@ -1,7 +1,5 @@
 package com.prograngers.backend.dto.solution.response;
 
-import com.prograngers.backend.entity.solution.AlgorithmConstant;
-import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +31,8 @@ public class SolutionResponse {
     private boolean mine;
 
     public static SolutionResponse from(Solution solution, String nickname, String problemLink,
-                                        int likeCount, int scrapCount, boolean pushedLike, boolean scraped, boolean mine, Long scrapId){
+                                        int likeCount, int scrapCount, boolean pushedLike, boolean scraped,
+                                        boolean mine, Long scrapId) {
         return SolutionResponse.builder()
                 .id(solution.getId())
                 .nickname(nickname)

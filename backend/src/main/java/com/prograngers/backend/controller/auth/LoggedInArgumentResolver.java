@@ -24,7 +24,8 @@ public class LoggedInArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String headerAuthorization = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         LoggedInMember loggedInMember = parameter.getParameterAnnotation(LoggedInMember.class);
         if (!loggedInMember.required() && headerAuthorization == null) {
@@ -36,7 +37,9 @@ public class LoggedInArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     private void validExistAccessTokenInHeader(String headerAuthorization) {
-        if(headerAuthorization == null) throw new NotExistAccessTokenException();
+        if (headerAuthorization == null) {
+            throw new NotExistAccessTokenException();
+        }
     }
 
 }

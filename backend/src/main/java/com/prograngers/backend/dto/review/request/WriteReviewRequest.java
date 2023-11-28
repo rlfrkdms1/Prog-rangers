@@ -1,19 +1,18 @@
 package com.prograngers.backend.dto.review.request;
 
-import com.prograngers.backend.entity.review.Review;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.CREATED;
+
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Getter
 @Setter

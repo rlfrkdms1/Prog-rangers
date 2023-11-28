@@ -15,6 +15,7 @@ public class CommentWithSolutionResponse {
     private SolutionWithProblemResponse solution;
 
     public static CommentWithSolutionResponse from(Comment comment) {
-        return new CommentWithSolutionResponse(CommentResponse.from(comment), SolutionWithProblemResponse.from(comment.getSolution()));
+        return new CommentWithSolutionResponse(CommentResponse.from(comment),
+                SolutionWithProblemResponse.from(comment.getSolution()));
     }
 }

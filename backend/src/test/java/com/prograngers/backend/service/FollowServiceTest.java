@@ -1,5 +1,16 @@
 package com.prograngers.backend.service;
 
+import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
+import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
+import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.prograngers.backend.dto.follow.response.ShowFollowListResponse;
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
@@ -11,6 +22,11 @@ import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,22 +34,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
-import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
-import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class FollowServiceTest {
@@ -46,6 +46,7 @@ class FollowServiceTest {
     private SolutionRepository solutionRepository;
     @InjectMocks
     private FollowService followService;
+    private final static Long RECOMMEND_MEMBER_COUNT = 4L;
 
     @Test
     @DisplayName("팔로우와 팔로워가 주어지면 팔로우를 할 수 있다.")
@@ -98,7 +99,8 @@ class FollowServiceTest {
         Long followingId = 2L;
         given(memberRepository.existsById(followerId)).willReturn(false);
         assertAll(
-                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(MemberNotFoundException.class),
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
+                        MemberNotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId)
         );
     }
@@ -111,7 +113,8 @@ class FollowServiceTest {
         given(memberRepository.existsById(followerId)).willReturn(true);
         given(memberRepository.existsById(followingId)).willReturn(false);
         assertAll(
-                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(MemberNotFoundException.class),
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
+                        MemberNotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId)
         );
@@ -128,7 +131,8 @@ class FollowServiceTest {
         given(followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)).willReturn(true);
 
         assertAll(
-                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(AlreadyFollowingException.class),
+                () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
+                        AlreadyFollowingException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId)
@@ -146,7 +150,8 @@ class FollowServiceTest {
         given(followRepository.findByFollowerIdAndFollowingId(followerId, followingId)).willReturn(Optional.empty());
 
         assertAll(
-                () -> assertThatThrownBy(() -> followService.unfollow(followerId, followingId)).isExactlyInstanceOf(FollowNotFoundException.class),
+                () -> assertThatThrownBy(() -> followService.unfollow(followerId, followingId)).isExactlyInstanceOf(
+                        FollowNotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).findByFollowerIdAndFollowingId(followerId, followingId)
@@ -155,39 +160,50 @@ class FollowServiceTest {
 
     @Test
     @DisplayName("마이페이지 팔로우 목록보기 응답을 가져올 수 있다")
-    void getFollowListTest(){
-        //given
-        // 나를 others1,2가 팔로우
-        // 내가 others3,4를 팔로우
+    void getFollowListTest() {
+        // given
+        /**
+         * 나를 1,2가 팔로우 / 내가 3,4를 팔로우
+         * 1,2는 내가 가장 최근에 푼 문제를 풀었음, 각각 팔로워 1,2명
+         * 5,6,7,8은 나랑 팔로우 팔로워 관계 X, 내가 가장 최근에 푼 문제를 풀지 않음, 각각 팔로워 6,5,4,3명
+         */
         final Long myId = 1L;
-        Member me = 장지담.아이디_지정_생성(myId);
-        Member others1 = 장지담.아이디_지정_생성(2L);
-        Member others2 = 장지담.아이디_지정_생성(3L);
-        Member others3 = 장지담.아이디_지정_생성(4L);
-        Member others4 = 장지담.아이디_지정_생성(5L);
+        final Member me = 장지담.아이디_지정_생성(myId);
+        final Member others1 = 장지담.아이디_지정_생성(2L);
+        final Member others2 = 장지담.아이디_지정_생성(3L);
+        final Member others3 = 장지담.아이디_지정_생성(4L);
+        final Member others4 = 장지담.아이디_지정_생성(5L);
+        final Member others5 = 장지담.아이디_지정_생성(6L);
+        final Member others6 = 장지담.아이디_지정_생성(7L);
+        final Member others7 = 장지담.아이디_지정_생성(8L);
+        final Member others8 = 장지담.아이디_지정_생성(9L);
 
-        List<Member> following = Arrays.asList(others3, others4);
-        List<Member> follower = Arrays.asList(others1, others2);
+        final List<Member> following = Arrays.asList(others3, others4);
+        final List<Member> follower = Arrays.asList(others1, others2);
 
         final Long problemId = 1L;
-        Problem problem = 백준_문제.아이디_지정_생성(problemId);
+        final Problem problem = 백준_문제.아이디_지정_생성(problemId);
 
         final Long solutionId = 1L;
-        Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, me, LocalDateTime.now(), JAVA, 3);
+        final Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, me, LocalDateTime.now(), JAVA, 3);
 
         when(memberRepository.findAllByFollower(myId)).thenReturn(following);
         when(memberRepository.findAllByFollowing(myId)).thenReturn(follower);
         when(solutionRepository.findOneRecentSolutionByMemberId(myId)).thenReturn(solution);
-        when(memberRepository.getLimitRecommendedMembers(problem,10L,myId)).thenReturn(Arrays.asList(others4,others3,others2));
+        when(memberRepository.getLimitRecommendedMembers(problem, RECOMMEND_MEMBER_COUNT, myId)).thenReturn(
+                new ArrayList<>(Arrays.asList(others2, others1)));
+        when(memberRepository.getOtherMembersOrderByFollow(myId)).thenReturn(
+                Arrays.asList(others5, others6, others7, others8)
+        );
 
         ShowFollowListResponse expected = ShowFollowListResponse.of(
                 following,
                 follower,
-                Arrays.asList(others4,others3,others2)
+                Arrays.asList(others2, others1, others5, others6)
         );
 
         //when
-        ShowFollowListResponse result = followService.getFollowList(myId);
+        ShowFollowListResponse result = followService.getFollowList(myId, RECOMMEND_MEMBER_COUNT);
 
         //then
         Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);
@@ -195,16 +211,24 @@ class FollowServiceTest {
 
     @Test
     @DisplayName("사용자가 최근에 푼 문제가 없는 경우 마이페이지 팔로우 목록보기 응답을 가져올 수 있다")
-    void getFollowListTestWhenNoProblem(){
-        //given
-        // 나를 others1,2가 팔로우
-        // 내가 others3,4를 팔로우
+    void getFollowListTestWhenNoProblem() {
+        // given
+        /**
+         * 나를 1,2가 팔로우 / 내가 3,4를 팔로우
+         * 내가 최근에 푼 문제는 없음(푼 문제가 없는 회원)
+         * 1,2는 각각 팔로워 1,2명
+         * 5,6,7,8은 나랑 팔로우 팔로워 관계 X, 내가 가장 최근에 푼 문제를 풀지 않음, 각각 팔로워 6,5,4,3명
+         */
         final Long myId = 1L;
-        Member me = 장지담.아이디_지정_생성(myId);
-        Member others1 = 장지담.아이디_지정_생성(2L);
-        Member others2 = 장지담.아이디_지정_생성(3L);
-        Member others3 = 장지담.아이디_지정_생성(4L);
-        Member others4 = 장지담.아이디_지정_생성(5L);
+        final Member me = 장지담.아이디_지정_생성(myId);
+        final Member others1 = 장지담.아이디_지정_생성(2L);
+        final Member others2 = 장지담.아이디_지정_생성(3L);
+        final Member others3 = 장지담.아이디_지정_생성(4L);
+        final Member others4 = 장지담.아이디_지정_생성(5L);
+        final Member others5 = 장지담.아이디_지정_생성(6L);
+        final Member others6 = 장지담.아이디_지정_생성(7L);
+        final Member others7 = 장지담.아이디_지정_생성(8L);
+        final Member others8 = 장지담.아이디_지정_생성(9L);
 
         List<Member> following = Arrays.asList(others3, others4);
         List<Member> follower = Arrays.asList(others1, others2);
@@ -218,16 +242,17 @@ class FollowServiceTest {
         when(memberRepository.findAllByFollower(myId)).thenReturn(following);
         when(memberRepository.findAllByFollowing(myId)).thenReturn(follower);
         when(solutionRepository.findOneRecentSolutionByMemberId(myId)).thenReturn(null);
-        when(memberRepository.getLimitRecommendedMembers(null,10L,myId)).thenReturn(Arrays.asList(others4,others3,others2));
+        when(memberRepository.getLimitRecommendedMembers(null, RECOMMEND_MEMBER_COUNT, myId)).thenReturn(
+                Arrays.asList(others8, others7, others6, others5));
 
         ShowFollowListResponse expected = ShowFollowListResponse.of(
                 following,
                 follower,
-                Arrays.asList(others4,others3,others2)
+                Arrays.asList(others8, others7, others6, others5)
         );
 
         //when
-        ShowFollowListResponse result = followService.getFollowList(myId);
+        ShowFollowListResponse result = followService.getFollowList(myId, RECOMMEND_MEMBER_COUNT);
 
         //then
         Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(expected);

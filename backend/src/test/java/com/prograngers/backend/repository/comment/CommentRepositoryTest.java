@@ -1,21 +1,5 @@
 package com.prograngers.backend.repository.comment;
 
-import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.entity.problem.Problem;
-import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.repository.member.MemberRepository;
-import com.prograngers.backend.repository.problem.ProblemRepository;
-import com.prograngers.backend.repository.solution.SolutionRepository;
-import com.prograngers.backend.support.RepositoryTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-
-import java.time.LocalDateTime;
-
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
@@ -25,7 +9,22 @@ import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import com.prograngers.backend.entity.comment.Comment;
+import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.problem.Problem;
+import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.repository.member.MemberRepository;
+import com.prograngers.backend.repository.problem.ProblemRepository;
+import com.prograngers.backend.repository.solution.SolutionRepository;
+import com.prograngers.backend.support.RepositoryTest;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 
 @RepositoryTest
 class CommentRepositoryTest {
@@ -74,7 +73,9 @@ class CommentRepositoryTest {
         return solutionRepository.save(solution);
     }
 
-    private Comment 저장(Comment comment) { return commentRepository.save(comment); }
+    private Comment 저장(Comment comment) {
+        return commentRepository.save(comment);
+    }
 
 
 }

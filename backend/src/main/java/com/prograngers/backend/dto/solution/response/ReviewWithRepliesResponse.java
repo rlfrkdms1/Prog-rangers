@@ -1,12 +1,11 @@
 package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.review.Review;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 @Getter
@@ -19,7 +18,8 @@ public class ReviewWithRepliesResponse {
     private List<ReviewWithRepliesResponse> replies;
     boolean mine;
 
-    public static ReviewWithRepliesResponse from(Review review, ArrayList<ReviewWithRepliesResponse> replies, boolean mine) {
+    public static ReviewWithRepliesResponse from(Review review, ArrayList<ReviewWithRepliesResponse> replies,
+                                                 boolean mine) {
         return ReviewWithRepliesResponse.builder()
                 .id(review.getId())
                 .codeLineNumber(review.getCodeLineNumber())

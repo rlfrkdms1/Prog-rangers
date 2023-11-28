@@ -1,13 +1,12 @@
 package com.prograngers.backend.dto.solution.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +22,8 @@ public class ShowSolutionDetailResponse {
     private List<ReviewWithRepliesResponse> reviews;
 
     public static ShowSolutionDetailResponse from(ProblemResponse problem, SolutionResponse solution,
-                                                  List<CommentWithRepliesResponse> comments, List<ReviewWithRepliesResponse> reviews) {
+                                                  List<CommentWithRepliesResponse> comments,
+                                                  List<ReviewWithRepliesResponse> reviews) {
         return ShowSolutionDetailResponse.builder()
                 .problem(problem)
                 .solution(solution)

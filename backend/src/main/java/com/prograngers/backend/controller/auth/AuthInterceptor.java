@@ -21,16 +21,21 @@ public class AuthInterceptor implements HandlerInterceptor {
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(!(handler instanceof HandlerMethod)) return true;
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
         Login loginAnnotation = handlerMethod.getMethodAnnotation(Login.class);
-        if (loginAnnotation == null) return true;
+        if (loginAnnotation == null) {
+            return true;
+        }
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(header != null) {
+        if (header != null) {
             validHeader(header);
             validAccessToken(header);
             return true;
@@ -42,7 +47,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private void validHeader(String header) {
-        if(!header.startsWith(AUTHORIZATION_HEADER_PREFIX)){
+        if (!header.startsWith(AUTHORIZATION_HEADER_PREFIX)) {
             throw new InvalidAccessTokenException();
         }
     }
@@ -53,7 +58,9 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private void validLoginRequired(Login loginAnnotation) {
-        if(loginAnnotation.required()) throw new NotExistAccessTokenException(); // required true인데 토큰이 없는 경우
+        if (loginAnnotation.required()) {
+            throw new NotExistAccessTokenException(); // required true인데 토큰이 없는 경우
+        }
     }
 
 

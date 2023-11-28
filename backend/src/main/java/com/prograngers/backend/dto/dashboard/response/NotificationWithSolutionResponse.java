@@ -1,15 +1,14 @@
 package com.prograngers.backend.dto.dashboard.response;
 
+import static com.prograngers.backend.entity.NotificationType.COMMENT;
+import static com.prograngers.backend.entity.NotificationType.REVIEW;
+
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.InvalidNotificationTypeException;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import static com.prograngers.backend.entity.NotificationType.*;
 
 @Getter
 @AllArgsConstructor
@@ -45,9 +44,13 @@ public class NotificationWithSolutionResponse {
                 .build();
     }
 
-    private static String getContent(Notification notification){
-        if(notification.getType() == REVIEW) return notification.getReview().getContent();
-        if(notification.getType() == COMMENT) return notification.getComment().getContent();
+    private static String getContent(Notification notification) {
+        if (notification.getType() == REVIEW) {
+            return notification.getReview().getContent();
+        }
+        if (notification.getType() == COMMENT) {
+            return notification.getComment().getContent();
+        }
         throw new InvalidNotificationTypeException();
     }
 }
