@@ -60,7 +60,7 @@ public class Comment {
     private CommentStatusConstant status;
 
     public void update(String content) {
-        if (content != null) {
+        if (content != null && !content.isBlank()) {
             this.content = content;
             this.status = FIXED;
         }
