@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @Slf4j
 public class ShowMemberProfileResponse {
+    private static final Long LAST_PAGE_CURSOR = -1L;
     private static int SIZE_PER_SCROLL = 3;
     private String photo;
     private String nickname;
@@ -30,7 +31,7 @@ public class ShowMemberProfileResponse {
 
         List<Solution> solutions = new ArrayList<>(solutionList);
 
-        Long cursor = -1L;
+        Long cursor = LAST_PAGE_CURSOR;
         if (!isLastScroll(solutions)) {
             cursor = getCursor(solutions);
         }
