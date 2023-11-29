@@ -4,12 +4,15 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Builder
+@Slf4j
 public class ShowMemberProfileResponse {
     private static int SIZE_PER_SCROLL = 3;
     private String photo;
@@ -22,10 +25,11 @@ public class ShowMemberProfileResponse {
     private List<SolutionWithProblemResponse> list;
     private Long cursor;
 
-    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions,
+    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutionList,
                                                  Long follow, Long following) {
 
-        // 무한스크롤 isLast, 커서
+        List<Solution> solutions = new ArrayList<>(solutionList);
+
         Long cursor = -1L;
         if (!isLastScroll(solutions)) {
             cursor = getCursor(solutions);
