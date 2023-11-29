@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.comment;
 
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREATED;
 import static com.prograngers.backend.entity.comment.CommentStatusConstant.FIXED;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
@@ -16,9 +17,12 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class CommentTest {
     private static final String FIXED_CONTENT = "수정한 댓글입니다.";
+    private static final String CONTENT = "댓글내용";
     private Comment comment;
     private Solution solution;
     private Member member;
@@ -42,6 +46,31 @@ class CommentTest {
         assertAll(
                 () -> assertThat(comment.getContent()).isEqualTo(FIXED_CONTENT),
                 () -> assertThat(comment.getStatus()).isEqualTo(FIXED)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "    "})
+    void 수정하려는_내용이_blank일_경우_수정할_수_없다(String content) {
+        // when
+        comment.update(content);
+
+        // then
+        assertAll(
+                () -> assertThat(comment.getContent()).isEqualTo(CONTENT),
+                () -> assertThat(comment.getStatus()).isEqualTo(CREATED)
+        );
+    }
+
+    @Test
+    void 수정하려는_내용이_null일_경우_수정할_수_없다() {
+        // when
+        comment.update(null);
+
+        // then
+        assertAll(
+                () -> assertThat(comment.getContent()).isEqualTo(CONTENT),
+                () -> assertThat(comment.getStatus()).isEqualTo(CREATED)
         );
     }
 }
