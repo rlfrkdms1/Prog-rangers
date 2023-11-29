@@ -87,6 +87,5 @@ class CommentTest {
                 () -> assertThat(comment.getContent()).isEqualTo(DELETED_CONTENT),
                 () -> assertThat(comment.getStatus()).isEqualTo(DELETED)
         );
-
     }
 }
