@@ -1,6 +1,7 @@
 package com.prograngers.backend.entity.comment;
 
 import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREATED;
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
 import static com.prograngers.backend.entity.comment.CommentStatusConstant.FIXED;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
@@ -22,6 +23,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class CommentTest {
     private static final String FIXED_CONTENT = "수정한 댓글입니다.";
+    private static final String DELETED_CONTENT = "삭제된 댓글입니다";
+
     private static final String CONTENT = "댓글내용";
     private Comment comment;
     private Solution solution;
@@ -72,5 +75,18 @@ class CommentTest {
                 () -> assertThat(comment.getContent()).isEqualTo(CONTENT),
                 () -> assertThat(comment.getStatus()).isEqualTo(CREATED)
         );
+    }
+
+    @Test
+    void 댓글을_삭제할_수_있다() {
+        // when
+        comment.delete();
+
+        // then
+        assertAll(
+                () -> assertThat(comment.getContent()).isEqualTo(DELETED_CONTENT),
+                () -> assertThat(comment.getStatus()).isEqualTo(DELETED)
+        );
+
     }
 }
