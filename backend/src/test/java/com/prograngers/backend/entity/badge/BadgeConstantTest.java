@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class BadgeConstantTest {
 
@@ -25,4 +27,10 @@ class BadgeConstantTest {
         );
     }
 
+    @DisplayName("뱃지를 얻는 풀이 개수에 해당되지 않으면 null을 반환한다")
+    @ParameterizedTest
+    @ValueSource(longs = {0L, 9L, 49L, 99L, 149L})
+    void cantGetBadgeTest(Long solutionCount) {
+        assertThat(BadgeConstant.getBadge(solutionCount)).isEqualTo(null);
+    }
 }
