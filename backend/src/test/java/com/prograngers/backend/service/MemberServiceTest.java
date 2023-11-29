@@ -16,6 +16,7 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -40,6 +41,7 @@ class MemberServiceTest {
 
     private static final Long LAST_PAGE_CURSOR = -1L;
     private static final String MEMBER_NOT_FOUND = "회원을 찾을 수 없습니다.";
+    private static final String QUIT_MEMBER = "탈퇴한 사용자의 접근입니다.";
     @InjectMocks
     private MemberService memberService;
     @Mock
@@ -134,5 +136,17 @@ class MemberServiceTest {
         assertThatThrownBy(() -> memberService.getMemberProfile(notExistsNickname, Long.MAX_VALUE))
                 .isInstanceOf(MemberNotFoundException.class)
                 .hasMessageContaining(MEMBER_NOT_FOUND);
+    }
+
+    @DisplayName("탈퇴한 회원 프로필 보기를 시도하면 예외가 발생한다.")
+    @Test
+    void getMemberProfileWhenQuitMemberTest() {
+        // given
+        final Member member = 장지담.탈퇴_회원_생성();
+        when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
+        // when, then
+        assertThatThrownBy(() -> memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE))
+                .isInstanceOf(QuitMemberException.class)
+                .hasMessageContaining(QUIT_MEMBER);
     }
 }
