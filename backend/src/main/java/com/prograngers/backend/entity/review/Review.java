@@ -64,6 +64,9 @@ public class Review {
     private ReviewStatusConstant status;
 
     public void update(String content) {
+        if (content == null || content.isBlank()) {
+            return;
+        }
         this.content = content;
         this.status = FIXED;
     }
