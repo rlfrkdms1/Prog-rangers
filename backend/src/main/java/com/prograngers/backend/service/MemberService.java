@@ -92,8 +92,8 @@ public class MemberService {
         Member member = findByNickname(memberNickname);
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
-        Long followCount = followRepository.getFollowCount(member);
-        Long followingCount = followRepository.getFollowingCount(member);
+        Long followCount = followRepository.countFollow(member);
+        Long followingCount = followRepository.countFollowing(member);
 
         return ShowMemberProfileResponse.from(member,badges,solutions,followCount,followingCount);
     }

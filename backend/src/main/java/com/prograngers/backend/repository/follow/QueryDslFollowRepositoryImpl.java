@@ -16,7 +16,7 @@ public class QueryDslFollowRepositoryImpl implements QueryDslFollowRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Long getFollowCount(Member member) {
+    public Long countFollow(Member member) {
         return jpaQueryFactory
                 .select(follow.count())
                 .from(follow)
@@ -25,7 +25,7 @@ public class QueryDslFollowRepositoryImpl implements QueryDslFollowRepository {
     }
 
     @Override
-    public Long getFollowingCount(Member member) {
+    public Long countFollowing(Member member) {
         return jpaQueryFactory
                 .select(follow.count())
                 .from(follow)
