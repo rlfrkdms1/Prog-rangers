@@ -33,6 +33,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @Slf4j
 class MemberServiceTest {
+
+    private static final Long LAST_PAGE_CURSOR = -1L;
     @InjectMocks
     private MemberService memberService;
     @Mock
@@ -81,4 +83,39 @@ class MemberServiceTest {
         );
     }
 
+    @DisplayName("회원 프로필 조회 시 마지막 페이지인 경우 커서값으로 -1L을 반환한다.")
+    @Test
+    void getMemberProfileWhenLastPageTest(){
+        // given
+        final Long memberId = 1L;
+        final Member member = 장지담.아이디_지정_생성(memberId);
+        final Problem problem = 백준_문제.기본_정보_생성();
+        final Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
+        final Solution solution2 = 공개_풀이.아이디_지정_생성(2L, problem, member, LocalDateTime.now(), JAVA, 2);
+
+        final List<Solution> solutions = List.of(solution1, solution2);
+
+        when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
+        when(badgeRepository.findAllByMember(member)).thenReturn(Collections.emptyList());
+        when(solutionRepository.findProfileSolutions(memberId, Long.MAX_VALUE)).thenReturn(solutions);
+        when(followRepository.getFollowCount(member)).thenReturn(1L);
+        when(followRepository.getFollowingCount(member)).thenReturn(1L);
+
+        final ShowMemberProfileResponse expected = ShowMemberProfileResponse.from(member, Collections.emptyList(),
+                solutions, 1L, 1L);
+
+        // when
+        final ShowMemberProfileResponse actual = memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE);
+
+        // then
+        assertAll(
+                () -> assertThat(actual).usingRecursiveComparison().isEqualTo(expected),
+                () -> assertThat(actual.getCursor()).isEqualTo(LAST_PAGE_CURSOR),
+                () -> verify(memberRepository, times(1)).findByNickname(member.getNickname()),
+                () -> verify(badgeRepository, times(1)).findAllByMember(member),
+                () -> verify(solutionRepository, times(1)).findProfileSolutions(memberId, Long.MAX_VALUE),
+                () -> verify(followRepository, times(1)).getFollowCount(member),
+                () -> verify(followRepository, times(1)).getFollowingCount(member)
+        );
+    }
 }
