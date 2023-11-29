@@ -5,6 +5,7 @@ import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,6 +15,7 @@ import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -26,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,6 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MemberServiceTest {
 
     private static final Long LAST_PAGE_CURSOR = -1L;
+    private static final String MEMBER_NOT_FOUND = "회원을 찾을 수 없습니다.";
     @InjectMocks
     private MemberService memberService;
     @Mock
@@ -85,7 +90,7 @@ class MemberServiceTest {
 
     @DisplayName("회원 프로필 조회 시 마지막 페이지인 경우 커서값으로 -1L을 반환한다.")
     @Test
-    void getMemberProfileWhenLastPageTest(){
+    void getMemberProfileWhenLastPageTest() {
         // given
         final Long memberId = 1L;
         final Member member = 장지담.아이디_지정_생성(memberId);
@@ -117,5 +122,17 @@ class MemberServiceTest {
                 () -> verify(followRepository, times(1)).getFollowCount(member),
                 () -> verify(followRepository, times(1)).getFollowingCount(member)
         );
+    }
+
+    @DisplayName("존재하지 않는 닉네임으로 회원 프로필 보기를 시도하면 예외가 발생한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"바보", "babo", "notexists"})
+    void getMemberProfileWhenNicknameNotExistsTest(String notExistsNickname) {
+        // given
+        final Member member = 장지담.기본_정보_생성();
+        // when, then
+        assertThatThrownBy(() -> memberService.getMemberProfile(notExistsNickname, Long.MAX_VALUE))
+                .isInstanceOf(MemberNotFoundException.class)
+                .hasMessageContaining(MEMBER_NOT_FOUND);
     }
 }
