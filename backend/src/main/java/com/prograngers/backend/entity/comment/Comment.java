@@ -60,10 +60,11 @@ public class Comment {
     private CommentStatusConstant status;
 
     public void update(String content) {
-        if (!content.isBlank()) {
-            this.content = content;
-            this.status = FIXED;
+        if (content == null || content.isBlank()) {
+            return;
         }
+        this.content = content;
+        this.status = FIXED;
     }
 
     public void delete() {
