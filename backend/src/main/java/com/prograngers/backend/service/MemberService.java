@@ -95,15 +95,19 @@ public class MemberService {
 
     public ShowMemberProfileResponse getMemberProfile(String memberNickname, Long page) {
         Member member = findByNickname(memberNickname);
-        if (!member.isUsable()) {
-            throw new QuitMemberException();
-        }
+        validQuitMember(member);
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
         Long followCount = followRepository.getFollowCount(member);
         Long followingCount = followRepository.getFollowingCount(member);
 
         return ShowMemberProfileResponse.from(member, badges, solutions, followCount, followingCount);
+    }
+
+    private void validQuitMember(Member member) {
+        if (!member.isUsable()) {
+            throw new QuitMemberException();
+        }
     }
 
     private Member findByNickname(String memberNickname) {
