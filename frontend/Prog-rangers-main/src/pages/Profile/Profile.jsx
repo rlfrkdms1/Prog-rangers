@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { LeftBody, MainBody, RightBody } from './MainBody';
@@ -16,7 +16,8 @@ import {
 } from './ProfileStyle';
 
 export const Profile = () => {
-
+  
+  const navigate = useNavigate();
   const { nickname } = useParams();
   const [data, setData] = useState([]);
 
@@ -37,6 +38,8 @@ export const Profile = () => {
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
+        alert("탈퇴한 사용자의 프로필을 방문할 수 없습니다.");
+        navigate(-1);
       });
   }, [nickname]);
   
@@ -60,7 +63,8 @@ export const Profile = () => {
         <div css={css`
           ${fontSize20}
           ${alignCenter}
-          margin-top: 8px;`}>
+          margin-top: 8px;
+          color: ${data.nickname === '탈퇴한 사용자' ? '#D9D9D9' : '#000000'};`}>
           {data.nickname}
           </div>
 

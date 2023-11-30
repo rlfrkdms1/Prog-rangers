@@ -27,7 +27,7 @@ export const CommentForm = () => {
 
     const navigate = useNavigate();
     const onClickSolution = (solutionId) => {
-      navigate(`/solution/${solutionId}`); 
+      navigate(`/solutions/${solutionId}`); 
     };  
 
 return(
