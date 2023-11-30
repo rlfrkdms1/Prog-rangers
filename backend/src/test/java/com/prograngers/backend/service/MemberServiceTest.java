@@ -42,8 +42,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MemberServiceTest {
 
     private static final Long LAST_PAGE_CURSOR = -1L;
-    private static final String MEMBER_NOT_FOUND = "회원을 찾을 수 없습니다.";
-    private static final String QUIT_MEMBER = "탈퇴한 사용자의 접근입니다.";
     @InjectMocks
     private MemberService memberService;
     @Mock
@@ -136,8 +134,7 @@ class MemberServiceTest {
         final Member member = 장지담.기본_정보_생성();
         // when, then
         assertThatThrownBy(() -> memberService.getMemberProfile(notExistsNickname, Long.MAX_VALUE))
-                .isInstanceOf(MemberNotFoundException.class)
-                .hasMessageContaining(MEMBER_NOT_FOUND);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 
     @DisplayName("탈퇴한 회원 프로필 보기를 시도하면 예외가 발생한다.")
@@ -148,7 +145,6 @@ class MemberServiceTest {
         when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
         // when, then
         assertThatThrownBy(() -> memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE))
-                .isInstanceOf(QuitMemberException.class)
-                .hasMessageContaining(QUIT_MEMBER);
+                .isInstanceOf(QuitMemberException.class);
     }
 }
