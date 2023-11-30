@@ -22,6 +22,8 @@ import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +66,7 @@ class MemberServiceTest {
         final Solution solution2 = 공개_풀이.아이디_지정_생성(2L, problem, member, LocalDateTime.now(), JAVA, 2);
         final Solution solution3 = 공개_풀이.아이디_지정_생성(3L, problem, member, LocalDateTime.now(), JAVA, 3);
 
-        final List<Solution> solutions = List.of(solution1, solution2, solution3);
+        List<Solution> solutions = new ArrayList<>(Arrays.asList(solution1, solution2, solution3));
 
         when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
         when(badgeRepository.findAllByMember(member)).thenReturn(Collections.emptyList());
@@ -73,7 +75,7 @@ class MemberServiceTest {
         when(followRepository.getFollowingCount(member)).thenReturn(1L);
 
         final ShowMemberProfileResponse expected = ShowMemberProfileResponse.from(member, Collections.emptyList(),
-                solutions, 1L, 1L);
+                new ArrayList<>(Arrays.asList(solution1, solution2)), 1L, 1L, solution3.getId());
 
         // when
         final ShowMemberProfileResponse actual = memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE);
@@ -109,7 +111,7 @@ class MemberServiceTest {
         when(followRepository.getFollowingCount(member)).thenReturn(1L);
 
         final ShowMemberProfileResponse expected = ShowMemberProfileResponse.from(member, Collections.emptyList(),
-                solutions, 1L, 1L);
+                solutions, 1L, 1L, LAST_PAGE_CURSOR);
 
         // when
         final ShowMemberProfileResponse actual = memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE);
