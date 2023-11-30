@@ -1,12 +1,10 @@
 package com.prograngers.backend.service;
 
-import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
-import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -47,7 +45,7 @@ class MemberServiceTest {
     private MemberService memberService;
 
     @Test
-    void 회원의_로그인_타입에_따라_계정_정보_조회시_반환되는_DTO가_다르다_BASIC() {
+    void 회원의_로그인_타입에_따라_계정_정보_조회시_반환되는_Response가_다르다_BASIC() {
         Member member = 길가은.기본_정보_생성(1L);
         String encodedPassword = "encoded";
 
@@ -65,7 +63,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void 회원의_로그인_타입에_따라_계정_정보_조회시_반환되는_DTO가_다르다_SOCIAL() {
+    void 회원의_로그인_타입에_따라_계정_정보_조회시_반환되는_Response가_다르다_SOCIAL() {
         Member member = 장지담.기본_정보_생성(1L);
         String encodedPassword = "encoded";
 
