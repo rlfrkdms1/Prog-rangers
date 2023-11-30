@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class MemberController {
 
-    private static final String LONG_MAX = "922337;2036854775807";
+    private static final String LONG_MAX = "9223372036854775807";
 
     private final MemberService memberService;
 
