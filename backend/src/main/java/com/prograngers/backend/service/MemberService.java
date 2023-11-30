@@ -30,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
+    private static final Long PROFILE_LAST_PAGE_CURSOR = -1L;
+    private static int PROFILE_SIZE_PER_SCROLL = 3;
     private final MemberRepository memberRepository;
     private final BadgeRepository badgeRepository;
     private final SolutionRepository solutionRepository;
@@ -100,8 +102,17 @@ public class MemberService {
         List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
         Long followCount = followRepository.getFollowCount(member);
         Long followingCount = followRepository.getFollowingCount(member);
+        Long cursor = setCursor(solutions);
+        return ShowMemberProfileResponse.from(member, badges, solutions, followCount, followingCount, cursor);
+    }
 
-        return ShowMemberProfileResponse.from(member, badges, solutions, followCount, followingCount);
+    private Long setCursor(List<Solution> profileSolutions) {
+        Long cursor = PROFILE_LAST_PAGE_CURSOR;
+        if (profileSolutions.size() < PROFILE_SIZE_PER_SCROLL) {
+            cursor = profileSolutions.get(PROFILE_SIZE_PER_SCROLL - 1).getId();
+            profileSolutions.remove(PROFILE_SIZE_PER_SCROLL - 1);
+        }
+        return cursor;
     }
 
     private void validQuitMember(Member member) {

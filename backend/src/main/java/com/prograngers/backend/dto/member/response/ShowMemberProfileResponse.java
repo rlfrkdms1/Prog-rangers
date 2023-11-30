@@ -4,7 +4,6 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,14 +26,7 @@ public class ShowMemberProfileResponse {
     private Long cursor;
 
     public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> profileSolutions,
-                                                 Long follow, Long following) {
-
-        List<Solution> responseSolutions = new ArrayList<>(profileSolutions);
-
-        Long cursor = LAST_PAGE_CURSOR;
-        if (!isLastScroll(responseSolutions)) {
-            cursor = getCursor(responseSolutions);
-        }
+                                                 Long follow, Long following, Long cursor) {
 
         return ShowMemberProfileResponse.builder()
                 .photo(member.getPhoto())
@@ -43,7 +35,7 @@ public class ShowMemberProfileResponse {
                 .follow(follow)
                 .following(following)
                 .badge(getBadgeList(badges))
-                .list(getProblemSolutionList(responseSolutions))
+                .list(getProblemSolutionList(profileSolutions))
                 .cursor(cursor)
                 .build();
     }
@@ -55,16 +47,5 @@ public class ShowMemberProfileResponse {
 
     private static List<BadgeConstant> getBadgeList(List<Badge> badges) {
         return badges.stream().map(badge -> badge.getBadgeType()).toList();
-    }
-
-    private static boolean isLastScroll(List<Solution> solutions) {
-        return solutions.size() < SIZE_PER_SCROLL;
-    }
-
-    private static Long getCursor(List<Solution> solutions) {
-        Long cursor;
-        cursor = solutions.get(SIZE_PER_SCROLL - 1).getId();
-        solutions.remove(SIZE_PER_SCROLL - 1);
-        return cursor;
     }
 }
