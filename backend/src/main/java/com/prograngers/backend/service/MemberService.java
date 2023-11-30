@@ -22,12 +22,14 @@ import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class MemberService {
 
     private static final Long PROFILE_LAST_PAGE_CURSOR = -1L;
@@ -103,12 +105,13 @@ public class MemberService {
         Long followCount = followRepository.getFollowCount(member);
         Long followingCount = followRepository.getFollowingCount(member);
         Long cursor = setCursor(solutions);
+
         return ShowMemberProfileResponse.from(member, badges, solutions, followCount, followingCount, cursor);
     }
 
     private Long setCursor(List<Solution> profileSolutions) {
         Long cursor = PROFILE_LAST_PAGE_CURSOR;
-        if (profileSolutions.size() < PROFILE_SIZE_PER_SCROLL) {
+        if (profileSolutions.size() >= PROFILE_SIZE_PER_SCROLL) {
             cursor = profileSolutions.get(PROFILE_SIZE_PER_SCROLL - 1).getId();
             profileSolutions.remove(PROFILE_SIZE_PER_SCROLL - 1);
         }
