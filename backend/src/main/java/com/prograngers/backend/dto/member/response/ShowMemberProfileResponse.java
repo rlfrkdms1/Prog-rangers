@@ -26,14 +26,14 @@ public class ShowMemberProfileResponse {
     private List<SolutionWithProblemResponse> list;
     private Long cursor;
 
-    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutionList,
+    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> profileSolutions,
                                                  Long follow, Long following) {
 
-        List<Solution> solutions = new ArrayList<>(solutionList);
+        List<Solution> responseSolutions = new ArrayList<>(profileSolutions);
 
         Long cursor = LAST_PAGE_CURSOR;
-        if (!isLastScroll(solutions)) {
-            cursor = getCursor(solutions);
+        if (!isLastScroll(responseSolutions)) {
+            cursor = getCursor(responseSolutions);
         }
 
         return ShowMemberProfileResponse.builder()
@@ -43,7 +43,7 @@ public class ShowMemberProfileResponse {
                 .follow(follow)
                 .following(following)
                 .badge(getBadgeList(badges))
-                .list(getProblemSolutionList(solutions))
+                .list(getProblemSolutionList(responseSolutions))
                 .cursor(cursor)
                 .build();
     }
