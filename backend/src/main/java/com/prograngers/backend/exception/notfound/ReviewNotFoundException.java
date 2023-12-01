@@ -5,6 +5,6 @@ import static com.prograngers.backend.exception.ErrorCode.REVIEW_NOT_FOUND;
 
 public class ReviewNotFoundException extends NotFoundException {
     public ReviewNotFoundException() {
-        super(REVIEW_NOT_FOUND,"리뷰를 찾을 수 없습니다");
+        super(REVIEW_NOT_FOUND, "리뷰를 찾을 수 없습니다");
     }
 }

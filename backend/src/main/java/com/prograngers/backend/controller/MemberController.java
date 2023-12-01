@@ -2,9 +2,9 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
-import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class MemberController {
 
+    private static final String LONG_MAX = "9223372036854775807";
+
     private final MemberService memberService;
 
     @Login
@@ -32,14 +34,16 @@ public class MemberController {
 
     @Login
     @PatchMapping("/members")
-    public ResponseEntity<Void> updateMemberAccount(@LoggedInMember Long memberId, @RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
+    public ResponseEntity<Void> updateMemberAccount(@LoggedInMember Long memberId,
+                                                    @RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         memberService.updateMemberAccount(memberId, updateMemberAccountInfoRequest);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/members/{nickname}")
-    public ShowMemberProfileResponse showProfile(@PathVariable String nickname, @RequestParam(defaultValue = "9223372036854775807") Long page){
-        return memberService.getMemberProfile(nickname,page);
+    public ShowMemberProfileResponse showProfile(@PathVariable String nickname,
+                                                 @RequestParam(defaultValue = LONG_MAX) Long page) {
+        return memberService.getMemberProfile(nickname, page);
     }
 
     @Login

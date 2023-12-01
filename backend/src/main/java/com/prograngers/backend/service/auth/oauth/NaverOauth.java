@@ -1,16 +1,15 @@
 package com.prograngers.backend.service.auth.oauth;
 
+import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
+
 import com.prograngers.backend.dto.auth.response.naver.GetNaverTokenResponse;
 import com.prograngers.backend.dto.auth.response.naver.GetNaverUserInfoResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
-import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
 public class NaverOauth {

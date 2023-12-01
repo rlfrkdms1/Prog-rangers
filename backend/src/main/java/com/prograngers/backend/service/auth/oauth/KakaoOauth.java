@@ -1,16 +1,16 @@
 package com.prograngers.backend.service.auth.oauth;
 
+import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
+import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.convertToMultiValueMap;
+
 import com.prograngers.backend.dto.auth.response.kakao.GetKakaoTokenResponse;
 import com.prograngers.backend.dto.auth.response.kakao.GetKakaoUserInfoResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import lombok.extern.slf4j.Slf4j;
-
-import static com.prograngers.backend.service.auth.oauth.MultiValueMapConverter.convertToMultiValueMap;
-import static com.prograngers.backend.service.auth.OauthConstant.BEARER_FORMAT;
 
 @Component
 @Slf4j
@@ -49,7 +49,7 @@ public class KakaoOauth {
                 .block();
     }
 
-    public GetKakaoUserInfoResponse kakaoGetUserInfo(String accessToken){
+    public GetKakaoUserInfoResponse kakaoGetUserInfo(String accessToken) {
         return webClient.get()
                 .uri(USER_INFO_URI)
                 .header(HttpHeaders.AUTHORIZATION, String.format(BEARER_FORMAT, accessToken))

@@ -1,15 +1,16 @@
 package com.prograngers.backend.support.fixture;
 
+import static com.prograngers.backend.entity.review.Review.ReviewBuilder;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.CREATED;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.FIXED;
+
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.review.ReviewStatusConstant;
 import com.prograngers.backend.entity.solution.Solution;
-import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
-import static com.prograngers.backend.entity.review.Review.*;
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.CREATED;
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.FIXED;
+import lombok.AllArgsConstructor;
 
 
 @AllArgsConstructor
@@ -23,7 +24,7 @@ public enum ReviewFixture {
     private final ReviewStatusConstant status;
     private final int codeLineNumber;
 
-    public ReviewBuilder 기본_빌더_생성(Member member, Solution solution, LocalDateTime createdAt){
+    public ReviewBuilder 기본_빌더_생성(Member member, Solution solution, LocalDateTime createdAt) {
         return Review.builder()
                 .content(content)
                 .status(status)
@@ -33,11 +34,11 @@ public enum ReviewFixture {
                 .createdAt(createdAt);
     }
 
-    public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdAt){
+    public Review 기본_정보_생성(Member member, Solution solution, LocalDateTime createdAt) {
         return 기본_빌더_생성(member, solution, createdAt).build();
     }
 
-    public Review 아이디_지정_생성(Long id,Member member, Solution solution, LocalDateTime createdAt){
+    public Review 아이디_지정_생성(Long id, Member member, Solution solution, LocalDateTime createdAt) {
         return 기본_빌더_생성(member, solution, createdAt).id(id).build();
     }
 

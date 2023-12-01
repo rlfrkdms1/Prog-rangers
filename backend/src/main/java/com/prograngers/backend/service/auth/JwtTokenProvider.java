@@ -19,13 +19,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
@@ -42,7 +41,7 @@ public class JwtTokenProvider {
         this.validTimeInMillisecond = validTimeInMillisecond;
     }
 
-    public String createAccessToken(Long memberId){
+    public String createAccessToken(Long memberId) {
         Date now = new Date();
         Date validTime = new Date(now.getTime() + validTimeInMillisecond);
         return Jwts.builder()
@@ -67,12 +66,12 @@ public class JwtTokenProvider {
             throw new UnsupportedTokenException();
         } catch (SignatureException e) {
             throw new FailedSignatureTokenException();
-        } catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             throw new IncorrectlyConstructedTokenException();
         }
     }
 
-    public Jws<Claims> getClaimsJwt(String token){
+    public Jws<Claims> getClaimsJwt(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .requireIssuer(ISSUER)
@@ -80,16 +79,16 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token);
     }
 
-    public Long getMemberId(String accessToken){
-        try{
+    public Long getMemberId(String accessToken) {
+        try {
             return getClaimsJwt(accessToken).getBody().get(MEMBER_ID, Long.class);
-        }catch (RequiredTypeException e){
+        } catch (RequiredTypeException e) {
             throw new InvalidClaimTypeException();
         }
 
     }
 
-    public Date getExpiredAt(String accessToken){
+    public Date getExpiredAt(String accessToken) {
         return getClaimsJwt(accessToken).getBody().getExpiration();
     }
 }

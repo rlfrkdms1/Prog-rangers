@@ -3,10 +3,12 @@ package com.prograngers.backend.service.auth;
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.support.Encrypt;
@@ -43,7 +45,7 @@ class AuthServiceTest {
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
-                () -> assertThatThrownBy(() -> authService.validNicknameDuplication(nickname)).isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> assertThatThrownBy(() -> authService.validAlreadyExistNickname(nickname)).isExactlyInstanceOf(AlreadyExistNicknameException.class),
                 () -> verify(memberRepository).findByNickname(nickname)
         );
     }
@@ -52,7 +54,7 @@ class AuthServiceTest {
     void 닉네임_중복검사를_할_수_있다() {
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.empty());
-        authService.validNicknameDuplication(nickname);
+        authService.validAlreadyExistNickname(nickname);
         verify(memberRepository).findByNickname(nickname);
     }
 
@@ -116,6 +118,21 @@ class AuthServiceTest {
     }
 
     @Test
+    void 회원가입_진행_금지_닉네임_사용시_예외() {
+        String wrongNickname = "탈퇴한 사용자";
+        String email = "notExist@naver.com";
+        SignUpRequest wrongRequest = new SignUpRequest("password", email, wrongNickname);
+        given(memberRepository.existsByEmail(email)).willReturn(false);
+        given(memberRepository.existsByNickname(wrongNickname)).willReturn(false);
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.signUp(wrongRequest))
+                        .isExactlyInstanceOf(ProhibitionNicknameException.class),
+                () -> verify(memberRepository).existsByEmail(email),
+                () -> verify(memberRepository).existsByNickname(wrongNickname)
+        );
+    }
+
+    @Test
     void 일반_로그인_이메일이_틀렸을_떄(){
         String email = "rlfrkdms@naver.com";
         String password = "rlfrkdms";
@@ -169,5 +186,16 @@ class AuthServiceTest {
             );
 
         }
+    }
+
+    @Test
+    void 탈퇴한_회원은_로그인_할_수_없다() {
+        Member member = 길가은.탈퇴_회원_생성();
+        LoginRequest request = 길가은.로그인_요청_생성();
+        given(memberRepository.findByEmail(member.getEmail())).willReturn(Optional.of(member));
+        assertAll(
+                () -> assertThatThrownBy(() -> authService.login(request)).isExactlyInstanceOf(QuitMemberException.class),
+                () -> verify(memberRepository).findByEmail(member.getEmail())
+        );
     }
 }

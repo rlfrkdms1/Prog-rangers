@@ -37,3 +37,12 @@ out/
 ### VS Code ###
 .vscode/
 .DS_Store
+/src/main/generated/com/prograngers/backend/entity/badge/QBadge.java
+/src/main/generated/com/prograngers/backend/entity/comment/QComment.java
+/src/main/generated/com/prograngers/backend/entity/QFollow.java
+/src/main/generated/com/prograngers/backend/entity/QLikes.java
+/src/main/generated/com/prograngers/backend/entity/member/QMember.java
+/src/main/generated/com/prograngers/backend/entity/QNotification.java
+/src/main/generated/com/prograngers/backend/entity/problem/QProblem.java
+/src/main/generated/com/prograngers/backend/entity/review/QReview.java
+/src/main/generated/com/prograngers/backend/entity/solution/QSolution.java

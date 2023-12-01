@@ -2,12 +2,11 @@ package com.prograngers.backend.dto.problem.response;
 
 import com.prograngers.backend.entity.problem.JudgeConstant;
 import com.prograngers.backend.entity.problem.Problem;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter

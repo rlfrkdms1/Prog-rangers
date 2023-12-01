@@ -6,7 +6,12 @@ import com.prograngers.backend.dto.follow.response.ShowFollowListResponse;
 import com.prograngers.backend.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
 
     private final FollowService followService;
+    private static final Long RECOMMEND_MEMBER_COUNT = 10L;
+
 
     @Login
     @PostMapping("/members/{memberId}/following")
@@ -33,7 +40,7 @@ public class FollowController {
 
     @Login
     @GetMapping("/follows")
-    public ResponseEntity<ShowFollowListResponse> followList(@LoggedInMember Long memberId){
-        return ResponseEntity.ok().body(followService.getFollowList(memberId));
+    public ResponseEntity<ShowFollowListResponse> followList(@LoggedInMember Long memberId) {
+        return ResponseEntity.ok().body(followService.getFollowList(memberId, RECOMMEND_MEMBER_COUNT));
     }
 }

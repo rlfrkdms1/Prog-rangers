@@ -1,12 +1,11 @@
 package com.prograngers.backend.dto.review.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -18,7 +17,7 @@ public class CodeLineWithReview {
     private String code;
     private List<ReviewWithRepliesResponse> reviews;
 
-    public static CodeLineWithReview from(String line, int lineNumber){
+    public static CodeLineWithReview from(String line, int lineNumber) {
         return CodeLineWithReview.builder()
                 .codeLineNumber(lineNumber)
                 .code(line)

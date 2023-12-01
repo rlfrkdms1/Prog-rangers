@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class JpaConfig {
 
     /**
-     * QueryDSL 설정 파일
-     * query를 생성할 수 있도록 EntityManager 주입
+     * QueryDSL 설정 파일 query를 생성할 수 있도록 EntityManager 주입
      */
 
     @PersistenceContext

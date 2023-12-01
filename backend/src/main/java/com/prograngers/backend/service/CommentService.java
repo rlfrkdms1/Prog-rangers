@@ -1,5 +1,7 @@
 package com.prograngers.backend.service;
 
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
+
 import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
 import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
@@ -24,8 +26,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.*;
-
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -44,7 +44,8 @@ public class CommentService {
 
     public ShowMyCommentsResponse showMyComments(Long memberId, Integer pageNumber) {
         validPageNumber(pageNumber);
-        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
+        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(
+                PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
         return ShowMyCommentsResponse.from(commentPage);
     }
 
@@ -58,7 +59,7 @@ public class CommentService {
     public void addComment(Long solutionId, WriteCommentRequest writeCommentRequest, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
-        if (writeCommentRequest.getParentId() != null){
+        if (writeCommentRequest.getParentId() != null) {
             validParentExists(writeCommentRequest);
             validSameSolution(writeCommentRequest, solutionId);
         }

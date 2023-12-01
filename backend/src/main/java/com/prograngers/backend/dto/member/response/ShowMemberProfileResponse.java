@@ -1,16 +1,19 @@
 package com.prograngers.backend.dto.member.response;
 
 import com.prograngers.backend.entity.badge.Badge;
-import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.badge.BadgeConstant;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Builder
+@Slf4j
 public class ShowMemberProfileResponse {
+    private static final Long LAST_PAGE_CURSOR = -1L;
     private static int SIZE_PER_SCROLL = 3;
     private String photo;
     private String nickname;
@@ -22,11 +25,8 @@ public class ShowMemberProfileResponse {
     private List<SolutionWithProblemResponse> list;
     private Long cursor;
 
-    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> solutions, Long follow, Long following) {
-
-        // 무한스크롤 isLast, 커서
-        Long cursor = -1L;
-        if (!isLastScroll(solutions)) cursor = getCursor(solutions);
+    public static ShowMemberProfileResponse from(Member member, List<Badge> badges, List<Solution> profileSolutions,
+                                                 Long follow, Long following, Long cursor) {
 
         return ShowMemberProfileResponse.builder()
                 .photo(member.getPhoto())
@@ -35,7 +35,7 @@ public class ShowMemberProfileResponse {
                 .follow(follow)
                 .following(following)
                 .badge(getBadgeList(badges))
-                .list(getProblemSolutionList(solutions))
+                .list(getProblemSolutionList(profileSolutions))
                 .cursor(cursor)
                 .build();
     }
@@ -47,16 +47,5 @@ public class ShowMemberProfileResponse {
 
     private static List<BadgeConstant> getBadgeList(List<Badge> badges) {
         return badges.stream().map(badge -> badge.getBadgeType()).toList();
-    }
-
-    private static boolean isLastScroll(List<Solution> solutions) {
-        return solutions.size() < SIZE_PER_SCROLL;
-    }
-
-    private static Long getCursor(List<Solution> solutions) {
-        Long cursor;
-        cursor = solutions.get(SIZE_PER_SCROLL-1).getId();
-        solutions.remove(SIZE_PER_SCROLL-1);
-        return cursor;
     }
 }

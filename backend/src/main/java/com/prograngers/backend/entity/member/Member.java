@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.member;
 
+import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
 import com.prograngers.backend.support.Encrypt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,16 +10,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 
 @Entity
@@ -26,6 +25,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
+
+    private static final String QUIT_NICKNAME = "탈퇴한 사용자";
+    private static final List<String> PROHIBITED_NICKNAMES = List.of("탈퇴한 사용자");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +61,12 @@ public class Member {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Member member = (Member) o;
         return Objects.equals(id, member.id);
     }
@@ -71,7 +77,10 @@ public class Member {
     }
 
     @Builder
-    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github, String introduction, String password, String photo, LocalDateTime passwordModifiedAt) {
+    public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github,
+                  String introduction, String password, String photo, LocalDateTime passwordModifiedAt,
+                  boolean usable) {
+        validProhibitionNickname(nickname);
         this.id = id;
         this.socialId = socialId;
         this.type = type;
@@ -82,9 +91,17 @@ public class Member {
         this.password = password;
         this.photo = photo;
         this.passwordModifiedAt = passwordModifiedAt;
+        this.usable = usable;
+    }
+
+    private void validProhibitionNickname(String nickname) {
+        if (PROHIBITED_NICKNAMES.contains(nickname)) {
+            throw new ProhibitionNicknameException();
+        }
     }
 
     private void updateNickName(String nickname) {
+        validProhibitionNickname(nickname);
         if (nickname != null) {
             this.nickname = nickname;
         }
@@ -121,8 +138,8 @@ public class Member {
         }
     }
 
-    private void updatePhoto(String photo){
-        if (photo!=null){
+    private void updatePhoto(String photo) {
+        if (photo != null) {
             this.photo = photo;
         }
     }
@@ -131,11 +148,22 @@ public class Member {
         this.usable = false;
     }
 
+    public boolean isUsable() {
+        return usable;
+    }
+
     public void update(Member member) {
         updateNickName(member.getNickname());
         updateGitHub(member.getGithub());
         updateIntroduction(member.getIntroduction());
         updatePassword(member.getPassword());
         updatePhoto(member.getPhoto());
+    }
+
+    public String getNickname() {
+        if (isUsable()) {
+            return nickname;
+        }
+        return QUIT_NICKNAME;
     }
 }

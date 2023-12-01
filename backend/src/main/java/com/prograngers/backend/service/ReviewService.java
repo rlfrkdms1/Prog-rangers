@@ -1,13 +1,15 @@
 package com.prograngers.backend.service;
 
+import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
+
 import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
 import com.prograngers.backend.dto.review.request.WriteReviewRequest;
 import com.prograngers.backend.dto.review.response.CodeLineWithReview;
 import com.prograngers.backend.dto.review.response.ReplyResponse;
 import com.prograngers.backend.dto.review.response.ReviewWithRepliesResponse;
 import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
-import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.DifferentCodeLineNumberException;
 import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
@@ -21,15 +23,12 @@ import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedExcep
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.*;
 
 @Service
 @Slf4j
@@ -45,38 +44,39 @@ public class ReviewService {
     public void writeReview(WriteReviewRequest writeReviewRequest, Long memberId, Long solutionId) {
         Member writer = findMemberById(memberId);
         Solution solution = findSolutionById(solutionId);
-        validCodeLineNumber(writeReviewRequest,solution.getCode().split("\n").length);
-        if (writeReviewRequest.getParentId()!=null){
+        validCodeLineNumber(writeReviewRequest, solution.getCode().split("\n").length);
+        if (writeReviewRequest.getParentId() != null) {
             validParentExists(writeReviewRequest);
-            validSameSolution(writeReviewRequest,solutionId);
+            validSameSolution(writeReviewRequest, solutionId);
             validSameCodeLineWithParent(writeReviewRequest);
         }
         reviewRepository.save(writeReviewRequest.toReview(writer, solution));
     }
 
     private void validSameCodeLineWithParent(WriteReviewRequest writeReviewRequest) {
-        if (reviewRepository.findById(writeReviewRequest.getParentId()).get().getCodeLineNumber()!=writeReviewRequest.getCodeLineNumber()){
+        if (reviewRepository.findById(writeReviewRequest.getParentId()).get().getCodeLineNumber()
+                != writeReviewRequest.getCodeLineNumber()) {
             throw new DifferentCodeLineNumberException();
         }
     }
 
     private void validCodeLineNumber(WriteReviewRequest writeReviewRequest, int length) {
-        if (writeReviewRequest.getCodeLineNumber()>length||writeReviewRequest.getCodeLineNumber()<=0){
+        if (writeReviewRequest.getCodeLineNumber() > length || writeReviewRequest.getCodeLineNumber() <= 0) {
             throw new InvalidCodeLIneNumberException();
         }
     }
 
     private void validSameSolution(WriteReviewRequest writeReviewRequest, Long solutionId) {
-        if (solutionId!=reviewRepository.findById(writeReviewRequest.getParentId())
+        if (solutionId != reviewRepository.findById(writeReviewRequest.getParentId())
                 .get()
                 .getSolution()
-                .getId()){
+                .getId()) {
             throw new DifferentSolutionException();
         }
     }
 
     private void validParentExists(WriteReviewRequest writeReviewRequest) {
-        if (!reviewRepository.existsById(writeReviewRequest.getParentId())){
+        if (!reviewRepository.existsById(writeReviewRequest.getParentId())) {
             throw new InvalidParentException();
         }
     }
