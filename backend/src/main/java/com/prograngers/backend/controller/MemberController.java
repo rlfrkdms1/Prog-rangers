@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class MemberController {
 
+    private static final String LONG_MAX = "9223372036854775807";
+
     private final MemberService memberService;
 
     @Login
@@ -40,7 +42,7 @@ public class MemberController {
 
     @GetMapping("/members/{nickname}")
     public ShowMemberProfileResponse showProfile(@PathVariable String nickname,
-                                                 @RequestParam(defaultValue = "9223372036854775807") Long page) {
+                                                 @RequestParam(defaultValue = LONG_MAX) Long page) {
         return memberService.getMemberProfile(nickname, page);
     }
 
