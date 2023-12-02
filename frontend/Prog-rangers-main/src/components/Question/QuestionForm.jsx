@@ -49,11 +49,14 @@ export const QuestionForm = ({data}) => {
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
               {item.tags.map((index) => (
-                <div key={index} css={css`${tags}`}> 
-                  {getRightName(index)}
-                </div>
+                getRightName(index) && (
+                  <div key={index} css={css`${tags}`}> 
+                    {getRightName(index)}
+                  </div>
+                )
               ))}
             </div>
+
             <div css={css`
               ${ojNameTag}
               background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};
