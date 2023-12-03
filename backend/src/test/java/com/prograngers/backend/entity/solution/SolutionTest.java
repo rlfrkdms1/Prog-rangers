@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class SolutionTest {
 
@@ -71,5 +73,19 @@ class SolutionTest {
         );
     }
 
-
+    @ParameterizedTest
+    @ValueSource(strings = {"", "  ", "        "})
+    void 수정하려는_제목이_blank이면_제목이_수정되지_않는다(String title) {
+        // when
+        solution.update(title, UPDATED_ALGORITHM, UPDATED_DATASTRUCTURE, UPDATED_LEVEL, UPDATED_CODE, "수정설명");
+        // then
+        Assertions.assertAll(
+                () -> assertThat(solution.getTitle()).isEqualTo(TITLE),
+                () -> assertThat(solution.getAlgorithm()).isEqualTo(UPDATED_ALGORITHM),
+                () -> assertThat(solution.getDataStructure()).isEqualTo(UPDATED_DATASTRUCTURE),
+                () -> assertThat(solution.getLevel()).isEqualTo(UPDATED_LEVEL),
+                () -> assertThat(solution.getCode()).isEqualTo(UPDATED_CODE),
+                () -> assertThat(solution.getDescription()).isEqualTo(UPDATED_DESCRIPTION)
+        );
+    }
 }
