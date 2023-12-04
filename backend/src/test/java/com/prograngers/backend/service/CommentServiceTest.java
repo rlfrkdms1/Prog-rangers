@@ -58,7 +58,7 @@ class CommentServiceTest {
     void 댓글_수정_테스트() {
 
         // given
-        Member member = 장지담.아이디_지정_생성(1L);
+        Member member = 장지담.기본_정보_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution = 공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), BFS, LIST, JAVA, 1);
         Comment comment = 생성된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
@@ -81,7 +81,7 @@ class CommentServiceTest {
     @Test
     void 댓글_삭제_테스트() {
         // given
-        Member member = 장지담.아이디_지정_생성(1L);
+        Member member = 장지담.기본_정보_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution = 공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), BFS, LIST, JAVA, 1);
         Comment comment = 생성된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
@@ -114,8 +114,8 @@ class CommentServiceTest {
     @Test
     void 내_댓글_아닌_댓글_수정() {
         // given
-        Member member1 = 장지담.아이디_지정_생성(1L);
-        Member member2 = 장지담.아이디_지정_생성(2L);
+        Member member1 = 장지담.기본_정보_생성(1L);
+        Member member2 = 장지담.기본_정보_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution = 공개_풀이.아이디_지정_생성(1L, problem, member1, LocalDateTime.now(), BFS, LIST, JAVA, 1);
         Comment comment = 생성된_댓글.아이디_지정_생성(1L, member1, solution, LocalDateTime.now());
@@ -137,8 +137,8 @@ class CommentServiceTest {
     @Test
     void 내_댓글_아닌_댓글_삭제() {
         // given
-        Member member1 = 장지담.아이디_지정_생성(1L);
-        Member member2 = 장지담.아이디_지정_생성(2L);
+        Member member1 = 장지담.기본_정보_생성(1L);
+        Member member2 = 장지담.기본_정보_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution = 공개_풀이.아이디_지정_생성(1L, problem, member1, LocalDateTime.now(), BFS, LIST, JAVA, 1);
         Comment comment = 생성된_댓글.아이디_지정_생성(1L, member1, solution, LocalDateTime.now());

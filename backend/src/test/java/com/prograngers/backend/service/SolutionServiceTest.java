@@ -97,7 +97,7 @@ class SolutionServiceTest {
     @Test
     void 스크랩_저장_테스트() {
         // given
-        Member member = 장지담.아이디_지정_생성(1L);
+        Member member = 장지담.기본_정보_생성(1L);
         Problem problem = 백준_문제.기본_정보_생성();
         // 스크랩 당할 풀이 scrapTarget
         Solution scrapTarget = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), DFS, LIST, JAVA, 1);
@@ -123,8 +123,8 @@ class SolutionServiceTest {
     @Test
     void 비공개_풀이_조회_예외_발생() {
         // given
-        Member member1 = 장지담.아이디_지정_생성(1L);
-        Member member2 = 장지담.아이디_지정_생성(2L);
+        Member member1 = 장지담.기본_정보_생성(1L);
+        Member member2 = 장지담.기본_정보_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution = 비공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
 
@@ -141,8 +141,8 @@ class SolutionServiceTest {
     @Test
     void 내_풀이_아닌_풀이_수정_시_예외_발생() {
         // given
-        Member member1 = 장지담.아이디_지정_생성(1L);
-        Member member2 = 장지담.아이디_지정_생성(2L);
+        Member member1 = 장지담.기본_정보_생성(1L);
+        Member member2 = 장지담.기본_정보_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
 
@@ -162,8 +162,8 @@ class SolutionServiceTest {
     @Test
     void 내_풀이_아닌_풀이_삭제_시_예외_발생() {
         // given
-        Member member1 = 장지담.아이디_지정_생성(1L);
-        Member member2 = 장지담.아이디_지정_생성(2L);
+        Member member1 = 장지담.기본_정보_생성(1L);
+        Member member2 = 장지담.기본_정보_생성(2L);
         Problem problem = 백준_문제.기본_정보_생성();
         Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1);
 
@@ -187,8 +187,8 @@ class SolutionServiceTest {
         final Long solutionId = 1L;
 
         //member
-        final Member member1 = 장지담.아이디_지정_생성(member1Id);
-        final Member member2 = 장지담.아이디_지정_생성(member2Id);
+        final Member member1 = 장지담.기본_정보_생성(member1Id);
+        final Member member2 = 장지담.기본_정보_생성(member2Id);
 
         //problem
         final Problem problem = 백준_문제.기본_정보_생성();
@@ -285,7 +285,7 @@ class SolutionServiceTest {
         //given
         final Long memberId = 1L;
         final Long solutionId = 1L;
-        final Member member = 장지담.아이디_지정_생성(memberId);
+        final Member member = 장지담.기본_정보_생성(memberId);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", "https://www.acmicpc.net/problem/2557", 1,
                 JAVA, true, "설명", "import\nmain\nhello\nworld");
         final Problem problem = 백준_문제.기본_정보_생성();
@@ -314,7 +314,7 @@ class SolutionServiceTest {
         //given
         final Long memberId = 1L;
         final String WRONG_LINK = "wrongLink123";
-        Member member = 장지담.아이디_지정_생성(memberId);
+        Member member = 장지담.기본_정보_생성(memberId);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", WRONG_LINK, 1, JAVA, true, "설명",
                 "import\nmain\nhello\nworld");
 
@@ -358,8 +358,8 @@ class SolutionServiceTest {
         final Long memberId = 1L;
         final Long problemId = 1L;
 
-        Member member = 장지담.아이디_지정_생성(memberId);
-        Member other = 길가은.아이디_지정_생성(2L);
+        Member member = 장지담.기본_정보_생성(memberId);
+        Member other = 길가은.기본_정보_생성(2L);
         Problem problem = 백준_문제.아이디_지정_생성(problemId);
         Solution solution = 공개_풀이.아이디_지정_생성(solutionId, problem, member, LocalDateTime.now().minusDays(100), JAVA, 3);
         Solution scrapSolution = 공개_풀이.스크랩_아이디_지정_생성(2L, other, LocalDateTime.now(), 3, solution);
@@ -413,7 +413,7 @@ class SolutionServiceTest {
         //given
         final Long memberId = 1L;
         final Long solutionId = 1L;
-        final Member member = 장지담.아이디_지정_생성(memberId);
+        final Member member = 장지담.기본_정보_생성(memberId);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", "https://www.acmicpc.net/problem/2557", 1,
                 JAVA, true, "설명", "import\nmain\nhello\nworld");
         final Problem problem = 백준_문제.기본_정보_생성();
@@ -440,7 +440,7 @@ class SolutionServiceTest {
         //given
         final String problemLink = "https://www.acmicpc.net/problem/2557";
         final Long memberId = 1L;
-        final Member member = 장지담.아이디_지정_생성(1L);
+        final Member member = 장지담.기본_정보_생성(1L);
         final Problem problem = 백준_문제.아이디_지정_생성(1L);
         final Solution solution = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
         final WriteSolutionRequest request = 풀이_생성_요청_생성("백준 문제", "풀이 제목", problemLink, 1, JAVA, true, "설명",
