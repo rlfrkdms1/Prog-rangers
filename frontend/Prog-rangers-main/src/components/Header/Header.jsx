@@ -32,7 +32,7 @@ export const Header = () => {
       const result = await axios.get(
         'http://13.124.131.171:8080/api/v1/problems'
       );
-      setData(result.data);
+      setData(result.data.problems);
     };
 
     fetchData();
@@ -63,7 +63,7 @@ export const Header = () => {
   const results = !search
     ? data
     : data.filter((item) =>
-        item
+        item.title
           .toLowerCase()
           .includes(search.toLocaleLowerCase())
       );
