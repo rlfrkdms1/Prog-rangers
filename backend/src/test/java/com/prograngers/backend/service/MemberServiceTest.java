@@ -1,5 +1,6 @@
 package com.prograngers.backend.service;
 
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountRequest;
 import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
@@ -16,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Optional;
 
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
@@ -91,6 +91,23 @@ class MemberServiceTest {
                         .isExactlyInstanceOf(MemberNotFoundException.class),
                 () -> verify(memberRepository).findById(member.getId())
         );
+    }
+
+    @Test
+    void 회원은_계정_정보를_수정할_수_있다() {
+        Member member = 길가은.기본_정보_생성(1L);
+        String newNickname = "newNickname";
+        String newGithub = "newGithub";
+        String introduction = "newIntroduction";
+        String oldPassword = "decodedOriginPassword";
+        String newPassword = "newPassword";
+        String photo = "newPhoto";
+        UpdateMemberAccountRequest updateMemberAccountRequest = new UpdateMemberAccountRequest(newNickname, newGithub, introduction, oldPassword, newPassword, photo);
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+            encryptMockedStatic.when(() -> Encrypt.decoding("testPassword")).thenReturn(oldPassword);
+            memberService.updateMemberAccount(member.getId(), updateMemberAccountRequest);
+        }
     }
 
 }
