@@ -75,7 +75,7 @@ public class MemberService {
     }
 
     private void validCorrectPassword(UpdateMemberAccountRequest updateMemberAccountRequest, Member member) {
-        if(member.getPassword().equals(updateMemberAccountRequest.getOldPassword()))
+        if(!member.getPassword().equals(updateMemberAccountRequest.getOldPassword()))
             throw new IncorrectPasswordException();
     }
 
