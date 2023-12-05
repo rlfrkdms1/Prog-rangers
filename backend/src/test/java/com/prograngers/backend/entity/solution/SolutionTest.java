@@ -24,6 +24,8 @@ class SolutionTest {
     private static final String TITLE = "풀이제목";
     private static final String CODE = "import\nmain\nhello world\nreturn";
     private static final String DESCRIPTION = "풀이설명";
+    private static final AlgorithmConstant ALGORITHM = BELLMAN_FORD;
+    private static final DataStructureConstant DATA_STRUCTURE = HEAP;
 
     final static String UPDATED_TITLE = "수정제목";
     final static AlgorithmConstant UPDATED_ALGORITHM = DFS;
@@ -40,7 +42,7 @@ class SolutionTest {
     void beforeEach() {
         member = 장지담.기본_정보_생성();
         problem = 백준_문제.기본_정보_생성();
-        solution = 공개_풀이.알고리즘_자료구조_지정_생성(problem, member, LocalDateTime.now(), JAVA, 1, BELLMAN_FORD, HEAP);
+        solution = 공개_풀이.알고리즘_자료구조_지정_생성(problem, member, LocalDateTime.now(), JAVA, 1, ALGORITHM, DATA_STRUCTURE);
     }
 
     @Test
@@ -59,33 +61,33 @@ class SolutionTest {
     }
 
     @Test
-    void 수정하려는_제목이_null이면_제목이_수정되지_않는다() {
+    void 수정하려는_값이_null이면_수정되지_않는다() {
         // when
-        solution.update(null, UPDATED_ALGORITHM, UPDATED_DATASTRUCTURE, UPDATED_LEVEL, UPDATED_CODE, "수정설명");
+        solution.update(null, null, null, UPDATED_LEVEL, null, null);
         // then
         Assertions.assertAll(
                 () -> assertThat(solution.getTitle()).isEqualTo(TITLE),
-                () -> assertThat(solution.getAlgorithm()).isEqualTo(UPDATED_ALGORITHM),
-                () -> assertThat(solution.getDataStructure()).isEqualTo(UPDATED_DATASTRUCTURE),
+                () -> assertThat(solution.getAlgorithm()).isEqualTo(ALGORITHM),
+                () -> assertThat(solution.getDataStructure()).isEqualTo(DATA_STRUCTURE),
                 () -> assertThat(solution.getLevel()).isEqualTo(UPDATED_LEVEL),
-                () -> assertThat(solution.getCode()).isEqualTo(UPDATED_CODE),
-                () -> assertThat(solution.getDescription()).isEqualTo(UPDATED_DESCRIPTION)
+                () -> assertThat(solution.getCode()).isEqualTo(CODE),
+                () -> assertThat(solution.getDescription()).isEqualTo(DESCRIPTION)
         );
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "  ", "        "})
-    void 수정하려는_제목이_blank이면_제목이_수정되지_않는다(String title) {
+    void 수정하려는_값이_blank이면_수정되지_않는다(String blank) {
         // when
-        solution.update(title, UPDATED_ALGORITHM, UPDATED_DATASTRUCTURE, UPDATED_LEVEL, UPDATED_CODE, "수정설명");
+        solution.update(blank, UPDATED_ALGORITHM, UPDATED_DATASTRUCTURE, UPDATED_LEVEL, blank, blank);
         // then
         Assertions.assertAll(
                 () -> assertThat(solution.getTitle()).isEqualTo(TITLE),
                 () -> assertThat(solution.getAlgorithm()).isEqualTo(UPDATED_ALGORITHM),
                 () -> assertThat(solution.getDataStructure()).isEqualTo(UPDATED_DATASTRUCTURE),
                 () -> assertThat(solution.getLevel()).isEqualTo(UPDATED_LEVEL),
-                () -> assertThat(solution.getCode()).isEqualTo(UPDATED_CODE),
-                () -> assertThat(solution.getDescription()).isEqualTo(UPDATED_DESCRIPTION)
+                () -> assertThat(solution.getCode()).isEqualTo(CODE),
+                () -> assertThat(solution.getDescription()).isEqualTo(DESCRIPTION)
         );
     }
 }
