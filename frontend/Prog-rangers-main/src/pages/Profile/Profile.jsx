@@ -15,6 +15,9 @@ import {
   fontSize24
 } from './ProfileStyle';
 
+
+import star1 from '../../assets/icons/star/star1.svg';
+
 export const Profile = () => {
   
   const navigate = useNavigate();
@@ -24,6 +27,15 @@ export const Profile = () => {
   //팔로우 버튼
   const [isFollowing, setIsFollowing] = useState(false);
   const buttonColor = isFollowing ? theme.colors.light3 : theme.colors.main30;
+
+   // 달성 뱃지
+   const badgeImages = {
+    새싹: star1,
+    // 꽃: star2,
+    // 안경: star3,
+    // 4: star4,
+    // 5: star5,
+  }
 
   const handleFollowClick = () => {
     setIsFollowing(!isFollowing); 
@@ -145,6 +157,9 @@ export const Profile = () => {
             </div>
             달성
           </div>  
+          {badgeImages[data.badges] && (
+              <img src={badgeImages[data.badges]} alt={`${data.badges}`} />
+              )}
       </div>
 
 

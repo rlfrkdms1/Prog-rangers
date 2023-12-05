@@ -88,10 +88,10 @@ export const MySolution = () => {
         
         <div className="filter"
           css={css`${filterStyle}`}>
-              <FilterBar2 options={sort.LANGUAGE}/>
-              <FilterBar2 options={sort.ALGORITHM}/>
-              <FilterBar2 options={sort.DATASTRUCTURE}/>
-              <FilterBar2 options={sort.LEVEL}/>
+              <FilterBar2 title="language" options={sort.LANGUAGE}/>
+              <FilterBar2 title="algorithm" options={sort.ALGORITHM}/>
+              <FilterBar2 title="datastructure" options={sort.DATASTRUCTURE}/>
+              <FilterBar2 title="level" options={sort.LEVEL}/>
         </div>
 
         <div css={css`width: 800px; margin-top: 20px; margin-right: 111px;`}>
