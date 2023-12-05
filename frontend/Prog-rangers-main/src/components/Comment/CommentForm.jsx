@@ -68,7 +68,7 @@ return(
       <div css={css`display: flex; flex-direction: row; margin-left:30px;`}>
           {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.algorithm}</div>)}
           {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.dataStructure}</div>)}
-        </div>
+      </div>
     </div>
 
     <div css={css`display:flex; align-items: center; width: 100%; height: 130px; margin-bottom:30px; border-bottom: 1px solid #DEDCDC;`}>

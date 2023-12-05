@@ -17,7 +17,7 @@ export const QSolving = ({data}) => {
     const foundElement = forTags[foundIndex];
     return foundElement?.name;
   }
-  
+
   return(
     <>
       {data.map((item,index) => (
@@ -39,7 +39,7 @@ export const QSolving = ({data}) => {
             `
           }            
           >
-            {item.title}
+            {item.solutionName}
           </div>
           <div css={css`
             width: 100%; 
@@ -50,9 +50,10 @@ export const QSolving = ({data}) => {
             justify-content: space-between;
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
-              <div key={index} css={css`${tags}`}>
-                {getRightName(item.algorithm)}
-              </div>
+              {getRightName(item.algorithm) && 
+                (<div key={index} css={css`${tags}`}> {getRightName(item.algorithm)} </div>)}
+              {item.dataStructure && 
+                (<div key={index} css={css`${tags}`}> {item.dataStructure} </div>)}
             </div>
           </div>
         </div>

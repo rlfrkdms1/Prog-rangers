@@ -29,7 +29,7 @@ export const Solutions = () => {
   };
 
   const WantSolutions = async() => {
-    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems/${targetIndex+1}/solutions`);
+    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems/${targetIndex+1}/solutions?page=${page-1}`);
     setTotalPages(response.data.totalPages);
     setSolvings(response.data.solutions);
     setQuestionTitle(response.data.problemName);
@@ -87,8 +87,8 @@ export const Solutions = () => {
             align-items:center;
         `}>
           <Pagination
-            totalPages={totalPages}
             page={page}
+            totalPages={totalPages}
             handlePageChange={handlePageChange}
           />
         </div>
