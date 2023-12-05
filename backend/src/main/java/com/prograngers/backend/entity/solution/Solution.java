@@ -139,7 +139,8 @@ public class Solution {
         if (dataStructure != null) {
             return dataStructure.getView();
         }
-        return null;    }
+        return null;
+    }
 
     public boolean isScrapped() {
         return scrapSolution != null;
