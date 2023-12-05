@@ -1,9 +1,11 @@
 package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.dto.auth.response.LoginResponse;
-import com.prograngers.backend.dto.auth.result.AuthResult;
+import static com.prograngers.backend.controller.auth.RefreshCookieProvider.REFRESH_TOKEN;
+
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
+import com.prograngers.backend.dto.auth.response.LoginResponse;
+import com.prograngers.backend.dto.auth.result.AuthResult;
 import com.prograngers.backend.exception.unauthorization.NotExistRefreshTokenException;
 import com.prograngers.backend.service.auth.AuthService;
 import jakarta.validation.Valid;
@@ -20,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.prograngers.backend.controller.auth.RefreshCookieProvider.REFRESH_TOKEN;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -33,14 +33,15 @@ public class AuthController {
 
     @GetMapping("/auth")
     public ResponseEntity<Void> checkNicknameDuplication(@RequestParam String nickname) {
-        authService.validNicknameDuplication(nickname);
+        authService.validAlreadyExistNickname(nickname);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<LoginResponse> singUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         AuthResult authResult = authService.signUp(signUpRequest);
-        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(),
+                authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(LoginResponse.from(authResult));
@@ -49,7 +50,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         AuthResult authResult = authService.login(loginRequest);
-        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(),
+                authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(LoginResponse.from(authResult));
@@ -59,7 +61,8 @@ public class AuthController {
     public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String code) {
         log.info("kakao's authorization code is {}", code);
         AuthResult authResult = authService.kakaoLogin(code);
-        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(),
+                authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(LoginResponse.from(authResult));
@@ -68,7 +71,8 @@ public class AuthController {
     @PostMapping("/login/google")
     public ResponseEntity<LoginResponse> googleLogin(@RequestParam String code) {
         AuthResult authResult = authService.googleLogin(code);
-        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(),
+                authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(LoginResponse.from(authResult));
@@ -77,7 +81,8 @@ public class AuthController {
     @PostMapping("/login/naver")
     public ResponseEntity<LoginResponse> naverLogin(@RequestParam String code, @RequestParam String state) {
         AuthResult authResult = authService.naverLogin(code, state);
-        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(),
+                authResult.getRefreshTokenExpiredAt());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(LoginResponse.from(authResult));
@@ -87,7 +92,8 @@ public class AuthController {
     public ResponseEntity<LoginResponse> reissue(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
         validRefreshToken(refreshToken);
         AuthResult authResult = authService.reissue(refreshToken);
-        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(), authResult.getRefreshTokenExpiredAt());
+        ResponseCookie cookie = refreshCookieProvider.createCookieWithRefreshToken(authResult.getRefreshToken(),
+                authResult.getRefreshTokenExpiredAt());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -95,7 +101,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@CookieValue(name = REFRESH_TOKEN) String refreshToken){
+    public ResponseEntity<Void> logout(@CookieValue(name = REFRESH_TOKEN) String refreshToken) {
         validRefreshToken(refreshToken);
         ResponseCookie logoutCookie = refreshCookieProvider.createLogoutCookie();
         return ResponseEntity.noContent()

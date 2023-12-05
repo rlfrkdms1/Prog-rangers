@@ -14,14 +14,14 @@ public class ProblemResponse {
     private String title;
     private JudgeConstant ojName;
 
-    public static ProblemResponse from(String problemTitle, JudgeConstant ojName){
+    public static ProblemResponse from(String problemTitle, JudgeConstant ojName) {
         return ProblemResponse.builder()
                 .title(problemTitle)
                 .ojName(ojName)
                 .build();
     }
 
-    public static ProblemResponse from(Problem problem){
+    public static ProblemResponse from(Problem problem) {
         return ProblemResponse.builder()
                 .title(problem.getTitle())
                 .ojName(problem.getOjName())

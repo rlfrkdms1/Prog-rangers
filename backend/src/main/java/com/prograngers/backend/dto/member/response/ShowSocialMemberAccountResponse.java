@@ -7,7 +7,8 @@ import lombok.Builder;
 public class ShowSocialMemberAccountResponse extends ShowMemberAccountResponse {
 
     @Builder
-    public ShowSocialMemberAccountResponse(MemberType type, String nickname, String email, String github, String introduction, String photo) {
+    public ShowSocialMemberAccountResponse(MemberType type, String nickname, String email, String github,
+                                           String introduction, String photo) {
         super(type, nickname, email, github, introduction, photo);
     }
 

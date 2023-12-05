@@ -3,9 +3,9 @@ package com.prograngers.backend.dto.member.response;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.support.Encrypt;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import java.time.LocalDateTime;
 
 @Getter
 public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse {
@@ -14,7 +14,9 @@ public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse {
     private LocalDateTime passwordModifiedAt;
 
     @Builder
-    public ShowBasicMemberAccountResponse(MemberType type, String nickname, String email, String github, String introduction, String photo, String password, LocalDateTime passwordModifiedAt) {
+    public ShowBasicMemberAccountResponse(MemberType type, String nickname, String email, String github,
+                                          String introduction, String photo, String password,
+                                          LocalDateTime passwordModifiedAt) {
         super(type, nickname, email, github, introduction, photo);
         this.password = password;
         this.passwordModifiedAt = passwordModifiedAt;

@@ -1,8 +1,8 @@
 package com.prograngers.backend.service;
 
 import com.prograngers.backend.entity.Likes;
-import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.LikesAlreadyExistsException;
 import com.prograngers.backend.exception.notfound.LikesNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -11,12 +11,11 @@ import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedExcep
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +36,7 @@ public class LikesService {
                 .build();
         likesRepository.save(likes);
     }
+
     public void cancelLike(Long memberId, Long solutionId) {
         Solution targetSolution = getTargetSolution(solutionId);
         Member targetMember = getTargetMember(memberId);
@@ -46,13 +46,14 @@ public class LikesService {
     }
 
     private void validMemberAuthorization(Member targetMember, Likes targetLikes) {
-        if (targetLikes.getMember().getId()!= targetMember.getId()){
+        if (targetLikes.getMember().getId() != targetMember.getId()) {
             throw new MemberUnAuthorizedException();
         }
     }
 
     private Likes getLikesBySolutionAndMember(Solution targetSolution, Member targetMember) {
-        return likesRepository.findByMemberAndSolution(targetMember, targetSolution).orElseThrow(LikesNotFoundException::new);
+        return likesRepository.findByMemberAndSolution(targetMember, targetSolution)
+                .orElseThrow(LikesNotFoundException::new);
     }
 
     private Solution getTargetSolution(Long solutionId) {
@@ -68,7 +69,7 @@ public class LikesService {
     }
 
     private void validLikeAlreadyExists(Solution targetSolution, Member targetMember) {
-        if (getTargetLikes(targetSolution, targetMember).isPresent()){
+        if (getTargetLikes(targetSolution, targetMember).isPresent()) {
             throw new LikesAlreadyExistsException();
         }
     }

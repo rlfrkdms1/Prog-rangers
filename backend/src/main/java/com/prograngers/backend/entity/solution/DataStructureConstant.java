@@ -1,7 +1,6 @@
 package com.prograngers.backend.entity.solution;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.prograngers.backend.entity.HashTag;
 import com.prograngers.backend.exception.enumtype.DataStructureNotFoundException;
 import lombok.AllArgsConstructor;
@@ -16,6 +15,7 @@ public enum DataStructureConstant implements HashTag {
     HEAP("힙");
 
     private final String view;
+
     @JsonCreator
     public static DataStructureConstant from(String value) {
         for (DataStructureConstant dataStructure : DataStructureConstant.values()) {

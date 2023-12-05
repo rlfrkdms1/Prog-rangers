@@ -8,10 +8,10 @@ import com.prograngers.backend.dto.auth.response.naver.GetNaverTokenResponse;
 import com.prograngers.backend.dto.auth.response.naver.GetNaverUserInfoResponse;
 import com.prograngers.backend.dto.auth.result.AuthResult;
 import com.prograngers.backend.dto.auth.request.LoginRequest;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.support.Encrypt;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
-import com.prograngers.backend.exception.unauthorization.IncorrectStateInNaverLoginException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
@@ -44,11 +44,16 @@ public class AuthService {
 
     @Transactional
     public AuthResult login(LoginRequest loginRequest) {
-        //회원 검증
         Member member = findByEmail(loginRequest.getEmail());
+        validQuit(member);
         validPassword(member.getPassword(), loginRequest.getPassword());
-        //access token 발급
         return issueToken(member);
+    }
+
+    private void validQuit(Member member) {
+        if (!member.isUsable()) {
+            throw new QuitMemberException();
+        }
     }
 
     private Member findByEmail(String email) {
@@ -64,7 +69,6 @@ public class AuthService {
     private AuthResult issueToken(Member member) {
         Long memberId = member.getId();
         String accessToken = jwtTokenProvider.createAccessToken(memberId);
-        //refresh token 발급, 저장, 쿠키 생성
         RefreshToken refreshToken = refreshTokenRepository.save(createRefreshToken(memberId));
         return AuthResult.of(accessToken, refreshToken, member);
     }
@@ -75,17 +79,16 @@ public class AuthService {
 
     @Transactional
     public AuthResult signUp(SignUpRequest signUpRequest) {
-        validExistMember(signUpRequest);
-        validNicknameDuplication(signUpRequest.getNickname());
+        validAlreadyExistEmail(signUpRequest.getEmail());
+        validAlreadyExistNickname(signUpRequest.getNickname());
         Member member = signUpRequest.toMember();
         member.encodePassword(member.getPassword());
         memberRepository.save(member);
-        //access token 발급
         return issueToken(member);
     }
 
-    private void validExistMember(SignUpRequest signUpRequest) {
-        if(memberRepository.findByEmail(signUpRequest.getEmail()).isPresent()){
+    private void validAlreadyExistEmail(String email) {
+        if(memberRepository.existsByEmail(email)){
             throw new AlreadyExistMemberException();
         }
     }
@@ -135,25 +138,21 @@ public class AuthService {
         return issueToken(member);
     }
 
-    private void validState(String state) {
-        if(!state.equals(naverOauth.getState())) throw new IncorrectStateInNaverLoginException();
-    }
-
     private Member socialRegister(Member member) {
         String nickname = "";
         do {
             nickname = nicknameGenerator.getRandomNickname().getNickname();
-        } while (isDuplicateNickname(nickname));
+        } while (alreadyExistNickname(nickname));
         member.updateRandomNickname(nickname);
         return memberRepository.save(member);
     }
 
-    private boolean isDuplicateNickname(String nickname) {
-        return memberRepository.findByNickname(nickname).isPresent();
+    private boolean alreadyExistNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 
-    public void validNicknameDuplication(String nickname) {
-        if (isDuplicateNickname(nickname)) {
+    public void validAlreadyExistNickname(String nickname) {
+        if (alreadyExistNickname(nickname)) {
             throw new AlreadyExistNicknameException();
         }
     }

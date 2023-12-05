@@ -7,6 +7,7 @@ import com.prograngers.backend.dto.review.request.WriteReviewRequest;
 import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.service.ReviewService;
 import jakarta.validation.Valid;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -27,14 +27,16 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/solutions/{solutionId}/reviews")
-    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId, @LoggedInMember(required = false) Long memberId) {
+    public ResponseEntity<?> solutionReviews(@PathVariable Long solutionId,
+                                             @LoggedInMember(required = false) Long memberId) {
         ShowReviewsResponse reviewDetail = reviewService.getReviewDetail(solutionId, memberId);
         return ResponseEntity.ok().body(reviewDetail);
     }
 
     @Login
     @PostMapping("/solutions/{solutionId}/reviews")
-    public ResponseEntity<Void> write(@PathVariable Long solutionId, @Valid @RequestBody WriteReviewRequest request, @LoggedInMember Long memberId) {
+    public ResponseEntity<Void> write(@PathVariable Long solutionId, @Valid @RequestBody WriteReviewRequest request,
+                                      @LoggedInMember Long memberId) {
         reviewService.writeReview(request, memberId, solutionId);
         return ResponseEntity.created(URI.create("/api/v1/solutions/" + solutionId)).build();
     }

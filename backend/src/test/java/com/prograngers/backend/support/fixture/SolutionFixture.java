@@ -1,29 +1,29 @@
 package com.prograngers.backend.support.fixture;
 
+import static com.prograngers.backend.entity.solution.Solution.SolutionBuilder;
+import static com.prograngers.backend.entity.solution.Solution.builder;
+
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
-import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
-import lombok.AllArgsConstructor;
-
+import com.prograngers.backend.entity.solution.Solution;
 import java.time.LocalDateTime;
-
-import static com.prograngers.backend.entity.solution.Solution.*;
+import lombok.AllArgsConstructor;
 
 
 @AllArgsConstructor
 public enum SolutionFixture {
 
-    공개_풀이("풀이제목",true,"import\nmain\nhello world\nreturn","풀이설명"),
-    비공개_풀이("풀이제목",false,"import\nmain\nhello world\nreturn","풀이설명");
+    공개_풀이("풀이제목", true, "import\nmain\nhello world\nreturn", "풀이설명"),
+    비공개_풀이("풀이제목", false, "import\nmain\nhello world\nreturn", "풀이설명");
     private final String title;
     private final boolean isPublic;
     private final String code;
     private final String description;
 
-    public SolutionBuilder 기본_정보_빌더_생성(){
+    public SolutionBuilder 기본_정보_빌더_생성() {
         return builder()
                 .title(title)
                 .isPublic(isPublic)
@@ -33,7 +33,8 @@ public enum SolutionFixture {
 
     public Solution 태그_추가_생성(
             Problem problem, Member member, LocalDateTime createdDate,
-            AlgorithmConstant algorithm, DataStructureConstant dataStructure,LanguageConstant language, Integer level){
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure, LanguageConstant language,
+            Integer level) {
         return 기본_정보_빌더_생성()
                 .problem(problem)
                 .member(member)
@@ -47,7 +48,7 @@ public enum SolutionFixture {
 
     public Solution 기본_정보_생성(
             Problem problem, Member member, LocalDateTime createdDate,
-            LanguageConstant language, Integer level){
+            LanguageConstant language, Integer level) {
         return 기본_정보_빌더_생성()
                 .problem(problem)
                 .member(member)
@@ -57,7 +58,7 @@ public enum SolutionFixture {
                 .build();
     }
 
-    public Solution 스크랩_생성(Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
+    public Solution 스크랩_생성(Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution) {
         return 기본_정보_빌더_생성()
                 .problem(scrapSolution.getProblem())
                 .member(member)
@@ -70,7 +71,8 @@ public enum SolutionFixture {
                 .build();
     }
 
-    public Solution 스크랩_아이디_지정_생성(Long id, Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution){
+    public Solution 스크랩_아이디_지정_생성(Long id, Member member, LocalDateTime createdDate, Integer level,
+                                  Solution scrapSolution) {
         return 기본_정보_빌더_생성()
                 .id(id)
                 .problem(scrapSolution.getProblem())
@@ -86,7 +88,8 @@ public enum SolutionFixture {
 
     public Solution 아이디_지정_생성(
             Long id, Problem problem, Member member, LocalDateTime createdDate,
-            AlgorithmConstant algorithm, DataStructureConstant dataStructure,LanguageConstant language, Integer level) {
+            AlgorithmConstant algorithm, DataStructureConstant dataStructure, LanguageConstant language,
+            Integer level) {
         return 기본_정보_빌더_생성()
                 .id(id)
                 .problem(problem)
@@ -113,7 +116,7 @@ public enum SolutionFixture {
     }
 
     public Solution 풀이_제목_지정_생성(String title, Problem problem, Member member, LocalDateTime createdDate,
-                                LanguageConstant language, Integer level){
+                                LanguageConstant language, Integer level) {
         return 기본_정보_빌더_생성()
                 .title(title)
                 .problem(problem)

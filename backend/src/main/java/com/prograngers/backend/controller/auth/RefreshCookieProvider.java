@@ -23,6 +23,7 @@ public class RefreshCookieProvider {
                 .path("/")
                 .sameSite(SameSite.NONE.attributeValue());
     }
+
     public ResponseCookie createLogoutCookie() {
         return createBaseCookie("")
                 .maxAge(0)
