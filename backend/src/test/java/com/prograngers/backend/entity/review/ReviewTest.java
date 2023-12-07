@@ -1,12 +1,11 @@
 package com.prograngers.backend.entity.review;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.CREATED;
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.FIXED;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.ReviewFixture.삭제된_리뷰;
 import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
+import static com.prograngers.backend.support.fixture.ReviewFixture.수정된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -22,10 +21,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class ReviewTest {
-
-    private static final String DELETED_CONTENT = "삭제된 리뷰입니다";
-    private static final String FIXED_CONTENT = "수정한 댓글입니다.";
-    private static final String CONTENT = "리뷰내용";
     private Review review;
     private Solution solution;
     private Member member;
@@ -42,50 +37,62 @@ class ReviewTest {
     @DisplayName("댓글을 수정할 수 있다.")
     @Test
     void updateTest() {
+        // given
+        Review updated = 수정된_리뷰.기본_정보_생성(member, solution, review.getCreatedAt());
+
         // when
-        review.update(FIXED_CONTENT);
+        review.update(updated.getContent());
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(FIXED_CONTENT),
-                () -> assertThat(review.getStatus()).isEqualTo(FIXED)
+                () -> assertThat(review.getContent()).isEqualTo(updated.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(updated.getStatus())
         );
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "    "})
     void 수정하려는_내용이_blank일_경우_수정할_수_없다(String content) {
+        // given
+        Review expected = 생성된_리뷰.기본_정보_생성(member, solution, review.getCreatedAt());
+
         // when
         review.update(content);
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(CONTENT),
-                () -> assertThat(review.getStatus()).isEqualTo(CREATED)
+                () -> assertThat(review.getContent()).isEqualTo(expected.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(expected.getStatus())
         );
     }
 
     @Test
     void 수정하려는_내용이_null일_경우_수정할_수_없다() {
+        // given
+        Review expected = 생성된_리뷰.기본_정보_생성(member, solution, review.getCreatedAt());
+
         // when
         review.update(null);
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(CONTENT),
-                () -> assertThat(review.getStatus()).isEqualTo(CREATED)
+                () -> assertThat(review.getContent()).isEqualTo(expected.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(expected.getStatus())
         );
     }
 
     @Test
     void 댓글을_삭제할_수_있다() {
+        // given
+        Review deleted = 삭제된_리뷰.기본_정보_생성(member, solution, review.getCreatedAt());
+
         // when
         review.delete();
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(DELETED_CONTENT),
-                () -> assertThat(review.getStatus()).isEqualTo(DELETED)
+                () -> assertThat(review.getContent()).isEqualTo(deleted.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(deleted.getStatus())
         );
     }
 }
