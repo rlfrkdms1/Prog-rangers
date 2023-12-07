@@ -98,13 +98,11 @@ public class SolutionService {
     }
 
     @Transactional
-    public Long update(Long solutionId, UpdateSolutionRequest request, Long memberId) {
-        Solution target = findSolutionById(solutionId);
+    public void update(Long solutionId, UpdateSolutionRequest request, Long memberId) {
+        Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
-        validMemberAuthorization(target, member);
-        Solution solution = request.updateSolution(target);
-        Solution updated = solutionRepository.save(solution);
-        return updated.getId();
+        validMemberAuthorization(solution, member);
+        solution.update(request);
     }
 
     @Transactional
