@@ -5,6 +5,7 @@ import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountRespons
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.BlankNicknameException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
@@ -13,6 +14,8 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import com.prograngers.backend.support.Encrypt;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
@@ -108,6 +111,19 @@ class MemberServiceTest {
             encryptMockedStatic.when(() -> Encrypt.decoding("testPassword")).thenReturn(oldPassword);
             memberService.updateMemberAccount(member.getId(), updateMemberAccountRequest);
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " "})
+    void 계정_수정시_닉네임을_공백으로_요청한_경우_예외를_반환한다(String blank) {
+        Member member = 길가은.기본_정보_생성(1L);
+        UpdateMemberAccountRequest request = UpdateMemberAccountRequest.builder().nickname(blank).build();
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.updateMemberAccount(member.getId(), request))
+                        .isExactlyInstanceOf(BlankNicknameException.class),
+                () -> verify(memberRepository).findById(member.getId())
+        );
     }
 
 }
