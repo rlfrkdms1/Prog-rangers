@@ -102,7 +102,7 @@ public class SolutionService {
         Solution solution = findSolutionById(solutionId);
         Member member = findMemberById(memberId);
         validMemberAuthorization(solution, member);
-        solution.update(request);
+        solution.update(request.toSolution());
     }
 
     @Transactional
