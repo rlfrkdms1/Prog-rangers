@@ -119,13 +119,13 @@ public class Solution {
         }
     }
 
-    public void update(UpdateSolutionRequest request) {
-        updateTitle(request.getTitle());
-        updateAlgorithm(request.getAlgorithm());
-        updateDataStructure(request.getDataStructure());
-        updateLevel(request.getLevel());
-        updateCode(request.getCode());
-        updateDescription(request.getDescription());
+    public void update(Solution update) {
+        updateTitle(update.getTitle());
+        updateAlgorithm(update.getAlgorithm());
+        updateDataStructure(update.getDataStructure());
+        updateLevel(update.getLevel());
+        updateCode(update.getCode());
+        updateDescription(update.getDescription());
     }
 
     public String getAlgorithmView() {
