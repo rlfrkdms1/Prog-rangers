@@ -1,5 +1,6 @@
 package com.prograngers.backend.entity.solution;
 
+import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.support.converter.AlgorithmConverter;
@@ -118,14 +119,13 @@ public class Solution {
         }
     }
 
-    public void update(String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure, int level,
-                       String code, String description) {
-        updateTitle(title);
-        updateAlgorithm(algorithm);
-        updateDataStructure(dataStructure);
-        updateLevel(level);
-        updateCode(code);
-        updateDescription(description);
+    public void update(UpdateSolutionRequest request) {
+        updateTitle(request.getTitle());
+        updateAlgorithm(request.getAlgorithm());
+        updateDataStructure(request.getDataStructure());
+        updateLevel(request.getLevel());
+        updateCode(request.getCode());
+        updateDescription(request.getDescription());
     }
 
     public String getAlgorithmView() {
