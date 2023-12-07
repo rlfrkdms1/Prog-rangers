@@ -4,14 +4,11 @@ import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountRequest;
 import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
-import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
-import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
 import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.exception.badrequest.AlreadyDeletedMemberException;
 import com.prograngers.backend.exception.badrequest.BlankNicknameException;
 import com.prograngers.backend.exception.badrequest.NotExistOldPasswordException;
@@ -77,14 +74,14 @@ public class MemberService {
 
     }
 
-    private void validExistOldPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
-        if(updateMemberAccountInfoRequest.getOldPassword()==null){
+    private void validExistOldPassword(UpdateMemberAccountRequest updateMemberAccountRequest) {
+        if(updateMemberAccountRequest.getOldPassword()==null){
             throw new NotExistOldPasswordException();
         }
     }
 
-    private void validCorrectPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
-        if(member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword()))
+    private void validCorrectPassword(UpdateMemberAccountRequest updateMemberAccountRequest, Member member) {
+        if(member.getPassword().equals(updateMemberAccountRequest.getOldPassword()))
             throw new IncorrectPasswordException();
     }
 
