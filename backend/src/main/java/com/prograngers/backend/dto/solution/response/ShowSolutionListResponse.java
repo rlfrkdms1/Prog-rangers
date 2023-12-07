@@ -41,11 +41,7 @@ public class ShowSolutionListResponse {
                                               ShowSolutionListResponse showSolutionListResponse) {
         solutions.stream()
                 .forEach((solution -> showSolutionListResponse.getSolutions()
-                        .add(SolutionAtSolutionListResponse.builder()
-                                .solutionName(solution.getTitle())
-                                .algorithm(solution.getAlgorithmView())
-                                .dataStructure(solution.getDataStructureView())
-                                .build())));
+                        .add(SolutionAtSolutionListResponse.from(solution))));
     }
 
     private static ShowSolutionListResponse addProblemNameAndOjNameAtResponse(PageImpl<Solution> pages,
