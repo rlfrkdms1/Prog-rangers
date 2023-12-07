@@ -64,7 +64,7 @@ public class MemberService {
 
         if (nickname != null) {
             validNicknameBlank(nickname);
-            validNicknameDuplication(nickname);
+            validAlreadyExistNickname(nickname);
         }
 
         if (updateMemberAccountRequest.getNewPassword() != null) {
@@ -91,8 +91,8 @@ public class MemberService {
         }
     }
 
-    private void validNicknameDuplication(String nickname) {
-        if (memberRepository.findByNickname(nickname).isPresent()) {
+    private void validAlreadyExistNickname(String nickname) {
+        if (memberRepository.existsByNickname(nickname)) {
             throw new AlreadyExistNicknameException();
         }
     }
