@@ -11,7 +11,7 @@ import ToggleUp from '../../assets/icons/main-toggle-up.svg';
 import { useAtom } from 'jotai';
 import { targetAtom, targetScope, nameAtom, nameScope, valueAtom, valueScope } from "../../pages/BoardPage/AddSolution";
 
-export const FilterBar2 = ({title, options, secondWidth}) => {
+export const FilterBar2 = ({title, options, onSelect, secondWidth}) => {
   const [ selectedOption, setSelectedOption ] = React.useState(options[0]); 
   const [ isOpen, setIsOpen ] = React.useState(false);
   const [ isClicked, setIsClicked ] = useState(false);
@@ -25,14 +25,17 @@ export const FilterBar2 = ({title, options, secondWidth}) => {
     setIsOpen(!isOpen);
   };
 
-  const handleSelect = (e) => {
-    setSelectedOption(e);
+
+  const handleSelect = (selected) => {
+    setSelectedOption(selected);
     setIsClicked(true);
-    setTarget(e.name);
-    setValue(e.value);
+    setTarget(selected.name);
+    setValue(selected.value);
     setName(title);
-    setIsOpen(false); 
+    onSelect(selected); // 선택된 옵션에 대한 처리를 상위 컴포넌트로 전달
+    setIsOpen(false);
   };
+
 
   const closeFilterBarOnOutsideClick = (e) => {
     if (isOpen) {
