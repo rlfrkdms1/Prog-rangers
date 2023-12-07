@@ -37,9 +37,4 @@ public class UpdateSolutionRequest {
     @Max(value = 5, message = "레벨 값은 5 초과일 수 없습니다")
     @NotNull(message = "난이도 값을 입력해주세요")
     private Integer level;
-
-    public Solution updateSolution(Solution target) {
-        target.update(title, algorithm, dataStructure, level, code, description);
-        return target;
-    }
 }
