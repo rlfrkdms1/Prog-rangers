@@ -24,6 +24,7 @@ import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
@@ -140,6 +141,21 @@ class MemberServiceTest {
                 () -> assertThatThrownBy(() -> memberService.updateMemberAccount(member.getId(), request))
                         .isExactlyInstanceOf(BlankNicknameException.class),
                 () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 계정_수정시_중복된_닉네임으로_요청한_경우_예외를_반환한다() {
+        Member member = 길가은.기본_정보_생성(1L);
+        String existNickname = "existNickname";
+        UpdateMemberAccountRequest request = UpdateMemberAccountRequest.builder().nickname(existNickname).build();
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        given(memberRepository.existsByNickname(existNickname)).willReturn(true);
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.updateMemberAccount(member.getId(), request))
+                        .isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> verify(memberRepository).findById(member.getId()),
+                () -> verify(memberRepository).existsByNickname(existNickname)
         );
     }
 
