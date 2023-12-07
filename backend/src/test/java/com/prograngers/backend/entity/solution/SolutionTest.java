@@ -2,7 +2,6 @@ package com.prograngers.backend.entity.solution;
 
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BELLMAN_FORD;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.DFS;
-import static com.prograngers.backend.entity.solution.DataStructureConstant.HEAP;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.QUEUE;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
@@ -21,19 +20,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class SolutionTest {
 
-    private static final String TITLE = "풀이제목";
-    private static final String CODE = "import\nmain\nhello world\nreturn";
-    private static final String DESCRIPTION = "풀이설명";
-    private static final AlgorithmConstant ALGORITHM = BELLMAN_FORD;
-    private static final DataStructureConstant DATA_STRUCTURE = HEAP;
-
-    final static String UPDATED_TITLE = "수정제목";
-    final static AlgorithmConstant UPDATED_ALGORITHM = DFS;
-    final static DataStructureConstant UPDATED_DATASTRUCTURE = QUEUE;
-    final static int UPDATED_LEVEL = 2;
-    final static String UPDATED_CODE = "수정코드";
-    final static String UPDATED_DESCRIPTION = "수정설명";
-
     private Solution solution;
     private Member member;
     private Problem problem;
@@ -42,52 +28,83 @@ class SolutionTest {
     void beforeEach() {
         member = 장지담.기본_정보_생성();
         problem = 백준_문제.기본_정보_생성();
-        solution = 공개_풀이.알고리즘_자료구조_지정_생성(problem, member, LocalDateTime.now(), JAVA, 1, ALGORITHM, DATA_STRUCTURE);
+        solution = 공개_풀이.알고리즘_자료구조_지정_생성(problem, member, LocalDateTime.now(), JAVA, 1, BELLMAN_FORD, QUEUE);
     }
 
     @Test
     void 풀이를_수정_할_수_있다() {
+        // given
+        Solution toUpdate = 수정용_풀이_생성("수정제목", DFS, QUEUE, 2,
+                "수정코드", "수정설명");
+
         // when
-        solution.update(UPDATED_TITLE, UPDATED_ALGORITHM, UPDATED_DATASTRUCTURE, UPDATED_LEVEL, UPDATED_CODE, "수정설명");
+        solution.update(toUpdate);
+
         // then
         Assertions.assertAll(
-                () -> assertThat(solution.getTitle()).isEqualTo(UPDATED_TITLE),
-                () -> assertThat(solution.getAlgorithm()).isEqualTo(UPDATED_ALGORITHM),
-                () -> assertThat(solution.getDataStructure()).isEqualTo(UPDATED_DATASTRUCTURE),
-                () -> assertThat(solution.getLevel()).isEqualTo(UPDATED_LEVEL),
-                () -> assertThat(solution.getCode()).isEqualTo(UPDATED_CODE),
-                () -> assertThat(solution.getDescription()).isEqualTo(UPDATED_DESCRIPTION)
+                () -> assertThat(solution.getTitle()).isEqualTo(toUpdate.getTitle()),
+                () -> assertThat(solution.getAlgorithm()).isEqualTo(toUpdate.getAlgorithm()),
+                () -> assertThat(solution.getDataStructure()).isEqualTo(toUpdate.getDataStructure()),
+                () -> assertThat(solution.getLevel()).isEqualTo(toUpdate.getLevel()),
+                () -> assertThat(solution.getCode()).isEqualTo(toUpdate.getCode()),
+                () -> assertThat(solution.getDescription()).isEqualTo(toUpdate.getDescription())
         );
     }
 
     @Test
     void 수정하려는_값이_null이면_수정되지_않는다() {
+        // given
+        Solution toUpdate = 수정용_풀이_생성(null, null, null, 2,
+                null, null);
+        Solution expected = 공개_풀이.알고리즘_자료구조_지정_생성(solution.getProblem(), solution.getMember(), solution.getCreatedAt(),
+                solution.getLanguage(), solution.getLevel(), solution.getAlgorithm(), solution.getDataStructure());
+
         // when
-        solution.update(null, null, null, UPDATED_LEVEL, null, null);
+        solution.update(toUpdate);
+
         // then
         Assertions.assertAll(
-                () -> assertThat(solution.getTitle()).isEqualTo(TITLE),
-                () -> assertThat(solution.getAlgorithm()).isEqualTo(ALGORITHM),
-                () -> assertThat(solution.getDataStructure()).isEqualTo(DATA_STRUCTURE),
-                () -> assertThat(solution.getLevel()).isEqualTo(UPDATED_LEVEL),
-                () -> assertThat(solution.getCode()).isEqualTo(CODE),
-                () -> assertThat(solution.getDescription()).isEqualTo(DESCRIPTION)
+                () -> assertThat(solution.getTitle()).isEqualTo(expected.getTitle()),
+                () -> assertThat(solution.getAlgorithm()).isEqualTo(expected.getAlgorithm()),
+                () -> assertThat(solution.getDataStructure()).isEqualTo(expected.getDataStructure()),
+                () -> assertThat(solution.getLevel()).isEqualTo(toUpdate.getLevel()),
+                () -> assertThat(solution.getCode()).isEqualTo(expected.getCode()),
+                () -> assertThat(solution.getDescription()).isEqualTo(expected.getDescription())
         );
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "  ", "        "})
     void 수정하려는_값이_blank이면_수정되지_않는다(String blank) {
+        // given
+        Solution toUpdate = 수정용_풀이_생성(blank, DFS, QUEUE, 2, blank, blank);
+        Solution expected = 공개_풀이.알고리즘_자료구조_지정_생성(solution.getProblem(), solution.getMember(), solution.getCreatedAt(),
+                solution.getLanguage(), solution.getLevel(), toUpdate.getAlgorithm(), toUpdate.getDataStructure());
+
         // when
-        solution.update(blank, UPDATED_ALGORITHM, UPDATED_DATASTRUCTURE, UPDATED_LEVEL, blank, blank);
+        solution.update(toUpdate);
+
         // then
         Assertions.assertAll(
-                () -> assertThat(solution.getTitle()).isEqualTo(TITLE),
-                () -> assertThat(solution.getAlgorithm()).isEqualTo(UPDATED_ALGORITHM),
-                () -> assertThat(solution.getDataStructure()).isEqualTo(UPDATED_DATASTRUCTURE),
-                () -> assertThat(solution.getLevel()).isEqualTo(UPDATED_LEVEL),
-                () -> assertThat(solution.getCode()).isEqualTo(CODE),
-                () -> assertThat(solution.getDescription()).isEqualTo(DESCRIPTION)
+                () -> assertThat(solution.getTitle()).isEqualTo(expected.getTitle()),
+                () -> assertThat(solution.getAlgorithm()).isEqualTo(expected.getAlgorithm()),
+                () -> assertThat(solution.getDataStructure()).isEqualTo(expected.getDataStructure()),
+                () -> assertThat(solution.getLevel()).isEqualTo(2),
+                () -> assertThat(solution.getCode()).isEqualTo(expected.getCode()),
+                () -> assertThat(solution.getDescription()).isEqualTo(expected.getDescription())
         );
+    }
+
+
+    private Solution 수정용_풀이_생성(String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure,
+                               int level, String code, String description) {
+        return Solution.builder()
+                .title(title)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
+                .level(level)
+                .code(code)
+                .description(description)
+                .build();
     }
 }
