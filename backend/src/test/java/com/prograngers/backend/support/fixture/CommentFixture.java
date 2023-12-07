@@ -15,9 +15,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum CommentFixture {
 
-    생성된_댓글("댓글내용", CREATED),
-    수정된_댓글("댓글내용", FIXED),
-    삭제된_댓글("댓글내용", DELETED);
+    생성된_댓글("생성된 댓글", CREATED),
+    수정된_댓글("수정된 댓글", FIXED),
+    삭제된_댓글("삭제된 댓글", DELETED);
 
     private final String content;
     private final CommentStatusConstant status;
