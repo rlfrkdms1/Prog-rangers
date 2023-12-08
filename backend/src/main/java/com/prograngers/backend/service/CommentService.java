@@ -10,6 +10,7 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
 import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
+import com.prograngers.backend.exception.badrequest.InvalidPageSizeException;
 import com.prograngers.backend.exception.badrequest.InvalidParentException;
 import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
@@ -22,6 +23,7 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,22 +38,30 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
 
-    private final int MY_COMMENTS_PAGE_SIZE = 3;
-
     private Comment findById(Long id) {
         return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
-    public ShowMyCommentsResponse showMyComments(Long memberId, Integer pageNumber) {
-        validPageNumber(pageNumber);
-        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(
-                PageRequest.of(pageNumber - 1, MY_COMMENTS_PAGE_SIZE), memberId);
+    public ShowMyCommentsResponse showMyComments(Long memberId, Pageable pageable) {
+        validPageableNumber(pageable);
+        Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(pageable, memberId);
         return ShowMyCommentsResponse.from(commentPage);
     }
 
-    private void validPageNumber(Integer pageNumber) {
-        if (pageNumber < 1) {
+    private void validPageableNumber(Pageable pageable) {
+        validPageNumber(pageable);
+        validPageSize(pageable);
+    }
+
+    private void validPageNumber(Pageable pageable) {
+        if (pageable.getPageNumber() < 0) {
             throw new InvalidPageNumberException();
+        }
+    }
+
+    private void validPageSize(Pageable pageable) {
+        if (pageable.getPageSize() < 1) {
+            throw new InvalidPageSizeException();
         }
     }
 

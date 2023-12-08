@@ -29,6 +29,7 @@ import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
 import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
+import com.prograngers.backend.exception.badrequest.InvalidPageSizeException;
 import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
@@ -63,7 +64,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SolutionService {
 
-    private static final int MY_SOLUTION_LIST_PAGE_SIZE = 4;
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
@@ -228,10 +228,11 @@ public class SolutionService {
     public ShowSolutionListResponse getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm,
             DataStructureConstant dataStructure, SortConstant sortBy) {
+        validPageable(pageable);
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language,
                 algorithm, dataStructure, sortBy);
-        return ShowSolutionListResponse.from(solutions, pageable.getPageNumber());
+        return ShowSolutionListResponse.from(solutions);
     }
 
     private List<ReviewWithRepliesResponse> makeReviewsResponse(List<Review> mainSolutionReviews, Long memberId) {
@@ -341,26 +342,33 @@ public class SolutionService {
     }
 
     public ShowMySolutionListResponse getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm,
-                                                DataStructureConstant dataStructure, Integer level, int page,
+                                                DataStructureConstant dataStructure, Integer level, Pageable pageable,
                                                 Long memberId) {
-        validPageNumber(page);
-        Page<Solution> solutions = solutionRepository.getMyList(PageRequest.of(page - 1, MY_SOLUTION_LIST_PAGE_SIZE),
-                keyword, language, algorithm, dataStructure, level, memberId);
+        validPageable(pageable);
+        Page<Solution> solutions = solutionRepository.getMyList(pageable, keyword, language, algorithm, dataStructure, level, memberId);
         return ShowMySolutionListResponse.from(solutions);
     }
 
-    private void validPageNumber(int page) {
-        if (page < 1) {
+    private void validPageable(Pageable pageable) {
+        validPageNumber(pageable);
+        validPageSize(pageable);
+    }
+
+    private void validPageNumber(Pageable pageable) {
+        if (pageable.getPageNumber() < 0) {
             throw new InvalidPageNumberException();
         }
     }
 
-    private static final int LIKE_SOLUTION_PAGE_SIZE = 3;
+    private void validPageSize(Pageable pageable) {
+        if (pageable.getPageSize() < 1) {
+            throw new InvalidPageSizeException();
+        }
+    }
 
-    public ShowMyLikeSolutionsResponse getMyLikes(Long memberId, int page) {
-        validPageNumber(page);
-        Slice<Solution> solutions = solutionRepository.findMyLikesPage(memberId,
-                PageRequest.of(page - 1, LIKE_SOLUTION_PAGE_SIZE));
+    public ShowMyLikeSolutionsResponse getMyLikes(Long memberId, Pageable pageable) {
+        validPageable(pageable);
+        Slice<Solution> solutions = solutionRepository.findMyLikesPage(memberId, pageable);
         return ShowMyLikeSolutionsResponse.from(solutions);
     }
 }
