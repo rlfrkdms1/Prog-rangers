@@ -25,12 +25,11 @@ public class ProblemController {
     private final String SORT_CONSTANT_DEFAULT = "NEWEST";
 
     @GetMapping
-    public ResponseEntity<?> problems(
-            @PageableDefault(size = 5) Pageable pageable,
+    public ShowProblemListResponse problems(
+            @PageableDefault Pageable pageable,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = SORT_CONSTANT_DEFAULT) SortConstant sortBy) {
-        ShowProblemListResponse problemList = problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
-        return ResponseEntity.ok(problemList);
+        return problemService.getProblemList(pageable, algorithm, dataStructure, sortBy);
     }
 }

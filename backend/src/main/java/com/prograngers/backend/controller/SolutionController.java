@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SolutionController {
 
     private final SolutionService solutionService;
-    private static final String DEFAULT_PAGE = "1";
 
     @Login
     @PostMapping("/solutions")
@@ -84,7 +83,7 @@ public class SolutionController {
     }
 
     @GetMapping("/problems/{problemId}/solutions")
-    public ShowSolutionListResponse showList(@PageableDefault(size = 5) Pageable pageable,
+    public ShowSolutionListResponse showList(@PageableDefault Pageable pageable,
                                              @PathVariable Long problemId,
                                              @RequestParam(required = false) LanguageConstant language,
                                              @RequestParam(required = false) AlgorithmConstant algorithm,
@@ -101,9 +100,9 @@ public class SolutionController {
                                                  @RequestParam(required = false) AlgorithmConstant algorithm,
                                                  @RequestParam(required = false) DataStructureConstant dataStructure,
                                                  @RequestParam(required = false) Integer level,
-                                                 @RequestParam(defaultValue = DEFAULT_PAGE) int page,
+                                                 @PageableDefault Pageable pageable,
                                                  @LoggedInMember Long memberId) {
-        return solutionService.getMyList(keyword, language, algorithm, dataStructure, level, page, memberId);
+        return solutionService.getMyList(keyword, language, algorithm, dataStructure, level, pageable, memberId);
     }
 
 }
