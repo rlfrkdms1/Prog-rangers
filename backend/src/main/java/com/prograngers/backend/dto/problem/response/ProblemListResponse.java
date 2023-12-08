@@ -12,19 +12,18 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ProblemListResponse {
-    String title;
-    JudgeConstant ojName;
 
-    List<Object> tags;
-
+    private final Long id;
+    private final String title;
+    private final JudgeConstant ojName;
+    private final List<Object> tags;
 
     public static ProblemListResponse from(Problem problem) {
-        ProblemListResponse problemListResponseResponse = ProblemListResponse.builder()
+        return ProblemListResponse.builder()
+                .id(problem.getId())
                 .title(problem.getTitle())
                 .ojName(problem.getOjName())
                 .tags(new ArrayList<>())
                 .build();
-
-        return problemListResponseResponse;
     }
 }
