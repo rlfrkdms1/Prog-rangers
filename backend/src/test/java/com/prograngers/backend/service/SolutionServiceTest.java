@@ -231,6 +231,7 @@ class SolutionServiceTest {
                 Arrays.asList(review1, review2, review3, review4));
         when(solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, 6)).thenReturn(
                 Arrays.asList(othersSolution1, othersSolution2));
+        when(memberRepository.findById(member1Id)).thenReturn(Optional.of(member1));
 
         final List<CommentWithRepliesResponse> expectedComments = Arrays.asList(
                 CommentWithRepliesResponse.of(comment1, new ArrayList<>(), true),

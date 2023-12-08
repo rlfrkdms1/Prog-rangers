@@ -19,9 +19,10 @@ public class ShowMySolutionListResponse {
 
     public static ShowMySolutionListResponse from(Page<Solution> solutions) {
         return ShowMySolutionListResponse.builder()
-                .page(solutions.getNumber() + 1)
+                .page(solutions.getNumber())
                 .totalPage(solutions.getTotalPages())
-                .contents(solutions.getContent().stream().map(SolutionWithProblemForListResponse::from)
+                .contents(solutions.getContent().stream()
+                        .map(SolutionWithProblemForListResponse::from)
                         .collect(Collectors.toList()))
                 .build();
     }

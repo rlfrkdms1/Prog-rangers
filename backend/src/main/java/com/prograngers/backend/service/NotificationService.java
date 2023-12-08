@@ -13,6 +13,7 @@ import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
 import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
+import com.prograngers.backend.exception.badrequest.InvalidPageSizeException;
 import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,18 +118,28 @@ public class NotificationService {
         return emitter;
     }
 
-    public ShowNotificationsResponse getNotifications(Long memberId, int page) {
-        validPage(page);
-        Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId,
-                PageRequest.of(page - 1, DASHBOARD_NOTIFICATION_LIMIT));
+    public ShowNotificationsResponse getNotifications(Long memberId, Pageable pageable) {
+        validPageable(pageable);
+        Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, pageable);
         ShowNotificationsResponse response = ShowNotificationsResponse.from(notifications);
         notifications.stream().forEach(Notification::read);
         return response;
     }
 
-    private void validPage(int page) {
-        if (page < 2) {
+    private void validPageable(Pageable pageable) {
+        validPageNumber(pageable);
+        validPageSize(pageable);
+    }
+
+    private void validPageNumber(Pageable pageable) {
+        if (pageable.getPageNumber() < 2) {
             throw new InvalidPageNumberException();
+        }
+    }
+
+    private void validPageSize(Pageable pageable) {
+        if (pageable.getPageSize() < 1) {
+            throw new InvalidPageSizeException();
         }
     }
 

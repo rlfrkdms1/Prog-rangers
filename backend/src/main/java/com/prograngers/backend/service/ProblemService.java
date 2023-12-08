@@ -36,8 +36,7 @@ public class ProblemService {
         PageImpl<Problem> pageImpl = problemRepository.findAll(pageable, dataStructure, algorithm, sortBy);
         List<Problem> problems = pageImpl.getContent();
         List<ProblemListResponse> problemListResponseResponse = makeProblemList(problems);
-        ShowProblemListResponse response = ShowProblemListResponse.from(problemListResponseResponse,
-                pageImpl.getTotalPages(), pageable.getPageNumber());
+        ShowProblemListResponse response = ShowProblemListResponse.from(problemListResponseResponse, pageImpl);
         return response;
     }
 
