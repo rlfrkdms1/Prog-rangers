@@ -4,8 +4,7 @@ import { MainBody } from '../Problems/MainBody';
 import { FilterBar } from '../../components/FilterBar';
 import { QSolving } from '../../components/Solving';
 import { Pagination } from '../../components/Pagination/Pagination';
-import questions from '../../db/question.json';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import{ 
   fontSize24,
@@ -22,14 +21,14 @@ export const Solutions = () => {
   const [ questionTitle, setQuestionTitle ] = useState(""); 
   const [ ojName, setOjName ] = useState("");
   const currentPath = window.location.pathname;
-  const targetIndex = parseInt(currentPath.match(/\d+/), 10);
+  const { problemId } = useParams();
 
   const handlePageChange = (e, page) => {
     setPage(page);
   };
 
   const WantSolutions = async() => {
-    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems/${targetIndex+1}/solutions?page=${page-1}`);
+    const response = await axios.get(`http://13.124.131.171:8080/api/v1/problems/${problemId}/solutions?page=${page-1}&size=5`);
     setTotalPages(response.data.totalPages);
     setSolvings(response.data.solutions);
     setQuestionTitle(response.data.problemName);

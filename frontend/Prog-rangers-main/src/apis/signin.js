@@ -3,7 +3,7 @@ import axios from 'axios';
 // TODO response 처리 로직
 export const signIn= async (data)=>{
   const response = await axios.post(
-    `https://prog-rangers.com/api/v1/login`,
+    `http://13.124.131.171:8080/api/v1/login`,
     {...data},
     {headers: {'Content-Type': 'application/json'}}
   );  

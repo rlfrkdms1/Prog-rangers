@@ -1,6 +1,5 @@
 import { css } from "@emotion/react";
 import { tags } from "./QSolvingStyle";
-import sort from '../../db/autocomplete.json';
 import forTags from './fortagsort.json';
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +22,7 @@ export const QSolving = ({data}) => {
       {data.map((item,index) => (
         <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
           <div 
-          onClick={(e) => onClickSols(item.solutionId)}
+          onClick={(e) => onClickSols(item.id)}
           css={css`
             height: 29px; 
             width: 100%; 
@@ -39,7 +38,7 @@ export const QSolving = ({data}) => {
             `
           }            
           >
-            {item.solutionName}
+            {item.title}
           </div>
           <div css={css`
             width: 100%; 

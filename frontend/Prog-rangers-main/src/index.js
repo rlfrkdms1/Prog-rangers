@@ -36,7 +36,9 @@ import { NaverRedirect } from './components/SignUp/NaverRedirect';
 import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
 import loadable from '@loadable/component';
 
-// const MainPage = loadable(() => import('./pages/MainPage'));
+// const App = loadable(() => import('./App'));
+// const NotFound = loadable(() => import('./pages'));
+// const MainPage = loadable(() => import('./pages'));
 // const SignUp = loadable(() => import('./pages'));
 // const SignIn = loadable(() => import('./pages'));
 // const Problems = loadable(() => import('./pages'));
