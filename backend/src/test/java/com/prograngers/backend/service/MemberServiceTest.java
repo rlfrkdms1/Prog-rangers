@@ -159,6 +159,17 @@ class MemberServiceTest {
         );
     }
 
+    @Test
+    void 회원탈퇴를_할_수_있다() {
+        Member member = 길가은.기본_정보_생성(1L);
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        memberService.delete(member.getId());
+        assertAll(
+                () -> assertThat(member.isUsable()).isFalse(),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
     @DisplayName("회원 프로필을 조회할 수 있다. 마지막 페이지가 아닌 경우 다음 풀이의 id를 커서값으로 반환한다.")
     @Test
     void getMemberProfileTest() {
