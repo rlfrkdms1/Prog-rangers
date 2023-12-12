@@ -44,6 +44,13 @@ public enum MemberFixture {
                 .build();
     }
 
+    public Member 탈퇴_회원_생성(Long id) {
+        return 기본_정보_빌더_생성()
+                .id(id)
+                .usable(false)
+                .build();
+    }
+
     public Member 이메일_추가_생성(String email) {
         return 기본_정보_빌더_생성()
                 .email(email).build();
