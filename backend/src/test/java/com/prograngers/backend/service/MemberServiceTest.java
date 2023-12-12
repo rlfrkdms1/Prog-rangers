@@ -19,6 +19,7 @@ import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountRespons
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
 import com.prograngers.backend.entity.member.Member;
+import com.prograngers.backend.exception.badrequest.AlreadyDeletedMemberException;
 import com.prograngers.backend.exception.badrequest.BlankNicknameException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
@@ -166,6 +167,17 @@ class MemberServiceTest {
         memberService.delete(member.getId());
         assertAll(
                 () -> assertThat(member.isUsable()).isFalse(),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 이미_탈퇴한_회원이_탈퇴요청을_할_경우_예외를_반환한다() {
+        Member member = 길가은.탈퇴_회원_생성(1L);
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.delete(member.getId()))
+                        .isExactlyInstanceOf(AlreadyDeletedMemberException.class),
                 () -> verify(memberRepository).findById(member.getId())
         );
     }
