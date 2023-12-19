@@ -18,7 +18,7 @@ import {
 import { ScrollDownArrow } from '../../components/Home/ScrollDownArrow';
 import Sec2Mockup from '../../assets/main-sec2.png';
 import Sec3Mock1 from '../../assets/main-sec3-1.png';
-import Sec3Mock2 from '../../assets/main-sec3-2.png';
+import Sec3Mock2 from '../../assets/main-sec3-2.jpg';
 import {
   bookPosition,
   chatPosition,
