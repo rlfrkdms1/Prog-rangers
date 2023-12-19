@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/react";
-import { theme } from '../../components/Header/theme';
 import sharemark from '../../assets/icons/share-mark.svg'
 import axios from "axios";
 import {

@@ -64,41 +64,6 @@ export const CommentList = () => {
           });
       }, []); 
 
-    // const api = axios.create({
-    //   baseURL: 'http://13.124.131.171:8080/api/v1',  // API의 기본 URL
-    // });
-
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //     try {
-    //       // API 호출하여 팔로잉 데이터를 받아옴
-    //       const response = await api.get(`/solutions/${solutionId}`, {
-    //         method: 'GET',
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       });
-          
-    //       const { comments, newComment } = response.data;
-          
-    //       setComments(comments);
-    //       setNewComment(newComment);
-          
-    //       // 만약 댓글과 관련된 replies가 있다면 설정
-    //       if (comments && comments.replies) {
-    //         setReplies(comments.replies);
-    //       } else {
-    //         setReplies([]);
-    //       }   
-            
-    //     } catch (error) {
-    //       console.error("Error fetching following data:", error);
-    //     }
-    //   };
-  
-    //   fetchData();
-    // }, []);
-
       // 댓글 삭제
       const handleDeleteComment = (commentId) => {
         

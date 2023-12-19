@@ -1,8 +1,5 @@
-import { Link } from 'react-router-dom';
-
 import {
   navStyle,
-  linkDefault,
   StyledLink
 } from './headerStyle';
 

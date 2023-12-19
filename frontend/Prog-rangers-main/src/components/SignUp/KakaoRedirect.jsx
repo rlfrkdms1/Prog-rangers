@@ -1,6 +1,5 @@
-import React, { useEffect, useCallback, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from "axios";
 import { IsLoginContext } from "../../context/AuthContext";
 
 export const KakaoRedirect = () => {

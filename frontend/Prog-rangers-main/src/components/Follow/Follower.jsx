@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { fontSize14, fontSize12 } from './FollowStyle';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import axios from "axios";
 import followStatus from '../../components/Follow/RecommendFollow';
