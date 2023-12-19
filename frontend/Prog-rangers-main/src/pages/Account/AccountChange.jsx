@@ -11,7 +11,7 @@ import Naver from '../../assets/icons/signin-naver-logo.svg'
 import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import axios from 'axios';
 
-export const AccountChange = () => {
+const AccountChange = () => {
   const [userData, setUserData] = useState({
     type: '',
     nickname: '',
@@ -515,4 +515,6 @@ const accountSubmit = () => {
         </div>    
       </div>
   );
-}
+};
+
+export default AccountChange;

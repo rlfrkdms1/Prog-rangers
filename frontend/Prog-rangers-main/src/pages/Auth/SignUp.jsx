@@ -6,7 +6,7 @@ import {
   headingStyle,
 } from '../../components/SignUp/signUpPage';
 
-export const SignUp = () => {
+const SignUp = () => {
   return (
     <div css={pageStyle}>
       <div css={innerPageStyle}>
@@ -15,4 +15,6 @@ export const SignUp = () => {
       </div>
     </div>
   );
-}
+};
+
+export default SignUp;

@@ -12,7 +12,7 @@ import{
   filterStyle
 } from './MySolutionStyle'
 
-export const MySolution = () => {
+const MySolution = () => {
 
   const [ page, setPage ] = useState(1);
   const [ solutions, setSolutions ] = useState([]);
@@ -116,4 +116,6 @@ export const MySolution = () => {
     </div>
   </div>
   );
-}
+};
+
+export default MySolution;
