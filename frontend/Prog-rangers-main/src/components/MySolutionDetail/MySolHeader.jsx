@@ -34,10 +34,6 @@ export const MySolHeader = () => {
     setShowEditButtons(!showEditButtons); 
   };
 
-  const handleSelect = (path) => {
-    setIsOpen(false);
-  };
-
   // 풀이 수정 페이지 이동
   const navigate = useNavigate();
 

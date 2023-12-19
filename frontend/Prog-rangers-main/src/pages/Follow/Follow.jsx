@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { css } from '@emotion/react';
 import { MainBody, RightBody, SubLeftBody, SubRightBody, SubBottomBody, fontSize18 } from './MainStyle';
 import { SideBar } from '../../components/SideBar/SideBar';

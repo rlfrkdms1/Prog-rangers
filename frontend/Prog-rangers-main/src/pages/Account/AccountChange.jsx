@@ -20,7 +20,6 @@ const AccountChange = () => {
     introduction: '',
     passwordModifiedAt: '',
     password: '',
-    // photo: '',
   });
 
   // 유저 정보 조회 api
@@ -40,7 +39,6 @@ const AccountChange = () => {
         introduction: json.introduction || '',
         passwordModifiedAt: json.passwordModifiedAt || '',
         password: json.password || '',
-        // photo: json.photo || '',
       })
       console.log(token);
     })
@@ -48,20 +46,6 @@ const AccountChange = () => {
       console.error(error);
     })
   }, []);
-
-  // 사진 업로드
-  const [photo, setPhoto] = useState("");
-  const imgRef = useRef();
-
-  // const savephoto = () => {
-  //   const file = imgRef.current.files[0];
-
-  //   const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onloadend = () => {
-  //         setPhoto(reader.result);
-  //     };
-  // };
 
   const [nickname, setNickname] = useState('');
   const [github, setGithub] = useState(userData.github);
@@ -265,7 +249,7 @@ const accountSubmit = () => {
               align-items: center;
               `}> 
                 <img
-                src={photo ? photo : ProfileImg}                  
+                src={ProfileImg}                  
                 alt='profileImg'
                 css={css`
                 height: 250px;

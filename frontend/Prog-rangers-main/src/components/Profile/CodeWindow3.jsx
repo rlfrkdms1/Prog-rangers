@@ -253,7 +253,7 @@ export const CodeWindow3 = () => {
               {hoveredLine === codeLineNumber && (
                 <div>
                   <button onClick={() => handleLineClick(codeLineNumber)} style={{ position: 'absolute' }}>
-                    <img src={plusmark} />
+                    <img src={plusmark} alt="plusmark"/>
                   </button>
                 </div>
               )}

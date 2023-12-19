@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   pageStyle,
   innerPageStyle,
@@ -8,7 +8,6 @@ import { DefaultSignInForm } from '../../components/SignIn/DefaultSignInForm';
 import { SocialLoginButtons, ForSignUp } from '../../components/SignUp';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import axios from 'axios';
 
 
 const OptionWrapper = styled.div`

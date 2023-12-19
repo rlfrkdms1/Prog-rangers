@@ -2,7 +2,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { NavLink } from 'react-router-dom';
-import { navStyle, activeNavStyle } from './SideBarStyle';
+import { navStyle } from './SideBarStyle';
 
 export const SideBar = () => {
   return (

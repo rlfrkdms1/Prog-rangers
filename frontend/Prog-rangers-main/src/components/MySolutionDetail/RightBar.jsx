@@ -26,12 +26,6 @@ export const RightBar = () => {
     const { solutionId } = useParams();
     const [ MySolList, setMySolList ] = useState([]);
     const [ MyScrapeList, setScrapeList ] = useState([]);
-    
-    // const SolData = MySolList.sort((a, b) => b.id - a.id);
-    // const top3Sol = SolData.slice(0, 5);
-    
-    // const ScrapeData = MyScrapeList.sort((a, b) => b.id - a.id);
-    // const top3Scrape = ScrapeData.slice(0, 5);
 
     useEffect(() => {
 
@@ -71,28 +65,6 @@ export const RightBar = () => {
              풀이목록 
             </div>
             
-            {/* {top3Sol.map((item) => (
-                // 데이터가 있는 경우에만 렌더링
-                item ? (
-                <div css={css` 
-                     margin-top: 10px;
-                     max-width: 170px; 
-
-                     overflow: hidden;
-                     text-overflow: ellipsis;
-                     white-space: nowrap;
-                     
-                     &:hover{
-                      cursor: pointer;
-                      text-decoration: underline;
-                    }`}
-                onClick={() => onClickSols(item.id)}
-                key={item.id}
-                >
-                {item.title}
-            </div>
-            ) : null
-            ))} */}
 
             <button 
             css={css`
@@ -113,29 +85,6 @@ export const RightBar = () => {
             `}> 
                 스크랩한 풀이
             </div>
-
-            {/* {top3Scrape.map((item) => (
-                // 데이터가 있는 경우에만 렌더링
-                item ? (
-                  <div css={css` 
-                  margin-top: 10px;
-                  max-width: 170px; 
-
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                  
-                  &:hover{
-                   cursor: pointer;
-                   text-decoration: underline;
-                 }`}
-                onClick={() => onClickScrape(item.id)}
-                key={item.id}
-                >
-                {item.title}
-            </div>
-            ) : null
-            ))} */}
         </div>        
       </div>      
     </div>

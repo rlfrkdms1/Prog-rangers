@@ -65,10 +65,6 @@ const Account = () => {
    const [inputValue, setInputValue] = useState('');
    const [deleteSuccess, setDeleteSuccess] = useState(false);
 
-   const handleInputChange = (e) => {
-     setInputValue(e.target.value);
-   };
-
    const handleDeleteAccount = async () => {
     const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
   
