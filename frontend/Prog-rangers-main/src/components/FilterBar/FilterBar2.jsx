@@ -36,7 +36,6 @@ export const FilterBar2 = ({title, options, onSelect, secondWidth}) => {
     setIsOpen(false);
   };
 
-
   const closeFilterBarOnOutsideClick = (e) => {
     if (isOpen) {
       const filterBar = document.getElementById(filterBarId);
@@ -71,7 +70,7 @@ export const FilterBar2 = ({title, options, onSelect, secondWidth}) => {
             margin-left:30px;
             padding-top: 7px;
             width: ${secondWidth || '120px'};
-            font-weight: ${isClicked ? 'bold' : 'normal'};
+            // font-weight: ${isClicked ? 'bold' : 'normal'};
           `}
         >
           {selectedOption.name}

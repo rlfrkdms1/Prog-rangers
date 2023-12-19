@@ -28,7 +28,7 @@ export const MySolution = () => {
   const Solutionpages = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://13.124.131.171:8080/api/v1/solutions?page=${page}`, 
+      const response = await axios.get(`http://13.124.131.171:8080/api/v1/solutions?page=${page-1}&size=${5}`, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,9 +73,9 @@ export const MySolution = () => {
   
         // 각 조건에 따라 필터링
         if (
-          (selectedLanguage !== 'ALL' && item.solution.language !== selectedLanguage) &&
-          (selectedAlgorithm !== 'ALL' && item.solution.algorithm !== selectedAlgorithm) &&
-          (selectedDataStructure !== 'ALL' && item.solution.dataStructure !== selectedDataStructure) &&
+          (selectedLanguage !== 'ALL' && item.solution.language !== selectedLanguage) ||
+          (selectedAlgorithm !== 'ALL' && item.solution.algorithm !== selectedAlgorithm) ||
+          (selectedDataStructure !== 'ALL' && item.solution.dataStructure !== selectedDataStructure) ||
           (selectedLevel !== 'ALL' && item.solution.level !== selectedLevel)
         ) {
           return false;
@@ -85,13 +85,11 @@ export const MySolution = () => {
   
       return filteredData;
     };
-  
+
     const filtered = filterSolutions();
     setFilteredSolutions(filtered); // 필터링된 데이터 상태 업데이트
   
   }, [selectedLanguage, selectedAlgorithm, selectedDataStructure, selectedLevel, solutions]);
-  
- 
  
   return (
     <div css={css`
@@ -146,7 +144,7 @@ export const MySolution = () => {
         </div>
 
         <div css={css`width: 800px; margin-top: 20px; margin-right: 111px;`}>
-          <MySolutionForm data={filteredSolutions.length > 0 ? filteredSolutions : solutions} />
+          <MySolutionForm data={filteredSolutions}/>
         </div>
 
         <div css={css`
