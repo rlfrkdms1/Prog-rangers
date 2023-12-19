@@ -67,11 +67,11 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
         <div
           css={css`
             font-size: 20px;
-            color: #959595;
+            color: ${isClicked ? '#757575' : '#959595'};
             margin-left:30px;
             padding-top: 9px;
             width: ${secondWidth || '165px'};
-            // font-weight: ${isClicked ? 'bold' : 'normal'};
+            font-weight: ${isClicked ? 'bold' : 'normal'};
           `}
         >
           {selectedOption.name}
