@@ -6,6 +6,7 @@ import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 
 import { BiSolidLockAlt } from 'react-icons/bi';
+import { BiSolidLockOpenAlt } from 'react-icons/bi';
 import {
   MyHeaderLayout,
   colFlex,
@@ -109,7 +110,7 @@ export const MySolHeader = () => {
                 {problem.title}
               </div>
               <div className="icon">
-                <BiSolidLockAlt size="18" color="#D9D9D9" />
+                {/* {isPublic ? <BiSolidLockAlt size="18" color="#D9D9D9" /> : <BiSolidLockOpenAlt size="18" color="#D9D9D9" />} */}
               </div>
             </div>
             <div

@@ -15,6 +15,8 @@ import {
   gridStyle,
   infoSytle
  } from './MyPageStyle';
+ 
+import star1 from '../../assets/icons/star/star1.svg';
 
 const MyPage = () => {
 
@@ -23,9 +25,19 @@ const MyPage = () => {
   const [recentProblems, setrecentProblems] = useState([]);
   const [followingRecentSolutions, setfollowingRecentSolutions] = useState([]);
   const [notifications, setnotifications] = useState([]);
+  const [badges, setBadges] = useState();
 
   // MonthlyStudyCalendar
   const [value, setValue] = useState(new Date());
+
+  // 달성 뱃지
+  const badgeImages = {
+    새싹: star1,
+    // 꽃: star2,
+    // 안경: star3,
+    // 4: star4,
+    // 5: star5,
+  }
 
   useEffect(() => {
 
@@ -44,17 +56,18 @@ const MyPage = () => {
       setfollowingRecentSolutions(data.followingRecentSolutions || []);
       setnotifications(data.notifications || []);
       setValue(new Date());
+      setBadges(data.badges);
     })
     .catch((error) => {
       console.error('API 요청 오류:', error);
     })
   }, []);  
 
-  const sortedData = recentProblems.sort((a, b) => b.solutionId - a.solutionId);
-  const top3Data = sortedData.slice(0, 3);
+  // const sortedData = recentProblems.sort((a, b) => b.solutionId - a.solutionId);
+  // const top3Data = sortedData.slice(0, 3);
 
-  const sortedFollowingData = followingRecentSolutions.sort((a, b) => b.solutionId - a.solutionId);
-  const top5Data = sortedFollowingData.slice(0, 5);
+  // const sortedFollowingData = followingRecentSolutions.sort((a, b) => b.solutionId - a.solutionId);
+  // const top5Data = sortedFollowingData.slice(0, 5);
 
   const daysInMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
   const currentMonth = value.toLocaleString('en-US', { month: 'long' }).toUpperCase();
@@ -107,14 +120,9 @@ const MyPage = () => {
   ` }
   >
     <SideBar />
-    <div 
-    css={css`${MainBody}
-  `}>    
+      <div css={css`${MainBody}`}>    
 
-    <div
-      css={css`
-        ${LeftBody}
-      `}>
+      <div css={css`${LeftBody}`}>
           <div css={css`
           width: 365px;
           height: 123px;
@@ -123,23 +131,23 @@ const MyPage = () => {
               display: flex;
               align-items: center;
               `}>
-              <button onClick={goToPreviousMonth} css={css`
-              flex: 1;`}>
+
+              <button onClick={goToPreviousMonth} css={css`flex: 1;`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="6" height="14" viewBox="0 0 6 14" fill="none" >
                   <path d="M5.5 1L1 7L5.5 13" stroke="#545454"/>
                 </svg>
               </button>
-              <div css={css`
-              ${[fontSize16, alignCenter]} 
-              margin-bottom: 10px`}>
+
+              <div css={css`${[fontSize16, alignCenter]} margin-bottom: 10px`}>
                 {currentYear} {currentMonth}
               </div>
-              <button onClick={goToNextMonth} css={css`
-              flex: 1;`}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="6" height="14" viewBox="0 0 6 14" fill="none">
-                <path d="M0.5 13L5 7L0.500001 1" stroke="#545454"/>
-              </svg>
+
+              <button onClick={goToNextMonth} css={css`flex: 1;`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="6" height="14" viewBox="0 0 6 14" fill="none">
+                  <path d="M0.5 13L5 7L0.500001 1" stroke="#545454"/>
+                </svg>
               </button>
+
             </div>
 
             <div css={css`
@@ -147,14 +155,12 @@ const MyPage = () => {
             height: 90px;
             border-radius: 5px;
             padding-top: 3px;
-            background-color: ${theme.colors.light4}
-            
+            background-color: ${theme.colors.light4}            
             }`}>
-                <div css={css`
-                ${[gridStyle, alignCenter]}`}>
+                <div css={css` ${[gridStyle, alignCenter]}`}>
                   {renderCalendar()}
-                  </div>
-              </div>
+                </div>
+            </div>
           </div>
 
           <div css={css`
@@ -169,7 +175,7 @@ const MyPage = () => {
           margin-top: 10px;
           background-color: ${theme.colors.light4};
           `}>          
-          <RecentlyList data={recentProblems}/>
+            <RecentlyList data={recentProblems}/>
           </div>
 
           <div css={css`
@@ -184,11 +190,11 @@ const MyPage = () => {
           margin-top: 10px;
           background-color: ${theme.colors.light4};
           `}>
-          <FollowingList data={followingRecentSolutions}/>
-        </div>
-    </div>  
-     <div css={css`
-      ${RightBody}`}>
+            <FollowingList data={followingRecentSolutions}/>
+          </div>
+      </div>  
+
+     <div css={css`${RightBody}`}>
         <div css={css`
           width: 365px;
           height: 123px;
@@ -196,12 +202,17 @@ const MyPage = () => {
             <div css={css`
             ${[fontSize20, alignCenter]}
             `}> 달성 </div> 
+
             <div css={css`
             width: 365px;
             height: 90px;
             border-radius: 5px;
             margin-top: 4px;
+            padding: 15px;
             background-color: ${theme.colors.light4}`}>
+              {badgeImages[badges] && (
+              <img src={badgeImages[badges]} alt={`${badges}`} />
+              )}
             </div>  
           </div>
 
@@ -210,13 +221,11 @@ const MyPage = () => {
           height: 604px;
           padding-top: 50px;
           `}>
-            <div css={css`${fontSize20}`}>알림
-          </div>
+            <div css={css`${fontSize20}`}>알림 </div>
 
-
-            <div css={css` ${infoSytle}`}>
+            <div css={css` ${infoSytle} margin-top: 10px; `}>
               <InfoList data={notifications}/>
-              </div>
+            </div>
           </div>
         </div>
       </div>

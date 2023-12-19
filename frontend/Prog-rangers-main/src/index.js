@@ -8,30 +8,6 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-// import {
-//   NotFound,
-//   MainPage,
-//   SignUp,
-//   // SignIn,
-//   Problems,
-//   Solutions,
-//   SolutionDetail,
-//   Profile,
-//   MyPage,
-//   Account,
-//   AccountChange,
-//   MySolution,
-//   MySolutionDetail,
-//   MyComment,
-//   Like,
-//   Follow,
-// } from './pages';
-// import { 
-//   AddSolution,
-//   EditSolution,
-//   Scrap,
-//   WriteSolution
-// } from './pages/BoardPage';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
 import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
@@ -56,9 +32,6 @@ const AddSolution = loadable(() => import('./pages/BoardPage/AddSolution'));
 const EditSolution = loadable(() => import('./pages/BoardPage/EditSolution'));
 const Scrap = loadable(() => import('./pages/BoardPage/Scrap'));
 const WriteSolution = loadable(() => import('./pages/BoardPage/WriteSolution'));
-// const KakaoRedirect = loadable(() => import('./components/SignUp/KakaoRedirect'));
-// const NaverRedirect = loadable(() => import('./components/SignUp/NaverRedirect'));
-// const GoogleRedirect = loadable(() => import('./components/SignUp/GoogleRedirect'));
 
 const router = createBrowserRouter([
   {
