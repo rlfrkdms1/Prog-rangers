@@ -10,7 +10,7 @@ import {
   RightBar
 } from '../components/MySolutionDetail';
 
-export const MySolutionDetail = () => {
+const MySolutionDetail = () => {
   return (
     <div 
       className='container' 
@@ -35,3 +35,5 @@ export const MySolutionDetail = () => {
     </div>
   );
 };
+
+export default MySolutionDetail;

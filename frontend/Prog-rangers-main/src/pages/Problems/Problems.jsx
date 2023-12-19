@@ -9,28 +9,30 @@ import { MainBody } from './MainBody';
 import { FilterBar } from '../../components/FilterBar';
 import { QuestionForm } from '../../components/Question';
 import { Pagination } from '../../components/Pagination/Pagination';
-import questions from '../../db/question.json';
 import sort from '../../db/autocomplete.json';
-import { Provider, atom, useAtom } from 'jotai';
 import axios from 'axios';
 import { SearchContext } from '../../context/SearchContext';
 
-const questionAtom = atom(questions);
-
-export const Problems = () => {
+const Problems = () => {
   const [page, setPage] = useState(1);
-  const [Questions, setQuestions] = useAtom(questionAtom);
+  const [Questions, setQuestions] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
 
   const AllQuestions = async () => {
     const response = await axios.get(
-      `http://13.124.131.171:8080/api/v1/problems?page=${
-        page - 1
-      }`
+      `http://13.124.131.171:8080/api/v1/problems?page=${page-1}&size=5`
     );
     setQuestions(response.data.problems);
     setTotalPages(response.data.totalCount);
   };
+
+  useEffect(() => {
+    AllQuestions();
+  }, [page]);
+
+  useEffect(() => {
+    AllQuestions();
+  }, [page]);
 
   const handlePageChange = (e, page) => {
     setPage(page);
@@ -39,21 +41,26 @@ export const Problems = () => {
   //검색 기능 추가
   const { searchTerm } = useContext(SearchContext);
   const [filteredQuestions, setFilteredQuestions] =
-    useState([]);
+    useState(Questions);
 
-  useEffect(() => {
-    AllQuestions();
-    filterData();
-  }, [page, searchTerm]);
+    const filterData = () => {
+      let filteredResults = Questions.filter((item) =>
+        item.title
+          .toLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
+      );
+      setFilteredQuestions(filteredResults);
+    };
 
-  const filterData = () => {
-    let filteredResults = Questions.filter((item) =>
-      item.title
-        .toLowerCase()
-        .includes(searchTerm.toLocaleLowerCase())
-    );
-    setFilteredQuestions(filteredResults);
-  };
+    useEffect(() => {
+      AllQuestions();
+      filterData();
+    }, [searchTerm]);
+
+    useEffect(() => {
+      AllQuestions();
+      filterData();
+    }, [searchTerm]);
 
   return (
     <div
@@ -98,7 +105,8 @@ export const Problems = () => {
             margin-top: 20px;
           `}
         >
-          <QuestionForm data={filteredQuestions} />
+          <QuestionForm data={searchTerm ? filteredQuestions : Questions} />
+          <QuestionForm data={searchTerm ? filteredQuestions : Questions} />
         </div>
         <div
           css={css`
@@ -110,8 +118,8 @@ export const Problems = () => {
           `}
         >
           <Pagination
-            totalPages={totalPages}
             page={page}
+            totalPages={totalPages}
             handlePageChange={handlePageChange}
           />
         </div>
@@ -119,3 +127,5 @@ export const Problems = () => {
     </div>
   );
 };
+
+export default Problems;

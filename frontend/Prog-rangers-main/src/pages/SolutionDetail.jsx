@@ -6,7 +6,7 @@ import {
   Comments
 } from '../components/SolutionDetail';
 
-export const SolutionDetail = () => {
+const SolutionDetail = () => {
   return (
     <div>
       <SolutionDetailHeader />
@@ -16,3 +16,5 @@ export const SolutionDetail = () => {
     </div>
   );
 };
+
+export default SolutionDetail;

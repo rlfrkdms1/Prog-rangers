@@ -27,7 +27,7 @@ export const CommentForm = () => {
 
     const navigate = useNavigate();
     const onClickSolution = (solutionId) => {
-      navigate(`/solution/${solutionId}`); 
+      navigate(`/solutions/${solutionId}`); 
     };  
 
 return(
@@ -38,14 +38,14 @@ return(
     <div css={css`max-width:800px; display: flex; align-items: center; justify-content: space-between;`}>           
         <div css={css`display: flex; align-items: center;`}>
         <img
-            src= {item.solution.authorImageUrl || ProfileImg}                 
+            src= {item.solution.author.imageUrl || ProfileImg}                 
             alt='profileImg'
             width='50px'
             css={css`
             border-radius: 50%;
             margin : 20px 10px 10px 20px;
             `}></img>
-        <div css={css`font-size:20px`}>{item.solution.authorNickname}</div>
+        <div css={css`font-size:20px`}>{item.solution.author.nickname}</div>
         </div>
         <div css={css`
           ${ojNameTag}
@@ -68,21 +68,21 @@ return(
       <div css={css`display: flex; flex-direction: row; margin-left:30px;`}>
           {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.algorithm}</div>)}
           {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags} background-color: #D9D9D9;`}>{item.solution.dataStructure}</div>)}
-        </div>
+      </div>
     </div>
 
     <div css={css`display:flex; align-items: center; width: 100%; height: 130px; margin-bottom:30px; border-bottom: 1px solid #DEDCDC;`}>
           
           <div css={css`display: flex; align-items: center; padding: 20px;`}>
           <img
-              src= {item.comment.authorImageUrl || ProfileImg}                 
+              src= {item.comment.author.imageUrl || ProfileImg}                 
               alt='profileImg'
               width='80px'
               css={css`
               border-radius: 50%;
               `}></img>
               <div css={css`display:flex; flex-direction: column; margin-left:20px;`}>
-              <div css={css`font-size:14px; margin-bottom:10px;`}>{item.comment.authorNickname}</div>
+              <div css={css`font-size:14px; margin-bottom:10px;`}>{item.comment.author.nickname}</div>
               <div css={css`font-size:20px`}>{item.comment.content}</div>
               </div>
           </div>

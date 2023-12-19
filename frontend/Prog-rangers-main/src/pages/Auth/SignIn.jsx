@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   pageStyle,
   innerPageStyle,
@@ -8,6 +8,8 @@ import { DefaultSignInForm } from '../../components/SignIn/DefaultSignInForm';
 import { SocialLoginButtons, ForSignUp } from '../../components/SignUp';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import axios from 'axios';
+
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -32,8 +34,7 @@ const Label = styled.label`
   margin-left: 5px;
 `;
 
-export const SignIn = () => {
-
+const SignIn = () => {
   return (
     <div css={pageStyle}>
       <div css={css`${innerPageStyle}  margin-bottom: 100px;`}>
@@ -63,4 +64,6 @@ export const SignIn = () => {
       </div>
     </div>
   );
-}
+};
+
+export default SignIn;

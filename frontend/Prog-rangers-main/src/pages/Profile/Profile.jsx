@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../../components/Header/theme';
 import { LeftBody, MainBody, RightBody } from './MainBody';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { SolvingList } from '../../components/Profile/SolvingList';
 import github from '../../assets/icons/github-mark.svg'
 import achievemark from '../../assets/icons/achieve-mark.svg'
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import {
   alignCenter,
   fontSize14,
@@ -15,8 +16,11 @@ import {
   fontSize24
 } from './ProfileStyle';
 
-export const Profile = () => {
+import star1 from '../../assets/icons/star/star1.svg';
 
+const Profile = () => {
+  
+  const navigate = useNavigate();
   const { nickname } = useParams();
   const [data, setData] = useState([]);
 
@@ -24,12 +28,21 @@ export const Profile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const buttonColor = isFollowing ? theme.colors.light3 : theme.colors.main30;
 
+   // 달성 뱃지
+   const badgeImages = {
+    새싹: star1,
+    // 꽃: star2,
+    // 안경: star3,
+    // 4: star4,
+    // 5: star5,
+  }
+
   const handleFollowClick = () => {
     setIsFollowing(!isFollowing); 
   };
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname.substring(1)}`;
+    const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
     axios.get(apiUrl)
       .then((response) => {
@@ -37,6 +50,8 @@ export const Profile = () => {
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
+        alert("탈퇴한 사용자의 프로필을 방문할 수 없습니다.");
+        navigate(-1);
       });
   }, [nickname]);
   
@@ -54,13 +69,17 @@ export const Profile = () => {
           object-fit: cover;
           border: 1px solid black;
           `}>
-          {data.photo} 
+          <img
+                src= {data.photo || ProfileImg }                 
+                alt='profileImg'>
+          </img>
           </div> 
 
         <div css={css`
           ${fontSize20}
           ${alignCenter}
-          margin-top: 8px;`}>
+          margin-top: 8px;
+          color: ${data.nickname === '탈퇴한 사용자' ? '#D9D9D9' : '#000000'};`}>
           {data.nickname}
           </div>
 
@@ -141,6 +160,9 @@ export const Profile = () => {
             </div>
             달성
           </div>  
+          {badgeImages[data.badges] && (
+              <img src={badgeImages[data.badges]} alt={`${data.badges}`} />
+              )}
       </div>
 
 
@@ -156,4 +178,6 @@ export const Profile = () => {
       </div>
   </div>
   )
-}
+};
+
+export default Profile;

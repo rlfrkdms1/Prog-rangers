@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { CommentForm } from '../../components/Comment';
 
-export const MyComment = () => {
+const MyComment = () => {
   return (
     <div 
       className='container' 
@@ -30,4 +30,6 @@ export const MyComment = () => {
       </div>
     </div>
   );
-}
+};
+
+export default MyComment;

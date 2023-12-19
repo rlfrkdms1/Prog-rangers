@@ -10,7 +10,7 @@ import {
     fontSize18,
     fontSizedark20,
     boxStyle, 
-    fontSize14} from '../../pages/Profile/ProfileStyle';
+    fontSize14} from './LikeStyle.js';
 import hljs from "highlight.js";
 
 export const LikeList = () => {    
@@ -19,7 +19,7 @@ export const LikeList = () => {
 
     const navigate = useNavigate();
     const onClickName = (nickname) => {
-      navigate(`/profile/:${nickname}`); 
+      navigate(`/profile/${nickname}`); 
     };  
 
     useEffect(() => {
@@ -141,6 +141,7 @@ export const LikeList = () => {
           `}>
             <div key={ item.solution.id + i } css={css`overflow-y: auto; max-height: 270px; margin-bottom: 20px;`}>
             <pre css={css`font-size: 20px; white-space: pre-wrap;`} >
+            <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
               {item.solution.code.map((line, lineIndex) => (
               <React.Fragment key={lineIndex}>
                  {lineIndex} {'  '}
@@ -148,6 +149,7 @@ export const LikeList = () => {
                 <br />
               </React.Fragment>
               ))}
+              </span>
             </pre>
           </div>
           </div>

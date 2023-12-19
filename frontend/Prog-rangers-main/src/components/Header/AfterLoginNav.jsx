@@ -65,7 +65,7 @@ export const AfterLoginNav = () => {
   return (
     <div className="AfterLoginNav" css={navStyle}>
       <StyledLink to="problems" onClick={hideDropdown}>
-        풀이 보러가기
+        문제 보러가기
       </StyledLink>
       <StyledLink
         to="registerReview"
