@@ -13,7 +13,7 @@ import { useAtom } from 'jotai';
 import { targetAtom, targetScope, nameAtom, nameScope, valueAtom, valueScope } from "../../pages/BoardPage/AddSolution";
 import { useEffect } from "react";
 
-export const FilterBar = ({title, options, width, onSelect, secondWidth}) => {
+export const FilterBar = ({title, options, width, secondWidth}) => {
   const [ selectedOption, setSelectedOption ] = React.useState(options[0]); 
   const [ isOpen, setIsOpen ] = React.useState(false);
   const [ isClicked, setIsClicked ] = useState(false);
@@ -32,7 +32,6 @@ export const FilterBar = ({title, options, width, onSelect, secondWidth}) => {
     setIsClicked(true);
     setTarget(e.name);
     setValue(e.value);
-    onSelect(e); // 선택된 옵션에 대한 처리를 상위 컴포넌트로 전달
     setName(title);
     setIsOpen(false); 
   };
