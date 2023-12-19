@@ -17,8 +17,7 @@ import { FilterBar } from "../FilterBar";
 import sort from '../../db/autocomplete.json';
 import { useAtomValue } from "jotai";
 import { targetAtom, targetScope, nameAtom, nameScope , valueAtom, valueScope} from "../../pages/BoardPage/AddSolution";
-import { ButtonDiv, SubmitButton } from "../../pages/BoardPage/buttonDiv";
-import { TagAction } from "./TagAction";
+import { SubmitButton } from "../../pages/BoardPage/buttonDiv";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -40,13 +39,13 @@ export const EditMySolution = ({postURL}) => {
   const [ data, setData ] = useState([]);
 
   useEffect(() => {
-    if(name == 'algorithm'){
+    if(name === 'algorithm'){
       setAlgo({
         value: value,
         name: target,
       });
     }
-    if(name == 'datastructure'){
+    if(name === 'datastructure'){
       setData({
         value: value,
         name: target,

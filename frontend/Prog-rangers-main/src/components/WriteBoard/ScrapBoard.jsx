@@ -138,11 +138,6 @@ export const ScrapBoard = () => {
     if(addCode){
       let updatedCode = [ addCode ];
       updatedCode = updatedCode.join('\n');
-      // setInputs({
-      //   ...inputs,
-      //   code: updatedCode,
-      // });
-      // setAddCode('');
     }
   }
   const TagDisplay1 = () => {

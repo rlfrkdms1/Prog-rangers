@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import { Pagination as MuiPagination, PaginationItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 

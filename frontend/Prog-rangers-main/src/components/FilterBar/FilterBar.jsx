@@ -1,17 +1,15 @@
 import { css } from "@emotion/react";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Fragment,
   SelectBox,
   Wrapper,
-  OptionBox,
-  ToggleIcon
+  OptionBox
 } from "./FilterBox";
 import ToggleDown from '../../assets/icons/main-toggle-down.svg';
 import ToggleUp from '../../assets/icons/main-toggle-up.svg';
 import { useAtom } from 'jotai';
 import { targetAtom, targetScope, nameAtom, nameScope, valueAtom, valueScope } from "../../pages/BoardPage/AddSolution";
-import { useEffect } from "react";
 
 export const FilterBar = ({title, options, width, secondWidth}) => {
   const [ selectedOption, setSelectedOption ] = React.useState(options[0]); 
