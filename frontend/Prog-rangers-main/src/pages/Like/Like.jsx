@@ -5,7 +5,7 @@ import { MainBody, RightBody } from './MainBody';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { LikeList } from '../../components/Like/LikeList';
 
-export const Like = () => {
+const Like = () => {
   return (
     <div
       css={css`${MainBody}`}>
@@ -18,5 +18,6 @@ export const Like = () => {
       </div>
     </div>
   );
-}
+};
+export default Like;
 

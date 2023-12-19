@@ -13,7 +13,7 @@ import sort from '../../db/autocomplete.json';
 import axios from 'axios';
 import { SearchContext } from '../../context/SearchContext';
 
-export const Problems = () => {
+const Problems = () => {
   const [page, setPage] = useState(1);
   const [Questions, setQuestions] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -117,3 +117,5 @@ export const Problems = () => {
     </div>
   );
 };
+
+export default Problems;

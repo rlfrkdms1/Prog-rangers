@@ -13,7 +13,7 @@ import{
 } from './SolutionsStyle';
 import sort from '../../db/autocomplete.json';
 
-export const Solutions = () => {
+const Solutions = () => {
   const location = useLocation();
   const [ page, setPage ] = useState(1);
   const [ Solvings, setSolvings ] = useState([]);
@@ -94,4 +94,6 @@ export const Solutions = () => {
       </div>
     </div>
   );
-}
+};
+
+export default Solutions;

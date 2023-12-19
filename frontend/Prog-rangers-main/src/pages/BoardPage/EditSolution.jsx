@@ -16,7 +16,7 @@ export const nameAtom = atom("");
 //mypage-my solution-add solution 페이지
 //mypage 정보를 미리 가져와서 추가수정기능
 
-export const EditSolution = () => {
+const EditSolution = () => {
   const currentURL = window.location.href.split('/');
   const indexOfSolution = currentURL.indexOf("solutions");
   const [ id, setId ] = useState(0);
@@ -57,3 +57,5 @@ export const EditSolution = () => {
     </div>
   );
 };
+
+export default EditSolution;

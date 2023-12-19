@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import loadable from '@loadable/component';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -7,60 +8,57 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import {
-  NotFound,
-  MainPage,
-  SignUp,
-  SignIn,
-  Problems,
-  Solutions,
-  SolutionDetail,
-  Profile,
-  MyPage,
-  Account,
-  AccountChange,
-  MySolution,
-  MySolutionDetail,
-  MyComment,
-  Like,
-  Follow,
-} from './pages';
-import { 
-  AddSolution,
-  EditSolution,
-  Scrap,
-  WriteSolution
-} from './pages/BoardPage';
+// import {
+//   NotFound,
+//   MainPage,
+//   SignUp,
+//   // SignIn,
+//   Problems,
+//   Solutions,
+//   SolutionDetail,
+//   Profile,
+//   MyPage,
+//   Account,
+//   AccountChange,
+//   MySolution,
+//   MySolutionDetail,
+//   MyComment,
+//   Like,
+//   Follow,
+// } from './pages';
+// import { 
+//   AddSolution,
+//   EditSolution,
+//   Scrap,
+//   WriteSolution
+// } from './pages/BoardPage';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
 import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
-import loadable from '@loadable/component';
 
-// const App = loadable(() => import('./App'));
-// const NotFound = loadable(() => import('./pages'));
-// const MainPage = loadable(() => import('./pages'));
-// const SignUp = loadable(() => import('./pages'));
-// const SignIn = loadable(() => import('./pages'));
-// const Problems = loadable(() => import('./pages'));
-// const Solutions = loadable(() => import('./pages'));
-// const SolutionDetail = loadable(() => import('./pages'));
-// const Profile = loadable(() => import('./pages'));
-// const MyPage = loadable(() => import('./pages'));
-// const Account = loadable(() => import('./pages'));
-// const AccountChange = loadable(() => import('./pages'));
-// const MySolution = loadable(() => import('./pages'));
-// const MySolutionDetail = loadable(() => import('./pages'));
-// const MyComment = loadable(() => import('./pages'));
-// const Like = loadable(() => import('./pages'));
-// const Follow = loadable(() => import('./pages'));
-// const AddSolution = loadable(() => import('./pages/BoardPage'));
-// const EditSolution = loadable(() => import('./pages/BoardPage'));
-// const Scrap = loadable(() => import('./pages/BoardPage'));
-// const WriteSolution = loadable(() => import('./pages/BoardPage'));
+const NotFound = loadable(() => import('./pages/NotFound'));
+const MainPage = loadable(() => import('./pages/MainPage/MainPage'));
+const SignUp = loadable(() => import('./pages/Auth/SignUp'));
+const SignIn = loadable(() => import('./pages/Auth/SignIn'));
+const Problems = loadable(() => import('./pages/Problems/Problems'));
+const Solutions = loadable(() => import('./pages/Solutions/Solutions'));
+const SolutionDetail = loadable(() => import('./pages/SolutionDetail'));
+const Profile = loadable(() => import('./pages/Profile/Profile'));
+const MyPage = loadable(() => import('./pages/MyPage/MyPage'));
+const Account = loadable(() => import('./pages/Account/Account'));
+const AccountChange = loadable(() => import('./pages/Account/AccountChange'));
+const MySolution = loadable(() => import('./pages/MySolution/MySolution'));
+const MySolutionDetail = loadable(() => import('./pages/MySolutionDetail'));
+const MyComment = loadable(() => import('./pages/MyComment/MyComment'));
+const Like = loadable(() => import('./pages/Like/Like'));
+const Follow = loadable(() => import('./pages/Follow/Follow'));
+const AddSolution = loadable(() => import('./pages/BoardPage/AddSolution'));
+const EditSolution = loadable(() => import('./pages/BoardPage/EditSolution'));
+const Scrap = loadable(() => import('./pages/BoardPage/Scrap'));
+const WriteSolution = loadable(() => import('./pages/BoardPage/WriteSolution'));
 // const KakaoRedirect = loadable(() => import('./components/SignUp/KakaoRedirect'));
 // const NaverRedirect = loadable(() => import('./components/SignUp/NaverRedirect'));
 // const GoogleRedirect = loadable(() => import('./components/SignUp/GoogleRedirect'));
-
 
 const router = createBrowserRouter([
   {

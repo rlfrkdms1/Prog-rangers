@@ -16,7 +16,7 @@ import {
   fontSize24
 } from './ProfileStyle';
 
-export const Profile = () => {
+const Profile = () => {
 
   const { nickname } = useParams();
   const [data, setData] = useState([]);
@@ -160,4 +160,6 @@ export const Profile = () => {
       </div>
   </div>
   )
-}
+};
+
+export default Profile;

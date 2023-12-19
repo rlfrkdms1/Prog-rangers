@@ -42,7 +42,7 @@ const displayBlock = css`
   display: block;
 `;
 
-export const MainPage = () => {
+ const MainPage = () => {
   const element = useRef();
   const moveToElement = () => {
     element.current.scrollIntoView({ behavior: 'smooth' });
@@ -336,3 +336,5 @@ export const MainPage = () => {
     </div>
   );
 };
+
+export default MainPage;
