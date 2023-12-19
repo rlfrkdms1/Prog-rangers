@@ -221,12 +221,11 @@ const MyPage = () => {
           height: 604px;
           padding-top: 50px;
           `}>
-            <div css={css`${fontSize20}`}>알림
-          </div>
+            <div css={css`${fontSize20}`}>알림 </div>
 
-          <div css={css` ${infoSytle}`}>
-            <InfoList data={notifications}/>
-          </div>
+            <div css={css` ${infoSytle} margin-top: 10px; `}>
+              <InfoList data={notifications}/>
+            </div>
           </div>
         </div>
       </div>

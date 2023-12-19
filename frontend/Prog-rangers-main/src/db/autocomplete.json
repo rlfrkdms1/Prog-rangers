@@ -36,10 +36,10 @@
 
   "LEVEL": [
     { "value": "ALL", "name": "난이도"},
-    { "value": 1, "name": "매우쉬움", "svgPath": "/src/assets/icons/star/star1"},
-    { "value": 2, "name": "쉬움", "svgPath": "/src/assets/icons/star/star2" },
-    { "value": 3, "name": "보통", "svgPath": "/src/assets/icons/star/star3"},
-    { "value": 4, "name": "어려움", "svgPath": "/src/assets/icons/star/star4" },
-    { "value": 5, "name": "매우어려움", "svgPath": "/src/assets/icons/star/star5" }
+    { "value": 1, "name": "⭐"},
+    { "value": 2, "name": "⭐⭐" },
+    { "value": 3, "name": "⭐⭐⭐"},
+    { "value": 4, "name": "⭐⭐⭐⭐"},
+    { "value": 5, "name": "⭐⭐⭐⭐⭐"}
   ]
 }
