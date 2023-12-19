@@ -1,8 +1,6 @@
 import { css } from "@emotion/react";
-import { SideBar } from "../../components/SideBar/SideBar";
-import { AddMySolution, Register } from "../../components/WriteBoard";
-import { ButtonDiv, SubmitButton } from "./buttonDiv";
-import { Provider, atom, useAtom } from 'jotai';
+import { Register } from "../../components/WriteBoard";
+import { Provider, atom } from 'jotai';
 
 export const targetScope = Symbol();
 export const targetAtom = atom("");
