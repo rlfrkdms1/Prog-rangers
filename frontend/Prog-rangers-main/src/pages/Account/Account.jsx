@@ -9,7 +9,7 @@ import Google from '../../assets/icons/signin-google-logo.svg'
 import Naver from '../../assets/icons/signin-naver-logo.svg'
 import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 
-export const Account = () => {
+const Account = () => {
   const [userData, setUserData] = useState({
     type: '',
     nickname: '',
@@ -245,4 +245,6 @@ export const Account = () => {
       </div>
     </div>
   );
-}
+};
+
+export default Account;

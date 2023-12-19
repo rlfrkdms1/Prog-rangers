@@ -6,8 +6,7 @@ import { Following } from '../../components/Follow/Following';
 import { Follower } from '../../components/Follow/Follower';
 import { RecommendFollow } from '../../components/Follow/RecommendFollow';
 
-
-export const Follow = () => {
+const Follow = () => {
   return (
     <div
       css={css`${MainBody}`}>
@@ -35,4 +34,6 @@ export const Follow = () => {
       </div>
     </div>
   );
-}
+};
+
+export default Follow;

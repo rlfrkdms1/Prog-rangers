@@ -13,7 +13,7 @@ export const nameAtom = atom("");
 
 //mypage-my solution-add solution 페이지
 
-export const AddSolution = () => {
+const AddSolution = () => {
 
   const APIURL = `http://13.124.131.171:8080/api/v1/solutions`;
   return(
@@ -35,3 +35,5 @@ export const AddSolution = () => {
     </div>
   );
 };
+
+export default AddSolution;

@@ -12,7 +12,7 @@ export const nameScope = Symbol();
 export const nameAtom = atom("");
 
 //main-review-write 페이지
-export const WriteSolution = () => {
+const WriteSolution = () => {
   const APIURL = `http://13.124.131.171:8080/api/v1/solutions`;
 
   return(
@@ -34,3 +34,5 @@ export const WriteSolution = () => {
   </div>
   );
 };
+
+export default WriteSolution;

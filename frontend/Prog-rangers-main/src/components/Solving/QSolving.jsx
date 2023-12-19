@@ -1,6 +1,5 @@
 import { css } from "@emotion/react";
 import { tags } from "./QSolvingStyle";
-import sort from '../../db/autocomplete.json';
 import forTags from './fortagsort.json';
 import { useNavigate } from "react-router-dom";
 
@@ -17,13 +16,13 @@ export const QSolving = ({data}) => {
     const foundElement = forTags[foundIndex];
     return foundElement?.name;
   }
-  
+
   return(
     <>
       {data.map((item,index) => (
         <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
           <div 
-          onClick={(e) => onClickSols(item.solutionId)}
+          onClick={(e) => onClickSols(item.id)}
           css={css`
             height: 29px; 
             width: 100%; 
@@ -50,9 +49,10 @@ export const QSolving = ({data}) => {
             justify-content: space-between;
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
-              <div key={index} css={css`${tags}`}>
-                {getRightName(item.algorithm)}
-              </div>
+              {getRightName(item.algorithm) && 
+                (<div key={index} css={css`${tags}`}> {getRightName(item.algorithm)} </div>)}
+              {item.dataStructure && 
+                (<div key={index} css={css`${tags}`}> {item.dataStructure} </div>)}
             </div>
           </div>
         </div>

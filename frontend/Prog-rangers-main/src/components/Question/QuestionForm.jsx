@@ -1,9 +1,7 @@
 import { css } from "@emotion/react";
-import questions from '../../db/question.json';
 import { ojNameTag, tags } from "./tagsform";
 import { useNavigate } from 'react-router-dom';
 import forTags from './fortagsort.json';
-import { useEffect } from "react";
 
 export const QuestionForm = ({data}) => {
   const navigate = useNavigate();
@@ -23,7 +21,7 @@ export const QuestionForm = ({data}) => {
       {data.map((item,index) => (
         <div key={index} css={css`display: inline-block; width: 100%; height: 138px; border-bottom: 1px solid #D9D9D9`}>
           <div
-          onClick={(e) => onClickSols(index)}
+          onClick={(e) => onClickSols(item.id)}
           css={css`
             height: 29px; 
             width: 100%; 
@@ -49,11 +47,14 @@ export const QuestionForm = ({data}) => {
           `}>
             <div css={css`display: flex; flex-direction: row;`}>
               {item.tags.map((index) => (
-                <div key={index} css={css`${tags}`}> 
-                  {getRightName(index)}
-                </div>
+                getRightName(index) && (
+                  <div key={index} css={css`${tags}`}> 
+                    {getRightName(index)}
+                  </div>
+                )
               ))}
             </div>
+
             <div css={css`
               ${ojNameTag}
               background-color: ${item.ojName === "프로그래머스" ? "#6AB4AC" : "#3578BF"};

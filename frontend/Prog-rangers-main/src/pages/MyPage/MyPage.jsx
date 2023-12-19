@@ -16,7 +16,7 @@ import {
   infoSytle
  } from './MyPageStyle';
 
-export const MyPage = () => {
+const MyPage = () => {
 
   // API 가져오기
   const [monthlyStudyCalendar, setMonthlyStudyCalendar] = useState([]);
@@ -222,4 +222,6 @@ export const MyPage = () => {
       </div>
     </div>
   )
-}
+};
+
+export default MyPage;

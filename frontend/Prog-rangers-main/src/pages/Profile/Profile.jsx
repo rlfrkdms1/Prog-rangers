@@ -7,6 +7,7 @@ import axios from 'axios';
 import { SolvingList } from '../../components/Profile/SolvingList';
 import github from '../../assets/icons/github-mark.svg'
 import achievemark from '../../assets/icons/achieve-mark.svg'
+import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import {
   alignCenter,
   fontSize14,
@@ -15,7 +16,7 @@ import {
   fontSize24
 } from './ProfileStyle';
 
-export const Profile = () => {
+const Profile = () => {
 
   const { nickname } = useParams();
   const [data, setData] = useState([]);
@@ -29,7 +30,7 @@ export const Profile = () => {
   };
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname.substring(1)}`;
+    const apiUrl = `http://13.124.131.171:8080/api/v1/members/${nickname}`;
 
     axios.get(apiUrl)
       .then((response) => {
@@ -54,7 +55,10 @@ export const Profile = () => {
           object-fit: cover;
           border: 1px solid black;
           `}>
-          {data.photo} 
+          <img
+                src= {data.photo || ProfileImg }                 
+                alt='profileImg'>
+          </img>
           </div> 
 
         <div css={css`
@@ -156,4 +160,6 @@ export const Profile = () => {
       </div>
   </div>
   )
-}
+};
+
+export default Profile;
