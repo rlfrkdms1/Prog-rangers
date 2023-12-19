@@ -16,9 +16,6 @@ import {
   fontSize24
 } from './ProfileStyle';
 
-
-import star1 from '../../assets/icons/star/star1.svg';
-
 import star1 from '../../assets/icons/star/star1.svg';
 
 const Profile = () => {
