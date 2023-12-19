@@ -16,6 +16,7 @@ import { SearchContext } from '../../context/SearchContext';
 const Problems = () => {
   const [page, setPage] = useState(1);
   const [Questions, setQuestions] = useState([]);
+  const [Questions, setQuestions] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
 
   const AllQuestions = async () => {
@@ -25,6 +26,10 @@ const Problems = () => {
     setQuestions(response.data.problems);
     setTotalPages(response.data.totalCount);
   };
+
+  useEffect(() => {
+    AllQuestions();
+  }, [page]);
 
   useEffect(() => {
     AllQuestions();
@@ -47,6 +52,19 @@ const Problems = () => {
       );
       setFilteredQuestions(filteredResults);
     };
+    const filterData = () => {
+      let filteredResults = Questions.filter((item) =>
+        item.title
+          .toLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
+      );
+      setFilteredQuestions(filteredResults);
+    };
+
+    useEffect(() => {
+      AllQuestions();
+      filterData();
+    }, [searchTerm]);
 
     useEffect(() => {
       AllQuestions();
@@ -97,6 +115,7 @@ const Problems = () => {
           `}
         >
           <QuestionForm data={searchTerm ? filteredQuestions : Questions} />
+          <QuestionForm data={searchTerm ? filteredQuestions : Questions} />
         </div>
         <div
           css={css`
@@ -108,6 +127,7 @@ const Problems = () => {
           `}
         >
           <Pagination
+            page={page}
             page={page}
             totalPages={totalPages}
             handlePageChange={handlePageChange}
