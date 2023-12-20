@@ -2,25 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { css } from "@emotion/react";
-import axios from "axios";
-import hljs from "highlight.js";
+import { css } from '@emotion/react';
+import axios from 'axios';
+import hljs from 'highlight.js';
 import './github-dark-dimmed.css';
 
 export const CodeWindow2 = () => {
-  
   const { solutionId } = useParams();
-  const [codeData, setCodeData] = useState({ solution: { code: [] } });
+  const [codeData, setCodeData] = useState({
+    solution: { code: [] },
+  });
 
   useEffect(() => {
-    
     const token = localStorage.getItem('token');
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
       .get(apiUrl, {
-        method: "GET",
-        headers: {Authorization: `Bearer ${token}`}
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         setCodeData(response.data);
@@ -33,11 +33,27 @@ export const CodeWindow2 = () => {
   return (
     <>
       {codeData.solution.code.map((line, lineIndex) => (
-        <div key={lineIndex} css={css`font-size: 18px; padding-left: 60px; margin: 6px; `}>
+        <div
+          key={lineIndex}
+          css={css`
+            font-size: 18px;
+            padding-left: 60px;
+            margin: 6px;
+          `}
+        >
           <pre>
-            <span style={{ fontFamily: 'Consolas, Courier New, monospace' }}>
+            <span
+              style={{
+                fontFamily:
+                  'Consolas, Courier New, monospace',
+              }}
+            >
               {lineIndex} {'  '}
-              <span dangerouslySetInnerHTML={{ __html: hljs.highlightAuto(line).value }} />
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: hljs.highlightAuto(line).value,
+                }}
+              />
               <br />
             </span>
           </pre>
