@@ -15,7 +15,7 @@ const buttonPage = css`
 export const ForSignUp = () => {
   const navigate = useNavigate();
   const handleSignUp = () => {
-    window.location.href = `http://13.124.131.171/signup`;
+    window.location.href = `http://localhost:3000/signup`;
   };
 
   return (
