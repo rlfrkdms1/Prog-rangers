@@ -1,23 +1,22 @@
 import axios from 'axios';
 
 // TODO response 처리 로직
-export const signIn= async (data)=>{
+export const signIn = async (data) => {
   const response = await axios.post(
-    `http://13.124.131.171:8080/api/v1/login`,
-    {...data},
-    {headers: {'Content-Type': 'application/json'}}
-  );  
-  
-  if(response.status === 200){
+    `http://13.125.13.131:8080/api/v1/login`,
+    { ...data },
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+
+  if (response.status === 200) {
     const refreshToken = response.headers['set-cookie'];
     localStorage.setItem('refreshToken', refreshToken);
     console.log('rt: ', refreshToken);
     return response.data;
-  }else{
+  } else {
     console.log('Error:', response.status);
   }
-}
-
+};
 
 // // TODO response 처리 로직
 // export const signIn = async (data) => {
@@ -45,7 +44,7 @@ export const signIn= async (data)=>{
 //   }
 // };
 
-  // The axios part can remain as it is if needed.
+// The axios part can remain as it is if needed.
 //   const axiosResponse = await axios.post(`https://prog-rangers.com/api/v1/login`, { ...data });
 
 //   if (axiosResponse.status === 200) {
@@ -55,4 +54,3 @@ export const signIn= async (data)=>{
 //     console.log('Error:', axiosResponse.status);
 //   }
 // };
-

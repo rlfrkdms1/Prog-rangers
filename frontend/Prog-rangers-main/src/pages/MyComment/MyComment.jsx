@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { css } from '@emotion/react';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { CommentForm } from '../../components/Comment';

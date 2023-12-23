@@ -30,7 +30,7 @@ export const Header = () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(
-        'http://13.124.131.171:8080/api/v1/problems'
+        'http://13.125.13.131:8080/api/v1/problems'
       );
       setData(result.data.problems);
     };

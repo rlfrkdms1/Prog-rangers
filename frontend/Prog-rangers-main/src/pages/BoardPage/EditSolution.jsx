@@ -1,8 +1,7 @@
 import { css } from "@emotion/react";
 import { SideBar } from "../../components/SideBar/SideBar";
 import { AddMySolution } from "../../components/WriteBoard";
-import { ButtonDiv, SubmitButton } from "./buttonDiv";
-import { Provider, atom, useAtom } from 'jotai';
+import { Provider, atom } from 'jotai';
 import { useState, useEffect } from 'react';
 import { RightBar } from "../../components/MySolutionDetail";
 

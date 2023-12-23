@@ -1,5 +1,4 @@
 import React, {
-  Fragment,
   useContext,
   useEffect,
   useState,
@@ -20,7 +19,9 @@ const Problems = () => {
 
   const AllQuestions = async () => {
     const response = await axios.get(
-      `http://13.124.131.171:8080/api/v1/problems?page=${page-1}&size=5`
+      `http://13.125.13.131:8080/api/v1/problems?page=${
+        page - 1
+      }&size=5`
     );
     setQuestions(response.data.problems);
     setTotalPages(response.data.totalCount);
@@ -43,24 +44,24 @@ const Problems = () => {
   const [filteredQuestions, setFilteredQuestions] =
     useState(Questions);
 
-    const filterData = () => {
-      let filteredResults = Questions.filter((item) =>
-        item.title
-          .toLowerCase()
-          .includes(searchTerm.toLocaleLowerCase())
-      );
-      setFilteredQuestions(filteredResults);
-    };
+  const filterData = () => {
+    let filteredResults = Questions.filter((item) =>
+      item.title
+        .toLowerCase()
+        .includes(searchTerm.toLocaleLowerCase())
+    );
+    setFilteredQuestions(filteredResults);
+  };
 
-    useEffect(() => {
-      AllQuestions();
-      filterData();
-    }, [searchTerm]);
+  useEffect(() => {
+    AllQuestions();
+    filterData();
+  }, [searchTerm]);
 
-    useEffect(() => {
-      AllQuestions();
-      filterData();
-    }, [searchTerm]);
+  useEffect(() => {
+    AllQuestions();
+    filterData();
+  }, [searchTerm]);
 
   return (
     <div
@@ -94,8 +95,14 @@ const Problems = () => {
             z-index: 2;
           `}
         >
-          <FilterBar title="algorithm" options={sort.ALGORITHM} />
-          <FilterBar title="datastructure" options={sort.DATASTRUCTURE} />
+          <FilterBar
+            title="algorithm"
+            options={sort.ALGORITHM}
+          />
+          <FilterBar
+            title="datastructure"
+            options={sort.DATASTRUCTURE}
+          />
           <FilterBar title="sort" options={sort.SORT} />
         </div>
         <div
@@ -105,8 +112,16 @@ const Problems = () => {
             margin-top: 20px;
           `}
         >
-          <QuestionForm data={searchTerm ? filteredQuestions : Questions} />
-          <QuestionForm data={searchTerm ? filteredQuestions : Questions} />
+          <QuestionForm
+            data={
+              searchTerm ? filteredQuestions : Questions
+            }
+          />
+          <QuestionForm
+            data={
+              searchTerm ? filteredQuestions : Questions
+            }
+          />
         </div>
         <div
           css={css`
