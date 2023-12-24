@@ -43,7 +43,6 @@ import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,7 +50,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -161,9 +159,7 @@ public class SolutionService {
         Long likes = likesRepository.countBySolution(mainSolution);
         Long scraps = solutionRepository.countByScrapSolution(mainSolution);
         ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution.getTitle(),
-                Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()),
-                mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
+        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution, likes, scraps);
         List<Comment> mainSolutionComments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(mainSolution);
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments,
                 memberId);
@@ -345,7 +341,8 @@ public class SolutionService {
                                                 DataStructureConstant dataStructure, Integer level, Pageable pageable,
                                                 Long memberId) {
         validPageable(pageable);
-        Page<Solution> solutions = solutionRepository.getMyList(pageable, keyword, language, algorithm, dataStructure, level, memberId);
+        Page<Solution> solutions = solutionRepository.getMyList(pageable, keyword, language, algorithm, dataStructure,
+                level, memberId);
         return ShowMySolutionListResponse.from(solutions);
     }
 
