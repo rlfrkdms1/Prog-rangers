@@ -1,5 +1,7 @@
 package com.prograngers.backend.dto.solution.response;
 
+import com.prograngers.backend.entity.solution.Solution;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,14 +18,15 @@ public class MySolutionResponse {
     private String[] code;
     private Long likes;
     private Long scraps;
+    private boolean isPublic;
 
-    public static MySolutionResponse from(String title, List<Object> tags, String description, String[] code,
-                                          Long likes, Long scraps) {
+    public static MySolutionResponse from(Solution solution, Long likes, Long scraps) {
         return MySolutionResponse.builder()
-                .title(title)
-                .tags(tags)
-                .description(description)
-                .code(code)
+                .title(solution.getTitle())
+                .tags(Arrays.asList(solution.getAlgorithm(), solution.getDataStructure()))
+                .description(solution.getDescription())
+                .code(solution.getCode().split("\n"))
+                .isPublic(solution.isPublic())
                 .likes(likes)
                 .scraps(scraps)
                 .build();
