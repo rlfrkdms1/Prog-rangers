@@ -61,7 +61,7 @@ export const MySolHeader = () => {
 
   // 풀이 삭제
   const deleteSolution = (solutionId) => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
       .delete(apiUrl, {
