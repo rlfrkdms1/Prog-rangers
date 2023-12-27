@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 
 export const MainBody = css`
-  height: 990px;
-  display: flex;
-  flex-direction: column;
+  width: 800px;
+  margin: 50px 110px 0;
   `;
