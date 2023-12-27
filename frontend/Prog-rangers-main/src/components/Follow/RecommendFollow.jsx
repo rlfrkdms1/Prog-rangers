@@ -83,7 +83,7 @@ export const RecommendFollow = () => {
     const token = localStorage.getItem('token');
 
     fetch(
-      `http://13.124.131.171:8080/api/v1/members/${memberId}/following`,
+      `http://13.125.13.131:8080/api/v1/members/${memberId}/following`,
       {
         method: followStatus[memberId] ? 'DELETE' : 'POST',
         headers: { Authorization: `Bearer ${token}` },
