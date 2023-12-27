@@ -12,6 +12,7 @@ public class GetKakaoUserInfoResponse {
 
     public Member toMember(String nickname) {
         return Member.builder()
+                .usable(true)
                 .nickname(nickname)
                 .socialId(id)
                 .type(KAKAO)
