@@ -1,8 +1,5 @@
-import axios from 'axios';
 import { useEffect, useContext, useState } from 'react';
 import {
-  Link,
-  navigate,
   useNavigate,
 } from 'react-router-dom';
 import {
@@ -18,7 +15,7 @@ import { IsLoginContext } from '../../context/AuthContext';
 export const AfterLoginNav = () => {
   const navigate = useNavigate();
   const { setIsLogin } = useContext(IsLoginContext);
-  const [nickname, setNickName] = useState(
+  const [nickname] = useState(
     localStorage.getItem('nickname')
   );
 
@@ -65,7 +62,7 @@ export const AfterLoginNav = () => {
   return (
     <div className="AfterLoginNav" css={navStyle}>
       <StyledLink to="problems" onClick={hideDropdown}>
-        풀이 보러가기
+        문제 보러가기
       </StyledLink>
       <StyledLink
         to="registerReview"

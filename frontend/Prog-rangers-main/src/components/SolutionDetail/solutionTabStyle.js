@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { theme } from '../Header/theme';
 
 //solutionTab
 

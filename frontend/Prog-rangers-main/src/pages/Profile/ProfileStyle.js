@@ -33,7 +33,6 @@ export const fontSize18 = css`
 export const fontSize20 = css`
   font-size: 20px;
   font-weight: 700;
-  color: ${theme.colors.black}
   `;
 
 export const fontSizedark20 = css`
