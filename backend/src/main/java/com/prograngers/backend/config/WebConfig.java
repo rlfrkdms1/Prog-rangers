@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
     private final LoggedInArgumentResolver loggedInArgumentResolver;
     private static final String FRONTEND_DOMAIN = "http://13.125.13.131";
+
     private static final String FRONT_LOCALHOST = "http://localhost:3000";
     private static final String CORS_ALLOWED_METHODS = "GET,POST,HEAD,PUT,PATCH,DELETE,TRACE,OPTIONS";
 

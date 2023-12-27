@@ -56,7 +56,7 @@ export const InfoList = ({
 
             // SSE 다시 구독 요청
             const newEventSource = new EventSource(
-              'http://13.124.131.171:8080/api/v1/notifications/subscribe',
+              'http://13.125.13.131:8080/api/v1/notifications/subscribe',
               {
                 headers: {
                   Accept: 'text/event-stream',
