@@ -87,7 +87,7 @@ const AccountChange = () => {
   const nicknameDuplicationCheck = async () => {
     try {
       const response = await axios.get(
-        `http://13.125.13.131:8080/api/v1/members?nickname=${nickname}`
+        `http://13.125.13.131:8080/api/v1/auth?nickname=${nickname}`
       );
       const errorCode = response.data.errorCode;
       setIsNicknameAvailable(response.data.errorCode);
