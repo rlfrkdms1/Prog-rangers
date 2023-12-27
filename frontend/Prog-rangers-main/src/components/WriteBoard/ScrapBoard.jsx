@@ -114,7 +114,7 @@ export const ScrapBoard = () => {
         dataStructure: Data.value,
         language: 'JAVA',
         description: inputs.description,
-        code: inputs.code,
+        code: addCode,
         isPublic: true,
       };
       console.log('inputs.solution:', inputs.solution);
@@ -127,8 +127,8 @@ export const ScrapBoard = () => {
         }
       );
       if (response.status === 201) {
-        alert('질문이 등록되었습니다.');
-        window.location.href = `http://localhost:3000/solutions/${id}`;
+        alert('풀이가 등록되었습니다.');
+        window.location.href = `http://13.125.13.131/solutions/${id}`;
       }
     } catch (error) {
       console.log(error);
@@ -151,10 +151,9 @@ export const ScrapBoard = () => {
   };
   const handleAddCode = () => {
     if (addCode) {
-      let updatedCode = [addCode];
-      updatedCode = updatedCode.join('\n');
+      const updatedCode = addCode;
     }
-  };
+  };  
   const TagDisplay1 = () => {
     const deleteHandler = () => {
       setAlgo([]);
