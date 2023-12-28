@@ -3,8 +3,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { tags } from '../Question/tagsform';
-import Public from '../../assets/icons/solution-public.svg';
-import Private from '../../assets/icons/solution-private.svg';
 import Unfilled from '../../assets/icons/solution-unfilled-star.svg';
 import Filled from '../../assets/icons/solution-filled-star.svg';
 import Delete from '../../assets/icons/solution-tag-delete.svg';
@@ -19,7 +17,7 @@ import {
 } from './inputBox';
 
 export const ScrapBoard = () => {
-  const [isPublic, setIsPublic] = useState(true);
+  // const [isPublic, setIsPublic] = useState(true);
   const [clickedStar, setClickedStar] = useState([
     false,
     false,
@@ -32,7 +30,6 @@ export const ScrapBoard = () => {
   const [Algo, setAlgo] = useState([]);
   const [Data, setData] = useState([]);
   const [problemTitle, setProblemTitle] = useState('');
-  // const [ problemLevel, setLevel ] = useState(0);
   const [problemLink, setLink] = useState('');
   let algo = '';
   let data = '';
@@ -43,8 +40,8 @@ export const ScrapBoard = () => {
     description: '',
     code: [],
   });
-  const [addCode, setAddCode] = useState('');
-  const { solution, description, code } = inputs;
+  const [code, setCode] = useState('');
+  const { solution, description } = inputs;
 
   const { id } = useParams();
 
@@ -88,11 +85,10 @@ export const ScrapBoard = () => {
       let link = response.data.solution.link;
       setProblemTitle(title);
       setLink(link);
-      console.log(problemTitle);
-      setInputs({
-        ...inputs,
-        code: codeText,
-      });
+      // setInputs({
+      //   ...inputs,
+      //   code: codeText,
+      // });
 
       console.log(response.data.problem.title);
       console.log(response.data.solution.link);
@@ -101,7 +97,6 @@ export const ScrapBoard = () => {
     }
   };
   const postWrite = async () => {
-    handleAddCode();
 
     let star = clickedStar.filter(Boolean).length;
     try {
@@ -114,10 +109,8 @@ export const ScrapBoard = () => {
         dataStructure: Data.value,
         language: 'JAVA',
         description: inputs.description,
-        code: addCode,
-        isPublic: true,
+        code: code,
       };
-      console.log('inputs.solution:', inputs.solution);
 
       const response = await axios.post(
         `http://13.125.13.131:8080/api/v1/solutions/${id}`,
@@ -148,12 +141,7 @@ export const ScrapBoard = () => {
       ...inputs,
       [name]: value,
     });
-  };
-  const handleAddCode = () => {
-    if (addCode) {
-      const updatedCode = addCode;
-    }
-  };  
+  }; 
   const TagDisplay1 = () => {
     const deleteHandler = () => {
       setAlgo([]);
@@ -215,10 +203,6 @@ export const ScrapBoard = () => {
     );
   };
 
-  const publicHandler = () => {
-    setIsPublic(!isPublic);
-  };
-
   const fillHandler = (index) => {
     let clickStates = [...clickedStar];
     for (let i = 0; i < 5; i++) {
@@ -254,32 +238,6 @@ export const ScrapBoard = () => {
           `}
         >
           문제 제목은 올린 사람이 작성한 것으로 고정
-        </div>
-        <div
-          css={css`
-            margin-right: 10px;
-            &:hover {
-              cursor: pointer;
-            }
-          `}
-          onClick={publicHandler}
-        >
-          <span
-            css={css`
-              font-size: 16px;
-              color: #959595;
-              font-weight: 400;
-              margin-right: 10px;
-              width: 30px;
-            `}
-          >
-            {isPublic ? '공개' : '비공개'}
-          </span>
-          {isPublic ? (
-            <img src={Public} />
-          ) : (
-            <img src={Private} />
-          )}
         </div>
       </div>
       <div
@@ -410,7 +368,6 @@ export const ScrapBoard = () => {
               }
             `}
             placeholder="다른 사람이 작성한 코드가 이미 써져 있음(수정불가)"
-            value={inputs.code}
             name="code"
             rows="30"
             cols="30"
@@ -418,30 +375,7 @@ export const ScrapBoard = () => {
           />
         </div>
       </div>
-      <div
-        css={css`
-          ${DetailBox} height: 250px;
-          width: 100%;
-        `}
-      >
-        <div
-          css={css`
-            ${DetailInput}
-          `}
-        >
-          <textarea
-            css={css`
-              border: none;
-              resize: none;
-              height: 250px;
-            `}
-            type="text"
-            value={addCode}
-            onChange={(e) => setAddCode(e.target.value)}
-            placeholder="새로운 풀이 입력"
-          />
-        </div>
-      </div>
+      
       <div
         css={css`
           margin-top: 100px;
