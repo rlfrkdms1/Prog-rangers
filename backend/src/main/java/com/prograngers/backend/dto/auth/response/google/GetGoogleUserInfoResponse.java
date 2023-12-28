@@ -11,6 +11,7 @@ public class GetGoogleUserInfoResponse {
 
     public Member toMember(String nickname) {
         return Member.builder()
+                .usable(true)
                 .nickname(nickname)
                 .socialId(Long.valueOf(id.hashCode()))
                 .type(MemberType.GOOGLE)
