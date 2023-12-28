@@ -137,7 +137,7 @@ const MySolution = () => {
               height: 50px;
               border: 1px solid #111;
               border-radius: 25px;
-              margin-top: 100px;
+              margin-top: 50px;
               padding-left: 30px;
             `}
           >

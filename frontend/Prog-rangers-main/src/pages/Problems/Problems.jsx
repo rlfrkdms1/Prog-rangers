@@ -117,11 +117,6 @@ const Problems = () => {
               searchTerm ? filteredQuestions : Questions
             }
           />
-          <QuestionForm
-            data={
-              searchTerm ? filteredQuestions : Questions
-            }
-          />
         </div>
         <div
           css={css`
