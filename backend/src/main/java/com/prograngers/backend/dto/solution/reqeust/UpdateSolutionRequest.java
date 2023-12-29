@@ -38,8 +38,14 @@ public class UpdateSolutionRequest {
     @NotNull(message = "난이도 값을 입력해주세요")
     private Integer level;
 
-    public Solution updateSolution(Solution target) {
-        target.update(title, algorithm, dataStructure, level, code, description);
-        return target;
+    public Solution toSolution() {
+        return Solution.builder()
+                .title(title)
+                .algorithm(algorithm)
+                .dataStructure(dataStructure)
+                .code(code)
+                .description(description)
+                .level(level)
+                .build();
     }
 }

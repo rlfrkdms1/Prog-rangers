@@ -40,8 +40,8 @@ class FollowRepositoryTest {
         Follow member2FollowMember1_4 = 저장(팔로우_생성(member2, member1));
 
         // when
-        Long follow = followRepository.getFollowCount(member1);
-        Long following = followRepository.getFollowingCount(member1);
+        Long follow = followRepository.countFollow(member1);
+        Long following = followRepository.countFollowing(member1);
 
         // then
         assertAll(
