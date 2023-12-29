@@ -13,7 +13,8 @@ import lombok.Setter;
 public class MySolutionResponse {
 
     private String title;
-    private List<Object> tags;
+    private String algorithm;
+    private String dataStructure;
     private String description;
     private String[] code;
     private Long likes;
@@ -23,7 +24,8 @@ public class MySolutionResponse {
     public static MySolutionResponse from(Solution solution, Long likes, Long scraps) {
         return MySolutionResponse.builder()
                 .title(solution.getTitle())
-                .tags(Arrays.asList(solution.getAlgorithm(), solution.getDataStructure()))
+                .dataStructure(solution.getDataStructureView())
+                .algorithm(solution.getAlgorithmView())
                 .description(solution.getDescription())
                 .code(solution.getCode().split("\n"))
                 .isPublic(solution.isPublic())
