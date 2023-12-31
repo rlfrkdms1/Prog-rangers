@@ -174,6 +174,7 @@ public class SolutionService {
 
         List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
         List<Solution> recommendedSolutions = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,
+                mainSolution,
                 6);
 
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
