@@ -29,6 +29,53 @@ const Profile = () => {
     ? theme.colors.light3
     : theme.colors.main30;
 
+  const token = localStorage.getItem('token');
+  const api = axios.create({
+    baseURL: 'http://13.125.13.131:8080/api/v1',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/follows', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const isFollowingProfile = response.data.followings.some(following => following.nickname === nickname);
+        setIsFollowing(isFollowingProfile);
+      } catch (error) {
+        console.error('Error fetching following data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [nickname, token]);
+
+  const handleFollowClick = async () => {
+    try {
+      if (isFollowing) {
+        await api.delete(`/follows/${nickname}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        await api.post('/follows', { nickname }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+    }
+  };
+
+
   // 달성 뱃지
   const badgeImages = {
     새싹: star1,
@@ -36,10 +83,6 @@ const Profile = () => {
     // 안경: star3,
     // 4: star4,
     // 5: star5,
-  };
-
-  const handleFollowClick = () => {
-    setIsFollowing(!isFollowing);
   };
 
   useEffect(() => {
