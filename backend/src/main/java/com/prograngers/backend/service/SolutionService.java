@@ -157,27 +157,26 @@ public class SolutionService {
         Problem problem = mainSolution.getProblem();
         List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem);
         List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
-
-        ProblemResponse problemResponse = ProblemResponse.from(problem);
-        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution, likesRepository.countBySolution(mainSolution), solutionRepository.countByScrapSolution(mainSolution));
-
         List<Comment> mainSolutionComments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(mainSolution);
-        List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments,
-                memberId);
-
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(mainSolution);
-        List<ReviewWithRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
 
-        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
+        return ShowMySolutionDetailResponse.of(
+                ProblemResponse.from(problem),
+                MySolutionResponse.from(mainSolution, likesRepository.countBySolution(mainSolution),
+                        solutionRepository.countByScrapSolution(mainSolution)),
+                makeCommentsResponse(mainSolutionComments, memberId),
+                makeReviewsResponse(mainSolutionReviews, memberId),
+                getRecommendedSolutionResponses(problem, mainSolution),
+                getSideSolutions(mySolutionList),
+                getSideScrapSolutions(solutionList, memberId));
+    }
+
+    private List<RecommendedSolutionResponse> getRecommendedSolutionResponses(Problem problem, Solution mainSolution) {
         List<Solution> recommendedSolutions = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,
                 RECOMMENDED_SOLUTION_LIMIT);
         recommendedSolutions.remove(mainSolution);
-
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
-        List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(solutionList, memberId);
-
-        return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse,
-                mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+        return recommendedSolutionList;
     }
 
     private List<Solution> getMySolutionList(Long memberId, List<Solution> solutionList) {
@@ -249,16 +248,13 @@ public class SolutionService {
         return mainSolutionReviewResponse;
     }
 
-    private static List<SolutionTitleAndIdResponse> getSideSolutions(List<Solution> solutionList) {
+    private List<SolutionTitleAndIdResponse> getSideSolutions(List<Solution> solutionList) {
         return solutionList.stream()
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getTitle(), solution.getId()))
                 .collect(Collectors.toList());
     }
 
     private List<RecommendedSolutionResponse> getRecommendedSolutions(List<Solution> recommendedSolutions) {
-        log.info("레포에서 제대로 가져왔는지 확인@@@@@@@@@");
-        recommendedSolutions.stream()
-                .forEach((s) -> log.info("풀이 id : {}", s.getId()));
         return recommendedSolutions.stream()
                 .map(solution -> makeRecommendedSolutionList(solution))
                 .collect(Collectors.toList());
