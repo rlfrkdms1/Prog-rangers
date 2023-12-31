@@ -62,6 +62,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SolutionService {
 
+    public static final int RECOMMENDED_SOLUTION_LIMIT = 6;
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
@@ -141,7 +142,7 @@ public class SolutionService {
         validViewPrivateSolution(solution, mine);
         boolean pushedLike = validPushedLike(memberId, likes);
         boolean scraped = validScraped(memberId, scrapedSolutions);
-        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
+        ProblemResponse problemResponse = ProblemResponse.from(problem);
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(),
                 problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine,
                 getScrapSolutionId(solution));
@@ -154,16 +155,11 @@ public class SolutionService {
         Solution mainSolution = findSolutionById(solutionId);
         validMemberAuthorization(mainSolution, findMemberById(memberId));
         Problem problem = mainSolution.getProblem();
-
         List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem);
         List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
 
-        Long likes = likesRepository.countBySolution(mainSolution);
-        Long scraps = solutionRepository.countByScrapSolution(mainSolution);
-
-        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-
-        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution, likes, scraps);
+        ProblemResponse problemResponse = ProblemResponse.from(problem);
+        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution, likesRepository.countBySolution(mainSolution), solutionRepository.countByScrapSolution(mainSolution));
 
         List<Comment> mainSolutionComments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(mainSolution);
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments,
@@ -174,11 +170,10 @@ public class SolutionService {
 
         List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
         List<Solution> recommendedSolutions = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,
-                6);
+                RECOMMENDED_SOLUTION_LIMIT);
         recommendedSolutions.remove(mainSolution);
 
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
-
         List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(solutionList, memberId);
 
         return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse,

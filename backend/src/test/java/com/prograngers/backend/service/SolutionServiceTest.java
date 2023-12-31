@@ -264,7 +264,7 @@ class SolutionServiceTest {
 
         //when
         final ShowMySolutionDetailResponse expected = ShowMySolutionDetailResponse.of(
-                ProblemResponse.from(problem.getTitle(), problem.getOjName()),
+                ProblemResponse.from(problem),
                 MySolutionResponse.from(myMainSolution, 3L, 2L),
                 expectedComments,
                 expectedReviews,
@@ -383,7 +383,7 @@ class SolutionServiceTest {
         when(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution)).thenReturn(
                 List.of(review1, review2, review3, review4));
 
-        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
+        ProblemResponse problemResponse = ProblemResponse.from(problem);
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(),
                 problem.getLink(), 1, 1, false, false, true, null);
         List<CommentWithRepliesResponse> commentsResponse = Arrays.asList(
