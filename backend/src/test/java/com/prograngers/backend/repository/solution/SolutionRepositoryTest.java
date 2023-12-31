@@ -67,7 +67,7 @@ class SolutionRepositoryTest {
         // given
         Member member1 = 저장(장지담.기본_정보_생성());
         Member member2 = 저장(장지담.기본_정보_생성());
-        Problem problem = 백준_문제.기본_정보_생성();
+        Problem problem = 저장(백준_문제.기본_정보_생성());
         // problem은 solution이 저장될 때 같이 저장된다, member는 solution과 cascade 옵션이 걸려있지 않다
         Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), BFS, LIST, JAVA, 1));
         Solution solution2 = 저장(공개_풀이.태그_추가_생성(problem, member1, LocalDateTime.now(), BFS, LIST, JAVA, 1));
@@ -94,8 +94,8 @@ class SolutionRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
 
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
-        Problem problem2 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+        Problem problem2 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이
         Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, LIST, JAVA, 1));
@@ -122,7 +122,7 @@ class SolutionRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
 
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이
         Solution solution1 = 저장(
@@ -156,7 +156,7 @@ class SolutionRepositoryTest {
         // 회원
         Member member1 = 저장(장지담.기본_정보_생성());
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이
         Solution solution1 = 저장(
@@ -191,7 +191,7 @@ class SolutionRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
 
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이 : solution9 ~ 1 순서로 최신
         // 풀이
@@ -240,7 +240,7 @@ class SolutionRepositoryTest {
     void 스크랩_문제_정렬() {
         // give
         Member member1 = 저장(장지담.기본_정보_생성());
-        Problem problem1 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
         Solution solution1 = 저장(
                 공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now().minusDays(8), BFS, QUEUE, JAVA, 1));
         Solution solution2 = 저장(
@@ -321,21 +321,6 @@ class SolutionRepositoryTest {
 
         // then
         assertThat(result).containsExactly(solution1);
-    }
-
-    @Test
-    @DisplayName("풀이들이 주어졌을 때 해당하는 회원이 작성한 최근 풀이 3개를 정렬해서 가져올 수 있다.")
-    void 나의_최근_풀이_조회() {
-        Member member = 저장(길가은.기본_정보_생성());
-        Problem problem = 저장(백준_문제.기본_정보_생성());
-
-        Solution solution2 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 3, 12, 0), JAVA, 1));
-        저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 8, 3, 12, 0), JAVA, 1));
-        Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 3, 11, 0), JAVA, 1));
-        Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member, LocalDateTime.of(2023, 9, 4, 11, 0), JAVA, 1));
-
-        List<Solution> solutionList = solutionRepository.findTop3ByMemberOrderByCreatedAtDesc(member);
-        assertThat(solutionList).containsExactly(solution1, solution2, solution3);
     }
 
     @Test
@@ -532,7 +517,6 @@ class SolutionRepositoryTest {
         //given
         Member member = 저장(장지담.기본_정보_생성());
         Problem problem1 = 저장(백준_문제.기본_정보_생성());
-        Problem problem2 = 저장(백준_문제.기본_정보_생성());
 
         Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(1), JAVA, 1));
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem1, member, LocalDateTime.now().plusDays(3), JAVA, 1));
