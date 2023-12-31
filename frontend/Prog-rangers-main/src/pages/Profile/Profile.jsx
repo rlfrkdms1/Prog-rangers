@@ -21,6 +21,7 @@ import star1 from '../../assets/icons/star/star1.svg';
 const Profile = () => {
   const navigate = useNavigate();
   const { nickname } = useParams();
+  const [id, setId ] = useState([]);
   const [data, setData] = useState([]);
 
   //팔로우 버튼
@@ -28,6 +29,8 @@ const Profile = () => {
   const buttonColor = isFollowing
     ? theme.colors.light3
     : theme.colors.main30;
+
+  const [followData, setFollowData] = useState({ followings: [] });
 
   const token = localStorage.getItem('token');
   const api = axios.create({
@@ -43,37 +46,58 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        const isFollowingProfile = response.data.followings.some(following => following.nickname === nickname);
+        const isFollowingProfile = response.data.followings.some(followings => followings.nickname === nickname);
         setIsFollowing(isFollowingProfile);
       } catch (error) {
         console.error('Error fetching following data:', error);
       }
     };
-  
     fetchData();
   }, [nickname, token]);
 
-  const handleFollowClick = async () => {
-    try {
-      if (isFollowing) {
-        await api.delete(`/follows/${nickname}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } else {
-        await api.post('/follows', { nickname }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  useEffect(() => {
+    const apiUrl =
+      'http://13.125.13.131:8080/api/v1/follows';
+    const token = localStorage.getItem('token');
+
+    axios
+      .get(apiUrl, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setFollowData(response.data);
+        })
+      .catch((error) => {
+        console.error('API 요청 오류:', error);
+      });
+  }, []);
+
+  const handleFollowButton = () => {
+    // const profileId = followData.followings.find(following => following.nickname === nickname)?.id;
+    // setId(profileId);
+    // console.log(profileId);
+    const token = localStorage.getItem('token');
+
+    fetch(
+      `http://13.125.13.131:8080/api/v1/members/${id}/following`,
+      {
+        method: isFollowing ? 'DELETE' : 'POST',
+        headers: { Authorization: `Bearer ${token}` },
       }
-      setIsFollowing(!isFollowing);
-    } catch (error) {
-      console.error('Error toggling follow:', error);
-    }
-  };
+    )
+      .then((response) => {
+        setIsFollowing(!isFollowing);
+        if (isFollowing) {
+          console.log('언팔로우 성공');
+        } else {
+          console.log('팔로우 성공');
+        }
+      })
+      .catch((error) => {
+        console.error('API 요청 실패', error);
+      });}
+
 
 
   // 달성 뱃지
@@ -152,7 +176,7 @@ const Profile = () => {
         </div>
 
         <button
-          onClick={handleFollowClick}
+          onClick={handleFollowButton}
           css={css`
             width: 245px;
             height: 40px;
