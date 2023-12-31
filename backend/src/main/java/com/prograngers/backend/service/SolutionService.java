@@ -134,21 +134,18 @@ public class SolutionService {
     public ShowSolutionDetailResponse getSolutionDetail(Long solutionId, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
-        List<Comment> comments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution);
-        List<Review> reviews = reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         List<Solution> scrapedSolutions = solutionRepository.findAllByScrapSolution(solution);
         boolean mine = validSolutionIsMine(memberId, solution);
         validViewPrivateSolution(solution, mine);
         boolean pushedLike = validPushedLike(memberId, likes);
         boolean scraped = validScraped(memberId, scrapedSolutions);
-        ProblemResponse problemResponse = ProblemResponse.from(problem);
-        SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(),
-                problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine,
-                getScrapSolutionId(solution));
-        List<CommentWithRepliesResponse> commentsResponse = makeCommentsResponse(comments, memberId);
-        List<ReviewWithRepliesResponse> reviewsResponse = makeReviewsResponse(reviews, memberId);
-        return ShowSolutionDetailResponse.from(problemResponse, solutionResponse, commentsResponse, reviewsResponse);
+        return ShowSolutionDetailResponse.from(
+                ProblemResponse.from(problem),
+                SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(),
+                        scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionId(solution)),
+                makeCommentsResponse(commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution), memberId),
+                makeReviewsResponse(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution), memberId));
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
