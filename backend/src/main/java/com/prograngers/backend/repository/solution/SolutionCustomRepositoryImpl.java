@@ -69,15 +69,15 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
     }
 
 
-    public List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, Solution mainSolution,
-                                                                         int limit) {
+    public List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit) {
+
         return jpaQueryFactory
                 .select(solution)
                 .from(likes)
                 .rightJoin(likes.solution, solution)
                 .groupBy(solution)
-                .where(solution.problem.eq(problem), solution.id.ne(mainSolution.getId()))
-                .orderBy(likes.count().desc(), solution.createdAt.desc())
+                .where(solution.problem.eq(problem))
+                .orderBy(likes.count().desc())
                 .limit(limit)
                 .fetch();
     }

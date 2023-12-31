@@ -229,7 +229,7 @@ class SolutionServiceTest {
                 Arrays.asList(comment1, comment2, comment3, comment4));
         when(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(myMainSolution)).thenReturn(
                 Arrays.asList(review1, review2, review3, review4));
-        when(solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, myMainSolution, 6)).thenReturn(
+        when(solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, 6)).thenReturn(
                 Arrays.asList(othersSolution1, othersSolution2));
         when(memberRepository.findById(member1Id)).thenReturn(Optional.of(member1));
 

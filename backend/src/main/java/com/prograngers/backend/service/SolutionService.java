@@ -174,8 +174,8 @@ public class SolutionService {
 
         List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
         List<Solution> recommendedSolutions = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,
-                mainSolution,
                 6);
+        recommendedSolutions.remove(mainSolution);
 
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
 
@@ -261,6 +261,9 @@ public class SolutionService {
     }
 
     private List<RecommendedSolutionResponse> getRecommendedSolutions(List<Solution> recommendedSolutions) {
+        log.info("레포에서 제대로 가져왔는지 확인@@@@@@@@@");
+        recommendedSolutions.stream()
+                .forEach((s) -> log.info("풀이 id : {}", s.getId()));
         return recommendedSolutions.stream()
                 .map(solution -> makeRecommendedSolutionList(solution))
                 .collect(Collectors.toList());
