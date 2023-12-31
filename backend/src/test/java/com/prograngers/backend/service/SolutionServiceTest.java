@@ -229,7 +229,7 @@ class SolutionServiceTest {
                 Arrays.asList(comment1, comment2, comment3, comment4));
         when(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(myMainSolution)).thenReturn(
                 Arrays.asList(review1, review2, review3, review4));
-        when(solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, 6)).thenReturn(
+        when(solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, myMainSolution, 6)).thenReturn(
                 Arrays.asList(othersSolution1, othersSolution2));
         when(memberRepository.findById(member1Id)).thenReturn(Optional.of(member1));
 
@@ -265,9 +265,7 @@ class SolutionServiceTest {
         //when
         final ShowMySolutionDetailResponse expected = ShowMySolutionDetailResponse.of(
                 ProblemResponse.from(problem.getTitle(), problem.getOjName()),
-                MySolutionResponse.from(myMainSolution.getTitle(),
-                        Arrays.asList(myMainSolution.getAlgorithm(), myMainSolution.getDataStructure()),
-                        myMainSolution.getDescription(), myMainSolution.getCode().split("\n"), 3L, 2L),
+                MySolutionResponse.from(myMainSolution, 3L, 2L),
                 expectedComments,
                 expectedReviews,
                 expectedRecommendedSolutions,
@@ -343,7 +341,7 @@ class SolutionServiceTest {
                 new PageImpl<>(Arrays.asList(solution4, solution3, solution2, solution1), PageRequest.of(0, 4), 4L));
 
         ShowSolutionListResponse expected = ShowSolutionListResponse.from(
-                new PageImpl<>(Arrays.asList(solution4, solution3, solution2, solution1), PageRequest.of(0, 4), 4L), 0);
+                new PageImpl<>(Arrays.asList(solution4, solution3, solution2, solution1), PageRequest.of(0, 4), 4L));
         //when
         ShowSolutionListResponse result = solutionService.getSolutionList(PageRequest.of(0, 4), problemId, null, null,
                 null, NEWEST);

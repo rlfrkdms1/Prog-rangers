@@ -505,6 +505,8 @@ class SolutionRepositoryTest {
         Solution solution3 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
         Solution solution1 = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
 
+        Solution mainSolution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
+
         저장(좋아요_생성(member1, solution1));
         저장(좋아요_생성(member2, solution1));
         저장(좋아요_생성(member3, solution1));
@@ -519,7 +521,8 @@ class SolutionRepositoryTest {
 
         저장(좋아요_생성(member1, solution4));
 
-        List<Solution> result = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, 3);
+        List<Solution> result = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem, mainSolution,
+                3);
 
         assertThat(result).containsExactly(solution1, solution2, solution3);
     }
