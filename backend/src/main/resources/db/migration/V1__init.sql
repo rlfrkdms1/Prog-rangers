@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `likes`
     `id`          BIGINT NOT NULL auto_increment,
     `member_id`   BIGINT NOT NULL,
     `solution_id` BIGINT NOT NULL,
+    `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ( `id` )
 )
     engine = innodb
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `problem`
 CREATE TABLE IF NOT EXISTS `review`
 (
     `id`               BIGINT NOT NULL auto_increment,
+    `status`           VARCHAR(255),
     `code_line_number` INT NOT NULL,
     `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `content`          VARCHAR(255) NOT NULL,
