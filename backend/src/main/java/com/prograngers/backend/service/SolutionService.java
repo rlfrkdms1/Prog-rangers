@@ -168,13 +168,18 @@ public class SolutionService {
         List<Comment> mainSolutionComments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(mainSolution);
         List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments,
                 memberId);
+
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(mainSolution);
         List<ReviewWithRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
+
         List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
         List<Solution> recommendedSolutions = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,
                 6);
+
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
+
         List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(solutionList, memberId);
+
         return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse,
                 mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
     }
@@ -267,6 +272,7 @@ public class SolutionService {
                 .filter(solution -> solution.getMember().getId().equals(memberId))
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(),
                         solution.getScrapSolution().getId()))
+                .distinct()
                 .collect(Collectors.toList());
     }
 
