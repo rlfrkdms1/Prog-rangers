@@ -50,8 +50,8 @@ export const CodeWindow = () => {
               >
                 {item.solution.code.map(
                   (line, lineIndex) => (
-                    <React.Fragment key={lineIndex}>
-                      {lineIndex} {'  '}
+                    <React.Fragment key={lineIndex+1}>
+                      {lineIndex+1} {'  '}
                       <span
                         dangerouslySetInnerHTML={{
                           __html:
