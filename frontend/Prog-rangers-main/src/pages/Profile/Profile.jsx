@@ -58,7 +58,6 @@ const Profile = () => {
   useEffect(() => {
     const apiUrl =
       'http://13.125.13.131:8080/api/v1/follows';
-    const token = localStorage.getItem('token');
 
     axios
       .get(apiUrl, {
@@ -74,10 +73,6 @@ const Profile = () => {
   }, []);
 
   const handleFollowButton = () => {
-    // const profileId = followData.followings.find(following => following.nickname === nickname)?.id;
-    // setId(profileId);
-    // console.log(profileId);
-    const token = localStorage.getItem('token');
 
     fetch(
       `http://13.125.13.131:8080/api/v1/members/${id}/following`,
