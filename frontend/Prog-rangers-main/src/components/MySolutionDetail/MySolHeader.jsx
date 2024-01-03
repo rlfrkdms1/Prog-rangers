@@ -39,7 +39,7 @@ export const MySolHeader = () => {
   const navigate = useNavigate();
 
   const onClickSols = () => {
-    navigate(`/solutions/${solutionId}/editsolution`);
+    navigate(`/mySolution/${solutionId}/editsolution`);
   };
 
   useEffect(() => {

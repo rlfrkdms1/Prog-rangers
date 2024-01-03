@@ -156,7 +156,7 @@ const Account = () => {
                 border-radius: 50%;
               `}
             ></img>
-            <Link to="/accountChange" css={editBtnStyle}>
+            <Link to="/account/accountChange" css={editBtnStyle}>
               수정하기
             </Link>
           </div>

@@ -64,9 +64,9 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
-      { path: 'accountChange', element: <AccountChange /> },
+      { path: 'account/accountChange', element: <AccountChange /> },
       { path: 'myPage/addsolution', element: <AddSolution/> },
-      { path: 'solutions/:solutionId/editsolution', element: <EditSolution/> },
+      { path: 'mySolution/:solutionId/editsolution', element: <EditSolution/> },
     ],
   },
 ]);

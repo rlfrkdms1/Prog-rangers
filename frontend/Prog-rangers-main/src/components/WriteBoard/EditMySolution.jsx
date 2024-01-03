@@ -26,7 +26,7 @@ import {
 } from '../../pages/BoardPage/AddSolution';
 import { SubmitButton } from '../../pages/BoardPage/buttonDiv';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const EditMySolution = ({ postURL }) => {
   const [isPublic, setIsPublic] = useState(true);
@@ -50,6 +50,31 @@ export const EditMySolution = ({ postURL }) => {
   });
   const [algo, setAlgo] = useState([]);
   const [data, setData] = useState([]);
+
+
+  const { solutionId } = useParams(); 
+  const [id, setId] = useState();
+  const [mySolution, setMySolution] = useState(null);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState();
+  const [selectedDatastructure, setSelectedDatastructure] = useState();
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://13.125.13.131:8080/api/v1/solutions/${solutionId}`);
+      setMySolution(response.data);
+      setSelectedAlgorithm(response.data.solution.algorithm);
+      setSelectedDatastructure(response.data.solution.dataStructure);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    setId(solutionId);
+    fetchData();
+  }, [solutionId]);
+
+
 
   useEffect(() => {
     if (name === 'algorithm') {
@@ -207,10 +232,10 @@ export const EditMySolution = ({ postURL }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      if (response.status === 201) {
+      
         alert('질문이 등록되었습니다.');
-        window.location.href = `http://localhost:3000/solutions/${id}`;
-      }
+        window.location.href = `http://localhost:3000/mySolution/${id}`;
+      
     } catch (error) {
       console.log(error);
     }
@@ -276,16 +301,17 @@ export const EditMySolution = ({ postURL }) => {
             )}
           </div>
         </div>
+        {mySolution && 
         <input
-          placeholder="풀이 제목을 입력해주세요"
+          placeholder="{mySolution.solution.title}"
           css={css`
             ${StyledInput}
           `}
-          value={inputs.solution}
+          value={inputs.solution || mySolution.solution.title}
           name="solution"
           onChange={handleInput}
-          readOnly
-        />
+          
+        />}
 
         <div
           css={css`
@@ -294,16 +320,17 @@ export const EditMySolution = ({ postURL }) => {
         >
           문제링크
         </div>
+        {mySolution && 
         <input
           placeholder="문제 링크를 입력해주세요"
           css={css`
             ${StyledInput}
           `}
-          value={inputs.link}
+          value={inputs.link || mySolution.solution.link}
           name="link"
           onChange={handleInput}
-          readOnly
-        />
+          
+        />}
 
         <div
           placeholder="middle"
@@ -375,13 +402,15 @@ export const EditMySolution = ({ postURL }) => {
             options={sort.ALGORITHM}
             width="350px"
             secondWidth="270px"
+            selected={selectedAlgorithm} 
           />
           <FilterBar
             title="datastructure"
             options={sort.DATASTRUCTURE}
             width="350px"
             secondWidth="270px"
-          />
+            selected={selectedDatastructure}
+          /> 
         </div>
         <div
           css={css`
@@ -407,15 +436,16 @@ export const EditMySolution = ({ postURL }) => {
             width: 100%;
           `}
         >
+           {mySolution && 
           <textarea
             css={css`
               ${DetailInput}
             `}
-            value={inputs.description}
+            value={inputs.description || mySolution.solution.description}
             name="description"
             onChange={handleInput}
-            readOnly
-          />
+            
+          />}
         </div>
 
         <div
@@ -431,15 +461,16 @@ export const EditMySolution = ({ postURL }) => {
             width: 100%;
           `}
         >
+           {mySolution && 
           <textarea
             css={css`
               ${DetailInput}
             `}
-            value={inputs.code}
+            value={inputs.code || mySolution.solution.code.join('\n')}
             name="code"
             onChange={handleInput}
-            readOnly
-          />
+            
+          />}
         </div>
         <div
           css={css`
