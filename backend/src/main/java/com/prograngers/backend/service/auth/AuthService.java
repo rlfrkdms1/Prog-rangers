@@ -116,7 +116,7 @@ public class AuthService {
         GetKakaoTokenResponse getKakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
         GetKakaoUserInfoResponse getKakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(getKakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(getKakaoUserInfoResponse.getId())
-                .orElseGet(() -> socialRegister(getKakaoUserInfoResponse.toMember()));
+                .orElseGet(() -> socialRegister(getKakaoUserInfoResponse.toMember(createRandomNickname())));
         return issueToken(member);
     }
     @Transactional
@@ -124,7 +124,7 @@ public class AuthService {
         GetGoogleTokenResponse getGoogleTokenResponse = googleOauth.googleGetToken(code);
         GetGoogleUserInfoResponse getGoogleUserInfoResponse = googleOauth.googleGetUserInfo(getGoogleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(getGoogleUserInfoResponse.getId().hashCode()))
-                .orElseGet(() -> socialRegister(getGoogleUserInfoResponse.toMember()));
+                .orElseGet(() -> socialRegister(getGoogleUserInfoResponse.toMember(createRandomNickname())));
         return issueToken(member);
     }
 
@@ -134,17 +134,20 @@ public class AuthService {
         log.info(naverToken.toString());
         GetNaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
-                .orElseGet(() -> socialRegister(userInfo.toMember()));
+                .orElseGet(() -> socialRegister(userInfo.toMember(createRandomNickname())));
         return issueToken(member);
     }
 
     private Member socialRegister(Member member) {
+        return memberRepository.save(member);
+    }
+
+    private String createRandomNickname() {
         String nickname = "";
         do {
             nickname = nicknameGenerator.getRandomNickname().getNickname();
         } while (alreadyExistNickname(nickname));
-        member.updateRandomNickname(nickname);
-        return memberRepository.save(member);
+        return nickname;
     }
 
     private boolean alreadyExistNickname(String nickname) {

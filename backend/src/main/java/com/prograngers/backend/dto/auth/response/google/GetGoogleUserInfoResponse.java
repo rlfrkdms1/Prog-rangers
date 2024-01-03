@@ -9,8 +9,9 @@ public class GetGoogleUserInfoResponse {
 
     private String id;
 
-    public Member toMember() {
+    public Member toMember(String nickname) {
         return Member.builder()
+                .nickname(nickname)
                 .socialId(Long.valueOf(id.hashCode()))
                 .type(MemberType.GOOGLE)
                 .build();

@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ShowMemberProfileResponse {
     private static final Long LAST_PAGE_CURSOR = -1L;
     private static int SIZE_PER_SCROLL = 3;
+    private Long id;
     private String photo;
     private String nickname;
     private String introduction;
@@ -29,6 +30,7 @@ public class ShowMemberProfileResponse {
                                                  Long follow, Long following, Long cursor) {
 
         return ShowMemberProfileResponse.builder()
+                .id(member.getId())
                 .photo(member.getPhoto())
                 .nickname(member.getNickname())
                 .introduction(member.getIntroduction())
