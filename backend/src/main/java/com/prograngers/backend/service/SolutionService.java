@@ -43,7 +43,6 @@ import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,7 +50,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -64,6 +62,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SolutionService {
 
+    public static final int RECOMMENDED_SOLUTION_LIMIT = 6;
     private final SolutionRepository solutionRepository;
     private final CommentRepository commentRepository;
     private final ReviewRepository reviewRepository;
@@ -135,21 +134,18 @@ public class SolutionService {
     public ShowSolutionDetailResponse getSolutionDetail(Long solutionId, Long memberId) {
         Solution solution = findSolutionById(solutionId);
         Problem problem = solution.getProblem();
-        List<Comment> comments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution);
-        List<Review> reviews = reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution);
         List<Likes> likes = likesRepository.findAllBySolution(solution);
         List<Solution> scrapedSolutions = solutionRepository.findAllByScrapSolution(solution);
         boolean mine = validSolutionIsMine(memberId, solution);
         validViewPrivateSolution(solution, mine);
         boolean pushedLike = validPushedLike(memberId, likes);
         boolean scraped = validScraped(memberId, scrapedSolutions);
-        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-        SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(),
-                problem.getLink(), likes.size(), scrapedSolutions.size(), pushedLike, scraped, mine,
-                getScrapSolutionId(solution));
-        List<CommentWithRepliesResponse> commentsResponse = makeCommentsResponse(comments, memberId);
-        List<ReviewWithRepliesResponse> reviewsResponse = makeReviewsResponse(reviews, memberId);
-        return ShowSolutionDetailResponse.from(problemResponse, solutionResponse, commentsResponse, reviewsResponse);
+        return ShowSolutionDetailResponse.from(
+                ProblemResponse.from(problem),
+                SolutionResponse.from(solution, solution.getMember().getNickname(), problem.getLink(), likes.size(),
+                        scrapedSolutions.size(), pushedLike, scraped, mine, getScrapSolutionId(solution)),
+                makeCommentsResponse(commentRepository.findAllBySolutionOrderByCreatedAtAsc(solution), memberId),
+                makeReviewsResponse(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution), memberId));
     }
 
     public ShowMySolutionDetailResponse getMySolutionDetail(Long memberId, Long solutionId) {
@@ -158,24 +154,26 @@ public class SolutionService {
         Problem problem = mainSolution.getProblem();
         List<Solution> solutionList = solutionRepository.findAllByProblemOrderByCreatedAtAsc(problem);
         List<Solution> mySolutionList = getMySolutionList(memberId, solutionList);
-        Long likes = likesRepository.countBySolution(mainSolution);
-        Long scraps = solutionRepository.countByScrapSolution(mainSolution);
-        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
-        MySolutionResponse mySolutionResponse = MySolutionResponse.from(mainSolution.getTitle(),
-                Arrays.asList(mainSolution.getAlgorithm(), mainSolution.getDataStructure()),
-                mainSolution.getDescription(), mainSolution.getCode().split("\n"), likes, scraps);
         List<Comment> mainSolutionComments = commentRepository.findAllBySolutionOrderByCreatedAtAsc(mainSolution);
-        List<CommentWithRepliesResponse> mainSolutionCommentsResponse = makeCommentsResponse(mainSolutionComments,
-                memberId);
         List<Review> mainSolutionReviews = reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(mainSolution);
-        List<ReviewWithRepliesResponse> mainSolutionReviewResponse = makeReviewsResponse(mainSolutionReviews, memberId);
-        List<SolutionTitleAndIdResponse> sideSolutions = getSideSolutions(mySolutionList);
+
+        return ShowMySolutionDetailResponse.of(
+                ProblemResponse.from(problem),
+                MySolutionResponse.from(mainSolution, likesRepository.countBySolution(mainSolution),
+                        solutionRepository.countByScrapSolution(mainSolution)),
+                makeCommentsResponse(mainSolutionComments, memberId),
+                makeReviewsResponse(mainSolutionReviews, memberId),
+                getRecommendedSolutionResponses(problem, mainSolution),
+                getSideSolutions(mySolutionList),
+                getSideScrapSolutions(solutionList, memberId));
+    }
+
+    private List<RecommendedSolutionResponse> getRecommendedSolutionResponses(Problem problem, Solution mainSolution) {
         List<Solution> recommendedSolutions = solutionRepository.findTopLimitsSolutionOfProblemOrderByLikesDesc(problem,
-                6);
+                RECOMMENDED_SOLUTION_LIMIT);
+        recommendedSolutions.remove(mainSolution);
         List<RecommendedSolutionResponse> recommendedSolutionList = getRecommendedSolutions(recommendedSolutions);
-        List<SolutionTitleAndIdResponse> sideScrapSolutions = getSideScrapSolutions(solutionList, memberId);
-        return ShowMySolutionDetailResponse.of(problemResponse, mySolutionResponse, mainSolutionCommentsResponse,
-                mainSolutionReviewResponse, recommendedSolutionList, sideSolutions, sideScrapSolutions);
+        return recommendedSolutionList;
     }
 
     private List<Solution> getMySolutionList(Long memberId, List<Solution> solutionList) {
@@ -247,7 +245,7 @@ public class SolutionService {
         return mainSolutionReviewResponse;
     }
 
-    private static List<SolutionTitleAndIdResponse> getSideSolutions(List<Solution> solutionList) {
+    private List<SolutionTitleAndIdResponse> getSideSolutions(List<Solution> solutionList) {
         return solutionList.stream()
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getTitle(), solution.getId()))
                 .collect(Collectors.toList());
@@ -266,6 +264,7 @@ public class SolutionService {
                 .filter(solution -> solution.getMember().getId().equals(memberId))
                 .map(solution -> SolutionTitleAndIdResponse.from(solution.getScrapSolution().getTitle(),
                         solution.getScrapSolution().getId()))
+                .distinct()
                 .collect(Collectors.toList());
     }
 
@@ -345,7 +344,8 @@ public class SolutionService {
                                                 DataStructureConstant dataStructure, Integer level, Pageable pageable,
                                                 Long memberId) {
         validPageable(pageable);
-        Page<Solution> solutions = solutionRepository.getMyList(pageable, keyword, language, algorithm, dataStructure, level, memberId);
+        Page<Solution> solutions = solutionRepository.getMyList(pageable, keyword, language, algorithm, dataStructure,
+                level, memberId);
         return ShowMySolutionListResponse.from(solutions);
     }
 

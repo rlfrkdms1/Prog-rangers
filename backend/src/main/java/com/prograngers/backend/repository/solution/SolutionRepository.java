@@ -22,8 +22,6 @@ public interface SolutionRepository extends JpaRepository<Solution, Long>, Solut
 
     Long countByMember(Member member);
 
-    List<Solution> findTop3ByMemberOrderByCreatedAtDesc(Member member);
-
     List<Solution> findAllByProblemOrderByCreatedAtAsc(Problem problem);
 
     @Query("select distinct function('date_format', s.createdAt, '%d') from Solution s where s.member.id = :memberId and function('date_format', s.createdAt, '%m') = :month")
