@@ -26,6 +26,7 @@ public class SolutionResponse {
     private Integer likes;
     private Integer scraps;
     private Long scrapId;
+    private boolean isPublic;
     private boolean pushedLike;
     private boolean scraped;
     private boolean mine;
@@ -49,6 +50,7 @@ public class SolutionResponse {
                 .scraped(scraped)
                 .mine(mine)
                 .scrapId(scrapId)
+                .isPublic(solution.isPublic())
                 .build();
     }
 }

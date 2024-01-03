@@ -69,8 +69,8 @@ class MemberServiceTest {
         when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
         when(badgeRepository.findAllByMember(member)).thenReturn(Collections.emptyList());
         when(solutionRepository.findProfileSolutions(memberId, Long.MAX_VALUE)).thenReturn(solutions);
-        when(followRepository.getFollowCount(member)).thenReturn(1L);
-        when(followRepository.getFollowingCount(member)).thenReturn(1L);
+        when(followRepository.countFollow(member)).thenReturn(1L);
+        when(followRepository.countFollowing(member)).thenReturn(1L);
 
         final ShowMemberProfileResponse expected = ShowMemberProfileResponse.from(member, Collections.emptyList(),
                 new ArrayList<>(Arrays.asList(solution1, solution2)), 1L, 1L, solution3.getId());
@@ -85,8 +85,8 @@ class MemberServiceTest {
                 () -> verify(memberRepository, times(1)).findByNickname(member.getNickname()),
                 () -> verify(badgeRepository, times(1)).findAllByMember(member),
                 () -> verify(solutionRepository, times(1)).findProfileSolutions(memberId, Long.MAX_VALUE),
-                () -> verify(followRepository, times(1)).getFollowCount(member),
-                () -> verify(followRepository, times(1)).getFollowingCount(member)
+                () -> verify(followRepository, times(1)).countFollow(member),
+                () -> verify(followRepository, times(1)).countFollowing(member)
         );
     }
 
@@ -105,8 +105,8 @@ class MemberServiceTest {
         when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
         when(badgeRepository.findAllByMember(member)).thenReturn(Collections.emptyList());
         when(solutionRepository.findProfileSolutions(memberId, Long.MAX_VALUE)).thenReturn(solutions);
-        when(followRepository.getFollowCount(member)).thenReturn(1L);
-        when(followRepository.getFollowingCount(member)).thenReturn(1L);
+        when(followRepository.countFollow(member)).thenReturn(1L);
+        when(followRepository.countFollowing(member)).thenReturn(1L);
 
         final ShowMemberProfileResponse expected = ShowMemberProfileResponse.from(member, Collections.emptyList(),
                 solutions, 1L, 1L, LAST_PAGE_CURSOR);
@@ -121,8 +121,8 @@ class MemberServiceTest {
                 () -> verify(memberRepository, times(1)).findByNickname(member.getNickname()),
                 () -> verify(badgeRepository, times(1)).findAllByMember(member),
                 () -> verify(solutionRepository, times(1)).findProfileSolutions(memberId, Long.MAX_VALUE),
-                () -> verify(followRepository, times(1)).getFollowCount(member),
-                () -> verify(followRepository, times(1)).getFollowingCount(member)
+                () -> verify(followRepository, times(1)).countFollow(member),
+                () -> verify(followRepository, times(1)).countFollowing(member)
         );
     }
 

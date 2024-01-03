@@ -33,7 +33,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Review {
 
-    private static final String DELETED_CONTENT = "삭제된 리뷰입니다";
+    public static final String DELETED_CONTENT = "삭제된 리뷰입니다";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +64,9 @@ public class Review {
     private ReviewStatusConstant status;
 
     public void update(String content) {
+        if (content == null || content.isBlank()) {
+            return;
+        }
         this.content = content;
         this.status = FIXED;
     }
