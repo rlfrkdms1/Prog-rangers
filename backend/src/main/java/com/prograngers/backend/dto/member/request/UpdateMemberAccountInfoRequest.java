@@ -20,6 +20,7 @@ public class UpdateMemberAccountInfoRequest {
 
     public Member toMember() {
         return Member.builder()
+                .usable(true)
                 .nickname(this.nickname)
                 .github(this.github)
                 .introduction(this.introduction)
