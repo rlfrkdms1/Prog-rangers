@@ -12,7 +12,7 @@ import plusmark from '../../assets/icons/plus-mark.svg';
 export const CodeWindow3 = () => {
   const { solutionId } = useParams();
   const [codeData, setData] = useState({
-    solution: { code: [] },
+    solution: { code: [], reviews:[] },
   });
 
   // 한줄리뷰 추가 버튼
@@ -55,7 +55,7 @@ export const CodeWindow3 = () => {
 
     // 해당 코드 줄에 대한 리뷰 정보 찾기
     const reviewForLine = codeData.reviews.find(
-      (review) => review.codeLineNumber === codeLineNumber
+      (review) => review.codeLineNumber === codeLineNumber+1
     );
 
     // 찾은 리뷰 정보의 닉네임을 가져와서 설정
@@ -120,7 +120,7 @@ export const CodeWindow3 = () => {
     ) {
       const newReview = {
         nickname: nickname,
-        codeLineNumber: clickedLineId,
+        codeLineNumber: clickedLineId+1,
         content: reviews[clickedLineId],
       };
 
@@ -305,7 +305,7 @@ export const CodeWindow3 = () => {
                   </div>
                 )}
                 {'    '}
-                {codeLineNumber} {'  '}
+                {codeLineNumber+1} {'  '}
                 <span
                   dangerouslySetInnerHTML={{
                     __html: hljs.highlightAuto(line).value,
@@ -333,7 +333,7 @@ export const CodeWindow3 = () => {
                       >
                         <input
                           type="text"
-                          placeholder={`${codeLineNumber}번째 줄 코드 리뷰를 입력하세요`}
+                          placeholder={`${codeLineNumber+1}번째 줄 코드 리뷰를 입력하세요`}
                           value={reviews[codeLineNumber]}
                           onChange={(e) =>
                             handleReviewChange(
@@ -376,7 +376,7 @@ export const CodeWindow3 = () => {
                               .filter(
                                 (review) =>
                                   review.codeLineNumber ===
-                                    codeLineNumber &&
+                                    codeLineNumber+1 &&
                                   review.content !==
                                     '삭제된 리뷰입니다'
                               )
@@ -386,8 +386,7 @@ export const CodeWindow3 = () => {
                                     css={css`
                                       display: flex;
                                       align-items: center;
-                                      font-family: Noto Sans
-                                        KR;
+                                      font-family: Noto Sans KR;
                                       font-size: 16px;
                                     `}
                                   >
@@ -407,10 +406,6 @@ export const CodeWindow3 = () => {
                                       {review.editing ? (
                                         <input
                                           type="text"
-                                          // value={review.content}  // Use the review content here
-                                          // onChange={(e) => onReviewContentChange(review.id, e.target.value)} // Use onReviewContentChange instead of setEditValue
-                                          // onBlur={() => handleEditReview(review.id, review.content)}
-
                                           value={editValue}
                                           onChange={(e) =>
                                             setEditValue(
@@ -532,7 +527,7 @@ export const CodeWindow3 = () => {
                         {codeData.reviews.filter(
                           (review) =>
                             review.codeLineNumber ===
-                            codeLineNumber
+                            codeLineNumber+1
                         ).length > 1 && (
                           <div
                             css={css`

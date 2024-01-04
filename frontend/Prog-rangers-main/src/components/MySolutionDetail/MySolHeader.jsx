@@ -149,6 +149,7 @@ export const MySolHeader = () => {
               >
                 {solution.algorithm}
               </div>
+
               <div
                 className="DataStrOptions"
                 css={css`
@@ -165,6 +166,21 @@ export const MySolHeader = () => {
                 `}
               >
                 {solution.dataStructure}
+              </div>
+
+              <div
+                className="LanguageOptions"
+                css={css`
+                  width: 89px;
+                  height: 36px;
+                  background-color: ${theme.colors.light3};
+                  border-radius: 20px;
+                  text-align: center;
+                  line-height: 36px;
+                  color: ${theme.colors.dark1};
+                `}
+              >
+                {solution.language}
               </div>
             </div>
           </div>

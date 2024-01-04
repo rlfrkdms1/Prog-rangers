@@ -1,6 +1,7 @@
 package com.prograngers.backend.dto.solution.response;
 
 import com.prograngers.backend.entity.solution.Solution;
+
 import java.util.Arrays;
 import java.util.List;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class MySolutionResponse {
                 .dataStructure(solution.getDataStructureView())
                 .algorithm(solution.getAlgorithmView())
                 .description(solution.getDescription())
-                .code(solution.getCode().split("\n"))
+                .code(solution.getCode().split(System.lineSeparator()))
                 .isPublic(solution.isPublic())
                 .likes(likes)
                 .scraps(scraps)
