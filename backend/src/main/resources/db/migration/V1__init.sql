@@ -99,15 +99,15 @@ CREATE TABLE IF NOT EXISTS `solution`
 
 CREATE TABLE IF NOT EXISTS `notification`
 (
-    `id`          BIGINT NOT NULL auto_increment,
-    `title`       VARCHAR(255) NOT NULL,
-    `type`        VARCHAR(255) NOT NULL,
-    `created_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `id_read`     TINYINT(1) NOT NULL,
-    `member_id`   BIGINT NOT NULL,
-    `solution_id` BIGINT NOT NULL,
-    `comment_id`  BIGINT,
-    `review_id`   BIGINT,
+    `id`              BIGINT       NOT NULL auto_increment,
+    `writer_nickname` VARCHAR(255) NOT NULL,
+    `type`            VARCHAR(255) NOT NULL,
+    `created_at`      TIMESTAMP    NOT NULL,
+    `is_read`         TINYINT(1)   NOT NULL,
+    `receiver_id`     BIGINT       NOT NULL,
+    `solution_id`     BIGINT       NOT NULL,
+    `comment_id`      BIGINT,
+    `review_id`       BIGINT,
     PRIMARY KEY ( `id` )
 )
     engine = innodb
