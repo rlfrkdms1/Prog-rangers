@@ -96,7 +96,10 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
         return jpaQueryFactory.selectFrom(solution)
                 .join(follow).on(solution.member.id.eq(follow.followingId))
                 .join(solution.problem).fetchJoin()
-                .where(follow.followerId.eq(memberId))
+                .where(
+                        follow.followerId.eq(memberId),
+                        solution.isPublic.isTrue()
+                )
                 .orderBy(solution.createdAt.desc())
                 .limit(limit)
                 .fetch();
