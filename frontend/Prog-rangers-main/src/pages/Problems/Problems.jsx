@@ -31,10 +31,6 @@ const Problems = () => {
     AllQuestions();
   }, [page]);
 
-  useEffect(() => {
-    AllQuestions();
-  }, [page]);
-
   const handlePageChange = (e, page) => {
     setPage(page);
   };
@@ -52,11 +48,6 @@ const Problems = () => {
     );
     setFilteredQuestions(filteredResults);
   };
-
-  useEffect(() => {
-    AllQuestions();
-    filterData();
-  }, [searchTerm]);
 
   useEffect(() => {
     AllQuestions();
