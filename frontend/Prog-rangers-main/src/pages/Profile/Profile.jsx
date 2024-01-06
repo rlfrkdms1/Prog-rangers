@@ -21,6 +21,7 @@ import star1 from '../../assets/icons/star/star1.svg';
 const Profile = () => {
   const navigate = useNavigate();
   const { nickname } = useParams();
+  const [id, setId ] = useState([]);
   const [data, setData] = useState([]);
 
   //팔로우 버튼
@@ -29,6 +30,71 @@ const Profile = () => {
     ? theme.colors.light3
     : theme.colors.main30;
 
+  const [followData, setFollowData] = useState({ followings: [] });
+
+  const token = localStorage.getItem('token');
+  const api = axios.create({
+    baseURL: 'http://13.125.13.131:8080/api/v1',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/follows', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const isFollowingProfile = response.data.followings.some(followings => followings.nickname === nickname);
+        setIsFollowing(isFollowingProfile);
+      } catch (error) {
+        console.error('Error fetching following data:', error);
+      }
+    };
+    fetchData();
+  }, [nickname, token]);
+
+  useEffect(() => {
+    const apiUrl =
+      'http://13.125.13.131:8080/api/v1/follows';
+
+    axios
+      .get(apiUrl, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setFollowData(response.data);
+        })
+      .catch((error) => {
+        console.error('API 요청 오류:', error);
+      });
+  }, []);
+
+  const handleFollowButton = () => {
+
+    fetch(
+      `http://13.125.13.131:8080/api/v1/members/${id}/following`,
+      {
+        method: isFollowing ? 'DELETE' : 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+      .then((response) => {
+        setIsFollowing(!isFollowing);
+        if (isFollowing) {
+          console.log('언팔로우 성공');
+        } else {
+          console.log('팔로우 성공');
+        }
+      })
+      .catch((error) => {
+        console.error('API 요청 실패', error);
+      });}
+
+
+
   // 달성 뱃지
   const badgeImages = {
     새싹: star1,
@@ -36,10 +102,6 @@ const Profile = () => {
     // 안경: star3,
     // 4: star4,
     // 5: star5,
-  };
-
-  const handleFollowClick = () => {
-    setIsFollowing(!isFollowing);
   };
 
   useEffect(() => {
@@ -109,7 +171,7 @@ const Profile = () => {
         </div>
 
         <button
-          onClick={handleFollowClick}
+          onClick={handleFollowButton}
           css={css`
             width: 245px;
             height: 40px;

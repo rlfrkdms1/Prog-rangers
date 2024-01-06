@@ -34,7 +34,7 @@ export const CodeWindow2 = () => {
     <>
       {codeData.solution.code.map((line, lineIndex) => (
         <div
-          key={lineIndex}
+          key={lineIndex+1}
           css={css`
             font-size: 18px;
             padding-left: 60px;
@@ -48,7 +48,7 @@ export const CodeWindow2 = () => {
                   'Consolas, Courier New, monospace',
               }}
             >
-              {lineIndex} {'  '}
+              {lineIndex+1} {'  '}
               <span
                 dangerouslySetInnerHTML={{
                   __html: hljs.highlightAuto(line).value,
