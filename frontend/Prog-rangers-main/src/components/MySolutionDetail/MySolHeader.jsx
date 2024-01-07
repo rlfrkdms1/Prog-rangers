@@ -61,7 +61,7 @@ export const MySolHeader = () => {
 
   // 풀이 삭제
   const deleteSolution = (solutionId) => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
       .delete(apiUrl, {
@@ -131,26 +131,57 @@ export const MySolHeader = () => {
                 {solution.nickname}
               </span>
             </div>
-            <div
-              className="options"
-              css={css`
-                width: 89px;
-                height: 36px;
-                background-color: ${theme.colors.light3};
-                border-radius: 20px;
-                text-align: center;
-                line-height: 36px;
-                color: ${theme.colors.dark1};
-                ${solution.algorithm === null
-                  ? 'display: none;'
-                  : ''}
-                ${solution.dataStructure === null
-                  ? 'display: none;'
-                  : ''}
-              `}
-            >
-              {solution.algorithm}
-              {solution.dataStructure}
+            <div css={css`display: flex; gap: 5px;`}>
+              <div
+                className="AlgoOptions"
+                css={css`
+                  width: 89px;
+                  height: 36px;
+                  background-color: ${theme.colors.light3};
+                  border-radius: 20px;
+                  text-align: center;
+                  line-height: 36px;
+                  color: ${theme.colors.dark1};
+                  ${solution.algorithm === null
+                    ? 'display: none;'
+                    : ''}
+                `}
+              >
+                {solution.algorithm}
+              </div>
+
+              <div
+                className="DataStrOptions"
+                css={css`
+                  width: 89px;
+                  height: 36px;
+                  background-color: ${theme.colors.light3};
+                  border-radius: 20px;
+                  text-align: center;
+                  line-height: 36px;
+                  color: ${theme.colors.dark1};
+                  ${solution.dataStructure === null
+                    ? 'display: none;'
+                    : ''}
+                `}
+              >
+                {solution.dataStructure}
+              </div>
+
+              <div
+                className="LanguageOptions"
+                css={css`
+                  width: 89px;
+                  height: 36px;
+                  background-color: ${theme.colors.light3};
+                  border-radius: 20px;
+                  text-align: center;
+                  line-height: 36px;
+                  color: ${theme.colors.dark1};
+                `}
+              >
+                {solution.language}
+              </div>
             </div>
           </div>
           <div css={colFlex}>

@@ -9,8 +9,10 @@ public class GetNaverUserInfoResponse {
 
     private NaverSocialIdResponse response;
 
-    public Member toMember() {
+    public Member toMember(String nickname) {
         return Member.builder()
+                .usable(true)
+                .nickname(nickname)
                 .socialId(Long.valueOf(response.getId().hashCode()))
                 .type(MemberType.NAVER)
                 .build();

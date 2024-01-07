@@ -43,7 +43,7 @@ export const CodeWindow4 = () => {
 
     // 해당 코드 줄에 대한 리뷰 정보 찾기
     const reviewForLine = codeData.reviews.find(
-      (review) => review.codeLineNumber === codeLineNumber
+      (review) => review.codeLineNumber === codeLineNumber+1
     );
 
     // 찾은 리뷰 정보의 닉네임을 가져와서 설정
@@ -112,7 +112,7 @@ export const CodeWindow4 = () => {
                   </div>
                 )}
                 {'    '}
-                {codeLineNumber} {'  '}
+                {codeLineNumber+1} {'  '}
                 <span
                   dangerouslySetInnerHTML={{
                     __html: hljs.highlightAuto(line).value,
@@ -147,7 +147,7 @@ export const CodeWindow4 = () => {
                                 .filter(
                                   (review) =>
                                     review.codeLineNumber ===
-                                      codeLineNumber &&
+                                      codeLineNumber+1 &&
                                     review.content !==
                                       '삭제된 리뷰입니다'
                                 )
@@ -209,7 +209,7 @@ export const CodeWindow4 = () => {
                           {codeData.reviews.filter(
                             (review) =>
                               review.codeLineNumber ===
-                              codeLineNumber
+                              codeLineNumber+1
                           ).length > 1 && (
                             <div
                               css={css`

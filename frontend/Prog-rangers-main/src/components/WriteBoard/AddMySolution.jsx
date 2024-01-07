@@ -156,7 +156,7 @@ export const AddMySolution = ({postURL}) => {
       });
     if(response.status === 201){
       alert('질문이 등록되었습니다.');
-      window.location.href = `http://localhost:3000/mypage`;
+      window.location.href = `http://13.125.13.131/mypage`;
     }
     }
     catch(error){

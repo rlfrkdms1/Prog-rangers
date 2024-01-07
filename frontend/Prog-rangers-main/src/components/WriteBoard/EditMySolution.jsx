@@ -245,8 +245,8 @@ export const EditMySolution = ({ postURL }) => {
       );
       
         alert('질문이 등록되었습니다.');
-        window.location.href = `http://localhost:3000/mySolution/${id}`;
-      
+        window.location.href = `/mySolutions/${id}`;
+      }
     } catch (error) {
       console.log(error);
     }

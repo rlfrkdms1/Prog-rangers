@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
-import { MainBody } from './MainBody';
+import { MainBody, RightBody } from './MainBody';
 import { SideBar } from '../../components/SideBar/SideBar';
 import { IoSearchOutline } from 'react-icons/io5';
 import { FilterBar2 } from '../../components/FilterBar';
@@ -111,23 +111,18 @@ const MySolution = () => {
     <div
       css={css`
         display: flex;
-        justify-content: center;
       `}
     >
       <div
         className="container"
         css={css`
-          width: 1200px;
-          height: 100%;
-          display: flex;
-          justify-content: space-between;
-          margin: 0 auto;
+          ${MainBody}
         `}
       >
         <SideBar />
         <div
           css={css`
-            ${MainBody}
+            ${RightBody}
           `}
         >
           <div
@@ -137,7 +132,7 @@ const MySolution = () => {
               height: 50px;
               border: 1px solid #111;
               border-radius: 25px;
-              margin-top: 100px;
+              margin-top: 50px;
               padding-left: 30px;
             `}
           >

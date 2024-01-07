@@ -147,8 +147,8 @@ export const Register = ({postURL}) => {
       solutionTitle: inputs.solution,
       problemLink: inputs.link,
       level: star.toString(),
-      algorithmName: algo.value,
-      dataStructureName: data.value,
+      algorithm: algo.value,
+      dataStructure: data.value,
       language: "JAVA",
       description: inputs.description,
       code: inputs.code,
@@ -160,7 +160,7 @@ export const Register = ({postURL}) => {
       });
     if(response.status === 201){
       alert('질문이 등록되었습니다.');
-      window.location.href = `http://localhost:3000/mypage`;
+      window.location.href = `http://13.125.13.131/mypage`;
     }
     }
     catch(error){
