@@ -230,7 +230,7 @@ export const EditMySolution = ({ postURL }) => {
         dataStructure: data.value || sort.DATASTRUCTURE.find(option => option.value === data).value,
         language: inputs.language,
         description: inputs.description,
-        code: inputs.code,
+        code: inputs.code.join('\n'),
         isPublic: isPublic.toString(),
       };
       
@@ -244,9 +244,8 @@ export const EditMySolution = ({ postURL }) => {
         }
       );
       
-        alert('질문이 등록되었습니다.');
-        window.location.href = `/mySolutions/${id}`;
-      }
+        alert('수정 완료되었습니다.');
+        window.location.href = `/mySolution/${id}`;
     } catch (error) {
       console.log(error);
     }
