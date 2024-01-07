@@ -46,24 +46,29 @@ export const EditMySolution = ({ postURL }) => {
     solution: '',
     link: '',
     description: '',
-    code: '',
+    code: [],
   });
   const [algo, setAlgo] = useState([]);
   const [data, setData] = useState([]);
-
+  const [problem, setProblem] = useState([]);
 
   const { solutionId } = useParams(); 
   const [id, setId] = useState();
-  const [mySolution, setMySolution] = useState(null);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState();
-  const [selectedDatastructure, setSelectedDatastructure] = useState();
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`http://13.125.13.131:8080/api/v1/solutions/${solutionId}`);
-      setMySolution(response.data);
-      setSelectedAlgorithm(response.data.solution.algorithm);
-      setSelectedDatastructure(response.data.solution.dataStructure);
+      setAlgo(response.data.solution.algorithm);
+      setData(response.data.solution.dataStructure);
+      setInputs({
+        solution: response.data.solution.title,
+        link: response.data.solution.link,
+        description: response.data.solution.description,
+        code: response.data.solution.code,
+        language: response.data.solution.language,
+      })
+      setProblem(response.data.problem);
+      
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -72,8 +77,7 @@ export const EditMySolution = ({ postURL }) => {
   useEffect(() => {
     setId(solutionId);
     fetchData();
-  }, [solutionId]);
-
+  }, []);
 
 
   useEffect(() => {
@@ -98,10 +102,17 @@ export const EditMySolution = ({ postURL }) => {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
+    if (name === "code") {
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        code: value.split('\n'), 
+      }));
+    } else {
+      setInputs({
+        ...inputs,
+        [name]: value,
+      });
+    }
   };
 
   const TagDisplay1 = () => {
@@ -110,13 +121,13 @@ export const EditMySolution = ({ postURL }) => {
     };
     return (
       <>
-        {algo.length !== 0 ? (
+        {algo ? (
           <div
             css={css`
               ${tags}
             `}
           >
-            {algo.name}
+           {algo && (algo.name || (sort.ALGORITHM.find(option => option.value === algo) || {}).name)}
             <img
               onClick={deleteHandler}
               css={css`
@@ -140,13 +151,14 @@ export const EditMySolution = ({ postURL }) => {
     };
     return (
       <>
-        {data.length !== 0 ? (
+        {data ? (
           <div
             css={css`
               ${tags}
             `}
           >
-            {data.name}
+            {data && (data.name || (sort.DATASTRUCTURE.find(option => option.value === data) || {}).name)}
+
             <img
               onClick={deleteHandler}
               css={css`
@@ -210,20 +222,19 @@ export const EditMySolution = ({ postURL }) => {
         return;
       }
       const body = {
-        problemTitle: '몰라요',
+        problemTitle: problem.title,
         title: inputs.solution,
         problemLink: inputs.link,
         level: star.toString(),
-        algorithm: algo.value,
-        dataStructure: data.value,
-        language: 'JAVA',
+        algorithm: algo.value || sort.ALGORITHM.find(option => option.value === algo).value,
+        dataStructure: data.value || sort.DATASTRUCTURE.find(option => option.value === data).value,
+        language: inputs.language,
         description: inputs.description,
         code: inputs.code,
         isPublic: isPublic.toString(),
       };
-
-      console.log('inputs.title:', inputs.title);
-      console.log('inputs.link:', inputs.link);
+      
+      console.log(body);
 
       const response = await axios.patch(
         `http://13.125.13.131:8080/api/v1/solutions/${id}`,
@@ -301,17 +312,16 @@ export const EditMySolution = ({ postURL }) => {
             )}
           </div>
         </div>
-        {mySolution && 
+       
         <input
-          placeholder="{mySolution.solution.title}"
+          placeholder="풀이 제목을 입력해주세요."
           css={css`
             ${StyledInput}
           `}
-          value={inputs.solution || mySolution.solution.title}
+          value={inputs.solution}
           name="solution"
           onChange={handleInput}
-          
-        />}
+        />
 
         <div
           css={css`
@@ -320,17 +330,17 @@ export const EditMySolution = ({ postURL }) => {
         >
           문제링크
         </div>
-        {mySolution && 
+       
         <input
           placeholder="문제 링크를 입력해주세요"
           css={css`
             ${StyledInput}
           `}
-          value={inputs.link || mySolution.solution.link}
+          value={inputs.link}
           name="link"
           onChange={handleInput}
           
-        />}
+        />
 
         <div
           placeholder="middle"
@@ -402,14 +412,14 @@ export const EditMySolution = ({ postURL }) => {
             options={sort.ALGORITHM}
             width="350px"
             secondWidth="270px"
-            selected={selectedAlgorithm} 
+            selected={sort.ALGORITHM.find(option => option.value === algo)} 
           />
           <FilterBar
             title="datastructure"
             options={sort.DATASTRUCTURE}
             width="350px"
             secondWidth="270px"
-            selected={selectedDatastructure}
+            selected={sort.DATASTRUCTURE.find(option => option.value === data)}
           /> 
         </div>
         <div
@@ -436,16 +446,16 @@ export const EditMySolution = ({ postURL }) => {
             width: 100%;
           `}
         >
-           {mySolution && 
+          
           <textarea
             css={css`
               ${DetailInput}
             `}
-            value={inputs.description || mySolution.solution.description}
+            value={inputs.description}
             name="description"
             onChange={handleInput}
             
-          />}
+          />
         </div>
 
         <div
@@ -461,16 +471,16 @@ export const EditMySolution = ({ postURL }) => {
             width: 100%;
           `}
         >
-           {mySolution && 
+          
           <textarea
             css={css`
               ${DetailInput}
             `}
-            value={inputs.code || mySolution.solution.code.join('\n')}
+            value={inputs.code.join('\n')}
             name="code"
             onChange={handleInput}
             
-          />}
+          />
         </div>
         <div
           css={css`
