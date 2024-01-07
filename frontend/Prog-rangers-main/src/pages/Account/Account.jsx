@@ -78,15 +78,11 @@ const Account = () => {
       window.confirm('정말 삭제하시겠습니까?');
 
     if (isConfirmed) {
-      if (
-        inputValue ===
-        '계정 삭제시 작성한 리뷰가 전부 사라집니다.'
-      ) {
         const token = localStorage.getItem('token');
 
         try {
           const response = await fetch(
-            'http://13.124.131.171:8080/api/v1/members',
+            'http://13.125.13.131:8080/api/v1/members',
             {
               method: 'DELETE',
               headers: { Authorization: `Bearer ${token}` },
@@ -96,6 +92,7 @@ const Account = () => {
           if (response.ok) {
             setDeleteSuccess(true);
             localStorage.removeItem('token');
+            alert('계정이 삭제되었습니다.');
             window.location.href = '/';
           } else {
             alert('계정 삭제에 실패했습니다.');
@@ -105,11 +102,10 @@ const Account = () => {
         }
       } else {
         alert(
-          '입력값이 일치하지 않습니다. 다시 확인해주세요.'
+          '계정 삭제에 실패했습니다. 다시 확인해주세요.'
         );
       }
-    }
-  };
+    };
 
   return (
     <div
