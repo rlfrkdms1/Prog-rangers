@@ -23,6 +23,7 @@ const Profile = () => {
   const { nickname } = useParams();
   const [id, setId ] = useState([]);
   const [data, setData] = useState([]);
+  const [cursor, setCursor] = useState('');
 
   //팔로우 버튼
   const [isFollowing, setIsFollowing] = useState(false);
@@ -91,9 +92,8 @@ const Profile = () => {
       })
       .catch((error) => {
         console.error('API 요청 실패', error);
-      });}
-
-
+      });
+    }
 
   // 달성 뱃지
   const badgeImages = {
@@ -103,6 +103,33 @@ const Profile = () => {
     // 4: star4,
     // 5: star5,
   };
+  
+  // 무한 스크롤 기능
+  const handleScroll = () => {
+    const isBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight;
+    if (isBottom && cursor !== null) {
+      const apiUrl = `http://13.125.13.131:8080/api/v1/members/${nickname}?page=${cursor}`;
+
+      axios.get(apiUrl)
+        .then((response) => {
+          if (Array.isArray(response.data.list)) {
+            setData(prevData => ({ ...prevData, list: [...prevData.list, ...response.data.list] }));
+            setCursor(response.data.cursor);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+      }
+  };
+    
+  // 스크롤 이벤트 리스너
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [cursor, nickname]);
 
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/members/${nickname}`;
@@ -115,11 +142,11 @@ const Profile = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
         alert(
-          '탈퇴한 사용자의 프로필을 방문할 수 없습니다.'
+          '존재하지 않는 사용자의 프로필을 방문할 수 없습니다.'
         );
         navigate(-1);
       });
-  }, [nickname]);
+    }, []);
 
   return (
     <div
@@ -303,8 +330,9 @@ const Profile = () => {
         >
           풀이
         </div>
-
-        <SolvingList />
+      
+        <SolvingList list={data.list} />
+      
       </div>
     </div>
   );
