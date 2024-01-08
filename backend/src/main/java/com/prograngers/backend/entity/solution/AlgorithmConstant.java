@@ -39,6 +39,4 @@ public enum AlgorithmConstant implements HashTag {
         }
         throw new AlgorithmNotFoundException();
     }
-
-
 }
