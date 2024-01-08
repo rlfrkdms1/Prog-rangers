@@ -62,7 +62,7 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
-                .where(solution.member.id.eq(memberId), solution.id.loe(page))
+                .where(solution.member.id.eq(memberId), solution.id.loe(page), solution.isPublic.eq(true))
                 .orderBy(solution.createdAt.desc())
                 .limit(3)
                 .fetch();
