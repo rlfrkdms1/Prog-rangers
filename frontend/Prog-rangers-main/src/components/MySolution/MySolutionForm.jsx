@@ -73,7 +73,7 @@ export const MySolutionForm = ({data}) => {
               </div>
 
               <div className="icon">
-                {/* {isPublic ? <BiSolidLockAlt size="18" color="#D9D9D9" /> : <BiSolidLockOpenAlt size="18" color="#D9D9D9" />} */}
+                {item.solution.public ? <BiSolidLockOpenAlt size="18" color="#D9D9D9" /> : <BiSolidLockAlt size="18" color="#D9D9D9" />}
               </div>
             </div>
               
