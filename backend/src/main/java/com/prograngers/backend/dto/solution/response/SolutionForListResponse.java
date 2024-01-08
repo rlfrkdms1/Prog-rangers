@@ -17,6 +17,7 @@ public class SolutionForListResponse {
     private String language;
     private int level;
     private boolean isScrapped;
+    private boolean isPublic;
 
     public static SolutionForListResponse from(Solution solution) {
         SolutionForListResponse response = SolutionForListResponse.builder()
@@ -27,6 +28,7 @@ public class SolutionForListResponse {
                 .algorithm(solution.getAlgorithmName())
                 .dataStructure(solution.getDataStructureName())
                 .isScrapped(solution.isScrapped())
+                .isPublic(solution.isPublic())
                 .build();
         return response;
     }
