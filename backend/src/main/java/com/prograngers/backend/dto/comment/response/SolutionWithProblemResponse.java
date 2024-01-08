@@ -35,8 +35,8 @@ public class SolutionWithProblemResponse {
                 .problemTitle(problem.getTitle())
                 .ojName(problem.getOjName())
                 .author(AuthorResponse.from(author))
-                .algorithm(solution.getAlgorithmView())
-                .dataStructure(solution.getDataStructureView())
+                .algorithm(solution.getAlgorithmName())
+                .dataStructure(solution.getDataStructureName())
                 .build();
     }
 }
