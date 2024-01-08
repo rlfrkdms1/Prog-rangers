@@ -127,14 +127,14 @@ public class Solution {
         updateDescription(update.getDescription());
     }
 
-    public String getAlgorithmView() {
+    public String getAlgorithmName() {
         if (algorithm != null) {
             return algorithm.name();
         }
         return null;
     }
 
-    public String getDataStructureView() {
+    public String getDataStructureName() {
         if (dataStructure != null) {
             return dataStructure.name();
         }

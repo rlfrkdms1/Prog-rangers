@@ -23,8 +23,8 @@ public class MySolutionResponse {
     public static MySolutionResponse from(Solution solution, Long likes, Long scraps) {
         return MySolutionResponse.builder()
                 .title(solution.getTitle())
-                .dataStructure(solution.getDataStructureView())
-                .algorithm(solution.getAlgorithmView())
+                .dataStructure(solution.getDataStructureName())
+                .algorithm(solution.getAlgorithmName())
                 .description(solution.getDescription())
                 .code(solution.getCode().split(System.lineSeparator()))
                 .isPublic(solution.isPublic())

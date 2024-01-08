@@ -24,8 +24,8 @@ public class SolutionForListResponse {
                 .title(solution.getTitle())
                 .language(solution.getLanguage().getView())
                 .level(solution.getLevel())
-                .algorithm(solution.getAlgorithmView())
-                .dataStructure(solution.getDataStructureView())
+                .algorithm(solution.getAlgorithmName())
+                .dataStructure(solution.getDataStructureName())
                 .isScrapped(solution.isScrapped())
                 .build();
         return response;
