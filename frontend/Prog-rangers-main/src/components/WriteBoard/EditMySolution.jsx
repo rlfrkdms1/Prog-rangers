@@ -37,6 +37,9 @@ export const EditMySolution = ({ postURL }) => {
     false,
     false,
   ]);
+  const api = axios.create({
+    baseURL: 'http://13.125.13.131:8080/api/v1',
+  });
   const token = localStorage.getItem('token');
   const target = useAtomValue(targetAtom, targetScope);
   const name = useAtomValue(nameAtom, nameScope);
@@ -44,41 +47,46 @@ export const EditMySolution = ({ postURL }) => {
   const array = [0, 1, 2, 3, 4];
   const [inputs, setInputs] = useState({
     solution: '',
-    link: '',
     description: '',
     code: [],
   });
   const [algo, setAlgo] = useState([]);
   const [data, setData] = useState([]);
   const [problem, setProblem] = useState([]);
+  const [level, setLevel] = useState();
 
   const { solutionId } = useParams(); 
   const [id, setId] = useState();
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`http://13.125.13.131:8080/api/v1/solutions/${solutionId}`);
-      setAlgo(response.data.solution.algorithm);
-      setData(response.data.solution.dataStructure);
-      setInputs({
-        solution: response.data.solution.title,
-        link: response.data.solution.link,
-        description: response.data.solution.description,
-        code: response.data.solution.code,
-        language: response.data.solution.language,
-      })
-      setProblem(response.data.problem);
-      
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   useEffect(() => {
-    setId(solutionId);
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`/solutions/${solutionId}/mine`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAlgo(response.data.solution.algorithm);
+        setData(response.data.solution.dataStructure);
+        setInputs({
+          solution: response.data.solution.title,
+          description: response.data.solution.description,
+          code: response.data.solution.code,
+        })
+        setProblem(response.data.problem);
+        setId(solutionId);
+        setLevel(response.data.solution.level);
+      } catch (error) {
+        console.error('Error fetching following data:', error);
+      }
+    };
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fillHandler(level-1);
+  }, [level]);
 
   useEffect(() => {
     if (name === 'algorithm') {
@@ -176,9 +184,11 @@ export const EditMySolution = ({ postURL }) => {
       </>
     );
   };
+
   const publicHandler = () => {
     setIsPublic(!isPublic);
   };
+
   const fillHandler = (index) => {
     let clickStates = [...clickedStar];
     for (let i = 0; i < 5; i++) {
@@ -186,6 +196,7 @@ export const EditMySolution = ({ postURL }) => {
     }
     setClickedStar(clickStates);
   };
+
   const postWrite = async () => {
     let star = clickedStar.filter(Boolean).length;
     try {
@@ -224,17 +235,13 @@ export const EditMySolution = ({ postURL }) => {
       const body = {
         problemTitle: problem.title,
         title: inputs.solution,
-        problemLink: inputs.link,
         level: star.toString(),
         algorithm: algo.value || sort.ALGORITHM.find(option => option.value === algo).value,
         dataStructure: data.value || sort.DATASTRUCTURE.find(option => option.value === data).value,
-        language: inputs.language,
         description: inputs.description,
         code: inputs.code.join('\n'),
         isPublic: isPublic.toString(),
       };
-      
-      console.log(body);
 
       const response = await axios.patch(
         `http://13.125.13.131:8080/api/v1/solutions/${id}`,
@@ -243,7 +250,6 @@ export const EditMySolution = ({ postURL }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
         alert('수정 완료되었습니다.');
         window.location.href = `/mySolution/${id}`;
     } catch (error) {
