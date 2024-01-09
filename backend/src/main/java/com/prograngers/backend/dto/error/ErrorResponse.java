@@ -1,6 +1,6 @@
 package com.prograngers.backend.dto.error;
 
-import com.prograngers.backend.exception.ErrorCode;
+import com.prograngers.backend.exception.ErrorCodeBefore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ErrorResponse {
-    ErrorCode errorCode;
+    ErrorCodeBefore errorCodeBefore;
     String description;
 
 }

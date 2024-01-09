@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.badrequest;
 
-import static com.prograngers.backend.exception.ErrorCode.NOT_EXIST_OLD_PASSWORD;
+import static com.prograngers.backend.exception.ErrorCodeBefore.NOT_EXIST_OLD_PASSWORD;
 
 public class NotExistOldPasswordException extends InvalidValueException {
     public NotExistOldPasswordException() {

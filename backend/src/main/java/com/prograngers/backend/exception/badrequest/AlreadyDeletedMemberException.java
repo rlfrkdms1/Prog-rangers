@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.badrequest;
 
-import static com.prograngers.backend.exception.ErrorCode.ALREADY_DELETED_MEMBER;
+import static com.prograngers.backend.exception.ErrorCodeBefore.ALREADY_DELETED_MEMBER;
 
 public class AlreadyDeletedMemberException extends InvalidValueException {
 

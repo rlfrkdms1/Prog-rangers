@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.notfound;
 
-import static com.prograngers.backend.exception.ErrorCode.SOLUTION_NOT_FOUND;
+import static com.prograngers.backend.exception.ErrorCodeBefore.SOLUTION_NOT_FOUND;
 
 public class SolutionNotFoundException extends NotFoundException {
 

@@ -1,7 +1,7 @@
 package com.prograngers.backend.controller;
 
-import static com.prograngers.backend.exception.ErrorCode.INVALID_REQUEST_BODY;
-import static com.prograngers.backend.exception.ErrorCode.TYPE_MISMATCH;
+import static com.prograngers.backend.exception.ErrorCodeBefore.INVALID_REQUEST_BODY;
+import static com.prograngers.backend.exception.ErrorCodeBefore.TYPE_MISMATCH;
 
 import com.prograngers.backend.dto.error.ErrorResponse;
 import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception) {
         List<ErrorResponse> errorList = new ArrayList<>();
         exception.getBindingResult().getAllErrors().stream()
-                .map((error) -> ErrorResponse.builder().errorCode(INVALID_REQUEST_BODY)
+                .map((error) -> ErrorResponse.builder().errorCodeBefore(INVALID_REQUEST_BODY)
                         .description(error.getDefaultMessage()).build())
                 .forEach((errorResponse) -> errorList.add(errorResponse));
         return new ResponseEntity(errorList, HttpStatus.BAD_REQUEST);
@@ -38,21 +38,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> notFoundException(NotFoundException exception) {
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCodeBefore(), message);
         return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UnAuthorizationException.class)
     public ResponseEntity<ErrorResponse> unAuthorizationException(UnAuthorizationException exception) {
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCodeBefore(), message);
         return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EnumTypeException.class)
     public ResponseEntity<ErrorResponse> enumTypeException(EnumTypeException exception) {
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCodeBefore(), message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -66,14 +66,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> alreadyExistsException(AlreadyExistsException exception) {
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCodeBefore(), message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidValueException.class)
     public ResponseEntity<ErrorResponse> invalidValueException(InvalidValueException exception) {
         String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
+        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCodeBefore(), message);
         return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

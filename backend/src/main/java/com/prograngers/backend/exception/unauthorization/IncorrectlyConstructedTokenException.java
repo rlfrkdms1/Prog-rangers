@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.unauthorization;
 
-import static com.prograngers.backend.exception.ErrorCode.INCORRECTLY_CONSTRUCTED_TOKEN;
+import static com.prograngers.backend.exception.ErrorCodeBefore.INCORRECTLY_CONSTRUCTED_TOKEN;
 
 public class IncorrectlyConstructedTokenException extends UnAuthorizationException {
 

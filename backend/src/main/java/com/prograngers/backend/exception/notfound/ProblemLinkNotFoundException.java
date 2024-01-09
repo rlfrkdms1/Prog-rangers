@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.notfound;
 
-import static com.prograngers.backend.exception.ErrorCode.PROBLEM_LINK_NOT_FOUND;
+import static com.prograngers.backend.exception.ErrorCodeBefore.PROBLEM_LINK_NOT_FOUND;
 
 public class ProblemLinkNotFoundException extends NotFoundException {
 

@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.unauthorization;
 
-import static com.prograngers.backend.exception.ErrorCode.UNSUPPORTED_TOKEN;
+import static com.prograngers.backend.exception.ErrorCodeBefore.UNSUPPORTED_TOKEN;
 
 public class UnsupportedTokenException extends UnAuthorizationException {
     public UnsupportedTokenException() {

@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.unauthorization;
 
-import static com.prograngers.backend.exception.ErrorCode.INCORRECT_PASSWORD;
+import static com.prograngers.backend.exception.ErrorCodeBefore.INCORRECT_PASSWORD;
 
 public class IncorrectPasswordException extends UnAuthorizationException {
     public IncorrectPasswordException() {

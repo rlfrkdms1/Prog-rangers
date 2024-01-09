@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception;
 
-public enum ErrorCode {
+public enum ErrorCodeBefore {
     INVALID_REQUEST_BODY,
     SOLUTION_NOT_FOUND,
     PROBLEM_NOT_FOUND,

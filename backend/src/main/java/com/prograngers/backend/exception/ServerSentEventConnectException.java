@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception;
 
-import static com.prograngers.backend.exception.ErrorCode.SSE_DISCONNECTED;
+import static com.prograngers.backend.exception.ErrorCodeBefore.SSE_DISCONNECTED;
 
 public class ServerSentEventConnectException extends CustomException {
     public ServerSentEventConnectException() {

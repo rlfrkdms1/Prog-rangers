@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.badrequest;
 
-import static com.prograngers.backend.exception.ErrorCode.PROHIBITION_NICKNAME;
+import static com.prograngers.backend.exception.ErrorCodeBefore.PROHIBITION_NICKNAME;
 
 public class ProhibitionNicknameException extends InvalidValueException{
 

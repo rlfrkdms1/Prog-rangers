@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.unauthorization;
 
-import static com.prograngers.backend.exception.ErrorCode.QUIT_MEMBER;
+import static com.prograngers.backend.exception.ErrorCodeBefore.QUIT_MEMBER;
 
 public class QuitMemberException extends UnAuthorizationException{
     public QuitMemberException() {

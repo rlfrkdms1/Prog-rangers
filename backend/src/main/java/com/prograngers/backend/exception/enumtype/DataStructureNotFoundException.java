@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.enumtype;
 
-import static com.prograngers.backend.exception.ErrorCode.DATASTRUCTURE_NOT_EXISTS;
+import static com.prograngers.backend.exception.ErrorCodeBefore.DATASTRUCTURE_NOT_EXISTS;
 
 public class DataStructureNotFoundException extends EnumTypeException {
 

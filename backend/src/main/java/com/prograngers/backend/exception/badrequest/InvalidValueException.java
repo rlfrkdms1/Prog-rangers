@@ -1,10 +1,10 @@
 package com.prograngers.backend.exception.badrequest;
 
 import com.prograngers.backend.exception.CustomException;
-import com.prograngers.backend.exception.ErrorCode;
+import com.prograngers.backend.exception.ErrorCodeBefore;
 
 public class InvalidValueException extends CustomException {
-    public InvalidValueException(ErrorCode errorCode, String message) {
-        super(errorCode, message);
+    public InvalidValueException(ErrorCodeBefore errorCodeBefore, String message) {
+        super(errorCodeBefore, message);
     }
 }

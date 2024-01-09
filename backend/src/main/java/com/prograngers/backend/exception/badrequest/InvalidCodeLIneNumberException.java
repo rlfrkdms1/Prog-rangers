@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.badrequest;
 
-import static com.prograngers.backend.exception.ErrorCode.DIFFERENT_CODE_LINE_NUMBER;
+import static com.prograngers.backend.exception.ErrorCodeBefore.DIFFERENT_CODE_LINE_NUMBER;
 
 
 public class InvalidCodeLIneNumberException extends InvalidValueException {

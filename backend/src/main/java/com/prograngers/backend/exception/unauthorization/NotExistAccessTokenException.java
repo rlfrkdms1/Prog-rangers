@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.unauthorization;
 
-import static com.prograngers.backend.exception.ErrorCode.NOT_EXIST_ACCESS_TOKEN;
+import static com.prograngers.backend.exception.ErrorCodeBefore.NOT_EXIST_ACCESS_TOKEN;
 
 public class NotExistAccessTokenException extends UnAuthorizationException {
     public NotExistAccessTokenException() {

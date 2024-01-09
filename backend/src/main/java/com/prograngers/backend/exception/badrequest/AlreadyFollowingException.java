@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.badrequest;
 
-import static com.prograngers.backend.exception.ErrorCode.ALREADY_FOLLOWING;
+import static com.prograngers.backend.exception.ErrorCodeBefore.ALREADY_FOLLOWING;
 
 public class AlreadyFollowingException extends AlreadyExistsException {
     public AlreadyFollowingException() {

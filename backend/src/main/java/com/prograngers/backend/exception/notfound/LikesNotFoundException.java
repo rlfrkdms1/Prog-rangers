@@ -1,6 +1,6 @@
 package com.prograngers.backend.exception.notfound;
 
-import static com.prograngers.backend.exception.ErrorCode.NOT_FOUND_LIKE;
+import static com.prograngers.backend.exception.ErrorCodeBefore.NOT_FOUND_LIKE;
 
 public class LikesNotFoundException extends NotFoundException {
     public LikesNotFoundException() {
