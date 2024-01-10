@@ -23,7 +23,7 @@ export const FilterBar = ({
   options,
   width,
   secondWidth,
-  handleFilterChange,
+  // handleFilterChange,
 }) => {
   const [selectedOption, setSelectedOption] =
     React.useState(options[0]);
@@ -49,7 +49,7 @@ export const FilterBar = ({
     setValue(e.value);
     setName(title);
     setIsOpen(false);
-    handleFilterChange(title, e.value);
+    // handleFilterChange(title, e.value);
   };
 
   const closeFilterBarOnOutsideClick = (e) => {

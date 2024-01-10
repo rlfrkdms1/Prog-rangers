@@ -53,6 +53,7 @@ const Problems = () => {
     AllQuestions();
     filterData();
   }, [searchTerm]);
+  // 검색 기능 끝
 
   return (
     <div
