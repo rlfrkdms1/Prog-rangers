@@ -11,10 +11,10 @@ import ToggleUp from '../../assets/icons/main-toggle-up.svg';
 import { useAtom } from 'jotai';
 import { targetAtom, targetScope, nameAtom, nameScope, valueAtom, valueScope } from "../../pages/BoardPage/AddSolution";
 
-export const FilterBar = ({title, options, width, secondWidth}) => {
-  const [ selectedOption, setSelectedOption ] = React.useState(options[0]); 
+export const FilterBar = ({title, options, width, secondWidth, selected}) => {
+  const [selectedOption, setSelectedOption] = React.useState(selected || options[0]);
   const [ isOpen, setIsOpen ] = React.useState(false);
-  const [ isClicked, setIsClicked ] = useState(false);
+  const [ isClicked, setIsClicked ] = useState(selected ? true : false);
   const [ value, setValue ] = useAtom( valueAtom, valueScope );
   const [ target, setTarget ] = useAtom( targetAtom, targetScope );
   const [ name, setName ] = useAtom( nameAtom, nameScope );
@@ -42,7 +42,7 @@ export const FilterBar = ({title, options, width, secondWidth}) => {
       }
     }
   };
-
+  
   React.useEffect(() => {
     window.addEventListener('click', closeFilterBarOnOutsideClick);
     return () => {
