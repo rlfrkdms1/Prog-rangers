@@ -1,9 +1,9 @@
 package com.prograngers.backend.exception.notfound;
 
-import static com.prograngers.backend.exception.ErrorCodeBefore.MEMBER_NOT_FOUND;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER_NOT_FOUND;
 
 public class MemberNotFoundException extends NotFoundException {
     public MemberNotFoundException() {
-        super(MEMBER_NOT_FOUND, "회원을 찾을 수 없습니다.");
+        super(MEMBER_NOT_FOUND);
     }
 }

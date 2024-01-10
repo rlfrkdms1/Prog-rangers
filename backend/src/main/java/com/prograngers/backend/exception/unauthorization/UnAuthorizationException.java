@@ -1,10 +1,10 @@
 package com.prograngers.backend.exception.unauthorization;
 
 import com.prograngers.backend.exception.CustomException;
-import com.prograngers.backend.exception.ErrorCodeBefore;
+import com.prograngers.backend.exception.errorcode.ErrorCode;
 
 public class UnAuthorizationException extends CustomException {
-    public UnAuthorizationException(ErrorCodeBefore errorCodeBefore, String message) {
-        super(errorCodeBefore, message);
+    public UnAuthorizationException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

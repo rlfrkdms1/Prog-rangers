@@ -1,9 +1,9 @@
 package com.prograngers.backend.exception.notfound;
 
-import static com.prograngers.backend.exception.ErrorCodeBefore.NOT_FOUND_LIKE;
+import static com.prograngers.backend.exception.errorcode.LikeErrorCode.NOT_FOUND_LIKE;
 
 public class LikesNotFoundException extends NotFoundException {
     public LikesNotFoundException() {
-        super(NOT_FOUND_LIKE, "좋아요를 찾을  수 없습니다");
+        super(NOT_FOUND_LIKE);
     }
 }

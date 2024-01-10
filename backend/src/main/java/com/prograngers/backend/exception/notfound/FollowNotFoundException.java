@@ -1,10 +1,10 @@
 package com.prograngers.backend.exception.notfound;
 
-import static com.prograngers.backend.exception.ErrorCodeBefore.NOT_FOUND_FOLLOW;
+import static com.prograngers.backend.exception.errorcode.FollowErrorCode.NOT_FOUND_FOLLOW;
 
 public class FollowNotFoundException extends NotFoundException {
 
     public FollowNotFoundException() {
-        super(NOT_FOUND_FOLLOW, "팔로우 하지 않은 회원입니다.");
+        super(NOT_FOUND_FOLLOW);
     }
 }
