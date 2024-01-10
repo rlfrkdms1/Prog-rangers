@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 public enum CommentErrorCode implements ErrorCode {
 
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "댓글을 찾을 수 없습니다"),
-    TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "잘못된 쿼리 스트링 타입입니다"),
     COMMENT_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "삭제된 댓글입니다");
 
     private final HttpStatus httpStatus;
