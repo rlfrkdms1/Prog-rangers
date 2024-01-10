@@ -4,8 +4,8 @@ import static com.prograngers.backend.exception.ErrorCodeBefore.INVALID_REQUEST_
 import static com.prograngers.backend.exception.ErrorCodeBefore.TYPE_MISMATCH;
 
 import com.prograngers.backend.dto.error.ErrorResponse;
-import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
-import com.prograngers.backend.exception.badrequest.InvalidValueException;
+import com.prograngers.backend.exception.badrequest.alreadyexist.AlreadyExistsException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidValueException;
 import com.prograngers.backend.exception.enumtype.EnumTypeException;
 import com.prograngers.backend.exception.notfound.NotFoundException;
 import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
