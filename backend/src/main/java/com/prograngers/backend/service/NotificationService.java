@@ -119,28 +119,10 @@ public class NotificationService {
     }
 
     public ShowNotificationsResponse getNotifications(Long memberId, Pageable pageable) {
-        validPageable(pageable);
         Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, pageable);
         ShowNotificationsResponse response = ShowNotificationsResponse.from(notifications);
         notifications.stream().forEach(Notification::read);
         return response;
-    }
-
-    private void validPageable(Pageable pageable) {
-        validPageNumber(pageable);
-        validPageSize(pageable);
-    }
-
-    private void validPageNumber(Pageable pageable) {
-        if (pageable.getPageNumber() < 2) {
-            throw new InvalidPageNumberException();
-        }
-    }
-
-    private void validPageSize(Pageable pageable) {
-        if (pageable.getPageSize() < 1) {
-            throw new InvalidPageSizeException();
-        }
     }
 
 }

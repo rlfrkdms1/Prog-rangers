@@ -43,26 +43,8 @@ public class CommentService {
     }
 
     public ShowMyCommentsResponse showMyComments(Long memberId, Pageable pageable) {
-        validPageableNumber(pageable);
         Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(pageable, memberId);
         return ShowMyCommentsResponse.from(commentPage);
-    }
-
-    private void validPageableNumber(Pageable pageable) {
-        validPageNumber(pageable);
-        validPageSize(pageable);
-    }
-
-    private void validPageNumber(Pageable pageable) {
-        if (pageable.getPageNumber() < 0) {
-            throw new InvalidPageNumberException();
-        }
-    }
-
-    private void validPageSize(Pageable pageable) {
-        if (pageable.getPageSize() < 1) {
-            throw new InvalidPageSizeException();
-        }
     }
 
     @Transactional
