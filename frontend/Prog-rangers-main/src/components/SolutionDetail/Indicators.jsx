@@ -15,8 +15,6 @@ export const Indicators = () => {
   const [like, setLike] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
-  // const [scrapData, setScrapData] = useState({});
-
   useEffect(() => {
     const token = localStorage.getItem('token');
 

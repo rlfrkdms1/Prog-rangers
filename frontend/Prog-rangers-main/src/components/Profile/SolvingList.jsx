@@ -14,12 +14,14 @@ import { useNavigate } from 'react-router-dom';
 import { ProfileContentMock } from '../SolutionDetail/solutionTabStyle';
 
 export const SolvingList = ({ list }) => {
-
   const [updatedList, setUpdatedList] = useState(null);
 
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
     navigate(`/solutions/${solutionId}`);
+  };
+  const onClickScrape = (solutionId) => {
+    navigate(`/solutions/${solutionId}/detail/scrap`);
   };
 
   useEffect(() => {
@@ -112,6 +114,7 @@ export const SolvingList = ({ list }) => {
             </div>
 
             <button
+              onClick={() => onClickScrape(item.solution.id)}
               css={css`
                 width: 30px;
                 height: 30px;
