@@ -8,7 +8,7 @@ import hljs from 'highlight.js';
 import './github-dark-dimmed.css';
 import plusmark from '../../assets/icons/plus-mark.svg';
 
-export const CodeWindow4 = () => {
+export const CodeWindow5 = () => {
   const { solutionId } = useParams();
   const [codeData, setData] = useState({
     solution: { code: [] },

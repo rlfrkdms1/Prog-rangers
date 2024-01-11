@@ -9,7 +9,7 @@ import hljs from 'highlight.js';
 import './github-dark-dimmed.css';
 import plusmark from '../../assets/icons/plus-mark.svg';
 
-export const CodeWindow3 = () => {
+export const CodeWindow4 = () => {
   const { solutionId } = useParams();
   const [codeData, setData] = useState({
     solution: { code: [], reviews:[] },

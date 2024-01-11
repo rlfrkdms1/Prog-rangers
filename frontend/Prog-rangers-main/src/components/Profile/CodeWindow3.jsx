@@ -7,7 +7,7 @@ import axios from 'axios';
 import hljs from 'highlight.js';
 import './github-dark-dimmed.css';
 
-export const CodeWindow2 = () => {
+export const CodeWindow3 = () => {
   const { solutionId } = useParams();
   const [codeData, setCodeData] = useState({
     solution: { code: [] },
