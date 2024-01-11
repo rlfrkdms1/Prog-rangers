@@ -82,6 +82,7 @@ export const SolutionDetailHeader = () => {
               <span
                 css={css`
                   color: ${theme.colors.light1};
+                  cursor: pointer;
                 `}
                 onClick={() =>
                   onClickName(solution.nickname)
