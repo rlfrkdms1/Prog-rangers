@@ -47,6 +47,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        setFollowData(response.data);
         const isFollowingProfile = response.data.followings.some(followings => followings.nickname === nickname);
         setIsFollowing(isFollowingProfile);
       } catch (error) {
@@ -56,25 +57,7 @@ const Profile = () => {
     fetchData();
   }, [nickname, token]);
 
-  useEffect(() => {
-    const apiUrl =
-      'http://13.125.13.131:8080/api/v1/follows';
-
-    axios
-      .get(apiUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setFollowData(response.data);
-        })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, []);
-
   const handleFollowButton = () => {
-
     fetch(
       `http://13.125.13.131:8080/api/v1/members/${id}/following`,
       {
@@ -138,6 +121,7 @@ const Profile = () => {
       .get(apiUrl)
       .then((response) => {
         setData(response.data);
+        setId(response.data.id);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);

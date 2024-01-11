@@ -58,6 +58,21 @@ public enum SolutionFixture {
                 .build();
     }
 
+    public Solution 알고리즘_자료구조_지정_생성(
+            Problem problem, Member member, LocalDateTime createdDate,
+            LanguageConstant language, Integer level, AlgorithmConstant algorithmConstant,
+            DataStructureConstant dataStructureConstant) {
+        return 기본_정보_빌더_생성()
+                .problem(problem)
+                .member(member)
+                .createdAt(createdDate)
+                .language(language)
+                .level(level)
+                .algorithm(algorithmConstant)
+                .dataStructure(dataStructureConstant)
+                .build();
+    }
+
     public Solution 스크랩_생성(Member member, LocalDateTime createdDate, Integer level, Solution scrapSolution) {
         return 기본_정보_빌더_생성()
                 .problem(scrapSolution.getProblem())

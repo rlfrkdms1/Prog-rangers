@@ -116,7 +116,7 @@ public class AuthService {
         GetKakaoTokenResponse getKakaoTokenResponse = kakaoOauth.kakaoGetToken(code);
         GetKakaoUserInfoResponse getKakaoUserInfoResponse = kakaoOauth.kakaoGetUserInfo(getKakaoTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(getKakaoUserInfoResponse.getId())
-                .orElseGet(() -> socialRegister(getKakaoUserInfoResponse.toMember(createRandomNickname())));
+                .orElseGet(() -> memberRepository.save(getKakaoUserInfoResponse.toMember(createRandomNickname())));
         return issueToken(member);
     }
     @Transactional
@@ -124,7 +124,7 @@ public class AuthService {
         GetGoogleTokenResponse getGoogleTokenResponse = googleOauth.googleGetToken(code);
         GetGoogleUserInfoResponse getGoogleUserInfoResponse = googleOauth.googleGetUserInfo(getGoogleTokenResponse.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(getGoogleUserInfoResponse.getId().hashCode()))
-                .orElseGet(() -> socialRegister(getGoogleUserInfoResponse.toMember(createRandomNickname())));
+                .orElseGet(() -> memberRepository.save(getGoogleUserInfoResponse.toMember(createRandomNickname())));
         return issueToken(member);
     }
 
@@ -134,12 +134,8 @@ public class AuthService {
         log.info(naverToken.toString());
         GetNaverUserInfoResponse userInfo = naverOauth.getUserInfo(naverToken.getAccess_token());
         Member member = memberRepository.findBySocialId(Long.valueOf(userInfo.getResponse().getId().hashCode()))
-                .orElseGet(() -> socialRegister(userInfo.toMember(createRandomNickname())));
+                .orElseGet(() -> memberRepository.save(userInfo.toMember(createRandomNickname())));
         return issueToken(member);
-    }
-
-    private Member socialRegister(Member member) {
-        return memberRepository.save(member);
     }
 
     private String createRandomNickname() {

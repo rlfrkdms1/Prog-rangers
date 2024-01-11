@@ -32,7 +32,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
-    private static final String DELETED_CONTENT = "삭제된 댓글입니다";
+    public static final String DELETED_CONTENT = "삭제된 댓글입니다";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,10 +60,11 @@ public class Comment {
     private CommentStatusConstant status;
 
     public void update(String content) {
-        if (content != null) {
-            this.content = content;
-            this.status = FIXED;
+        if (content == null || content.isBlank()) {
+            return;
         }
+        this.content = content;
+        this.status = FIXED;
     }
 
     public void delete() {

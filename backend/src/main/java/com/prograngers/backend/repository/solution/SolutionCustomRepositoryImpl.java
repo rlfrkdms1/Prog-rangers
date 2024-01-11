@@ -62,7 +62,7 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
-                .where(solution.member.id.eq(memberId), solution.id.loe(page))
+                .where(solution.member.id.eq(memberId), solution.id.loe(page), solution.isPublic.eq(true))
                 .orderBy(solution.createdAt.desc())
                 .limit(3)
                 .fetch();
@@ -96,7 +96,10 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
         return jpaQueryFactory.selectFrom(solution)
                 .join(follow).on(solution.member.id.eq(follow.followingId))
                 .join(solution.problem).fetchJoin()
-                .where(follow.followerId.eq(memberId))
+                .where(
+                        follow.followerId.eq(memberId),
+                        solution.isPublic.isTrue()
+                )
                 .orderBy(solution.createdAt.desc())
                 .limit(limit)
                 .fetch();
