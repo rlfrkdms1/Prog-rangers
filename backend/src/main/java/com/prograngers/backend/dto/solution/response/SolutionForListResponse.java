@@ -20,7 +20,7 @@ public class SolutionForListResponse {
     private boolean isPublic;
 
     public static SolutionForListResponse from(Solution solution) {
-        SolutionForListResponse response = SolutionForListResponse.builder()
+        return SolutionForListResponse.builder()
                 .id(solution.getId())
                 .title(solution.getTitle())
                 .language(solution.getLanguage().getView())
@@ -30,7 +30,5 @@ public class SolutionForListResponse {
                 .isScrapped(solution.isScrapped())
                 .isPublic(solution.isPublic())
                 .build();
-        return response;
     }
-
 }
