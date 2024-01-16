@@ -135,7 +135,7 @@ const Profile = () => {
         );
         navigate(-1);
       });
-    }, []);
+    }, [isFollowing]);
 
   return (
     <div
