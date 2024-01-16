@@ -42,7 +42,7 @@ public class SolutionResponse {
                 .algorithm(solution.getAlgorithmName())
                 .dataStructure(solution.getDataStructureName())
                 .language(solution.getLanguage().getView())
-                .code(solution.getCode().split("\n"))
+                .code(solution.getCode().split(System.lineSeparator()))
                 .description(solution.getDescription())
                 .likes(likeCount)
                 .scraps(scrapCount)
