@@ -25,9 +25,7 @@ export const CodeWindow4 = () => {
     useState(true);
   const [nickname, setNickname] = useState('');
   const [content, setContent] = useState('');
-  const [reviews, setReviews] = useState(
-    Array(10).fill('')
-  );
+  const [reviews, setReviews] = useState([]);
 
   // 한줄리뷰 더보기
   const [showAllReviews, setShowAllReviews] =
@@ -64,6 +62,8 @@ export const CodeWindow4 = () => {
       setContent(reviewForLine.content);
       setIsReviewVisible(true); // 리뷰가 있으면 렌더링
     } else {
+      setNickname('');
+      setContent('');
       setIsReviewVisible(false); // 리뷰가 없으면 숨김
     }
     // 리뷰 클릭 시에 해당 리뷰의 편집 모드를 토글
@@ -133,7 +133,7 @@ export const CodeWindow4 = () => {
           }
         )
         .then((response) => {
-          console.log('리뷰가 저장되었습니다.');
+          console.log('리뷰가 저장되었습니다.');               
 
           // 리뷰 등록창 비우기
           setReviews(Array(10).fill(''));
@@ -202,15 +202,14 @@ export const CodeWindow4 = () => {
     axios
       .patch(
         `http://13.125.13.131:8080/api/v1/reviews/${reviewId}`,
-        {
-          content: editValue,
-        },
+        { content: editValue },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       )
+
       .then((response) => {
         const updatedReviews = reviews.map((review) => {
           if (review.id === reviewId) {
@@ -232,19 +231,13 @@ export const CodeWindow4 = () => {
 
   // 편집 모드를 토글하는 함수
   const toggleEditReview = (reviewId) => {
-    const updatedReviews = codeData.reviews.map(
-      (review) => {
-        if (review.id === reviewId) {
-          return { ...review, editing: !review.editing };
-        }
-        return review;
+    const updatedReviews = codeData.reviews.map((review) => {
+      if (review.id === reviewId) {
+        review.editing = !review.editing;
       }
-    );
-
-    setData({
-      ...codeData,
-      reviews: updatedReviews,
-    });
+      return review;
+    });  
+    setReviews(updatedReviews);
   };
 
   // 한줄리뷰 내용 변경 시 호출되는 함수
@@ -263,6 +256,7 @@ export const CodeWindow4 = () => {
         content: newContent,
       });
     }
+    
     setReviews(updatedReviews);
   };
 
@@ -312,7 +306,8 @@ export const CodeWindow4 = () => {
                   }}
                 />
                 <br />
-                {/* 한줄리뷰 */}
+
+                {/* 한줄리뷰 등록 */}
                 {clickedLineId === codeLineNumber &&
                   isBoxVisible && (
                     <div
@@ -320,7 +315,6 @@ export const CodeWindow4 = () => {
                         width: '830px',
                         height: 'auto',
                         margin: '0 35px',
-                        // borderRadius: '20px',
                         background: '#CCDEF2',
                         color: '#000000',
                       }}
@@ -334,7 +328,7 @@ export const CodeWindow4 = () => {
                         <input
                           type="text"
                           placeholder={`${codeLineNumber+1}번째 줄 코드 리뷰를 입력하세요`}
-                          value={reviews[codeLineNumber]}
+                          value={reviews[codeLineNumber] || ''}
                           onChange={(e) =>
                             handleReviewChange(
                               codeLineNumber,
@@ -365,11 +359,13 @@ export const CodeWindow4 = () => {
                           등록
                         </button>
                       </div>
+
                       <div
                         css={css`
                           padding: 0px 20px;
                         `}
                       >
+                        {/* 한줄리뷰 전체보기 */}
                         {showAllReviews && (
                           <div>
                             {codeData.reviews
@@ -501,6 +497,8 @@ export const CodeWindow4 = () => {
                               ))}
                           </div>
                         )}
+
+                        {/* 한줄 미리보기 */}
                         {isReviewVisible && (
                           <div
                             css={css`
@@ -511,19 +509,41 @@ export const CodeWindow4 = () => {
                               font-size: 16px;
                             `}
                           >
-                            <div
-                              css={css`
-                                font-size: 14px;
-                                color: #545454;
-                              `}
-                            >
-                              {' '}
-                              @{nickname}{' '}
-                            </div>
-                            {content}
-                          </div>
-                        )}
-
+                          {codeData.reviews
+                            .filter(
+                              (review) =>
+                                review.content !== '삭제된 리뷰입니다' &&
+                                review.codeLineNumber ===
+                                  clickedLineId + 1
+                            )
+                            .slice(0, 1) // 첫 번째 리뷰만 선택
+                            .map((filteredReview) => (
+                              <div
+                                css={css`
+                                  font-size: 14px;
+                                  color: #545454;
+                                `}
+                              >
+                                {' '}
+                                @{filteredReview.nickname}{' '}
+                              </div>
+                            ))}
+                          
+                            {codeData.reviews
+                            .filter(
+                              (review) =>
+                                review.content !== '삭제된 리뷰입니다' &&
+                                review.codeLineNumber ===
+                                  clickedLineId + 1
+                            )
+                            .slice(0, 1) // 첫 번째 리뷰만 선택
+                            .map((filteredReview) => (
+                              <div>{filteredReview.content}</div>
+                            ))}
+                          </div>  
+                        )} 
+                        
+                        {/* 더보기 버튼 */}
                         {codeData.reviews.filter(
                           (review) =>
                             review.codeLineNumber ===
@@ -551,6 +571,7 @@ export const CodeWindow4 = () => {
                             </button>
                           </div>
                         )}
+
                       </div>
                     </div>
                   )}
