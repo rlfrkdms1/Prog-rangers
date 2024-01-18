@@ -26,8 +26,7 @@ export const CommentList = () => {
   const { solutionId } = useParams();
   const [comments, setComments] = useState([]);
   const [replies, setReplies] = useState([]);
-  const [commentIdToDelete, setCommentIdToDelete] =
-    useState(null);
+  const [commentIdToDelete, setCommentIdToDelete] =useState(null);
   const [newComment, setNewComment] = useState(null);
 
   // 수정 삭제 버튼
@@ -182,7 +181,8 @@ export const CommentList = () => {
       {comments
         .filter(
           (commentItem) =>
-            commentItem.content !== '삭제된 댓글입니다'
+            commentItem.status !== 'DELETED' ||
+            commentItem.replies.length > 0
         )
         .map((commentItem) => (
           <div className="comment" key={commentItem.id}>
@@ -283,6 +283,8 @@ export const CommentList = () => {
                       css={css`
                         display: flex;
                         align-item: center;
+                        ${commentItem.status === 'DELETED' &&
+                        'display: none;'}
                       `}
                     >
                       <img src={dot} alt="dot" />
