@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -102,12 +102,16 @@ export const CommentList = () => {
       .then((response) => {
         const updatedComments = comments.map((comment) => {
           if (comment.id === commentId) {
-            comment.content = editValue;
-            comment.editing = false; // 수정이 완료되면 편집 모드 종료
+            return {
+              ...comment,
+              content: editValue,
+              editing: false,
+            }; // 수정이 완료되면 편집 모드 종료
           }
           return comment;
         });
         setComments(updatedComments);
+        console.log('2차 클릭');
       })
 
       .catch((error) => {
@@ -175,6 +179,32 @@ export const CommentList = () => {
       setComments(updatedComments);
     }
   };
+  
+  // 외부 클릭시 dot 닫힘
+  const closeOnOutsideClick = (e) => {
+    if (isOpen) {
+      const dotMenus = document.querySelectorAll('.dot-menu');
+      dotMenus.forEach((dotMenu) => {
+        if (dotMenu && !dotMenu.contains(e.target)) {
+          const commentId = dotMenu.getAttribute('data-comment-id');
+          setIsOpen((prevState) => {
+            const updatedState = { ...prevState };
+            updatedState[commentId] = false;
+            return updatedState;
+          });
+        }
+      });
+    }
+  };
+  
+  React.useEffect(() => {
+    window.addEventListener('click', closeOnOutsideClick);
+    return () => {
+      window.removeEventListener('click', closeOnOutsideClick);
+    };
+  }, [isOpen]);
+
+  
 
   return (
     <div className="comments">
@@ -295,7 +325,7 @@ export const CommentList = () => {
                         'display: none;'}
                       `}
                     >
-                      <img src={dot} alt="dot" />
+                      <img src={dot} alt="dot" className="dot-menu" data-comment-id={commentItem.id} />
                     </button>
                   </div>
 
@@ -319,10 +349,9 @@ export const CommentList = () => {
                             commentItem.id,
                             commentItem.content
                           );
-                        } else {
-                          // 수정 중이 아니면 수정 모드로 전환
+                        } 
+                          console.log("1차 클릭");
                           toggleEditComment(commentItem.id);
-                        }
                       }}
                     >
                       {commentItem.editing

@@ -260,6 +260,25 @@ export const CodeWindow4 = () => {
     setReviews(updatedReviews);
   };
 
+  // 외부 클릭시 한줄리뷰 닫힘
+  const closeOnOutsideClick = (e) => {
+    if (isBoxVisible) {
+      const plusmarks = document.querySelectorAll('.plusmark');
+      if (Array.from(plusmarks).some(mark => mark === e.target || mark.contains(e.target))) {
+        return;
+      }
+      setIsBoxVisible(false);
+      setClickedLineId(null);
+    }
+  };
+  
+  React.useEffect(() => {
+    window.addEventListener('click', closeOnOutsideClick);
+    return () => {
+      window.removeEventListener('click', closeOnOutsideClick);
+    };
+  }, [isBoxVisible]);
+
   return (
     <div style={{ position: 'relative' }}>
       {codeData.solution.code.map(
@@ -286,17 +305,15 @@ export const CodeWindow4 = () => {
                     'Consolas, Courier New, monospace',
                 }}
               >
-                {hoveredLine === codeLineNumber && (
-                  <div>
-                    <button
-                      onClick={() =>
-                        handleLineClick(codeLineNumber)
-                      }
-                      style={{ position: 'absolute' }}
-                    >
-                      <img src={plusmark} alt="plusmark" />
-                    </button>
-                  </div>
+                {hoveredLine === codeLineNumber && (                 
+                  <button
+                    onClick={() =>
+                      handleLineClick(codeLineNumber)
+                    }
+                    style={{ position: 'absolute' }}
+                  >
+                    <img src={plusmark} alt="plusmark" className="plusmark" data-comment-id={codeLineNumber} />
+                  </button>
                 )}
                 {'    '}
                 {codeLineNumber+1} {'  '}
