@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -115,7 +115,7 @@ export const CommentList = () => {
       });
   };
 
-  // 편집 모드를 토글하는 함수
+  // 수정 모드를 토글하는 함수
   const toggleEditComment = (commentId) => {
     const updatedComments = comments.map((comment) => {
       if (comment.id === commentId) {
@@ -240,6 +240,13 @@ export const CommentList = () => {
                         onBlur={() =>
                           toggleEditComment(commentItem.id)
                         } // 수정 모드에서 벗어날 때
+                        css={css`
+                        width: ${(commentItem.content.length + 3) * 12}px;
+                        border: 1px solid #111;
+                        border-radius: 25px;
+                        padding-left: 10px;
+                      `}
+                        
                       />
                     ) : (
                       <div
@@ -257,6 +264,7 @@ export const CommentList = () => {
                 <div
                   css={css`
                     margin-left: 20px;
+                    margin-top: 5px;
                     gap: 15px;
                     display: flex;
                     align-items: center;
@@ -282,7 +290,7 @@ export const CommentList = () => {
                       }
                       css={css`
                         display: flex;
-                        align-item: center;
+                        align-items: center;
                         ${commentItem.status === 'DELETED' &&
                         'display: none;'}
                       `}
@@ -303,7 +311,7 @@ export const CommentList = () => {
                       css={editStyle(
                         isOpen[commentItem.id]
                       )}
-                      onClick={() => {
+                      onClick={() => {                   
                         if (commentItem.editing) {
                           // 수정 중인 경우, 수정 완료 버튼 > 수정 모드에서 벗어나고 서버에 저장
                           toggleEditComment(commentItem.id);
