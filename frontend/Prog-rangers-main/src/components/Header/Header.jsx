@@ -71,14 +71,6 @@ export const Header = () => {
     setShowDropdown(false);
   };
 
-  // const results = !search
-  //   ? data
-  //   : data.filter((item) =>
-  //       item.title
-  //         .toLowerCase()
-  //         .includes(search.toLocaleLowerCase())
-  //     );
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.searchAll')) {

@@ -50,7 +50,6 @@ const Problems = () => {
   };
 
   useEffect(() => {
-    // AllQuestions();
     filterData();
   }, [searchTerm, Questions]);
   // 검색 기능 끝
