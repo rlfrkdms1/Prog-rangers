@@ -95,7 +95,7 @@ public class Member {
     }
 
     private void validProhibitionNickname(String nickname) {
-        if (PROHIBITED_NICKNAMES.contains(nickname)) {
+        if (nickname != null && PROHIBITED_NICKNAMES.contains(nickname)) {
             throw new ProhibitionNicknameException();
         }
     }

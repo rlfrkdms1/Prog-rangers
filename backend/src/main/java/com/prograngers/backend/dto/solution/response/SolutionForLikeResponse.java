@@ -29,8 +29,8 @@ public class SolutionForLikeResponse {
                 .language(solution.getLanguage().getView())
                 .description(solution.getDescription().split(System.lineSeparator()))
                 .code(solution.getCode().split(System.lineSeparator()))
-                .algorithm(solution.getAlgorithmView())
-                .dataStructure(solution.getDataStructureView())
+                .algorithm(solution.getAlgorithmName())
+                .dataStructure(solution.getDataStructureName())
                 .build();
         return response;
     }

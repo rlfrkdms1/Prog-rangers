@@ -18,6 +18,7 @@ import {
   valueScope,
 } from '../../pages/BoardPage/AddSolution';
 
+
 export const FilterBar = ({
   title,
   options,
@@ -62,7 +63,7 @@ export const FilterBar = ({
       }
     }
   };
-
+  
   React.useEffect(() => {
     window.addEventListener(
       'click',

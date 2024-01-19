@@ -39,7 +39,7 @@ export const MySolHeader = () => {
   const navigate = useNavigate();
 
   const onClickSols = () => {
-    navigate(`/solutions/${solutionId}/editsolution`);
+    navigate(`/mySolution/${solutionId}/editsolution`);
   };
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export const MySolHeader = () => {
                 {problem.title}
               </div>
               <div className="icon">
-                {/* {isPublic ? <BiSolidLockAlt size="18" color="#D9D9D9" /> : <BiSolidLockOpenAlt size="18" color="#D9D9D9" />} */}
+                {solution.public ? <BiSolidLockOpenAlt size="18" color="#D9D9D9" /> : <BiSolidLockAlt size="18" color="#D9D9D9" />}
               </div>
             </div>
             <div

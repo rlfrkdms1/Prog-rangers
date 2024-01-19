@@ -21,12 +21,12 @@
   ],
   "DATASTRUCTURE": [
     { "value": "ALL", "name": "자료구조" },
-    { "value": "리스트", "name": "리스트" },
-    { "value": "배열", "name": "배열" },
-    { "value": "스택", "name": "스택" },
-    { "value": "큐", "name": "큐" },
-    { "value": "맵", "name": "맵" },
-    { "value": "힙", "name": "힙" }
+    { "value": "LIST", "name": "리스트" },
+    { "value": "ARRAY", "name": "배열" },
+    { "value": "STACK", "name": "스택" },
+    { "value": "QUEUE", "name": "큐" },
+    { "value": "MAP", "name": "맵" },
+    { "value": "HEAP", "name": "힙" }
   ],
   "SORT": [
     { "value": "LATEST", "name": "최신순"},
