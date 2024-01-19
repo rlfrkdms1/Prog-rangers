@@ -43,6 +43,7 @@ export const FilterBar = ({
   };
 
   const handleSelect = (e) => {
+    // console.log(e.value); // e.value 하면 원하는 값을 불러올 수 있다.
     setSelectedOption(e);
     setIsClicked(true);
     setTarget(e.name);
