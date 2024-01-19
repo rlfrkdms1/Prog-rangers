@@ -47,13 +47,13 @@ export const Header = () => {
     event.preventDefault();
 
     const filteredData = data.filter((item) => {
-      item.title
+      return item.title
         .toLowerCase()
         .includes(search.toLocaleLowerCase());
     });
     // setData(filteredData);
     setResults(filteredData);
-    // setSearchTerm(search);
+    setSearchTerm(search);
     navigate('/problems');
     setShowDropdown(false);
   };
