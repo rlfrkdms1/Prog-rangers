@@ -10,6 +10,9 @@ import './github-dark-dimmed.css';
 import plusmark from '../../assets/icons/plus-mark.svg';
 
 export const CodeWindow4 = () => {
+
+  const token = localStorage.getItem('token');
+
   const { solutionId } = useParams();
   const [codeData, setData] = useState({
     solution: { code: [], reviews:[] },
@@ -83,9 +86,14 @@ export const CodeWindow4 = () => {
 
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
+    
+    // 토큰이 있는 경우와 없는 경우에 대한 설정
+    const axiosConfig = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
 
     axios
-      .get(apiUrl)
+      .get(apiUrl, axiosConfig)
       .then((response) => {
         setData(response.data);
       })
@@ -94,7 +102,6 @@ export const CodeWindow4 = () => {
       });
 
     // 사용자 닉네임을 가져오는 API 요청 추가
-    const token = localStorage.getItem('token');
     if (token) {
       axios
         .get('http://13.125.13.131:8080/api/v1/members', {
@@ -107,10 +114,9 @@ export const CodeWindow4 = () => {
           console.error('API 요청 오류:', error);
         });
     }
-  }, []);
+  }, [solutionId, token]);
 
   const handleSaveReviews = () => {
-    const token = localStorage.getItem('token');
 
     if (!token) {
       alert('로그인이 필요한 기능입니다.');
@@ -132,9 +138,7 @@ export const CodeWindow4 = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        .then((response) => {
-          console.log('리뷰가 저장되었습니다.');               
-
+        .then((response) => {     
           // 리뷰 등록창 비우기
           setReviews(Array(10).fill(''));
 
@@ -168,37 +172,44 @@ export const CodeWindow4 = () => {
         });
     }
   };
-
+  
   // 한줄리뷰 삭제
   const handleDeleteReview = (reviewId) => {
-    const token = localStorage.getItem('token');
-    axios
-      .delete(
-        `http://13.125.13.131:8080/api/v1/reviews/${reviewId}`,
-        {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        // 리뷰 삭제에 성공한 경우, 화면에서 댓글을 제거
-        const updatedReviews = codeData.reviews.filter(
-          (review) => review.id !== reviewId
-        );
+    const reviewToDelete = reviews.find((review) => review.id === reviewId);
 
-        setData({
-          ...codeData,
-          reviews: updatedReviews,
+    if (reviewToDelete && reviewToDelete.mine) {
+      axios
+        .delete(
+          `http://13.125.13.131:8080/api/v1/reviews/${reviewId}`,
+          {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          const updatedReviews = reviews.filter(
+            (review) => review.id !== reviewId
+          );
+  
+          setData((prevData) => ({
+            ...prevData,
+            reviews: updatedReviews,
+          }));
+        })
+        .catch((error) => {
+          console.error('리뷰 삭제 오류:', error);
         });
-      })
-      .catch((error) => {
-        console.error('리뷰 삭제 오류:', error);
-      });
+    } else {
+      alert('접근 권한이 없습니다.');
+    }
   };
+  
 
   // 한줄리뷰 수정
   const handleEditReview = (reviewId, editValue) => {
-    const token = localStorage.getItem('token');
+    const reviewToUpdate = reviews.find((review) => review.id === reviewId);
+  
+    if (reviewToUpdate && reviewToUpdate.mine) {
     axios
       .patch(
         `http://13.125.13.131:8080/api/v1/reviews/${reviewId}`,
@@ -227,9 +238,12 @@ export const CodeWindow4 = () => {
       .catch((error) => {
         console.error('한줄 리뷰 수정 오류:', error);
       });
+    } else {
+      alert('접근 권한이 없습니다.');
+    }
   };
-
-  // 편집 모드를 토글하는 함수
+  
+  // 수정 모드를 토글하는 함수
   const toggleEditReview = (reviewId) => {
     const updatedReviews = codeData.reviews.map((review) => {
       if (review.id === reviewId) {
@@ -239,6 +253,7 @@ export const CodeWindow4 = () => {
     });  
     setReviews(updatedReviews);
   };
+  
 
   // 한줄리뷰 내용 변경 시 호출되는 함수
   const onReviewContentChange = (reviewId, newContent) => {
@@ -260,17 +275,17 @@ export const CodeWindow4 = () => {
     setReviews(updatedReviews);
   };
 
-// 외부 클릭시 한줄리뷰 닫힘
-const codeWindowRef = useRef();
+  // 외부 클릭시 한줄리뷰 닫힘
+  const codeWindowRef = useRef();
 
-const closeOnOutsideClick = (event) => {
-  if (
-    codeWindowRef.current &&
-    !codeWindowRef.current.contains(event.target)
-  ) {
-    setIsBoxVisible(false);
-  }
-};
+  const closeOnOutsideClick = (event) => {
+    if (
+      codeWindowRef.current &&
+      !codeWindowRef.current.contains(event.target)
+    ) {
+      setIsBoxVisible(false);
+    }
+  };
 
 
 React.useEffect(() => {
