@@ -2,7 +2,6 @@ package com.prograngers.backend.service;
 
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
-import static com.prograngers.backend.service.DashBoardService.DASHBOARD_NOTIFICATION_LIMIT;
 
 import com.prograngers.backend.dto.notification.response.ShowNotificationResponse;
 import com.prograngers.backend.dto.notification.response.ShowNotificationsResponse;
@@ -12,15 +11,12 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
-import com.prograngers.backend.exception.badrequest.InvalidPageNumberException;
-import com.prograngers.backend.exception.badrequest.InvalidPageSizeException;
 import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
