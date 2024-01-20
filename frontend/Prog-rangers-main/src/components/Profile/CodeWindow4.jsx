@@ -1,6 +1,6 @@
 // 기본 풀이 한줄리뷰 코드창
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
@@ -113,7 +113,7 @@ export const CodeWindow4 = () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      alert('한줄리뷰를 작성하려면 로그인이 필요합니다.');
+      alert('로그인이 필요한 기능입니다.');
     } else if (
       reviews[clickedLineId] &&
       reviews[clickedLineId].trim() !== ''
