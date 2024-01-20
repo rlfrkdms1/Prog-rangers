@@ -11,28 +11,36 @@ import { wrapStyle, flexLayout } from './commentsStyle';
 export const Comments = () => {
   const { solutionId } = useParams();
   const [comment, setComment] = useState([]);
-  const [commentCount, setCommentCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);  
+  const [replyCount, setReplyCount] = useState(0);
 
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
       .get(apiUrl)
-      .then((response) => {
-        // 댓글 갯수
-        setCommentCount(response.data.comments.length);
-        // 삭제된 댓글 제외
+      .then((response) => {    
+        
         const newComments = response.data.comments;
-        setCommentsWithCountCheck(newComments);
+        
+        setCommentCount(calculateCommentCount(newComments));
+
+        // 삭제된 댓글 제외
+
+        const nonDeletedComments = newComments.filter(
+          (comment) => comment.status !== 'DELETED'
+        );
+        setCommentsWithCountCheck(nonDeletedComments);
+        
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
+  }, [solutionId]);
 
   const addComment = (newComment) => {
     setComment([...comment, newComment]);
-    setCommentCount(commentCount + 1);
+    setCommentCount((prevCount) => prevCount + calculateCommentCount([newComment]));
   };
 
   const setCommentsWithCountCheck = (newComments) => {
@@ -44,15 +52,25 @@ export const Comments = () => {
       },
       0
     );
-
     setCommentCount(
       (prevCount) => prevCount - deletedCommentsCount
     );
+  };
 
-    const nonDeletedComments = newComments.filter(
-      (comment) => comment.status !== 'DELETED'
-    );
-    setComment(nonDeletedComments);
+    const calculateCommentCount = (comments) => {
+      return comments.reduce((count, comment) => {
+        // 댓글 갯수 더하기
+        count += 1;
+  
+        // 삭제된 답글 갯수 빼기
+        count -= comment.replies.reduce(
+          (replyCount, reply) =>
+            reply.status === 'DELETED' ? replyCount + 1 : replyCount,
+          0
+        );
+  
+        return count;
+      }, 0);
   };
 
   return (
