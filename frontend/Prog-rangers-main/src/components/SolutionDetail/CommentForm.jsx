@@ -69,7 +69,7 @@ export const CommentForm = ({ addComment }) => {
             error
           );
           
-      alert('댓글을 작성하려면 로그인이 필요합니다.');
+      alert('로그인이 필요한 기능입니다.');
         });
     }
   };
