@@ -12,7 +12,6 @@ export const Comments = () => {
   const { solutionId } = useParams();
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState(0);  
-  const [replyCount, setReplyCount] = useState(0);
 
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
