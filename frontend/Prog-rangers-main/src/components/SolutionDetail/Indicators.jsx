@@ -15,16 +15,14 @@ export const Indicators = () => {
   const [like, setLike] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+  
+  const token = localStorage.getItem('token');
 
+  useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
-      .get(apiUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(apiUrl)
       .then((response) => {
         setSolution(response.data.solution);
         setLike(response.data.solution.likes);
@@ -37,7 +35,6 @@ export const Indicators = () => {
 
   // 좋아요 버튼
   const handleLikeClick = () => {
-    const token = localStorage.getItem('token');
     const method = isLiked ? 'delete' : 'post';
     axios({
       method: method, // POST 또는 DELETE를 선택
@@ -53,12 +50,19 @@ export const Indicators = () => {
       .catch((error) => {
         console.error(`좋아요 ${method} 실패`, error);
       });
+      alert('로그인이 필요한 기능입니다.');
   };
 
   // 스크랩 버튼
   const navigate = useNavigate();
+
   const onClickScrape = () => {
-    navigate(`/solutions/${solutionId}/detail/scrap`);
+    if (token) {
+      navigate(`/solutions/${solutionId}/detail/scrap`);
+    } 
+    else {
+      alert('로그인이 필요한 기능입니다.');
+    }
   };
 
   return (
