@@ -21,6 +21,9 @@ export const LikeList = () => {
   const onClickName = (nickname) => {
     navigate(`/profile/${nickname}`);
   };
+  const onClickSolution = (solutionId) =>{
+    navigate(`/solutions/${solutionId}`);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -62,6 +65,7 @@ export const LikeList = () => {
                 <div
                   css={css`
                     ${fontSizedark20}
+                    cursor: default;
                   `}
                 >
                   {item.problem.title}
@@ -77,7 +81,9 @@ export const LikeList = () => {
                   <div
                     css={css`
                       ${fontSize16}
+                      cursor: pointer;
                     `}
+                    onClick={()=>onClickSolution(item.solution.id)}
                   >
                     {item.solution.title}
                   </div>
@@ -99,7 +105,8 @@ export const LikeList = () => {
                   css={css`
                     ${boxStyle}
                     ${fontSize16}
-        background-color: ${theme.colors.light3}
+                    background-color: ${theme.colors.light3};
+                    cursor: default;
                   `}
                 >
                   {item.solution.language}
@@ -120,12 +127,13 @@ export const LikeList = () => {
                   css={css`
                     ${boxStyle}
                     ${fontSizewhite16}
-        float: right;
+                    float: right;
                     margin-right: 30px;
                     background-color: ${item.problem
                       .ojName === '프로그래머스'
                       ? '#6AB4AC'
                       : '#3578BF'};
+                      cursor: default;
                   `}
                 >
                   {item.problem.ojName}

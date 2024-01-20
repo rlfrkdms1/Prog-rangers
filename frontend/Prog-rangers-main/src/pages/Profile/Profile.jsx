@@ -66,11 +66,16 @@ const Profile = () => {
       }
     )
       .then((response) => {
-        setIsFollowing(!isFollowing);
-        if (isFollowing) {
-          console.log('언팔로우 성공');
-        } else {
-          console.log('팔로우 성공');
+        if (!token) {
+          alert('로그인 후 이용해주세요');
+        }
+        else {
+          setIsFollowing(!isFollowing);
+          if (isFollowing) {
+            console.log('언팔로우 성공');
+          } else {
+            console.log('팔로우 성공');
+          }
         }
       })
       .catch((error) => {
@@ -130,7 +135,7 @@ const Profile = () => {
         );
         navigate(-1);
       });
-    }, []);
+    }, [isFollowing]);
 
   return (
     <div

@@ -47,6 +47,7 @@ export const EditMySolution = ({ postURL }) => {
   const array = [0, 1, 2, 3, 4];
   const [inputs, setInputs] = useState({
     solution: '',
+    link: '',
     description: '',
     code: [],
   });
