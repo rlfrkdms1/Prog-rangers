@@ -1,7 +1,7 @@
 package com.prograngers.backend.controller;
 
 import com.prograngers.backend.exception.badrequest.PageNumberUnderZeroException;
-import com.prograngers.backend.exception.badrequest.PageSizeUnderZeroException;
+import com.prograngers.backend.exception.badrequest.InvalidPageSizeException;
 import com.prograngers.backend.exception.badrequest.PageSizeOverMaxException;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +46,7 @@ public class CustomPageableArgumentResolver extends PageableHandlerMethodArgumen
             return;
         }
         if (!NUMBER_PATTERN.matcher(pageSize).matches()) {
-            throw new PageSizeUnderZeroException();
+            throw new InvalidPageSizeException();
         }
         if (Integer.parseInt(pageSize) > MAX_SIZE) {
             throw new PageSizeOverMaxException(MAX_SIZE);
