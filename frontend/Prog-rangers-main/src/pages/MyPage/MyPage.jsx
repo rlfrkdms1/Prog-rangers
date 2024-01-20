@@ -19,6 +19,8 @@ import {
 import star1 from '../../assets/icons/star/star1.svg';
 
 const MyPage = () => {
+  
+  const token = localStorage.getItem('token');
   // API 가져오기
   const [monthlyStudyCalendar, setMonthlyStudyCalendar] =
     useState([]);
@@ -43,9 +45,8 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const apiUrl =
-      'http://13.125.13.131:8080/api/v1/dashboard';
+      `http://13.125.13.131:8080/api/v1/dashboard?date=${currentYear}-${currentMonthNum}`;
 
     axios
       .get(apiUrl, {
@@ -53,7 +54,6 @@ const MyPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        // API 응답이 정상적일 때 데이터를 설정
         const data = response.data;
         setMonthlyStudyCalendar(
           data.monthlyStudyCalendar || []
@@ -71,20 +71,17 @@ const MyPage = () => {
       });
   }, []);
 
-  // const sortedData = recentProblems.sort((a, b) => b.solutionId - a.solutionId);
-  // const top3Data = sortedData.slice(0, 3);
-
-  // const sortedFollowingData = followingRecentSolutions.sort((a, b) => b.solutionId - a.solutionId);
-  // const top5Data = sortedFollowingData.slice(0, 5);
-
   const daysInMonth = new Date(
     value.getFullYear(),
     value.getMonth() + 1,
     0
   ).getDate();
+  
   const currentMonth = value
     .toLocaleString('en-US', { month: 'long' })
     .toUpperCase();
+  const currentMonthNum = (value.getMonth() + 1).toString().padStart(2, '0');
+      
   const currentYear = value.getFullYear();
 
   const goToPreviousMonth = () => {
@@ -93,6 +90,7 @@ const MyPage = () => {
       value.getMonth() - 1,
       1
     );
+    fetchDataForMonth(previousMonth);
     setValue(previousMonth);
   };
 
@@ -102,8 +100,26 @@ const MyPage = () => {
       value.getMonth() + 1,
       1
     );
+    fetchDataForMonth(nextMonth);
     setValue(nextMonth);
   };
+
+  // 월별 캘린더 렌더링
+  const fetchDataForMonth = async (month) => {
+    try {
+        const apiUrl = `http://13.125.13.131:8080/api/v1/dashboard?date=${month.getFullYear()}-${(month.getMonth() + 1).toString().padStart(2, '0')}`;
+
+        const response = await axios.get(apiUrl, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = response.data;
+        setMonthlyStudyCalendar(data.monthlyStudyCalendar || []);
+      } catch (error) {
+        console.error('데이터를 불러오는 중 에러 발생:', error);
+    }
+  };
+
 
   const renderCalendar = () => {
     const calendar = [];

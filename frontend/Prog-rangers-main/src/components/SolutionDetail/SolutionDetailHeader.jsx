@@ -82,6 +82,7 @@ export const SolutionDetailHeader = () => {
               <span
                 css={css`
                   color: ${theme.colors.light1};
+                  cursor: pointer;
                 `}
                 onClick={() =>
                   onClickName(solution.nickname)
@@ -94,12 +95,10 @@ export const SolutionDetailHeader = () => {
               <div
                 className="AlgoOptions"
                 css={css`
-                  width: 89px;
-                  height: 36px;
+                  padding: 8px 20px;
                   background-color: ${theme.colors.light3};
                   border-radius: 20px;
                   text-align: center;
-                  line-height: 36px;
                   color: ${theme.colors.dark1};
                   ${solution.algorithm === null
                     ? 'display: none;'

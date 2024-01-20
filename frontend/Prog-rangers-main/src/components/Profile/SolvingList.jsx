@@ -14,15 +14,18 @@ import { useNavigate } from 'react-router-dom';
 import { ProfileContentMock } from '../SolutionDetail/solutionTabStyle';
 
 export const SolvingList = ({ list }) => {
-
   const [updatedList, setUpdatedList] = useState(null);
 
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
     navigate(`/solutions/${solutionId}`);
   };
+  const onClickScrape = (solutionId) => {
+    navigate(`/solutions/${solutionId}/detail/scrap`);
+  };
 
   useEffect(() => {
+    console.log(list);
     setUpdatedList(list); 
   }, [list]);
 
@@ -30,9 +33,9 @@ export const SolvingList = ({ list }) => {
     <>
     {updatedList && (
       <div>
-      {updatedList.map((item, index) => (
+      {updatedList.map((item) => (
         <div
-          key={item.problemTitle + index}
+          key={item.solution.id}
           css={css`
             width: 835px;
             height: auto;
@@ -112,6 +115,7 @@ export const SolvingList = ({ list }) => {
             </div>
 
             <button
+              onClick={() => onClickScrape(item.solution.id)}
               css={css`
                 width: 30px;
                 height: 30px;
@@ -177,7 +181,7 @@ export const SolvingList = ({ list }) => {
                   font-weight: 700;
                 `}
               >
-                {item.problemTitle + index}
+                {item.problemTitle}
               </div>
 
               <div
