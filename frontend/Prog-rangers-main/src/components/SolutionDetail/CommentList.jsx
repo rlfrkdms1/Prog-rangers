@@ -50,10 +50,12 @@ export const CommentList = () => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
-      .get(apiUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(apiUrl
+      //   , {
+      //   method: 'GET',
+      //   headers: { Authorization: `Bearer ${token}` },
+      // }
+      )
       .then((response) => {
         setComments(response.data.comments);
         setNewComment(response.data.newComment);
