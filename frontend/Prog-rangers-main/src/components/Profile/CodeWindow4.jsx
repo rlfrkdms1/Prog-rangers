@@ -326,8 +326,7 @@ React.useEffect(() => {
                 <br />
 
                 {/* 한줄리뷰 등록 */}
-                {clickedLineId === codeLineNumber &&
-                  isBoxVisible && (
+                {clickedLineId === codeLineNumber &&isBoxVisible && (
                     <div
                       style={{
                         width: '830px',
@@ -394,6 +393,7 @@ React.useEffect(() => {
                                   review.content !==
                                     '삭제된 리뷰입니다'
                               )
+                              .sort((a, b) => a.id - b.id)
                               .map((review) => (
                                 <div key={review.id}>
                                   <div
@@ -534,6 +534,7 @@ React.useEffect(() => {
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )
+                            .sort((a, b) => a.id - b.id)
                             .slice(0, 1) // 첫 번째 리뷰만 선택
                             .map((filteredReview) => (
                               <div
@@ -554,6 +555,7 @@ React.useEffect(() => {
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )
+                            .sort((a, b) => a.id - b.id)
                             .slice(0, 1) // 첫 번째 리뷰만 선택
                             .map((filteredReview) => (
                               <div>{filteredReview.content}</div>
@@ -566,7 +568,7 @@ React.useEffect(() => {
                           (review) =>
                             review.codeLineNumber ===
                             codeLineNumber+1
-                        ).length > 1 && (
+                        ).length > 0 && (
                           <div
                             css={css`
                               display: flex;
