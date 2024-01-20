@@ -25,8 +25,8 @@ public class ShowSolutionUpdateFormResponse {
                 .title(solution.getTitle())
                 .link(solution.getProblem()
                         .getLink())
-                .algorithm(solution.getAlgorithmView())
-                .dataStructure(solution.getDataStructureView())
+                .algorithm(solution.getAlgorithmName())
+                .dataStructure(solution.getDataStructureName())
                 .code(solution.getCode().split("\n"))
                 .level(solution.getLevel())
                 .description(solution.getDescription()).build();

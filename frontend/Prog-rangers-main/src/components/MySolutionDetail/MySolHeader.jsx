@@ -7,6 +7,13 @@ import { theme } from '../Header/theme';
 
 import { BiSolidLockAlt } from 'react-icons/bi';
 import { BiSolidLockOpenAlt } from 'react-icons/bi';
+
+import star1 from '../../assets/icons/star/star1.svg';
+import star2 from '../../assets/icons/star/star2.svg';
+import star3 from '../../assets/icons/star/star3.svg';
+import star4 from '../../assets/icons/star/star4.svg';
+import star5 from '../../assets/icons/star/star5.svg';
+
 import {
   MyHeaderLayout,
   colFlex,
@@ -16,6 +23,14 @@ import {
   rowFlex,
   fontStyle,
 } from '../SolutionDetail/headerStyle';
+
+const starImages = {
+  1: star1,
+  2: star2,
+  3: star3,
+  4: star4,
+  5: star5,
+}
 
 const token = localStorage.getItem('token');
 
@@ -39,7 +54,7 @@ export const MySolHeader = () => {
   const navigate = useNavigate();
 
   const onClickSols = () => {
-    navigate(`/solutions/${solutionId}/editsolution`);
+    navigate(`/mySolution/${solutionId}/editsolution`);
   };
 
   useEffect(() => {
@@ -56,6 +71,8 @@ export const MySolHeader = () => {
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
+        alert('접근 권한이 없습니다.');
+        navigate(-1);
       });
   }, []);
 
@@ -106,13 +123,13 @@ export const MySolHeader = () => {
                 {problem.title}
               </div>
               <div className="icon">
-                {/* {isPublic ? <BiSolidLockAlt size="18" color="#D9D9D9" /> : <BiSolidLockOpenAlt size="18" color="#D9D9D9" />} */}
+                {solution.public ? <BiSolidLockOpenAlt size="18" color="#D9D9D9" /> : <BiSolidLockAlt size="18" color="#D9D9D9" />}
               </div>
             </div>
             <div
               className="solutionTitle"
               css={css`
-                padding: 15px 0 15px 0;
+                padding: 15px 0;
               `}
             >
               <span
@@ -123,24 +140,21 @@ export const MySolHeader = () => {
               >
                 {solution.title}
               </span>
-              <span
-                css={css`
-                  color: ${theme.colors.light1};
-                `}
-              >
-                {solution.nickname}
+              <span>
+              <img src={starImages[1]}/>
+                {/* {starImages[item.solution.level] && (
+                  <img src={starImages[item.solution.level]} alt={`${item.solution.level}`} />
+                 )} */}
               </span>
             </div>
             <div css={css`display: flex; gap: 5px;`}>
               <div
                 className="AlgoOptions"
                 css={css`
-                  width: 89px;
-                  height: 36px;
+                  padding: 8px 20px;
                   background-color: ${theme.colors.light3};
                   border-radius: 20px;
                   text-align: center;
-                  line-height: 36px;
                   color: ${theme.colors.dark1};
                   ${solution.algorithm === null
                     ? 'display: none;'

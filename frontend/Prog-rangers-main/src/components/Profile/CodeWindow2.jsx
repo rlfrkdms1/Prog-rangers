@@ -1,4 +1,4 @@
-// (내) 풀이상세보기 - 풀이보기용 코드창
+// 전체풀이 상세보기 - 풀이보기용 코드창
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,14 +14,10 @@ export const CodeWindow2 = () => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     axios
-      .get(apiUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(apiUrl)
       .then((response) => {
         setCodeData(response.data);
       })

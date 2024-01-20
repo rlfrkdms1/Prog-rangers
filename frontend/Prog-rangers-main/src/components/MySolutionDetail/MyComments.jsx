@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
@@ -34,13 +33,53 @@ export const MyComments = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setComment(response.data.comments);
-        setCommentCount(response.data.comments.length);
+        const newComments = response.data.comments;
+        setComment(newComments);
+        
+        setCommentCount(calculateCommentCount(newComments));
+
+        // 삭제된 댓글 제외
+
+        const nonDeletedComments = newComments.filter(
+          (comment) => comment.status !== 'DELETED'
+        );
+        setCommentsWithCountCheck(nonDeletedComments);
+        
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
+  }, [solutionId]);
+
+  const setCommentsWithCountCheck = (newComments) => {
+    const deletedCommentsCount = newComments.reduce(
+      (count, comment) => {
+        return comment.status === 'DELETED'
+          ? count + 1
+          : count;
+      },
+      0
+    );
+    setCommentCount(
+      (prevCount) => prevCount - deletedCommentsCount
+    );
+  };
+
+    const calculateCommentCount = (comments) => {
+      return comments.reduce((count, comment) => {
+        // 댓글 갯수 더하기
+        count += 1;
+  
+        // 삭제된 답글 갯수 빼기
+        count -= comment.replies.reduce(
+          (replyCount, reply) =>
+            reply.status === 'DELETED' ? replyCount + 1 : replyCount,
+          0
+        );
+  
+        return count;
+      }, 0);
+  };
 
   return (
     <div className="wrap" css={MycommentStyle}>
@@ -71,7 +110,8 @@ export const MyComments = () => {
           {comment
             .filter(
               (commentItem) =>
-                commentItem.content !== '삭제된 댓글입니다'
+                commentItem.status !== 'DELETED' ||
+                commentItem.replies.length > 0
             )
             .map((commentItem) => (
               <div className="comment" key={commentItem.id}>
@@ -130,8 +170,7 @@ export const MyComments = () => {
                         .filter(
                           (reply) =>
                             reply &&
-                            reply.content !==
-                              '삭제된 댓글입니다'
+                              reply.status !== 'DELETED'
                         )
                         .map((reply) => (
                           <div

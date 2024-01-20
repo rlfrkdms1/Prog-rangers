@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import sharemark from '../../assets/icons/share-mark.svg';
-import axios from 'axios';
 import {
   fontSize16,
   fontSizewhite16,
@@ -11,36 +10,32 @@ import {
 } from '../../pages/Profile/ProfileStyle';
 import { tags } from '../MySolution/tagsform';
 import { CodeWindow } from './CodeWindow';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ProfileContentMock } from '../SolutionDetail/solutionTabStyle';
 
-export const SolvingList = () => {
-  const { nickname } = useParams();
-  const [data, setData] = useState({ list: [] });
+export const SolvingList = ({ list }) => {
+  const [updatedList, setUpdatedList] = useState(null);
 
   const navigate = useNavigate();
   const onClickSols = (solutionId) => {
     navigate(`/solutions/${solutionId}`);
   };
+  const onClickScrape = (solutionId) => {
+    navigate(`/solutions/${solutionId}/detail/scrap`);
+  };
 
   useEffect(() => {
-    const apiUrl = `http://13.125.13.131:8080/api/v1/members/${nickname}`;
-
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, [nickname]);
+    console.log(list);
+    setUpdatedList(list); 
+  }, [list]);
 
   return (
     <>
-      {data.list.map((item, index) => (
+    {updatedList && (
+      <div>
+      {updatedList.map((item) => (
         <div
-          key={item.problemTitle + index}
+          key={item.solution.id}
           css={css`
             width: 835px;
             height: auto;
@@ -48,10 +43,10 @@ export const SolvingList = () => {
           `}
         >
           <div
-            css={css`}
-        width: 835px;
-        margin-top: 30px;
-        `}
+            css={css`
+            width: 835px;
+            margin-top: 30px;
+            `}
           >
             <div
               css={css`
@@ -120,6 +115,7 @@ export const SolvingList = () => {
             </div>
 
             <button
+              onClick={() => onClickScrape(item.solution.id)}
               css={css`
                 width: 30px;
                 height: 30px;
@@ -135,7 +131,7 @@ export const SolvingList = () => {
               css={css`
                 ${boxStyle}
                 ${fontSizewhite16}
-        padding: 8px 20px;
+                padding: 8px 20px;
                 border-radius: 20px;
                 float: right;
                 margin: 15px 30px;
@@ -163,7 +159,6 @@ export const SolvingList = () => {
               `}
             >
               {item.solution.description
-                // .join('\n')
                 .split('\n')
                 .map((paragraph, index) =>
                   paragraph.trim() ? (
@@ -186,7 +181,7 @@ export const SolvingList = () => {
                   font-weight: 700;
                 `}
               >
-                {item.problemTitle + index}
+                {item.problemTitle}
               </div>
 
               <div
@@ -217,6 +212,8 @@ export const SolvingList = () => {
           </div>
         </div>
       ))}
+      </div>
+    )}
     </>
   );
 };
