@@ -260,27 +260,28 @@ export const CodeWindow4 = () => {
     setReviews(updatedReviews);
   };
 
-  // 외부 클릭시 한줄리뷰 닫힘
-  const closeOnOutsideClick = (e) => {
-    if (isBoxVisible) {
-      const plusmarks = document.querySelectorAll('.plusmark');
-      if (Array.from(plusmarks).some(mark => mark === e.target || mark.contains(e.target))) {
-        return;
-      }
-      setIsBoxVisible(false);
-      setClickedLineId(null);
-    }
+// 외부 클릭시 한줄리뷰 닫힘
+const codeWindowRef = useRef();
+
+const closeOnOutsideClick = (event) => {
+  if (
+    codeWindowRef.current &&
+    !codeWindowRef.current.contains(event.target)
+  ) {
+    setIsBoxVisible(false);
+  }
+};
+
+
+React.useEffect(() => {
+  window.addEventListener('click', closeOnOutsideClick);
+  return () => {
+    window.removeEventListener('click', closeOnOutsideClick);
   };
-  
-  React.useEffect(() => {
-    window.addEventListener('click', closeOnOutsideClick);
-    return () => {
-      window.removeEventListener('click', closeOnOutsideClick);
-    };
-  }, [isBoxVisible]);
+}, [isBoxVisible]);
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} ref={codeWindowRef}>
       {codeData.solution.code.map(
         (line, codeLineNumber) => (
           <div
