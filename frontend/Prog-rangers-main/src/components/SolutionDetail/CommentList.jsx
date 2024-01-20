@@ -49,13 +49,13 @@ export const CommentList = () => {
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
+    // 토큰이 있는 경우와 없는 경우에 대한 설정
+    const axiosConfig = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+
     axios
-      .get(apiUrl
-      //   , {
-      //   method: 'GET',
-      //   headers: { Authorization: `Bearer ${token}` },
-      // }
-      )
+      .get(apiUrl, axiosConfig)
       .then((response) => {
         setComments(response.data.comments);
         setNewComment(response.data.newComment);
@@ -64,29 +64,37 @@ export const CommentList = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
-
+  }, [solutionId, token]);
+  
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
-    axios
-      .delete(
-        `http://13.125.13.131:8080/api/v1/comments/${commentId}`,
-        {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        // 댓글 삭제에 성공한 경우, 화면에서 댓글을 제거
-        const updatedComments = comments.filter(
-          (comment) => comment.id !== commentId
-        );
-        setComments(updatedComments);
-      })
-      .catch((error) => {
-        console.error('댓글 삭제 오류:', error);
-      });
+    const commentToDelete = comments.find((comment) => comment.id === commentId);
+  
+    // 댓글이 존재하고 해당 댓글의 mine 속성이 true일 때 삭제
+    if (commentToDelete && commentToDelete.mine) {
+      axios
+        .delete(
+          `http://13.125.13.131:8080/api/v1/comments/${commentId}`,
+          {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          // 댓글 삭제에 성공한 경우, 화면에서 댓글을 제거
+          const updatedComments = comments.filter(
+            (comment) => comment.id !== commentId
+          );
+          setComments(updatedComments);
+        })
+        .catch((error) => {
+          console.error('댓글 삭제 오류:', error);
+        });
+    } else {
+      alert('접근 권한이 없습니다.');
+    }
   };
+  
 
   // 댓글 수정
   const handleEditComment = (commentId, editValue) => {
@@ -113,24 +121,36 @@ export const CommentList = () => {
           return comment;
         });
         setComments(updatedComments);
-        console.log('2차 클릭');
       })
 
       .catch((error) => {
         console.error('댓글 수정 오류:', error);
       });
   };
-
+  
   // 수정 모드를 토글하는 함수
   const toggleEditComment = (commentId) => {
-    const updatedComments = comments.map((comment) => {
-      if (comment.id === commentId) {
-        comment.editing = !comment.editing;
-      }
-      return comment;
-    });
-    setComments(updatedComments);
+    console.log(comments);
+    const commentToUpdate = comments.find((comment) => comment.id === commentId);
+  
+    // 댓글이 존재하고 해당 댓글의 mine 속성이 true일 때 수정 모드를 토글
+    if (commentToUpdate && commentToUpdate.mine) {
+      const updatedComments = comments.map((comment) => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            editing: !comment.editing,
+          };
+        }
+        return comment;
+      });
+      setComments(updatedComments);
+    } else {
+      alert('접근 권한이 없습니다.');
+    }
   };
+  
+
 
   // 댓글 내용 변경 시 호출되는 함수
   const onCommentContentChange = (
@@ -352,7 +372,6 @@ export const CommentList = () => {
                             commentItem.content
                           );
                         } 
-                          console.log("1차 클릭");
                           toggleEditComment(commentItem.id);
                       }}
                     >
