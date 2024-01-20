@@ -87,7 +87,7 @@ const AccountChange = () => {
   const nicknameDuplicationCheck = async () => {
     try {
       const response = await axios.get(
-        `http://13.125.13.131:8080/api/v1/members?nickname=${nickname}`
+        `http://13.125.13.131:8080/api/v1/auth?nickname=${nickname}`
       );
       const errorCode = response.data.errorCode;
       setIsNicknameAvailable(response.data.errorCode);
@@ -280,9 +280,6 @@ const AccountChange = () => {
                 object-fit: cover;
               `}
             ></img>
-            {/* <label htmlFor='uploadProfileImg' css={editBtnStyle}>사진선택</label>
-                <input type='file' accept='image/*' id='uploadProfileImg' onChange={savephoto} ref={imgRef}
-                css={css`display: none;`}></input> */}
           </div>
 
           <div
@@ -318,7 +315,6 @@ const AccountChange = () => {
                       value={nickname}
                       onChange={handleNicknameChange}
                       placeholder={userData.nickname}
-                      maxLength={10}
                       css={css`
                         width: 100%;
                         font-size: 16px;
