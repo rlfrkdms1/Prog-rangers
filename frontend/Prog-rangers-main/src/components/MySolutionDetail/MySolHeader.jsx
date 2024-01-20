@@ -71,10 +71,9 @@ export const MySolHeader = () => {
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
+        alert('접근 권한이 없습니다.');
+        navigate(-1);
       });
-      
-      alert('접근 권한이 없습니다.');
-      navigate(-1);
   }, []);
 
   // 풀이 삭제
