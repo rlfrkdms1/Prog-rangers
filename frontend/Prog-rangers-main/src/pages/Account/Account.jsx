@@ -91,11 +91,7 @@ const Account = () => {
         } catch (error) {
           console.error(error);
         }
-      } else {
-        alert(
-          '계정 삭제에 실패했습니다. 다시 확인해주세요.'
-        );
-      }
+      } 
     };
 
   return (
