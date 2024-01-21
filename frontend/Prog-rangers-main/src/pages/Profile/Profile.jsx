@@ -66,11 +66,16 @@ const Profile = () => {
       }
     )
       .then((response) => {
-        setIsFollowing(!isFollowing);
-        if (isFollowing) {
-          console.log('언팔로우 성공');
-        } else {
-          console.log('팔로우 성공');
+        if (!token) {
+          alert('로그인 후 이용해주세요');
+        }
+        else {
+          setIsFollowing(!isFollowing);
+          if (isFollowing) {
+            console.log('언팔로우 성공');
+          } else {
+            console.log('팔로우 성공');
+          }
         }
       })
       .catch((error) => {
@@ -90,27 +95,39 @@ const Profile = () => {
   // 무한 스크롤 기능
   const handleScroll = () => {
     const isBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight;
-    if (isBottom && cursor !== null) {
+    if (isBottom && cursor !== null && cursor !== -1) {
       const apiUrl = `http://13.125.13.131:8080/api/v1/members/${nickname}?page=${cursor}`;
 
+
       axios.get(apiUrl)
-        .then((response) => {
-          if (Array.isArray(response.data.list)) {
-            setData(prevData => ({ ...prevData, list: [...prevData.list, ...response.data.list] }));
-            setCursor(response.data.cursor);
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-      }
+      .then((response) => {
+        if (Array.isArray(response.data.list)) {
+          // 중복 방지
+          setData((prevData) => {
+            const newList = response.data.list.filter((newItem) => {
+              return !prevData.list.some((prevItem) => prevItem.solution.id === newItem.solution.id);
+            });
+            return { ...prevData, list: [...prevData.list, ...newList] };
+          });
+
+          setCursor(response.data.cursor);
+        }
+      });
+    }
   };
     
-  // 스크롤 이벤트 리스너
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+  
+    // 스크롤 이벤트 리스너
+    const scrollListener = () => {
+      handleScroll();
+    };
+
+    window.addEventListener('scroll', scrollListener);
+    
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', scrollListener);
     };
   }, [cursor, nickname]);
 
@@ -130,7 +147,7 @@ const Profile = () => {
         );
         navigate(-1);
       });
-    }, []);
+    }, [isFollowing]);
 
   return (
     <div
@@ -314,8 +331,21 @@ const Profile = () => {
         >
           풀이
         </div>
-      
+
+        {data.list && data.list.length === 0 ? (
+          <div
+            css={css`
+              font-size: 18px;
+              font-weight: 500;
+              margin-top: 50px;
+              color: ${theme.colors.light1};
+            `}
+          >
+            풀이 없음
+          </div>
+        ) : (
         <SolvingList list={data.list} />
+        )}
       
       </div>
     </div>

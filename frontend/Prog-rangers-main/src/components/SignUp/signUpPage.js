@@ -68,6 +68,24 @@ export const inputStyle = css`
   }
 `;
 
+export const inputBoxStyle = css`
+    width: 100%;
+    height: 100%;
+    color: ${theme.dark2};
+    border-radius: 12px;
+    border: 1px solid;
+    padding: 15px 30px;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    &::placeholder {
+      color: #959595;
+    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
 export const submitButtonStyle = css`
   width: 600px;
   height: 50px;

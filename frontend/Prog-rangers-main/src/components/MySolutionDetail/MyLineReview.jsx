@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CodeWindow4 } from '../Profile';
+import { CodeWindow5 } from '../Profile';
 import {
   LineContentMock,
   contentLayout,
@@ -75,7 +75,7 @@ export const MyLineReview = () => {
             `}
           ></div>
 
-          <CodeWindow4 />
+          <CodeWindow5 />
         </div>
       </div>
     </>
