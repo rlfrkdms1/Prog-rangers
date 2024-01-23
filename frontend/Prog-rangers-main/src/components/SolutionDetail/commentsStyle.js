@@ -4,6 +4,7 @@ import { theme } from '../Header/theme';
 export const wrapStyle = css`
   width: 956px;
   margin: 30px auto;
+  margin-bottom: 70px;
 `;
 
 export const MycommentStyle = css`

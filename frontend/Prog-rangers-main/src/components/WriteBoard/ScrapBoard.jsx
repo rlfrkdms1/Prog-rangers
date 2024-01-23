@@ -17,7 +17,6 @@ import {
 } from './inputBox';
 
 export const ScrapBoard = () => {
-  // const [isPublic, setIsPublic] = useState(true);
   const [clickedStar, setClickedStar] = useState([
     false,
     false,
@@ -85,10 +84,6 @@ export const ScrapBoard = () => {
       let link = response.data.solution.link;
       setProblemTitle(title);
       setLink(link);
-      // setInputs({
-      //   ...inputs,
-      //   code: codeText,
-      // });
 
       console.log(response.data.problem.title);
       console.log(response.data.solution.link);

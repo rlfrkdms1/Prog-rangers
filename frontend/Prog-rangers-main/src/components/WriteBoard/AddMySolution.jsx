@@ -155,7 +155,7 @@ export const AddMySolution = ({postURL}) => {
         headers: { Authorization: `Bearer ${token}`}
       });
     if(response.status === 201){
-      alert('질문이 등록되었습니다.');
+      alert('풀이가 등록되었습니다.');
       window.location.href = `http://13.125.13.131/mypage`;
     }
     }

@@ -43,9 +43,7 @@ export const CommentForm = ({ addComment }) => {
   const handleSubmit = () => {
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      alert('댓글을 작성하려면 로그인이 필요합니다.');
-    } else if (content.trim() !== '') {
+    if (content.trim() !== '') {
       const newComment = {
         nickname: nickname,
         content,
@@ -70,6 +68,8 @@ export const CommentForm = ({ addComment }) => {
             '댓글 등록 저장 API 요청 오류:',
             error
           );
+          
+      alert('로그인이 필요한 기능입니다.');
         });
     }
   };
