@@ -36,8 +36,6 @@ export const Comments = () => {
   }
 
   const calculateTotalCommentCount = (comments) => {
-    console.log('comment', commentCount);
-    console.log('replies', repliesCount);
     let totalCommentCount = 0;
     let totalRepliesCount = 0;
 

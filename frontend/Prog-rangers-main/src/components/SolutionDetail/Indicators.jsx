@@ -21,8 +21,13 @@ export const Indicators = () => {
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
+     // 토큰이 있는 경우와 없는 경우에 대한 설정
+     const axiosConfig = token
+     ? { headers: { Authorization: `Bearer ${token}` } }
+     : {};
+
     axios
-      .get(apiUrl)
+      .get(apiUrl, axiosConfig)
       .then((response) => {
         setSolution(response.data.solution);
         setLike(response.data.solution.likes);
@@ -36,8 +41,9 @@ export const Indicators = () => {
   // 좋아요 버튼
   const handleLikeClick = () => {
     const method = isLiked ? 'delete' : 'post';
+    if (token) {
     axios({
-      method: method, // POST 또는 DELETE를 선택
+      method: method, 
       headers: { Authorization: `Bearer ${token}` },
       url: `http://13.125.13.131:8080/api/v1/solutions/${solutionId}/likes`,
     })
@@ -50,7 +56,10 @@ export const Indicators = () => {
       .catch((error) => {
         console.error(`좋아요 ${method} 실패`, error);
       });
+    }
+    else{
       alert('로그인이 필요한 기능입니다.');
+    }
   };
 
   // 스크랩 버튼

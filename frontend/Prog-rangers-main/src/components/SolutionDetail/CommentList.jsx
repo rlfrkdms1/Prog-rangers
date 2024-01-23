@@ -131,7 +131,6 @@ export const CommentList = () => {
   // 수정 모드를 토글하는 함수
   const toggleEditComment = (commentId) => {
     const commentToUpdate = comments.find((comment) => comment.id === commentId);
-    console.log(commentToUpdate);
   
     // 댓글이 존재하고 해당 댓글의 mine 속성이 true일 때 수정 모드를 토글
     if (commentToUpdate && commentToUpdate.mine) {
@@ -150,8 +149,6 @@ export const CommentList = () => {
     }
   };
   
-
-
   // 댓글 내용 변경 시 호출되는 함수
   const onCommentContentChange = (
     commentId,
@@ -224,9 +221,7 @@ export const CommentList = () => {
     return () => {
       window.removeEventListener('click', closeOnOutsideClick);
     };
-  }, []);
-
-  
+  }, [isOpen]);
 
   return (
     <div className="comments">
