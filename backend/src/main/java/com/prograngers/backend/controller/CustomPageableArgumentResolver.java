@@ -49,7 +49,7 @@ public class CustomPageableArgumentResolver extends PageableHandlerMethodArgumen
             throw new InvalidPageSizeException();
         }
         if (Integer.parseInt(pageSize) > MAX_SIZE) {
-            throw new PageSizeOverMaxException(MAX_SIZE);
+            throw new PageSizeOverMaxException();
         }
     }
 

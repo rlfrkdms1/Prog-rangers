@@ -4,7 +4,7 @@ import static com.prograngers.backend.exception.errorcode.CommonErrorCode.PAGE_S
 
 public class PageSizeOverMaxException extends InvalidValueException {
 
-    public PageSizeOverMaxException(int maxSize) {
+    public PageSizeOverMaxException() {
         super(PAGE_SIZE_OVER_MAX);
     }
 }
