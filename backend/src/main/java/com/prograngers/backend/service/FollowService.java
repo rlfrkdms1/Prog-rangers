@@ -4,7 +4,7 @@ import com.prograngers.backend.dto.follow.response.ShowFollowListResponse;
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.AlreadyFollowingException;
+import com.prograngers.backend.exception.badrequest.alreadyexist.AlreadyFollowingException;
 import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;

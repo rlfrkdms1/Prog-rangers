@@ -1,79 +1,71 @@
 package com.prograngers.backend.controller;
 
-import static com.prograngers.backend.exception.ErrorCode.INVALID_REQUEST_BODY;
-import static com.prograngers.backend.exception.ErrorCode.TYPE_MISMATCH;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.INTERNAL_SEVER_ERROR;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.INVALID_VALUE;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.TYPE_MISMATCH;
 
 import com.prograngers.backend.dto.error.ErrorResponse;
-import com.prograngers.backend.exception.badrequest.AlreadyExistsException;
-import com.prograngers.backend.exception.badrequest.InvalidValueException;
-import com.prograngers.backend.exception.enumtype.EnumTypeException;
-import com.prograngers.backend.exception.notfound.NotFoundException;
-import com.prograngers.backend.exception.unauthorization.UnAuthorizationException;
-import java.util.ArrayList;
+import com.prograngers.backend.exception.CustomException;
+import com.prograngers.backend.exception.errorcode.ErrorCode;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // Valid를 통과하지 못할 경우 ErrorResponse dto로 해당하는 에러 반환
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ErrorResponse>> notValidException(MethodArgumentNotValidException exception) {
-        List<ErrorResponse> errorList = new ArrayList<>();
-        exception.getBindingResult().getAllErrors().stream()
-                .map((error) -> ErrorResponse.builder().errorCode(INVALID_REQUEST_BODY)
-                        .description(error.getDefaultMessage()).build())
-                .forEach((errorResponse) -> errorList.add(errorResponse));
-        return new ResponseEntity(errorList, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAllException(Exception e) {
+        return handleExceptionInternal(INTERNAL_SEVER_ERROR);
     }
 
-    // 요청한 PathVariable에 대한 데이터가 db에 없는 경우 에러메세지와 함께 NoSuchElementException 던짐
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> notFoundException(NotFoundException exception) {
-        String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<Object> handleCustomException(CustomException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
     }
 
-    @ExceptionHandler(UnAuthorizationException.class)
-    public ResponseEntity<ErrorResponse> unAuthorizationException(UnAuthorizationException exception) {
-        String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+    private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode) {
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(makeErrorResponse(errorCode));
     }
 
-    @ExceptionHandler(EnumTypeException.class)
-    public ResponseEntity<ErrorResponse> enumTypeException(EnumTypeException exception) {
-        String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    private ErrorResponse makeErrorResponse(ErrorCode errorCode) {
+        return ErrorResponse.builder().code(errorCode.name()).message(errorCode.getMessage()).build();
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> typeMismatchException(MethodArgumentTypeMismatchException exception) {
-        String message = "쿼리 스트링 타입을 확인해주세요";
-        ErrorResponse errorResponse = new ErrorResponse(TYPE_MISMATCH, message);
-        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers, HttpStatusCode status,
+                                                                  WebRequest request) {
+        return handleExceptionInternal(ex, INVALID_VALUE);
     }
 
-    @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> alreadyExistsException(AlreadyExistsException exception) {
-        String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    private ResponseEntity<Object> handleExceptionInternal(BindException e, ErrorCode errorCode) {
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(makeErrorResponse(e, errorCode));
     }
 
-    @ExceptionHandler(InvalidValueException.class)
-    public ResponseEntity<ErrorResponse> invalidValueException(InvalidValueException exception) {
-        String message = exception.getMessage();
-        ErrorResponse errorResponse = new ErrorResponse(exception.getErrorCode(), message);
-        return new ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST);
+    private ErrorResponse makeErrorResponse(BindException e, ErrorCode errorCode) {
+        List<ErrorResponse.ValidationError> validationErrorList = e.getBindingResult().getFieldErrors().stream()
+                .map(ErrorResponse.ValidationError::of).collect(Collectors.toList());
+
+        return ErrorResponse.builder().code(errorCode.name()).message(errorCode.getMessage())
+                .errors(validationErrorList).build();
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+                                                        HttpStatusCode status, WebRequest request) {
+        return handleExceptionInternal(TYPE_MISMATCH);
     }
 }
