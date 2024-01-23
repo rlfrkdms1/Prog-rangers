@@ -231,11 +231,6 @@ export const CommentList = () => {
   return (
     <div className="comments">
       {comments
-        .filter(
-          (commentItem) =>
-            commentItem.status !== 'DELETED' ||
-            commentItem.replies.length > 0
-        )
         .map((commentItem) => (
           <div className="comment" key={commentItem.id}>
             <div css={rowFlex}>
@@ -343,8 +338,6 @@ export const CommentList = () => {
                       css={css`
                         display: flex;
                         align-items: center;
-                        ${commentItem.status === 'DELETED' &&
-                        'display: none;'}
                       `}
                     >
                       <img src={dot} alt="dot" className="dot-menu" data-comment-id={commentItem.id} />
@@ -425,9 +418,7 @@ export const CommentList = () => {
                     .filter(
                       (reply) =>
                         reply &&
-                        reply.content !==
-                          '삭제된 댓글입니다'
-                    )
+                        reply.status !== 'DELETED')
                     .map((reply) => (
                       <div
                         key={reply && reply.id}
@@ -504,7 +495,7 @@ export const CommentList = () => {
                               onClick={() => {
                                 handleDeleteComment(
                                   reply.id
-                                ); // 댓글 삭제 함수 호출
+                                );
                               }}
                             >
                               삭제
