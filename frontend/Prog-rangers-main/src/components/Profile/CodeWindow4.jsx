@@ -405,8 +405,7 @@ React.useEffect(() => {
                                 (review) =>
                                   review.codeLineNumber ===
                                     codeLineNumber+1 &&
-                                  review.content !==
-                                    '삭제된 리뷰입니다'
+                                    review.status !== 'DELETED'
                               )
                               .sort((a, b) => a.id - b.id)
                               .map((review) => (
@@ -545,7 +544,7 @@ React.useEffect(() => {
                           {codeData.reviews
                             .filter(
                               (review) =>
-                                review.content !== '삭제된 리뷰입니다' &&
+                                review.status !== 'DELETED' &&
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )
@@ -566,7 +565,7 @@ React.useEffect(() => {
                             {codeData.reviews
                             .filter(
                               (review) =>
-                                review.content !== '삭제된 리뷰입니다' &&
+                                review.status !== 'DELETED' &&
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )

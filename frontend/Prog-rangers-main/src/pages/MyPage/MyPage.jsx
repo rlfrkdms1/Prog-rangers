@@ -13,10 +13,16 @@ import {
   alignCenter,
   dateStyle,
   gridStyle,
-  infoSytle,
+  infoStyle,
+  badgeStyle
 } from './MyPageStyle';
 
-import star1 from '../../assets/icons/star/star1.svg';
+import plant from '../../assets/badge/plant-pixel.png';
+import leaf from '../../assets/badge/stem-and-leaf-pixel.png';
+import bud from '../../assets/badge/bud-pixel.png';
+import flower from '../../assets/badge/badge-flower-pixel.png';
+import flowerbed from '../../assets/badge/badge-flowerbed-pixel.png';
+import field from '../../assets/badge/field.png';
 
 const MyPage = () => {
   
@@ -37,11 +43,12 @@ const MyPage = () => {
 
   // 달성 뱃지
   const badgeImages = {
-    새싹: star1,
-    // 꽃: star2,
-    // 안경: star3,
-    // 4: star4,
-    // 5: star5,
+    새싹: plant,
+    잎과줄기: leaf,
+    꽃봉오리 : bud,
+    꽃: flower,
+    화단: flowerbed,
+    들판: field
   };
 
   useEffect(() => {
@@ -334,7 +341,7 @@ const MyPage = () => {
                 height: 90px;
                 border-radius: 5px;
                 margin-top: 4px;
-                padding: 15px;
+                padding: 20px 10px 15px 17px;
                 background-color: ${theme.colors.light4};
               `}
             >
@@ -342,6 +349,7 @@ const MyPage = () => {
                 <img
                   src={badgeImages[badges]}
                   alt={`${badges}`}
+                  css={css`${badgeStyle}`}
                 />
               )}
             </div>
@@ -364,7 +372,7 @@ const MyPage = () => {
 
             <div
               css={css`
-                ${infoSytle} margin-top: 10px;
+                ${infoStyle} margin-top: 10px;
               `}
             >
               <InfoList data={notifications} />

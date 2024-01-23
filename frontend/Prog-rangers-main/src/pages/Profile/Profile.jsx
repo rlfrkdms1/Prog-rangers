@@ -14,9 +14,15 @@ import {
   fontSizebold16,
   fontSize20,
   fontSize24,
+  badgeStyle
 } from './ProfileStyle';
 
-import star1 from '../../assets/icons/star/star1.svg';
+import plant from '../../assets/badge/plant-pixel.png';
+import leaf from '../../assets/badge/stem-and-leaf-pixel.png';
+import bud from '../../assets/badge/bud-pixel.png';
+import flower from '../../assets/badge/badge-flower-pixel.png';
+import flowerbed from '../../assets/badge/badge-flowerbed-pixel.png';
+import field from '../../assets/badge/field.png';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -83,14 +89,15 @@ const Profile = () => {
       });
     }
 
-  // 달성 뱃지
-  const badgeImages = {
-    새싹: star1,
-    // 꽃: star2,
-    // 안경: star3,
-    // 4: star4,
-    // 5: star5,
-  };
+    // 달성 뱃지
+    const badgeImages = {
+      새싹: plant,
+      잎과줄기: leaf,
+      꽃봉오리 : bud,
+      꽃: flower,
+      화단: flowerbed,
+      들판: field
+    };
   
   // 무한 스크롤 기능
   const handleScroll = () => {
@@ -265,6 +272,7 @@ const Profile = () => {
             align-items: center;
           `}
         >
+          
           <div
             css={css`
               width: 30px;
@@ -274,6 +282,7 @@ const Profile = () => {
             <img src={github} alt="GitHub Logo" />
           </div>
 
+          {data.github == null ? (
           <div
             css={css`
               font-size: 16px;
@@ -281,8 +290,20 @@ const Profile = () => {
               color: ${theme.colors.light1};
             `}
           >
-            {data.github}
+            ...
           </div>
+            ) : (
+              <div
+            css={css`
+              font-size: 16px;
+              font-weight: 400;
+              color: ${theme.colors.light1};
+            `}
+          >
+            {data.github}
+            </div>
+            )}
+
         </div>
 
         <div
@@ -311,10 +332,11 @@ const Profile = () => {
           </div>
           달성
         </div>
-        {badgeImages[data.badges] && (
+        {badgeImages[data.badge] && (
           <img
-            src={badgeImages[data.badges]}
-            alt={`${data.badges}`}
+            src={badgeImages[data.badge]}
+            alt={`${data.badge}`}            
+            css={css`${badgeStyle}`}
           />
         )}
       </div>
