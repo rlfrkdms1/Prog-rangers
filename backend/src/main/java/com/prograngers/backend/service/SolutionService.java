@@ -28,7 +28,7 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
-import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
