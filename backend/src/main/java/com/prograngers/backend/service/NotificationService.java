@@ -3,8 +3,8 @@ package com.prograngers.backend.service;
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
 
-import com.prograngers.backend.dto.notification.response.ShowNotificationResponse;
 import com.prograngers.backend.dto.notification.response.ShowNotificationsResponse;
+import com.prograngers.backend.dto.notification.response.NotificationResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
@@ -37,7 +37,7 @@ public class NotificationService {
      */
     public void send(Review review, Solution solution, Member writer) {
         Notification notification = createReviewNotification(review, solution, writer);
-        ShowNotificationResponse showNotificationResponse = ShowNotificationResponse.from(notification);
+        NotificationResponse showNotificationResponse = NotificationResponse.from(notification);
         sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
                 .forEach((emitterId, emitter) -> {
                     cachedEventRepository.save(emitterId, showNotificationResponse);
@@ -60,7 +60,7 @@ public class NotificationService {
 
     public void send(Comment comment, Solution solution, Member writer) {
         Notification notification = createCommentNotification(comment, solution, writer);
-        ShowNotificationResponse showNotificationResponse = ShowNotificationResponse.from(notification);
+        NotificationResponse showNotificationResponse = NotificationResponse.from(notification);
         sseEmitterRepository.findAllByMemberId(String.valueOf(notification.getReceiver().getId()))
                 .forEach((emitterId, emitter) -> {
                     cachedEventRepository.save(emitterId, showNotificationResponse);
@@ -105,7 +105,7 @@ public class NotificationService {
         sendToClient(emitter, emitterId, "Notification Subscribe Success");
 
         if (!lastEventId.isEmpty()) {
-            Map<String, ShowNotificationResponse> cachedEvents = cachedEventRepository.findAllByMemberId(
+            Map<String, NotificationResponse> cachedEvents = cachedEventRepository.findAllByMemberId(
                     String.valueOf(memberId));
             cachedEvents.entrySet().stream()
                     .filter(entry -> entry.getKey().compareTo(lastEventId) > 0)
