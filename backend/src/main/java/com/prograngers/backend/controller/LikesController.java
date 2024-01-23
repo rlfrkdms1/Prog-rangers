@@ -43,7 +43,7 @@ public class LikesController {
 
     @Login
     @GetMapping("/likes")
-    public ShowMyLikeSolutionsResponse showMyLikes(@PageableDefault Pageable pageable,
+    public ShowMyLikeSolutionsResponse showMyLikes(Pageable pageable,
                                                    @LoggedInMember Long memberId) {
         return solutionService.getMyLikes(memberId, pageable);
     }

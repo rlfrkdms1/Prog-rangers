@@ -8,10 +8,8 @@ import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentSolutionException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageNumberException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageSizeException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidParentException;
+import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
+import com.prograngers.backend.exception.badrequest.InvalidParentException;
 import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
@@ -42,26 +40,8 @@ public class CommentService {
     }
 
     public ShowMyCommentsResponse showMyComments(Long memberId, Pageable pageable) {
-        validPageableNumber(pageable);
         Slice<Comment> commentPage = commentRepository.findMyPageByMemberId(pageable, memberId);
         return ShowMyCommentsResponse.from(commentPage);
-    }
-
-    private void validPageableNumber(Pageable pageable) {
-        validPageNumber(pageable);
-        validPageSize(pageable);
-    }
-
-    private void validPageNumber(Pageable pageable) {
-        if (pageable.getPageNumber() < 0) {
-            throw new InvalidPageNumberException();
-        }
-    }
-
-    private void validPageSize(Pageable pageable) {
-        if (pageable.getPageSize() < 1) {
-            throw new InvalidPageSizeException();
-        }
     }
 
     @Transactional

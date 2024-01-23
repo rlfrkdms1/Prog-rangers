@@ -28,8 +28,6 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageNumberException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageSizeException;
 import com.prograngers.backend.exception.badrequest.invalidvalue.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
@@ -224,7 +222,6 @@ public class SolutionService {
     public ShowSolutionListResponse getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm,
             DataStructureConstant dataStructure, SortConstant sortBy) {
-        validPageable(pageable);
         Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language,
                 algorithm, dataStructure, sortBy);
@@ -341,31 +338,13 @@ public class SolutionService {
     public ShowMySolutionListResponse getMyList(String keyword, LanguageConstant language, AlgorithmConstant algorithm,
                                                 DataStructureConstant dataStructure, Integer level, Pageable pageable,
                                                 Long memberId) {
-        validPageable(pageable);
         Page<Solution> solutions = solutionRepository.getMyList(pageable, keyword, language, algorithm, dataStructure,
                 level, memberId);
         return ShowMySolutionListResponse.from(solutions);
     }
 
-    private void validPageable(Pageable pageable) {
-        validPageNumber(pageable);
-        validPageSize(pageable);
-    }
-
-    private void validPageNumber(Pageable pageable) {
-        if (pageable.getPageNumber() < 0) {
-            throw new InvalidPageNumberException();
-        }
-    }
-
-    private void validPageSize(Pageable pageable) {
-        if (pageable.getPageSize() < 1) {
-            throw new InvalidPageSizeException();
-        }
-    }
 
     public ShowMyLikeSolutionsResponse getMyLikes(Long memberId, Pageable pageable) {
-        validPageable(pageable);
         Slice<Solution> solutions = solutionRepository.findMyLikesPage(memberId, pageable);
         return ShowMyLikeSolutionsResponse.from(solutions);
     }

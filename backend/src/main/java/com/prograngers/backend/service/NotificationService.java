@@ -11,8 +11,6 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.ServerSentEventConnectException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageNumberException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageSizeException;
 import com.prograngers.backend.repository.notification.CachedEventRepository;
 import com.prograngers.backend.repository.notification.NotificationRepository;
 import com.prograngers.backend.repository.notification.SseEmitterRepository;
@@ -117,28 +115,10 @@ public class NotificationService {
     }
 
     public ShowNotificationsResponse getNotifications(Long memberId, Pageable pageable) {
-        validPageable(pageable);
         Slice<Notification> notifications = notificationRepository.findPageByMemberId(memberId, pageable);
         ShowNotificationsResponse response = ShowNotificationsResponse.from(notifications);
         notifications.stream().forEach(Notification::read);
         return response;
-    }
-
-    private void validPageable(Pageable pageable) {
-        validPageNumber(pageable);
-        validPageSize(pageable);
-    }
-
-    private void validPageNumber(Pageable pageable) {
-        if (pageable.getPageNumber() < 2) {
-            throw new InvalidPageNumberException();
-        }
-    }
-
-    private void validPageSize(Pageable pageable) {
-        if (pageable.getPageSize() < 1) {
-            throw new InvalidPageSizeException();
-        }
     }
 
 }
