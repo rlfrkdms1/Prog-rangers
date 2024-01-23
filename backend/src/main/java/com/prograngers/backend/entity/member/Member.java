@@ -1,6 +1,6 @@
 package com.prograngers.backend.entity.member;
 
-import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.ProhibitionNicknameException;
 import com.prograngers.backend.support.Encrypt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

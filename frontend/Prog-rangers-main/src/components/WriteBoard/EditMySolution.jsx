@@ -26,7 +26,7 @@ import {
 } from '../../pages/BoardPage/AddSolution';
 import { SubmitButton } from '../../pages/BoardPage/buttonDiv';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const EditMySolution = ({ postURL }) => {
   const [isPublic, setIsPublic] = useState(true);
@@ -37,6 +37,9 @@ export const EditMySolution = ({ postURL }) => {
     false,
     false,
   ]);
+  const api = axios.create({
+    baseURL: 'http://13.125.13.131:8080/api/v1',
+  });
   const token = localStorage.getItem('token');
   const target = useAtomValue(targetAtom, targetScope);
   const name = useAtomValue(nameAtom, nameScope);
@@ -46,10 +49,45 @@ export const EditMySolution = ({ postURL }) => {
     solution: '',
     link: '',
     description: '',
-    code: '',
+    code: [],
   });
   const [algo, setAlgo] = useState([]);
   const [data, setData] = useState([]);
+  const [problem, setProblem] = useState([]);
+  const [level, setLevel] = useState();
+
+  const { solutionId } = useParams(); 
+  const [id, setId] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`/solutions/${solutionId}/mine`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAlgo(response.data.solution.algorithm);
+        setData(response.data.solution.dataStructure);
+        setInputs({
+          solution: response.data.solution.title,
+          description: response.data.solution.description,
+          code: response.data.solution.code,
+        })
+        setProblem(response.data.problem);
+        setId(solutionId);
+        setLevel(response.data.solution.level);
+      } catch (error) {
+        console.error('Error fetching following data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fillHandler(level-1);
+  }, [level]);
 
   useEffect(() => {
     if (name === 'algorithm') {
@@ -73,10 +111,17 @@ export const EditMySolution = ({ postURL }) => {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
+    if (name === "code") {
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        code: value.split('\n'), 
+      }));
+    } else {
+      setInputs({
+        ...inputs,
+        [name]: value,
+      });
+    }
   };
 
   const TagDisplay1 = () => {
@@ -85,13 +130,13 @@ export const EditMySolution = ({ postURL }) => {
     };
     return (
       <>
-        {algo.length !== 0 ? (
+        {algo ? (
           <div
             css={css`
               ${tags}
             `}
           >
-            {algo.name}
+           {algo && (algo.name || (sort.ALGORITHM.find(option => option.value === algo) || {}).name)}
             <img
               onClick={deleteHandler}
               css={css`
@@ -115,13 +160,14 @@ export const EditMySolution = ({ postURL }) => {
     };
     return (
       <>
-        {data.length !== 0 ? (
+        {data ? (
           <div
             css={css`
               ${tags}
             `}
           >
-            {data.name}
+            {data && (data.name || (sort.DATASTRUCTURE.find(option => option.value === data) || {}).name)}
+
             <img
               onClick={deleteHandler}
               css={css`
@@ -139,9 +185,11 @@ export const EditMySolution = ({ postURL }) => {
       </>
     );
   };
+
   const publicHandler = () => {
     setIsPublic(!isPublic);
   };
+
   const fillHandler = (index) => {
     let clickStates = [...clickedStar];
     for (let i = 0; i < 5; i++) {
@@ -149,6 +197,7 @@ export const EditMySolution = ({ postURL }) => {
     }
     setClickedStar(clickStates);
   };
+
   const postWrite = async () => {
     let star = clickedStar.filter(Boolean).length;
     try {
@@ -185,20 +234,15 @@ export const EditMySolution = ({ postURL }) => {
         return;
       }
       const body = {
-        problemTitle: '몰라요',
+        problemTitle: problem.title,
         title: inputs.solution,
-        problemLink: inputs.link,
         level: star.toString(),
-        algorithm: algo.value,
-        dataStructure: data.value,
-        language: 'JAVA',
+        algorithm: algo.value || sort.ALGORITHM.find(option => option.value === algo).value,
+        dataStructure: data.value || sort.DATASTRUCTURE.find(option => option.value === data).value,
         description: inputs.description,
-        code: inputs.code,
+        code: inputs.code.join('\n'),
         isPublic: isPublic.toString(),
       };
-
-      console.log('inputs.title:', inputs.title);
-      console.log('inputs.link:', inputs.link);
 
       const response = await axios.patch(
         `http://13.125.13.131:8080/api/v1/solutions/${id}`,
@@ -207,10 +251,8 @@ export const EditMySolution = ({ postURL }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      if (response.status === 201) {
-        alert('질문이 등록되었습니다.');
-        window.location.href = `http://13.125.13.131/solutions/${id}`;
-      }
+        alert('수정 완료되었습니다.');
+        window.location.href = `/mySolution/${id}`;
     } catch (error) {
       console.log(error);
     }
@@ -276,15 +318,15 @@ export const EditMySolution = ({ postURL }) => {
             )}
           </div>
         </div>
+       
         <input
-          placeholder="풀이 제목을 입력해주세요"
+          placeholder="풀이 제목을 입력해주세요."
           css={css`
             ${StyledInput}
           `}
           value={inputs.solution}
           name="solution"
           onChange={handleInput}
-          readOnly
         />
 
         <div
@@ -294,6 +336,7 @@ export const EditMySolution = ({ postURL }) => {
         >
           문제링크
         </div>
+       
         <input
           placeholder="문제 링크를 입력해주세요"
           css={css`
@@ -302,7 +345,7 @@ export const EditMySolution = ({ postURL }) => {
           value={inputs.link}
           name="link"
           onChange={handleInput}
-          readOnly
+          
         />
 
         <div
@@ -375,13 +418,15 @@ export const EditMySolution = ({ postURL }) => {
             options={sort.ALGORITHM}
             width="350px"
             secondWidth="270px"
+            selected={sort.ALGORITHM.find(option => option.value === algo)} 
           />
           <FilterBar
             title="datastructure"
             options={sort.DATASTRUCTURE}
             width="350px"
             secondWidth="270px"
-          />
+            selected={sort.DATASTRUCTURE.find(option => option.value === data)}
+          /> 
         </div>
         <div
           css={css`
@@ -407,6 +452,7 @@ export const EditMySolution = ({ postURL }) => {
             width: 100%;
           `}
         >
+          
           <textarea
             css={css`
               ${DetailInput}
@@ -414,7 +460,7 @@ export const EditMySolution = ({ postURL }) => {
             value={inputs.description}
             name="description"
             onChange={handleInput}
-            readOnly
+            
           />
         </div>
 
@@ -431,14 +477,15 @@ export const EditMySolution = ({ postURL }) => {
             width: 100%;
           `}
         >
+          
           <textarea
             css={css`
               ${DetailInput}
             `}
-            value={inputs.code}
+            value={inputs.code.join('\n')}
             name="code"
             onChange={handleInput}
-            readOnly
+            
           />
         </div>
         <div

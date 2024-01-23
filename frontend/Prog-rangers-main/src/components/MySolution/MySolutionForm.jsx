@@ -9,6 +9,9 @@ import star3 from '../../assets/icons/star/star3.svg';
 import star4 from '../../assets/icons/star/star4.svg';
 import star5 from '../../assets/icons/star/star5.svg';
 
+import { BiSolidLockAlt } from 'react-icons/bi';
+import { BiSolidLockOpenAlt } from 'react-icons/bi';
+
 export const MySolutionForm = ({data}) => {
 
   const navigate = useNavigate();
@@ -67,6 +70,10 @@ export const MySolutionForm = ({data}) => {
               color: #959595;
               `}>
                 {item.solution.title}
+              </div>
+
+              <div className="icon">
+                {item.solution.public ? <BiSolidLockOpenAlt size="18" color="#D9D9D9" /> : <BiSolidLockAlt size="18" color="#D9D9D9" />}
               </div>
             </div>
               

@@ -18,6 +18,7 @@ public class SolutionResponse {
     private String nickname;
     private String title;
     private String link;
+    private Integer level;
     private String algorithm;
     private String dataStructure;
     private String language;
@@ -39,10 +40,11 @@ public class SolutionResponse {
                 .nickname(nickname)
                 .title(solution.getTitle())
                 .link(problemLink)
+                .level(solution.getLevel())
                 .algorithm(solution.getAlgorithmName())
                 .dataStructure(solution.getDataStructureName())
                 .language(solution.getLanguage().getView())
-                .code(solution.getCode().split("\n"))
+                .code(solution.getCode().split(System.lineSeparator()))
                 .description(solution.getDescription())
                 .likes(likeCount)
                 .scraps(scrapCount)

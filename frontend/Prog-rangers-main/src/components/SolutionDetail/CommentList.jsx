@@ -26,8 +26,7 @@ export const CommentList = () => {
   const { solutionId } = useParams();
   const [comments, setComments] = useState([]);
   const [replies, setReplies] = useState([]);
-  const [commentIdToDelete, setCommentIdToDelete] =
-    useState(null);
+  const [commentIdToDelete, setCommentIdToDelete] =useState(null);
   const [newComment, setNewComment] = useState(null);
 
   // 수정 삭제 버튼
@@ -50,11 +49,13 @@ export const CommentList = () => {
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
+    // 토큰이 있는 경우와 없는 경우에 대한 설정
+    const axiosConfig = token
+      ? { headers: { Authorization: `Bearer ${token}` } }
+      : {};
+
     axios
-      .get(apiUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(apiUrl, axiosConfig)
       .then((response) => {
         setComments(response.data.comments);
         setNewComment(response.data.newComment);
@@ -63,29 +64,37 @@ export const CommentList = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
-
+  }, [solutionId, token]);
+  
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
-    axios
-      .delete(
-        `http://13.125.13.131:8080/api/v1/comments/${commentId}`,
-        {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        // 댓글 삭제에 성공한 경우, 화면에서 댓글을 제거
-        const updatedComments = comments.filter(
-          (comment) => comment.id !== commentId
-        );
-        setComments(updatedComments);
-      })
-      .catch((error) => {
-        console.error('댓글 삭제 오류:', error);
-      });
+    const commentToDelete = comments.find((comment) => comment.id === commentId);
+  
+    // 댓글이 존재하고 해당 댓글의 mine 속성이 true일 때 삭제
+    if (commentToDelete && commentToDelete.mine) {
+      axios
+        .delete(
+          `http://13.125.13.131:8080/api/v1/comments/${commentId}`,
+          {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          // 댓글 삭제에 성공한 경우, 화면에서 댓글을 제거
+          const updatedComments = comments.filter(
+            (comment) => comment.id !== commentId
+          );
+          setComments(updatedComments);
+        })
+        .catch((error) => {
+          console.error('댓글 삭제 오류:', error);
+        });
+    } else {
+      alert('접근 권한이 없습니다.');
+    }
   };
+  
 
   // 댓글 수정
   const handleEditComment = (commentId, editValue) => {
@@ -103,8 +112,11 @@ export const CommentList = () => {
       .then((response) => {
         const updatedComments = comments.map((comment) => {
           if (comment.id === commentId) {
-            comment.content = editValue;
-            comment.editing = false; // 수정이 완료되면 편집 모드 종료
+            return {
+              ...comment,
+              content: editValue,
+              editing: false,
+            }; // 수정이 완료되면 편집 모드 종료
           }
           return comment;
         });
@@ -115,17 +127,30 @@ export const CommentList = () => {
         console.error('댓글 수정 오류:', error);
       });
   };
-
-  // 편집 모드를 토글하는 함수
+  
+  // 수정 모드를 토글하는 함수
   const toggleEditComment = (commentId) => {
-    const updatedComments = comments.map((comment) => {
-      if (comment.id === commentId) {
-        comment.editing = !comment.editing;
-      }
-      return comment;
-    });
-    setComments(updatedComments);
+    const commentToUpdate = comments.find((comment) => comment.id === commentId);
+    console.log(commentToUpdate);
+  
+    // 댓글이 존재하고 해당 댓글의 mine 속성이 true일 때 수정 모드를 토글
+    if (commentToUpdate && commentToUpdate.mine) {
+      const updatedComments = comments.map((comment) => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            editing: !comment.editing,
+          };
+        }
+        return comment;
+      });
+      setComments(updatedComments);
+    } else {
+      alert('접근 권한이 없습니다.');
+    }
   };
+  
+
 
   // 댓글 내용 변경 시 호출되는 함수
   const onCommentContentChange = (
@@ -176,13 +201,40 @@ export const CommentList = () => {
       setComments(updatedComments);
     }
   };
+  
+  // 외부 클릭시 dot 닫힘
+  const closeOnOutsideClick = (e) => {
+    if (isOpen) {
+      const dotMenus = document.querySelectorAll('.dot-menu');
+      dotMenus.forEach((dotMenu) => {
+        if (dotMenu && !dotMenu.contains(e.target)) {
+          const commentId = dotMenu.getAttribute('data-comment-id');
+          setIsOpen((prevState) => {
+            const updatedState = { ...prevState };
+            updatedState[commentId] = false;
+            return updatedState;
+          });
+        }
+      });
+    }
+  };
+  
+  React.useEffect(() => {
+    window.addEventListener('click', closeOnOutsideClick);
+    return () => {
+      window.removeEventListener('click', closeOnOutsideClick);
+    };
+  }, []);
+
+  
 
   return (
     <div className="comments">
       {comments
         .filter(
           (commentItem) =>
-            commentItem.content !== '삭제된 댓글입니다'
+            commentItem.status !== 'DELETED' ||
+            commentItem.replies.length > 0
         )
         .map((commentItem) => (
           <div className="comment" key={commentItem.id}>
@@ -240,6 +292,13 @@ export const CommentList = () => {
                         onBlur={() =>
                           toggleEditComment(commentItem.id)
                         } // 수정 모드에서 벗어날 때
+                        css={css`
+                        width: ${(commentItem.content.length + 3) * 12}px;
+                        border: 1px solid #111;
+                        border-radius: 25px;
+                        padding-left: 10px;
+                      `}
+                        
                       />
                     ) : (
                       <div
@@ -257,6 +316,7 @@ export const CommentList = () => {
                 <div
                   css={css`
                     margin-left: 20px;
+                    margin-top: 5px;
                     gap: 15px;
                     display: flex;
                     align-items: center;
@@ -282,10 +342,12 @@ export const CommentList = () => {
                       }
                       css={css`
                         display: flex;
-                        align-item: center;
+                        align-items: center;
+                        ${commentItem.status === 'DELETED' &&
+                        'display: none;'}
                       `}
                     >
-                      <img src={dot} alt="dot" />
+                      <img src={dot} alt="dot" className="dot-menu" data-comment-id={commentItem.id} />
                     </button>
                   </div>
 
@@ -301,7 +363,7 @@ export const CommentList = () => {
                       css={editStyle(
                         isOpen[commentItem.id]
                       )}
-                      onClick={() => {
+                      onClick={() => {                   
                         if (commentItem.editing) {
                           // 수정 중인 경우, 수정 완료 버튼 > 수정 모드에서 벗어나고 서버에 저장
                           toggleEditComment(commentItem.id);
@@ -309,10 +371,8 @@ export const CommentList = () => {
                             commentItem.id,
                             commentItem.content
                           );
-                        } else {
-                          // 수정 중이 아니면 수정 모드로 전환
+                        } 
                           toggleEditComment(commentItem.id);
-                        }
                       }}
                     >
                       {commentItem.editing

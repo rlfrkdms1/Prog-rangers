@@ -23,6 +23,7 @@ const Profile = () => {
   const { nickname } = useParams();
   const [id, setId ] = useState([]);
   const [data, setData] = useState([]);
+  const [cursor, setCursor] = useState('');
 
   //팔로우 버튼
   const [isFollowing, setIsFollowing] = useState(false);
@@ -46,6 +47,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        setFollowData(response.data);
         const isFollowingProfile = response.data.followings.some(followings => followings.nickname === nickname);
         setIsFollowing(isFollowingProfile);
       } catch (error) {
@@ -55,25 +57,7 @@ const Profile = () => {
     fetchData();
   }, [nickname, token]);
 
-  useEffect(() => {
-    const apiUrl =
-      'http://13.125.13.131:8080/api/v1/follows';
-
-    axios
-      .get(apiUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setFollowData(response.data);
-        })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, []);
-
   const handleFollowButton = () => {
-
     fetch(
       `http://13.125.13.131:8080/api/v1/members/${id}/following`,
       {
@@ -82,18 +66,22 @@ const Profile = () => {
       }
     )
       .then((response) => {
-        setIsFollowing(!isFollowing);
-        if (isFollowing) {
-          console.log('언팔로우 성공');
-        } else {
-          console.log('팔로우 성공');
+        if (!token) {
+          alert('로그인 후 이용해주세요');
+        }
+        else {
+          setIsFollowing(!isFollowing);
+          if (isFollowing) {
+            console.log('언팔로우 성공');
+          } else {
+            console.log('팔로우 성공');
+          }
         }
       })
       .catch((error) => {
         console.error('API 요청 실패', error);
-      });}
-
-
+      });
+    }
 
   // 달성 뱃지
   const badgeImages = {
@@ -103,6 +91,45 @@ const Profile = () => {
     // 4: star4,
     // 5: star5,
   };
+  
+  // 무한 스크롤 기능
+  const handleScroll = () => {
+    const isBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight;
+    if (isBottom && cursor !== null && cursor !== -1) {
+      const apiUrl = `http://13.125.13.131:8080/api/v1/members/${nickname}?page=${cursor}`;
+
+
+      axios.get(apiUrl)
+      .then((response) => {
+        if (Array.isArray(response.data.list)) {
+          // 중복 방지
+          setData((prevData) => {
+            const newList = response.data.list.filter((newItem) => {
+              return !prevData.list.some((prevItem) => prevItem.solution.id === newItem.solution.id);
+            });
+            return { ...prevData, list: [...prevData.list, ...newList] };
+          });
+
+          setCursor(response.data.cursor);
+        }
+      });
+    }
+  };
+    
+  useEffect(() => {
+    handleScroll();
+  
+    // 스크롤 이벤트 리스너
+    const scrollListener = () => {
+      handleScroll();
+    };
+
+    window.addEventListener('scroll', scrollListener);
+    
+    return () => {
+      window.removeEventListener('scroll', scrollListener);
+    };
+  }, [cursor, nickname]);
 
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/members/${nickname}`;
@@ -111,15 +138,16 @@ const Profile = () => {
       .get(apiUrl)
       .then((response) => {
         setData(response.data);
+        setId(response.data.id);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
         alert(
-          '탈퇴한 사용자의 프로필을 방문할 수 없습니다.'
+          '존재하지 않는 사용자의 프로필을 방문할 수 없습니다.'
         );
         navigate(-1);
       });
-  }, [nickname]);
+    }, [isFollowing]);
 
   return (
     <div
@@ -304,7 +332,21 @@ const Profile = () => {
           풀이
         </div>
 
-        <SolvingList />
+        {data.list && data.list.length === 0 ? (
+          <div
+            css={css`
+              font-size: 18px;
+              font-weight: 500;
+              margin-top: 50px;
+              color: ${theme.colors.light1};
+            `}
+          >
+            풀이 없음
+          </div>
+        ) : (
+        <SolvingList list={data.list} />
+        )}
+      
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ package com.prograngers.backend.service.auth;
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.ProhibitionNicknameException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
