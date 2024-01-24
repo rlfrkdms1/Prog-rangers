@@ -20,6 +20,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     boolean existsById(Long id);
 
-    @Query("select c from Comment c join fetch c.member join fetch c.solution s join fetch s.problem join fetch s.member where c.member.id = :memberId and c.status != com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED order by c.createdAt")
+    @Query("select c from Comment c join fetch c.member join fetch c.solution s join fetch s.problem join fetch s.member where c.member.id = :memberId order by c.createdAt")
     Slice<Comment> findMyPageByMemberId(Pageable pageable, @Param("memberId") Long memberId);
 }
