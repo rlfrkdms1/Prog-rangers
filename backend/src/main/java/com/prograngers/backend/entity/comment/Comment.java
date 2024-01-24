@@ -56,14 +56,13 @@ public class Comment {
     private Long parentId;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private CommentStatusConstant status;
+    private boolean updated;
 
     public void update(String content) {
         if (content == null || content.isBlank()) {
             return;
         }
         this.content = content;
-        this.status = FIXED;
+        this.updated = true;
     }
 }
