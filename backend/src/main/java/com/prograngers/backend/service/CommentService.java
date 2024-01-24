@@ -89,11 +89,9 @@ public class CommentService {
     }
 
     private void deleteChildren(Comment comment) {
-        if (comment.getParentId() != null) {
-            List<Comment> children = commentRepository.findAllByParentId(comment.getParentId());
-            children.stream()
-                    .forEach((child) -> child.delete());
-        }
+        List<Comment> children = commentRepository.findAllByParentId(comment.getParentId());
+        children.stream()
+                .forEach((child) -> child.delete());
     }
 
     private void validCommentAlreadyDeleted(Comment comment) {
