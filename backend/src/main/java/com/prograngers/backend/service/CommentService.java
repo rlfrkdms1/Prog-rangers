@@ -84,8 +84,8 @@ public class CommentService {
         Member member = findMemberById(memberId);
         validMemberAuthorization(comment, member);
         validCommentAlreadyDeleted(comment);
-        comment.delete();
         deleteChildren(comment);
+        commentRepository.delete(comment);
     }
 
     private void deleteChildren(Comment comment) {

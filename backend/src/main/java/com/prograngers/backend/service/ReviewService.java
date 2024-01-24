@@ -96,8 +96,8 @@ public class ReviewService {
         Member member = findMemberById(memberId);
         validMemberAuthorization(review, member);
         validReviewAlreadyDeleted(review);
-        review.delete();
         deleteChildren(review);
+        reviewRepository.delete(review);
     }
 
     private void deleteChildren(Review review) {
