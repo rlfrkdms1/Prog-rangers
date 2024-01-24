@@ -101,7 +101,7 @@ public class ReviewService {
     }
 
     private void deleteChildren(Review review) {
-        List<Review> children = reviewRepository.findAllByParentId(review.getParentId());
+        List<Review> children = reviewRepository.findAllByParentId(review.getId());
         children.stream()
                 .forEach(reviewRepository::delete);
     }
