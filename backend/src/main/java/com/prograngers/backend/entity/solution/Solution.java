@@ -146,12 +146,12 @@ public class Solution {
     }
 
     /**
-     * 풀이의 id와 제목을 { id : %d, title : %d }의 문자열 형태로 반환합니다
-     * 예를 들어 { id : 1, title : 코딩테스트 연습 } 입니다.
+     * 풀이의 id와 날짜을 { id : %d, date : %s }의 문자열 형태로 반환합니다
+     * { id : 880, date : 2024-01-24T19:26:01.658721100 } 입니다.
      * 이 형식은 언제든 바뀔 수 있습니다
      */
     @Override
     public String toString() {
-        return String.format("{ id : %d, title : %s }",id,title);
+        return String.format("{ id : %d, date : %s }",id,createdAt);
     }
 }
