@@ -404,8 +404,7 @@ React.useEffect(() => {
                               .filter(
                                 (review) =>
                                   review.codeLineNumber ===
-                                    codeLineNumber+1 &&
-                                    review.status !== 'DELETED'
+                                    codeLineNumber+1
                               )
                               .sort((a, b) => a.id - b.id)
                               .map((review) => (
@@ -544,7 +543,6 @@ React.useEffect(() => {
                           {codeData.reviews
                             .filter(
                               (review) =>
-                                review.status !== 'DELETED' &&
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )
@@ -565,7 +563,6 @@ React.useEffect(() => {
                             {codeData.reviews
                             .filter(
                               (review) =>
-                                review.status !== 'DELETED' &&
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )

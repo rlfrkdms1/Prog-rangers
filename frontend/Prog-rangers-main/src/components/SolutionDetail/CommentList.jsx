@@ -410,10 +410,6 @@ export const CommentList = () => {
               Array.isArray(commentItem.replies) && (
                 <div className="repliesSection">
                   {commentItem.replies
-                    .filter(
-                      (reply) =>
-                        reply &&
-                        reply.status !== 'DELETED')
                     .map((reply) => (
                       <div
                         key={reply && reply.id}
