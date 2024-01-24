@@ -2,7 +2,6 @@ package com.prograngers.backend.dto.solution.response;
 
 
 import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.comment.CommentStatusConstant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
