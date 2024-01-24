@@ -58,7 +58,7 @@ export const MySolHeader = () => {
   };
 
   useEffect(() => {
-    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}/mine`;
 
     axios
       .get(apiUrl, {
