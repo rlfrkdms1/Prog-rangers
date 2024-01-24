@@ -97,6 +97,15 @@ public class ReviewService {
         validMemberAuthorization(review, member);
         validReviewAlreadyDeleted(review);
         review.delete();
+        deleteChildren(review);
+    }
+
+    private void deleteChildren(Review review) {
+        if (review.getParentId() != null) {
+            List<Review> children = reviewRepository.findAllByParentId(review.getParentId());
+            children.stream()
+                    .forEach(reviewRepository::delete);
+        }
     }
 
     public ShowReviewsResponse getReviewDetail(Long solutionId, Long memberId) {
