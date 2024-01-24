@@ -66,10 +66,4 @@ public class Comment {
         this.content = content;
         this.status = FIXED;
     }
-
-    public void delete() {
-        this.content = DELETED_CONTENT;
-        this.status = DELETED;
-    }
-
 }
