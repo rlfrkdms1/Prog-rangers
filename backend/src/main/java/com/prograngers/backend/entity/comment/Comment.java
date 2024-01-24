@@ -55,7 +55,7 @@ public class Comment {
 
     private Long parentId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BOOLEAN")
     private boolean updated;
 
     public void update(String content) {
