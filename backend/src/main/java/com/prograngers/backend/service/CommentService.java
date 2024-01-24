@@ -72,10 +72,8 @@ public class CommentService {
     @Transactional
     public Long updateComment(Long commentId, UpdateCommentRequest updateCommentRequest, Long memberId) {
         Comment comment = findById(commentId);
-        Long targetCommentMemberId = comment.getMember().getId();
-
         Member member = findMemberById(memberId);
-        validMemberAuthorization(targetCommentMemberId, member);
+        validMemberAuthorization(comment, member);
         comment.update(updateCommentRequest.getContent());
         return comment.getId();
     }
@@ -84,12 +82,10 @@ public class CommentService {
     public void deleteComment(Long commentId, Long memberId) {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
-        Long targetCommentMemberId = comment.getMember().getId();
-        validMemberAuthorization(targetCommentMemberId, member);
+        validMemberAuthorization(comment, member);
         validCommentAlreadyDeleted(comment);
         comment.delete();
         deleteChildren(comment);
-        commentRepository.save(comment);
     }
 
     private void deleteChildren(Comment comment) {
@@ -114,8 +110,8 @@ public class CommentService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private void validMemberAuthorization(Long targetCommentMemberId, Member member) {
-        if (!targetCommentMemberId.equals(member.getId())) {
+    private void validMemberAuthorization(Comment comment, Member member) {
+        if (!comment.getMember().getId().equals(member.getId())) {
             throw new MemberUnAuthorizedException();
         }
     }
