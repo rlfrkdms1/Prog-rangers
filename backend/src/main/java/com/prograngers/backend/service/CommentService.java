@@ -1,7 +1,5 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
-
 import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
 import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
@@ -10,7 +8,6 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentSolutionException;
 import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidParentException;
-import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -82,7 +79,6 @@ public class CommentService {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
         validMemberAuthorization(comment, member);
-        validCommentAlreadyDeleted(comment);
         deleteChildren(comment);
         commentRepository.delete(comment);
     }
@@ -91,11 +87,6 @@ public class CommentService {
         commentRepository.deleteAll(commentRepository.findAllByParentId(comment.getId()));
     }
 
-    private void validCommentAlreadyDeleted(Comment comment) {
-        if (comment.getStatus().equals(DELETED)) {
-            throw new CommentAlreadyDeletedException();
-        }
-    }
 
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
