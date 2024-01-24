@@ -152,6 +152,6 @@ public class Solution {
      */
     @Override
     public String toString() {
-        return String.format("{ id : %d, title : %d }",id,title);
+        return String.format("{ id : %d, title : %s }",id,title);
     }
 }
