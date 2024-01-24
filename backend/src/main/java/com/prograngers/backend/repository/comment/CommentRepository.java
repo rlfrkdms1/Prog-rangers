@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllBySolution(Solution solution);
 
+    List<Comment> findAllByParentId(Long parentId);
+
     List<Comment> findAllBySolutionOrderByCreatedAtAsc(Solution solution);
 
     boolean existsById(Long id);
