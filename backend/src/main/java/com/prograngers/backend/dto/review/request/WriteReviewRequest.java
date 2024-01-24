@@ -29,7 +29,7 @@ public class WriteReviewRequest {
 
     public Review toReview(Member member, Solution solution) {
         return Review.builder()
-                .status(CREATED)
+                .updated(false)
                 .member(member)
                 .solution(solution)
                 .content(content)

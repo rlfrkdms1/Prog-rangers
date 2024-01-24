@@ -1,7 +1,6 @@
 package com.prograngers.backend.dto.review.response;
 
 import com.prograngers.backend.entity.review.Review;
-import com.prograngers.backend.entity.review.ReviewStatusConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,16 +17,13 @@ public class ReplyResponse {
     private String nickname;
     private String photo;
     private String content;
-
-    private ReviewStatusConstant status;
-
-
+    private boolean updated;
     private boolean mine;
 
     public static ReplyResponse from(Review review, boolean reviewIsMine) {
 
         ReplyResponse replyResponse = ReplyResponse.builder()
-                .status(review.getStatus())
+                .updated(review.isUpdated())
                 .id(review.getId())
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())

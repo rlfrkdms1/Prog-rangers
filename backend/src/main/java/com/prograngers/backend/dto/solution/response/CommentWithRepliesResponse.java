@@ -17,7 +17,7 @@ public class CommentWithRepliesResponse {
     private Long id;
     private String nickname;
     private String content;
-    private CommentStatusConstant status;
+    private boolean updated;
     private List<CommentWithRepliesResponse> replies;
     private boolean mine;
 
@@ -28,7 +28,7 @@ public class CommentWithRepliesResponse {
                 .id(comment.getId())
                 .nickname(comment.getMember().getNickname())
                 .content(comment.getContent())
-                .status(comment.getStatus())
+                .updated(comment.isUpdated())
                 .replies(replies)
                 .mine(isMine)
                 .build();
@@ -40,7 +40,7 @@ public class CommentWithRepliesResponse {
                 .id(comment.getId())
                 .nickname(comment.getMember().getNickname())
                 .content(comment.getContent())
-                .status(comment.getStatus())
+                .updated(comment.isUpdated())
                 .mine(isMine)
                 .build();
     }
