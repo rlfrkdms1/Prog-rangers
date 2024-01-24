@@ -18,7 +18,6 @@ import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedExcep
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -89,9 +88,7 @@ public class CommentService {
     }
 
     private void deleteChildren(Comment comment) {
-        List<Comment> children = commentRepository.findAllByParentId(comment.getId());
-        children.stream()
-                .forEach(commentRepository::delete);
+        commentRepository.deleteAll(commentRepository.findAllByParentId(comment.getId()));
     }
 
     private void validCommentAlreadyDeleted(Comment comment) {
