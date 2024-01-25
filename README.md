@@ -45,5 +45,10 @@
 ## 팀원
 
 #### 빙길빙길 팀
+| Backend | Backend | Frontend | Frontend | Frontend |
+| :-----: | :-----: | :------: | :------: | :------: |
+| <img src="https://avatars.githubusercontent.com/u/83744709?v=4" width=400px alt="길가은"/> | <img src="https://avatars.githubusercontent.com/u/96513365?v=4" width=400px alt="장지담"/> | <img src="https://avatars.githubusercontent.com/u/137764022?v=4" width=400px alt="이수빈"/> | <img src="https://avatars.githubusercontent.com/u/109477788?v=4" width=400px alt="김유진"/> | <img src="https://avatars.githubusercontent.com/u/109705781?v=4" width=400px alt="강민경"/> |
+| [길가은](https://github.com/rlfrkdms1)|[장지담](https://github.com/jd99iam)|[이수빈](https://github.com/ddongguri-bing)|[김유진](https://github.com/yyyujinnn)|[강민경](https://github.com/mingyeong0210)
+
 
 
