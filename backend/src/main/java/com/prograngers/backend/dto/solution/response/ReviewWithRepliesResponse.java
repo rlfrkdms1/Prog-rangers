@@ -16,6 +16,7 @@ public class ReviewWithRepliesResponse {
     private String nickname;
     private String content;
     private List<ReviewWithRepliesResponse> replies;
+    private boolean updated;
     boolean mine;
 
     public static ReviewWithRepliesResponse from(Review review, ArrayList<ReviewWithRepliesResponse> replies,
@@ -26,6 +27,7 @@ public class ReviewWithRepliesResponse {
                 .nickname(review.getMember().getNickname())
                 .content(review.getContent())
                 .replies(replies)
+                .updated(review.isUpdated())
                 .mine(mine)
                 .build();
     }
@@ -37,6 +39,7 @@ public class ReviewWithRepliesResponse {
                 .nickname(review.getMember().getNickname())
                 .content(review.getContent())
                 .mine(mine)
+                .updated(review.isUpdated())
                 .build();
     }
 }
