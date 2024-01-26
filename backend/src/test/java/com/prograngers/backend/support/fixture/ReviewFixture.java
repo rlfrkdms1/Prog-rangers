@@ -9,7 +9,6 @@ import static com.prograngers.backend.entity.review.ReviewStatusConstant.FIXED;
 
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
-import com.prograngers.backend.entity.review.ReviewStatusConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

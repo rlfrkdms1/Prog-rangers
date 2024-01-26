@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `comment`
 (
     `id`          BIGINT NOT NULL auto_increment,
     `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `status`      VARCHAR(255),
+    `updated`      TINYINT(1) NOT NULL DEFAULT 0,
     `content`     VARCHAR(255) NOT NULL,
     `parent_id`   BIGINT,
     `member_id`   BIGINT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `problem`
 CREATE TABLE IF NOT EXISTS `review`
 (
     `id`               BIGINT NOT NULL auto_increment,
-    `status`           VARCHAR(255),
+    `updated`           TINYINT(1) NOT NULL DEFAULT 0,
     `code_line_number` INT NOT NULL,
     `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `content`          VARCHAR(255) NOT NULL,

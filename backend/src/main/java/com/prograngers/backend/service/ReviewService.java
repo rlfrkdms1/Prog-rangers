@@ -1,7 +1,5 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
-
 import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
 import com.prograngers.backend.dto.review.request.WriteReviewRequest;
 import com.prograngers.backend.dto.review.response.CodeLineWithReview;
@@ -11,12 +9,11 @@ import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.DifferentCodeLineNumberException;
-import com.prograngers.backend.exception.badrequest.DifferentSolutionException;
-import com.prograngers.backend.exception.badrequest.InvalidCodeLIneNumberException;
-import com.prograngers.backend.exception.badrequest.InvalidParentException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentCodeLineNumberException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentSolutionException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidCodeLIneNumberException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidParentException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
-import com.prograngers.backend.exception.notfound.ReviewAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.ReviewNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
@@ -86,7 +83,6 @@ public class ReviewService {
         Review review = findReviewById(reviewId);
         Member member = findMemberById(memberId);
         validMemberAuthorization(review, member);
-        validReviewAlreadyDeleted(review);
         review.update(updateReviewRequest.getContent());
     }
 
@@ -95,8 +91,12 @@ public class ReviewService {
         Review review = findReviewById(reviewId);
         Member member = findMemberById(memberId);
         validMemberAuthorization(review, member);
-        validReviewAlreadyDeleted(review);
-        review.delete();
+        deleteChildren(review);
+        reviewRepository.delete(review);
+    }
+
+    private void deleteChildren(Review review) {
+        reviewRepository.deleteAll(reviewRepository.findAllByParentId(review.getId()));
     }
 
     public ShowReviewsResponse getReviewDetail(Long solutionId, Long memberId) {
@@ -178,10 +178,5 @@ public class ReviewService {
         }
     }
 
-    private void validReviewAlreadyDeleted(Review targetReview) {
-        if (targetReview.getStatus().equals(DELETED)) {
-            throw new ReviewAlreadyDeletedException();
-        }
-    }
 
 }

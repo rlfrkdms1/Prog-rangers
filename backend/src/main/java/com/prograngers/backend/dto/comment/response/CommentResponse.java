@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CommentResponse {
 
-    private String status;
+    private boolean updated;
     private String content;
     private AuthorResponse author;
 
     public static CommentResponse from(Comment comment) {
         Member member = comment.getMember();
         return CommentResponse.builder()
-                .status(comment.getStatus().toString())
+                .updated(comment.isUpdated())
                 .content(comment.getContent())
                 .author(AuthorResponse.from(member))
                 .build();
