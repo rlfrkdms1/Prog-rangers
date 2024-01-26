@@ -1,7 +1,5 @@
 package com.prograngers.backend.dto.comment.request;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREATED;
-
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
@@ -29,7 +27,6 @@ public class WriteCommentRequest {
                 .content(content)
                 .createdAt(LocalDateTime.now())
                 .parentId(parentId)
-                .updated(false)
                 .build();
     }
 
