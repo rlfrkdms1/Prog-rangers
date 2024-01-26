@@ -65,8 +65,9 @@ export const LikeList = () => {
                 <div
                   css={css`
                     ${fontSizedark20}
-                    cursor: default;
+                    cursor: pointer;
                   `}
+                  onClick={()=>onClickSolution(item.solution.id)}
                 >
                   {item.problem.title}
                 </div>
