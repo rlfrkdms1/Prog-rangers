@@ -2,7 +2,6 @@ package com.prograngers.backend.dto.solution.response;
 
 
 import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.comment.CommentStatusConstant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -17,7 +16,7 @@ public class CommentWithRepliesResponse {
     private Long id;
     private String nickname;
     private String content;
-    private CommentStatusConstant status;
+    private boolean updated;
     private List<CommentWithRepliesResponse> replies;
     private boolean mine;
 
@@ -28,7 +27,7 @@ public class CommentWithRepliesResponse {
                 .id(comment.getId())
                 .nickname(comment.getMember().getNickname())
                 .content(comment.getContent())
-                .status(comment.getStatus())
+                .updated(comment.isUpdated())
                 .replies(replies)
                 .mine(isMine)
                 .build();
@@ -40,7 +39,7 @@ public class CommentWithRepliesResponse {
                 .id(comment.getId())
                 .nickname(comment.getMember().getNickname())
                 .content(comment.getContent())
-                .status(comment.getStatus())
+                .updated(comment.isUpdated())
                 .mine(isMine)
                 .build();
     }

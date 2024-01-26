@@ -18,4 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, QueryDslR
     List<Review> findAllByCodeLineNumberOrderByCreatedAtAsc(Integer codeLineNumber);
 
     boolean existsById(Long id);
+
+    List<Review> findAllByParentId(Long parentId);
 }

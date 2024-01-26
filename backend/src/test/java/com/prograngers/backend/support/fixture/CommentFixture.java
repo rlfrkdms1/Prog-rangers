@@ -8,7 +8,6 @@ import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELET
 import static com.prograngers.backend.entity.comment.CommentStatusConstant.FIXED;
 
 import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.comment.CommentStatusConstant;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import java.time.LocalDateTime;

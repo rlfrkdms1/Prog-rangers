@@ -1,7 +1,5 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
-
 import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
 import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
@@ -10,7 +8,6 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentSolutionException;
 import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidParentException;
-import com.prograngers.backend.exception.notfound.CommentAlreadyDeletedException;
 import com.prograngers.backend.exception.notfound.CommentNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
@@ -71,10 +68,8 @@ public class CommentService {
     @Transactional
     public Long updateComment(Long commentId, UpdateCommentRequest updateCommentRequest, Long memberId) {
         Comment comment = findById(commentId);
-        Long targetCommentMemberId = comment.getMember().getId();
-
         Member member = findMemberById(memberId);
-        validMemberAuthorization(targetCommentMemberId, member);
+        validMemberAuthorization(comment, member);
         comment.update(updateCommentRequest.getContent());
         return comment.getId();
     }
@@ -83,18 +78,15 @@ public class CommentService {
     public void deleteComment(Long commentId, Long memberId) {
         Comment comment = findById(commentId);
         Member member = findMemberById(memberId);
-        Long targetCommentMemberId = comment.getMember().getId();
-        validMemberAuthorization(targetCommentMemberId, member);
-        validCommentAlreadyDeleted(comment);
-        comment.delete();
-        commentRepository.save(comment);
+        validMemberAuthorization(comment, member);
+        deleteChildren(comment);
+        commentRepository.delete(comment);
     }
 
-    private void validCommentAlreadyDeleted(Comment comment) {
-        if (comment.getStatus().equals(DELETED)) {
-            throw new CommentAlreadyDeletedException();
-        }
+    private void deleteChildren(Comment comment) {
+        commentRepository.deleteAll(commentRepository.findAllByParentId(comment.getId()));
     }
+
 
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -104,8 +96,8 @@ public class CommentService {
         return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
-    private void validMemberAuthorization(Long targetCommentMemberId, Member member) {
-        if (!targetCommentMemberId.equals(member.getId())) {
+    private void validMemberAuthorization(Comment comment, Member member) {
+        if (!comment.getMember().getId().equals(member.getId())) {
             throw new MemberUnAuthorizedException();
         }
     }

@@ -2,7 +2,6 @@ package com.prograngers.backend.dto.solution.response;
 
 
 import com.prograngers.backend.entity.comment.Comment;
-import com.prograngers.backend.entity.comment.CommentStatusConstant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class SolutionDetailComment {
     private Long id;
     private String nickname;
     private String content;
-    private CommentStatusConstant status;
+    private boolean updated;
     private List<SolutionDetailComment> replies;
 
     boolean mine;
@@ -28,13 +27,13 @@ public class SolutionDetailComment {
                                              boolean isMine) {
 
         return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(),
-                comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), replies,
+                comment.getMember().getNickname(), comment.getContent(), comment.isUpdated(), replies,
                 isMine);
     }
 
     public static SolutionDetailComment from(Comment comment, boolean isMine) {
         return new SolutionDetailComment(comment.getMember().getPhoto(), comment.getId(),
-                comment.getMember().getNickname(), comment.getContent(), comment.getStatus(), null
+                comment.getMember().getNickname(), comment.getContent(), comment.isUpdated(), null
                 , isMine);
     }
 

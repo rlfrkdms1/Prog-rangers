@@ -2,7 +2,6 @@ package com.prograngers.backend.dto.review.response;
 
 
 import com.prograngers.backend.entity.review.Review;
-import com.prograngers.backend.entity.review.ReviewStatusConstant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -20,8 +19,7 @@ public class ReviewWithRepliesResponse {
     private String content;
     private List<ReplyResponse> replies;
     private boolean mine;
-
-    private ReviewStatusConstant status;
+    private boolean updated;
 
     public static ReviewWithRepliesResponse from(Review review, boolean reviewIsMine) {
 
@@ -30,7 +28,7 @@ public class ReviewWithRepliesResponse {
                 .nickname(review.getMember().getNickname())
                 .photo(review.getMember().getPhoto())
                 .content(review.getContent())
-                .status(review.getStatus())
+                .updated(review.isUpdated())
                 .replies(new ArrayList<>())
                 .mine(reviewIsMine)
                 .build();
