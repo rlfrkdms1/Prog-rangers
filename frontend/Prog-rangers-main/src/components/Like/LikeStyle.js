@@ -77,6 +77,6 @@ export const tags = css`
   font-weight: 400;
 
   &:hover{
-    cursor: pointer;
+    cursor: default;
   }
 `;

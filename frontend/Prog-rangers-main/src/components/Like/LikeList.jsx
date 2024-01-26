@@ -112,12 +112,10 @@ export const LikeList = () => {
                   </div>
                 </div>
 
-                <div classname="tags" css={css`display: flex;`}>
-                {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${tags}`}>{item.solution.algorithm}</div>)}
-                {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${tags}`}>{item.solution.dataStructure}</div>)}
-                {item.solution.language && (<div key={item.solution.language} css={css`${tags}`}>{item.solution.language}</div>)}
-                </div>
-
+                {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.algorithm}</div>)}
+                {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.dataStructure}</div>)}
+                {item.solution.language && (<div key={item.solution.language} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.language}</div>)}
+          
                 <button
                   css={css`
                     width: 30px;
