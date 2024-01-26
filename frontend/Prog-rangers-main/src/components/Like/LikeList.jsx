@@ -11,7 +11,6 @@ import {
   fontSizedark20,
   boxStyle,
   fontSize14,
-  tags,
 } from './LikeStyle.js';
 import hljs from 'highlight.js';
 
@@ -54,8 +53,6 @@ export const LikeList = () => {
 
   if (data.contents && data.contents.length > 0) {
     for (let i = 0; i < data.contents.length; i++) {
-      const item = data.contents[i];
-
       return (
         <>
           {data.contents.map((item, index) => (
