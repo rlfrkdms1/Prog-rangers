@@ -48,7 +48,7 @@ export const Recommand = () => {
       .catch((error) => {
         console.error('추천 리뷰 없음:', error);
       });
-  }, []);
+  }, [solutionId]);
 
   const gridContainerStyles = css`
     margin-top: 20px;

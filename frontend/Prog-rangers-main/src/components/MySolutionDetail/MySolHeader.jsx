@@ -74,7 +74,7 @@ export const MySolHeader = () => {
         alert('접근 권한이 없습니다.');
         navigate(-1);
       });
-  }, []);
+  }, [solutionId]);
 
   // 풀이 삭제
   const deleteSolution = (solutionId) => {

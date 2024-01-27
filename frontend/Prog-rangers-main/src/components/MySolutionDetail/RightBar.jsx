@@ -25,7 +25,9 @@ export const RightBar = () => {
     const token = localStorage.getItem('token');
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}/mine`;
 
-    axios
+    
+    const fetchData = async () => {
+      axios
       .get(apiUrl, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
@@ -38,6 +40,8 @@ export const RightBar = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
+    };
+    fetchData();
   }, [solutionId]);
 
   return (
