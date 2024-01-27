@@ -12,19 +12,13 @@ export const RightBar = () => {
     navigate(`/mySolution/${solutionId}`);
   };
 
-  const navigate1 = useNavigate();
-  const onClickScrape = (solutionId) => {
-    navigate1(`/solutions/${solutionId}`);
-  };
-
   const navigate2 = useNavigate();
   const onClickAddSol = () => {
     navigate2(`/myPage/addsolution`);
   };
 
   const { solutionId } = useParams();
-  const [MySolList, setMySolList] = useState([]);
-  const [MyScrapeList, setScrapeList] = useState([]);
+  const [ data, setData] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -36,20 +30,20 @@ export const RightBar = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setMySolList(response.data.mySolutionList);
-        setScrapeList(response.data.myScrapSolutionList);
+        setData(response.data);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
+  }, [solutionId]);
 
   return (
     <div className="RightbarWarp">
+      
       <div
         css={css`
           height: 100%;
-          alignitems: stretch;
+          align-items: stretch;
           border-left: 1px solid ${theme.colors.light3};
         `}
       >
@@ -68,6 +62,29 @@ export const RightBar = () => {
           >
             풀이목록
           </div>
+
+          {data && data.mySolutionList ? (
+            data.mySolutionList.map((item) => (
+              <div
+                key={item.id}
+                css={css`
+                  color: ${theme.colors.dark1};
+                  font-size: 16px;
+                  font-weight: 400;                  
+                  padding-top: 10px;
+                  cursor: pointer;
+                `}
+                onClick={() => onClickSols(item.id)}
+              >
+                {item.title}
+              </div>
+            ))
+          ) : (
+            <div css={css`
+            color: ${theme.colors.light1}`}
+            >
+              풀이 없음</div>
+          )}
 
           <button
             css={css`
@@ -93,8 +110,32 @@ export const RightBar = () => {
           >
             스크랩한 풀이
           </div>
+
+          {data && data.myScrapSolutionList ? (
+            data.myScrapSolutionList.map((item) => (
+              <div
+                key={item.id}
+                css={css`
+                  color: ${theme.colors.dark1};
+                  font-size: 16px;
+                  font-weight: 400;
+                  padding-top: 10px;
+                  cursor: pointer;
+                `}
+                onClick={() => onClickSols(item.id)}
+              >
+                {item.title}
+              </div>
+            ))
+          ) : (
+            <div css={css`
+              color: ${theme.colors.light1}`}
+            >
+              스크랩한 풀이 없음
+              </div>
+          )}
         </div>
       </div>
     </div>
-  );
+  )
 };

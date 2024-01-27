@@ -141,10 +141,9 @@ export const MySolHeader = () => {
                 {solution.title}
               </span>
               <span>
-              <img src={starImages[1]}/>
-                {/* {starImages[item.solution.level] && (
-                  <img src={starImages[item.solution.level]} alt={`${item.solution.level}`} />
-                 )} */}
+                {starImages[solution.level] && (
+                  <img src={starImages[solution.level]} alt={`${solution.level}`} />
+                 )}
               </span>
             </div>
             <div css={css`display: flex; gap: 5px;`}>
@@ -180,21 +179,6 @@ export const MySolHeader = () => {
                 `}
               >
                 {solution.dataStructure}
-              </div>
-
-              <div
-                className="LanguageOptions"
-                css={css`
-                  width: 89px;
-                  height: 36px;
-                  background-color: ${theme.colors.light3};
-                  border-radius: 20px;
-                  text-align: center;
-                  line-height: 36px;
-                  color: ${theme.colors.dark1};
-                `}
-              >
-                {solution.language}
               </div>
             </div>
           </div>
