@@ -17,7 +17,7 @@ import ProfileImg from './profile/default.png';
 import dot from '../../assets/icons/dotLight.svg';
 const token = localStorage.getItem('token');
 
-export const CommentList = () => {
+export const CommentList = ( totalCount ) => {
   const navigate = useNavigate();
   const onClickName = (nickname) => {
     navigate(`/profile/${nickname}`);
@@ -47,6 +47,7 @@ export const CommentList = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     // 토큰이 있는 경우와 없는 경우에 대한 설정
@@ -64,7 +65,9 @@ export const CommentList = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, [solutionId, token]);
+    }
+    fetchData();
+  }, [solutionId, totalCount]);
   
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
@@ -199,29 +202,29 @@ export const CommentList = () => {
     }
   };
   
-  // 외부 클릭시 dot 닫힘
-  const closeOnOutsideClick = (e) => {
-    if (isOpen) {
-      const dotMenus = document.querySelectorAll('.dot-menu');
-      dotMenus.forEach((dotMenu) => {
-        if (dotMenu && !dotMenu.contains(e.target)) {
-          const commentId = dotMenu.getAttribute('data-comment-id');
-          setIsOpen((prevState) => {
-            const updatedState = { ...prevState };
-            updatedState[commentId] = false;
-            return updatedState;
-          });
-        }
-      });
-    }
-  };
+  // // 외부 클릭시 dot 닫힘
+  // const closeOnOutsideClick = (e) => {
+  //   if (isOpen) {
+  //     const dotMenus = document.querySelectorAll('.dot-menu');
+  //     dotMenus.forEach((dotMenu) => {
+  //       if (dotMenu && !dotMenu.contains(e.target)) {
+  //         const commentId = dotMenu.getAttribute('data-comment-id');
+  //         setIsOpen((prevState) => {
+  //           const updatedState = { ...prevState };
+  //           updatedState[commentId] = false;
+  //           return updatedState;
+  //         });
+  //       }
+  //     });
+  //   }
+  // };
   
-  React.useEffect(() => {
-    window.addEventListener('click', closeOnOutsideClick);
-    return () => {
-      window.removeEventListener('click', closeOnOutsideClick);
-    };
-  }, [isOpen]);
+  // React.useEffect(() => {
+  //   window.addEventListener('click', closeOnOutsideClick);
+  //   return () => {
+  //     window.removeEventListener('click', closeOnOutsideClick);
+  //   };
+  // }, [isOpen]);
 
   return (
     <div className="comments">

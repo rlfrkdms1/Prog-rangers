@@ -13,6 +13,7 @@ export const Comments = () => {
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState(0); 
   const [repliesCount, setRepliesCount] = useState(0); 
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
@@ -23,7 +24,10 @@ export const Comments = () => {
         setComment(response.data.comments);
         const totalCommentCount = calculateTotalCommentCount(response.data.comments);
         setCommentCount(totalCommentCount.commentCount);
-        setRepliesCount(totalCommentCount.repliesCount);   
+        setRepliesCount(totalCommentCount.repliesCount);  
+        
+        const newTotalCount = totalCommentCount.commentCount + totalCommentCount.repliesCount;
+        setTotalCount(newTotalCount);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
@@ -80,12 +84,12 @@ export const Comments = () => {
               color: ${theme.colors.dark2};
             `}
           >
-            <span>{commentCount + repliesCount}</span>
+            <span>{totalCount}</span>
             <span>개</span>
           </div>
         </div>
 
-        <CommentList comments={comment} />
+        <CommentList comments={comment} key={totalCount} />
       </div>
     </div>
   );
