@@ -67,7 +67,7 @@ export const CommentList = ( totalCount ) => {
       });
     }
     fetchData();
-  }, [solutionId, totalCount]);
+  }, [solutionId, token, totalCount]);
   
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
