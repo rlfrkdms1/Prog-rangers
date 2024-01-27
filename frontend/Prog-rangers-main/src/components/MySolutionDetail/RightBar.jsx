@@ -19,6 +19,7 @@ export const RightBar = () => {
 
   const { solutionId } = useParams();
   const [ data, setData] = useState([]);
+  const [currentSolution, setCurrentSolution] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -31,6 +32,8 @@ export const RightBar = () => {
       })
       .then((response) => {
         setData(response.data);
+        const foundSolution = response.data.mySolutionList.find((item) => item.id === parseInt(solutionId));
+        setCurrentSolution(foundSolution);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
@@ -70,7 +73,7 @@ export const RightBar = () => {
                 css={css`
                   color: ${theme.colors.dark1};
                   font-size: 16px;
-                  font-weight: 400;                  
+                  font-weight: ${item.id === currentSolution?.id ? 700 : 400};                 
                   padding-top: 10px;
                   cursor: pointer;
                 `}
