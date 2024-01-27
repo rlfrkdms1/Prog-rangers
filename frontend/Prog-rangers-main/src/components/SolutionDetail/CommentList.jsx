@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -226,8 +226,28 @@ export const CommentList = ( totalCount ) => {
   //   };
   // }, [isOpen]);
 
+  // 외부 클릭시 한줄리뷰 닫힘
+  const commentsRef = useRef();
+
+  const closeOnOutsideClick = (event) => {
+    if (
+      commentsRef.current &&
+      !commentsRef.current.contains(event.target)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+
+  React.useEffect(() => {
+    window.addEventListener('click', closeOnOutsideClick);
+    return () => {
+      window.removeEventListener('click', closeOnOutsideClick);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="comments">
+    <div className="comments" ref={commentsRef}>
       {comments
         .map((commentItem) => (
           <div className="comment" key={commentItem.id}>
