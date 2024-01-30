@@ -76,10 +76,13 @@ export const CodeWindow4 = () => {
   const handleToggleReviews = () => {
     setShowAllReviews(!showAllReviews);
     setIsReviewVisible(!isReviewVisible);
-  };
+  }
 
   const handleReviewChange = (codeLineNumber, value) => {
     const updatedReviews = [...reviews];
+    if (!Array.isArray(updatedReviews)) {
+    updatedReviews = [];
+  }
     updatedReviews[codeLineNumber] = value;
     setReviews(updatedReviews);
   };
@@ -166,6 +169,7 @@ export const CodeWindow4 = () => {
 
           // 대표 한줄리뷰 가리기
           setIsReviewVisible(false);
+          setShowAllReviews(true);
         })
         .catch((error) => {
           console.error('리뷰 저장 중 오류 발생:', error);
