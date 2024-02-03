@@ -1,7 +1,5 @@
 import { useEffect, useContext, useState } from 'react';
-import {
-  useNavigate,
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   navStyle,
   linkDefault,
@@ -61,7 +59,7 @@ export const AfterLoginNav = () => {
 
   return (
     <div className="AfterLoginNav" css={navStyle}>
-      <StyledLink to="problems" onClick={hideDropdown}>
+      <StyledLink to="/problems" onClick={hideDropdown}>
         문제 보러가기
       </StyledLink>
       <StyledLink

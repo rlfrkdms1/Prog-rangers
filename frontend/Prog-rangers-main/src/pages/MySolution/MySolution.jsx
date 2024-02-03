@@ -15,6 +15,9 @@ const MySolution = () => {
   const [solutions, setSolutions] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
 
+  // 검색 상태 추가
+  const [searchTerm, setSearchTerm] = useState('');
+
   //필터 변수 선언
   const [filteredSolutions, setFilteredSolutions] =
     useState([]);
@@ -107,6 +110,24 @@ const MySolution = () => {
     solutions,
   ]);
 
+  // 검색 로직
+  const handleSearch = () => {
+    // solution의 title에서 검색어와 일치하는 것을 찾음
+    const filteredData = solutions.filter((item) => {
+      return item.problem.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    setFilteredSolutions(filteredData); // 검색 결과를 필터링된 데이터로 설정
+  };
+
+  // ENTER 이벤트 핸들러
+  const handleEnterPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div
       css={css`
@@ -139,6 +160,11 @@ const MySolution = () => {
             <input
               type="text"
               placeholder="내 풀이에서 문제 검색하기"
+              value={searchTerm}
+              onChange={(e) =>
+                setSearchTerm(e.target.value)
+              }
+              onKeyPress={handleEnterPress}
               css={css`
                 outline: none;
                 border: none;
@@ -150,6 +176,7 @@ const MySolution = () => {
               css={css`
                 line-height: 50px;
               `}
+              onClick={handleSearch}
             >
               <IoSearchOutline
                 size="27"
