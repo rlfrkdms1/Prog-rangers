@@ -144,4 +144,14 @@ public class Solution {
     public boolean isScrapped() {
         return scrapSolution != null;
     }
+
+    /**
+     * 풀이의 id와 날짜을 { id : %d, date : %s }의 문자열 형태로 반환합니다
+     * { id : 880, date : 2024-01-24T19:26:01.658721100 } 입니다.
+     * 이 형식은 언제든 바뀔 수 있습니다
+     */
+    @Override
+    public String toString() {
+        return String.format("{ id : %d, date : %s }",id,createdAt);
+    }
 }

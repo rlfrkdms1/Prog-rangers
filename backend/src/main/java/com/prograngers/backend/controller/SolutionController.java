@@ -83,7 +83,7 @@ public class SolutionController {
     }
 
     @GetMapping("/problems/{problemId}/solutions")
-    public ShowSolutionListResponse showList(@PageableDefault Pageable pageable,
+    public ShowSolutionListResponse showList(Pageable pageable,
                                              @PathVariable Long problemId,
                                              @RequestParam(required = false) LanguageConstant language,
                                              @RequestParam(required = false) AlgorithmConstant algorithm,
@@ -100,7 +100,7 @@ public class SolutionController {
                                                  @RequestParam(required = false) AlgorithmConstant algorithm,
                                                  @RequestParam(required = false) DataStructureConstant dataStructure,
                                                  @RequestParam(required = false) Integer level,
-                                                 @PageableDefault Pageable pageable,
+                                                 Pageable pageable,
                                                  @LoggedInMember Long memberId) {
         return solutionService.getMyList(keyword, language, algorithm, dataStructure, level, pageable, memberId);
     }

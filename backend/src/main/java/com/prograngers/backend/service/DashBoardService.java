@@ -2,6 +2,7 @@ package com.prograngers.backend.service;
 
 import com.prograngers.backend.dto.dashboard.response.IsDayOfStudyResponse;
 import com.prograngers.backend.dto.dashboard.response.NotificationWithSolutionResponse;
+import com.prograngers.backend.dto.dashboard.response.ShowCalendarResponse;
 import com.prograngers.backend.dto.dashboard.response.ShowDashBoardResponse;
 import com.prograngers.backend.dto.dashboard.response.SolutionWithProblemResponse;
 import com.prograngers.backend.entity.Notification;
@@ -104,5 +105,9 @@ public class DashBoardService {
 
     private Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    public ShowCalendarResponse getCalendar(Long memberId, YearMonth date) {
+        return new ShowCalendarResponse(getMonthlyStudyCalendar(memberId, date));
     }
 }

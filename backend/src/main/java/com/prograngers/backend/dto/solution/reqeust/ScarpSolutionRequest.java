@@ -31,20 +31,18 @@ public class ScarpSolutionRequest {
 
     public Solution toSolution(Solution scrap, Member member) {
         return Solution.builder()
-                .level(level).
-                description(description).
-                title(title)
-                // 위 내용까지 스크랩 한 사용자가 수정할 수 있는 내용
-                .isPublic(false) //스크랩한 풀이이기 때문에 무조건 비공개한다
+                .level(level)
+                .description(description)
+                .title(title)
+                .isPublic(false)
                 .problem(scrap.getProblem())
                 .createdAt(LocalDateTime.now())
-                .code(scrap.getCode()).
-                scrapSolution(scrap).
-                algorithm(scrap.getAlgorithm()).
-                dataStructure(scrap.getDataStructure())
+                .code(scrap.getCode())
+                .scrapSolution(scrap)
+                .algorithm(scrap.getAlgorithm())
+                .dataStructure(scrap.getDataStructure())
                 .language(scrap.getLanguage())
-                .member(member)
-                .build();
+                .member(member).build();
     }
 
 }
