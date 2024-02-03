@@ -1,6 +1,8 @@
 package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.exception.unauthorization.NotExistAccessTokenException;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.NOT_EXIST_ACCESS_TOKEN;
+
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.service.auth.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -38,7 +40,7 @@ public class LoggedInArgumentResolver implements HandlerMethodArgumentResolver {
 
     private void validExistAccessTokenInHeader(String headerAuthorization) {
         if (headerAuthorization == null) {
-            throw new NotExistAccessTokenException();
+            throw new UnAuthorizationException(NOT_EXIST_ACCESS_TOKEN);
         }
     }
 

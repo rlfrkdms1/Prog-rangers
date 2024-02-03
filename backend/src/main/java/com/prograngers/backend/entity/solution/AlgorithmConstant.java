@@ -1,8 +1,10 @@
 package com.prograngers.backend.entity.solution;
 
+import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.ALGORITHM_NOT_EXISTS;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.prograngers.backend.entity.HashTag;
-import com.prograngers.backend.exception.enumtype.AlgorithmNotFoundException;
+import com.prograngers.backend.exception.EnumTypeException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -37,6 +39,6 @@ public enum AlgorithmConstant implements HashTag {
                 return algorithm;
             }
         }
-        throw new AlgorithmNotFoundException();
+        throw new EnumTypeException(ALGORITHM_NOT_EXISTS);
     }
 }

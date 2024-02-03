@@ -1,12 +1,13 @@
 package com.prograngers.backend.controller.auth;
 
 import static com.prograngers.backend.controller.auth.RefreshCookieProvider.REFRESH_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.NOT_EXIST_REFRESH_TOKEN;
 
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.dto.auth.response.LoginResponse;
 import com.prograngers.backend.dto.auth.result.AuthResult;
-import com.prograngers.backend.exception.unauthorization.NotExistRefreshTokenException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.service.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -111,7 +112,7 @@ public class AuthController {
 
     private void validRefreshToken(String refreshToken) {
         if (refreshToken == null) {
-            throw new NotExistRefreshTokenException();
+            throw new UnAuthorizationException(NOT_EXIST_REFRESH_TOKEN);
         }
     }
 }

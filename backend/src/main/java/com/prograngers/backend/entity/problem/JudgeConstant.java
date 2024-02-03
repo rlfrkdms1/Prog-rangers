@@ -1,6 +1,8 @@
 package com.prograngers.backend.entity.problem;
 
-import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
+import static com.prograngers.backend.exception.errorcode.ProblemErrorCode.PROBLEM_LINK_NOT_FOUND;
+
+import com.prograngers.backend.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,6 @@ public enum JudgeConstant {
                 return judge;
             }
         }
-        throw new ProblemLinkNotFoundException();
+        throw new NotFoundException(PROBLEM_LINK_NOT_FOUND);
     }
 }

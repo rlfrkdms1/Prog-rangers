@@ -22,7 +22,7 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -128,7 +128,7 @@ class CommentServiceTest {
         // when then
         // member1의 댓글을 member2가 수정하려 한다
         Assertions.assertThrows(
-                MemberUnAuthorizedException.class,
+                UnAuthorizationException.class,
                 () -> commentService.updateComment(comment.getId(), request, member2.getId())
         );
     }
@@ -151,7 +151,7 @@ class CommentServiceTest {
         // when then
         // member1의 댓글을 member2가 삭제하려 한다
         Assertions.assertThrows(
-                MemberUnAuthorizedException.class,
+                UnAuthorizationException.class,
                 () -> commentService.deleteComment(comment.getId(), member2.getId())
         );
     }

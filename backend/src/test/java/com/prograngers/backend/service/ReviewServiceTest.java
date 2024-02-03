@@ -18,8 +18,8 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.notfound.ReviewAlreadyDeletedException;
-import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.exception.NotFoundException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -67,9 +67,9 @@ class ReviewServiceTest {
 
         // when then
         assertAll(
-                () -> assertThrows(MemberUnAuthorizedException.class,
+                () -> assertThrows(UnAuthorizationException.class,
                         () -> reviewService.updateReview(리뷰_수정_요청_생성(), 2L, 1L)),
-                () -> assertThrows(MemberUnAuthorizedException.class, () -> reviewService.deleteReview(2L, 1L))
+                () -> assertThrows(UnAuthorizationException.class, () -> reviewService.deleteReview(2L, 1L))
         );
     }
 
@@ -89,7 +89,7 @@ class ReviewServiceTest {
 
         // when then
         assertAll(
-                () -> assertThrows(ReviewAlreadyDeletedException.class,
+                () -> assertThrows(NotFoundException.class,
                         () -> reviewService.updateReview(리뷰_수정_요청_생성(), 1L, 1L)),
                 () -> assertThrows(ReviewAlreadyDeletedException.class, () -> reviewService.deleteReview(1L, 1L))
         );
