@@ -40,6 +40,7 @@
 
 
 ### DB 구조
+![](https://velog.velcdn.com/images/rlfrkdms1/post/922a7318-247f-432f-a4df-cd226dfce4fb/image.png)
 
 
 ## 팀원
