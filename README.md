@@ -54,10 +54,10 @@
 <img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
 
 
-### 사용한 오픈소스
 
+### Infra 구조
+![](https://velog.velcdn.com/images/rlfrkdms1/post/21142671-98dd-4f30-b90e-0e873e3335a7/image.png)
 
-### 시스템 구성도
 
 
 ### DB 구조
