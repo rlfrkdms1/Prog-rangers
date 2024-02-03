@@ -2,6 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
+import com.prograngers.backend.dto.dashboard.response.ShowCalendarResponse;
 import com.prograngers.backend.dto.dashboard.response.ShowDashBoardResponse;
 import com.prograngers.backend.service.DashBoardService;
 import java.time.YearMonth;
@@ -25,4 +26,12 @@ public class DashBoardController {
                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM") YearMonth date) {
         return dashBoardService.getDashboard(memberId, date);
     }
+
+    @Login
+    @GetMapping("/calendar")
+    public ShowCalendarResponse showCalendar(@LoggedInMember Long memberId,
+                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth date) {
+        return dashBoardService.getCalendar(memberId, date);
+    }
+
 }

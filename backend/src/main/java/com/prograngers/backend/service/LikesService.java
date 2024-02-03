@@ -3,7 +3,7 @@ package com.prograngers.backend.service;
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.LikesAlreadyExistsException;
+import com.prograngers.backend.exception.badrequest.alreadyexist.LikesAlreadyExistsException;
 import com.prograngers.backend.exception.notfound.LikesNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.notfound.SolutionNotFoundException;

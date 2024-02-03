@@ -35,9 +35,15 @@ import com.prograngers.backend.support.RepositoryTest;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -59,6 +65,18 @@ class SolutionRepositoryTest {
 
     @Autowired
     private LikesRepository likesRepository;
+
+    @MockBean
+    DateTimeProvider dateTimeProvider;
+
+    @SpyBean
+    AuditingHandler auditingHandler;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        MockitoAnnotations.openMocks(this);
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+    }
 
     @DisplayName("멤버 이름으로 풀이를 전부 찾을 수 있다")
     @Test

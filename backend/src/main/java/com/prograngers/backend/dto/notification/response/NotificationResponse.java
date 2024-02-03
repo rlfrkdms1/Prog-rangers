@@ -4,20 +4,22 @@ import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
 
 import com.prograngers.backend.entity.Notification;
-import com.prograngers.backend.exception.badrequest.InvalidNotificationTypeException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidNotificationTypeException;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class ShowNotificationResponse {
+@AllArgsConstructor
+public class NotificationResponse {
 
     private String nickname;
     private String content;
     private Long solutionId;
 
-    public static ShowNotificationResponse from(Notification notification) {
-        return ShowNotificationResponse.builder()
+    public static NotificationResponse from(Notification notification) {
+        return NotificationResponse.builder()
                 .nickname(notification.getWriterNickname())
                 .content(getContent(notification))
                 .solutionId(notification.getSolution().getId())

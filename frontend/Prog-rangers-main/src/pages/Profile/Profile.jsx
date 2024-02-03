@@ -31,6 +31,11 @@ const Profile = () => {
   const [data, setData] = useState([]);
   const [cursor, setCursor] = useState('');
 
+  const [myNickname] = useState(
+    localStorage.getItem('nickname')
+  );
+  const [isMine, setIsMine] = useState(false);
+
   //팔로우 버튼
   const [isFollowing, setIsFollowing] = useState(false);
   const buttonColor = isFollowing
@@ -146,6 +151,7 @@ const Profile = () => {
       .then((response) => {
         setData(response.data);
         setId(response.data.id);
+        if(response.data.nickname === myNickname) setIsMine(true);
       })
       .catch((error) => {
         console.error('API 요청 오류:', error);
@@ -205,20 +211,22 @@ const Profile = () => {
           {data.introduction}
         </div>
 
-        <button
-          onClick={handleFollowButton}
-          css={css`
-            width: 245px;
-            height: 40px;
-            border-radius: 25px;
-            margin-top: 10px;
-            ${fontSize20}
-            ${alignCenter}
-          background-color: ${buttonColor}
-          `}
-        >
-          {isFollowing ? '팔로잉' : '팔로우'}
-        </button>
+        <div css={css`display: ${isMine ? 'none' : 'block'};`}>
+          <button
+            onClick={handleFollowButton}
+            css={css`
+              width: 245px;
+              height: 40px;
+              border-radius: 25px;
+              margin-top: 10px;
+              ${fontSize20}
+              ${alignCenter}
+              background-color: ${buttonColor}
+            `}
+          >
+            {isFollowing ? '팔로잉' : '팔로우'}
+          </button>
+        </div>
 
         <div
           css={css`

@@ -33,7 +33,7 @@ public class CommentController {
     @Login
     @GetMapping("/comments")
     public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId,
-                                                 @PageableDefault Pageable pageable ) {
+                                                 Pageable pageable ) {
         return commentService.showMyComments(memberId, pageable);
     }
 

@@ -1,6 +1,6 @@
 package com.prograngers.backend.entity.member;
 
-import com.prograngers.backend.exception.badrequest.ProhibitionNicknameException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.ProhibitionNicknameException;
 import com.prograngers.backend.support.Encrypt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import lombok.Builder;
@@ -54,7 +54,7 @@ public class Member {
 
     @CreatedDate
     @Column(name = "password_modified_at")
-    private LocalDateTime passwordModifiedAt;
+    private LocalDate passwordModifiedAt;
 
     @Column(name = "usable", nullable = false)
     private boolean usable;
@@ -78,7 +78,7 @@ public class Member {
 
     @Builder
     public Member(Long id, Long socialId, MemberType type, String nickname, String email, String github,
-                  String introduction, String password, String photo, LocalDateTime passwordModifiedAt,
+                  String introduction, String password, String photo, LocalDate passwordModifiedAt,
                   boolean usable) {
         validProhibitionNickname(nickname);
         this.id = id;
@@ -128,7 +128,7 @@ public class Member {
     private void updatePassword(String password) {
         if (password != null) {
             this.password = Encrypt.encoding(password);
-            this.passwordModifiedAt = LocalDateTime.now();
+            this.passwordModifiedAt = LocalDate.now();
         }
     }
 

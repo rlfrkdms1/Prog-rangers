@@ -16,6 +16,7 @@ import hljs from 'highlight.js';
 
 export const LikeList = () => {
   const [data, setData] = useState({ contents: [] });
+  const token = localStorage.getItem('token');
 
   const navigate = useNavigate();
   const onClickName = (nickname) => {
@@ -23,6 +24,14 @@ export const LikeList = () => {
   };
   const onClickSolution = (solutionId) =>{
     navigate(`/solutions/${solutionId}`);
+  };
+  const onClickScrape = (solutionId) => {
+    if (token) {
+      navigate(`/solutions/${solutionId}/detail/scrap`);
+    } 
+    else {
+      alert('로그인이 필요한 기능입니다.');
+    }
   };
 
   useEffect(() => {
@@ -44,8 +53,6 @@ export const LikeList = () => {
 
   if (data.contents && data.contents.length > 0) {
     for (let i = 0; i < data.contents.length; i++) {
-      const item = data.contents[i];
-
       return (
         <>
           {data.contents.map((item, index) => (
@@ -65,8 +72,9 @@ export const LikeList = () => {
                 <div
                   css={css`
                     ${fontSizedark20}
-                    cursor: default;
+                    cursor: pointer;
                   `}
+                  onClick={()=>onClickSolution(item.solution.id)}
                 >
                   {item.problem.title}
                 </div>
@@ -101,17 +109,10 @@ export const LikeList = () => {
                   </div>
                 </div>
 
-                <div
-                  css={css`
-                    ${boxStyle}
-                    ${fontSize16}
-                    background-color: ${theme.colors.light3};
-                    cursor: default;
-                  `}
-                >
-                  {item.solution.language}
-                </div>
-
+                {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.algorithm}</div>)}
+                {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.dataStructure}</div>)}
+                {item.solution.language && (<div key={item.solution.language} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.language}</div>)}
+          
                 <button
                   css={css`
                     width: 30px;
@@ -119,6 +120,7 @@ export const LikeList = () => {
                     float: right;
                     padding-top: 13px;
                   `}
+                  onClick={()=>onClickScrape(item.solution.id)}
                 >
                   <img src={sharemark} alt="share_mark" />
                 </button>

@@ -4,7 +4,8 @@ import com.prograngers.backend.dto.follow.response.ShowFollowListResponse;
 import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.AlreadyFollowingException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.SelfFollowException;
+import com.prograngers.backend.exception.badrequest.alreadyexist.AlreadyFollowingException;
 import com.prograngers.backend.exception.notfound.FollowNotFoundException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.repository.follow.FollowRepository;
@@ -25,14 +26,20 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
     private final SolutionRepository solutionRepository;
-    private final Long RECOMMENDED_MEMBER_COUNT = 10L;
 
     @Transactional
     public void follow(Long followerId, Long followingId) {
+        validNotSelf(followerId, followingId);
         validFollowerAndFollowingExist(followerId, followingId);
         validNotFollow(followerId, followingId);
         Follow follow = Follow.builder().followingId(followingId).followerId(followerId).build();
         followRepository.save(follow);
+    }
+
+    private void validNotSelf(Long followerId, Long followingId) {
+        if (followerId.equals(followingId)) {
+            throw new SelfFollowException();
+        }
     }
 
     private void validNotFollow(Long followerId, Long followingId) {
