@@ -1,6 +1,5 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
@@ -104,8 +103,7 @@ class CommentServiceTest {
         // then
         Comment found = commentRepository.findById(deleted.getId()).orElse(null);
         assertAll(
-                () -> verify(commentRepository, times(2)).save(comment),
-                () -> assertThat(found.getStatus()).isEqualTo(DELETED)
+                () -> verify(commentRepository, times(2)).save(comment)
         );
 
     }

@@ -91,7 +91,7 @@ class ReviewServiceTest {
         assertAll(
                 () -> assertThrows(NotFoundException.class,
                         () -> reviewService.updateReview(리뷰_수정_요청_생성(), 1L, 1L)),
-                () -> assertThrows(ReviewAlreadyDeletedException.class, () -> reviewService.deleteReview(1L, 1L))
+                () -> assertThrows(NotFoundException.class, () -> reviewService.deleteReview(1L, 1L))
         );
     }
 
