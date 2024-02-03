@@ -57,17 +57,8 @@ const Account = () => {
   const year = formattedDate.getFullYear();
   const month = formattedDate.getMonth() + 1;
   const day = formattedDate.getDate();
-  const hours = formattedDate.getHours();
-  const minutes = formattedDate.getMinutes();
-  const seconds = formattedDate.getSeconds();
 
-  const formattedHours = hours < 10 ? `0${hours}` : hours;
-  const formattedMinutes =
-    minutes < 10 ? `0${minutes}` : minutes;
-  const formattedSeconds =
-    seconds < 10 ? `0${seconds}` : seconds;
-
-  const formattedTime = `${year}년 ${month}월 ${day}일 ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  const formattedTime = `${year}년 ${month}월 ${day}일`;
 
   // 계정 탈퇴
   const [inputValue, setInputValue] = useState('');
@@ -100,11 +91,7 @@ const Account = () => {
         } catch (error) {
           console.error(error);
         }
-      } else {
-        alert(
-          '계정 삭제에 실패했습니다. 다시 확인해주세요.'
-        );
-      }
+      } 
     };
 
   return (
