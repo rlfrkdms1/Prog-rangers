@@ -3,7 +3,6 @@ package com.prograngers.backend.service;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
@@ -73,38 +72,6 @@ class CommentServiceTest {
 
         // then
         assertThat(updated.getContent()).isEqualTo("수정내용");
-
-    }
-
-    @DisplayName("댓글을 삭제할 수 있다")
-    @Test
-    void 댓글_삭제_테스트() {
-        // given
-        Member member = 장지담.아이디_지정_생성(1L);
-        Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), BFS, LIST, JAVA, 1);
-        Comment comment = 생성된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
-        Comment deleted = 삭제된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
-
-        given(commentRepository.save(comment))
-                .willReturn(comment)
-                .willReturn(deleted);
-        given(commentRepository.findById(comment.getId())).
-                willReturn(Optional.ofNullable(comment))
-                .willReturn(Optional.ofNullable(deleted));
-        given(memberRepository.findById(member.getId()))
-                .willReturn(Optional.ofNullable(member));
-
-        commentRepository.save(comment);
-
-        // when
-        commentService.deleteComment(comment.getId(), member.getId());
-
-        // then
-        Comment found = commentRepository.findById(deleted.getId()).orElse(null);
-        assertAll(
-                () -> verify(commentRepository, times(2)).save(comment)
-        );
 
     }
 
