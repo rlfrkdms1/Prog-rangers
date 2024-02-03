@@ -17,7 +17,6 @@ import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.NotFoundException;
 import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;

@@ -1,6 +1,6 @@
 package com.prograngers.backend.entity.solution;
 
-import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.from;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
