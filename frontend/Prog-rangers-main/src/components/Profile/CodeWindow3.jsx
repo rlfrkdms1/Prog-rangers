@@ -28,7 +28,7 @@ export const CodeWindow3 = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, []);
+  }, [solutionId]);
 
   return (
     <>
