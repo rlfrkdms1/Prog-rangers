@@ -73,4 +73,18 @@ public class Notification {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "id=" + id +
+                ", writerNickname='" + writerNickname + '\'' +
+                ", type=" + type +
+                ", createdAt=" + createdAt +
+                ", isRead=" + isRead +
+                ", receiverId=" + receiver.getId() +
+                ", solutionId=" + solution.getId() +
+                ", commentId=" + (comment == null ? "null" : comment.getId()) +
+                ", reviewId=" + (review == null ? "null" : review.getId()) +
+                '}';
+    }
 }
