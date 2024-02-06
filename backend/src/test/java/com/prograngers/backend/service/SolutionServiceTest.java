@@ -48,9 +48,9 @@ import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.InvalidValueException;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.PrivateSolutionException;
+import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
@@ -133,7 +133,7 @@ class SolutionServiceTest {
         when(memberRepository.findById(member2.getId())).thenReturn(Optional.ofNullable(member2));
 
         // then
-        assertThrows(InvalidValueException.class,
+        assertThrows(PrivateSolutionException.class,
                 () -> solutionService.getSolutionDetail(solution.getId(), member2.getId()));
     }
 
@@ -153,7 +153,7 @@ class SolutionServiceTest {
 
         // when , then
         assertThrows(
-                UnAuthorizationException.class,
+                MemberUnAuthorizedException.class,
                 () -> solutionService.update(solution1.getId(), request, member2.getId()
                 ));
     }
@@ -172,7 +172,7 @@ class SolutionServiceTest {
 
         // when , then
         assertThrows(
-                UnAuthorizationException.class,
+                MemberUnAuthorizedException.class,
                 () -> solutionService.delete(solution1.getId(), member2.getId()
                 ));
     }
@@ -321,7 +321,7 @@ class SolutionServiceTest {
         when(problemRepository.findByLink(any())).thenReturn(Optional.empty());
 
         //when, then
-        assertThrows(NotFoundException.class, () -> solutionService.save(request, memberId));
+        assertThrows(ProblemLinkNotFoundException.class, () -> solutionService.save(request, memberId));
     }
 
     @Test

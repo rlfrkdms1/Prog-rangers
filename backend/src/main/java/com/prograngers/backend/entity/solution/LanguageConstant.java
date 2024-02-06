@@ -1,9 +1,7 @@
 package com.prograngers.backend.entity.solution;
 
-import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.LANGUAGE_NOT_EXISTS;
-
 import com.prograngers.backend.entity.HashTag;
-import com.prograngers.backend.exception.EnumTypeException;
+import com.prograngers.backend.exception.enumtype.LanguageNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -20,7 +18,7 @@ public enum LanguageConstant implements HashTag {
                 return language;
             }
         }
-        throw new EnumTypeException(LANGUAGE_NOT_EXISTS);
+        throw new LanguageNotFoundException();
     }
 
     public String getView() {

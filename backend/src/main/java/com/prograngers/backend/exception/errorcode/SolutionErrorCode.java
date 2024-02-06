@@ -1,7 +1,6 @@
 package com.prograngers.backend.exception.errorcode;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.*;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

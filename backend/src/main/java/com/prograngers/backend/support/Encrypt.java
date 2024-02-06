@@ -1,9 +1,7 @@
 package com.prograngers.backend.support;
 
-import static com.prograngers.backend.exception.errorcode.AuthErrorCode.FAILED_TO_DECODE;
-import static com.prograngers.backend.exception.errorcode.AuthErrorCode.FAILED_TO_ENCODE;
-
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.unauthorization.FailToDecodeException;
+import com.prograngers.backend.exception.unauthorization.FailToEncodeException;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -45,7 +43,7 @@ public class Encrypt {
             byte[] encrypted = cipher.doFinal(text.getBytes(charsetName));
             return Base64.getEncoder().encodeToString(encrypted);
         } catch (Exception e) {
-            throw new UnAuthorizationException(FAILED_TO_ENCODE);
+            throw new FailToEncodeException();
         }
 
     }
@@ -62,7 +60,7 @@ public class Encrypt {
             byte[] decrypted = cipher.doFinal(decodedBytes);
             return new String(decrypted, charsetName);
         } catch (Exception e) {
-            throw new UnAuthorizationException(FAILED_TO_DECODE);
+            throw new FailToDecodeException();
         }
 
     }

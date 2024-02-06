@@ -15,8 +15,8 @@ import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -134,7 +134,7 @@ class MemberServiceTest {
         final Member member = 장지담.기본_정보_생성();
         // when, then
         assertThatThrownBy(() -> memberService.getMemberProfile(notExistsNickname, Long.MAX_VALUE))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 
     @DisplayName("탈퇴한 회원 프로필 보기를 시도하면 예외가 발생한다.")
@@ -145,6 +145,6 @@ class MemberServiceTest {
         when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
         // when, then
         assertThatThrownBy(() -> memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE))
-                .isInstanceOf(UnAuthorizationException.class);
+                .isInstanceOf(QuitMemberException.class);
     }
 }

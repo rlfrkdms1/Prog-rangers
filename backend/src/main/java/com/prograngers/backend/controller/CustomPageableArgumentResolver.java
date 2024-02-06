@@ -1,11 +1,8 @@
 package com.prograngers.backend.controller;
 
-import static com.prograngers.backend.exception.errorcode.CommonErrorCode.PAGE_NUMBER_UNDER_ZERO;
-import static com.prograngers.backend.exception.errorcode.CommonErrorCode.PAGE_SIZE_MUST_NUMBER_OVER_THAN_ONE;
-import static com.prograngers.backend.exception.errorcode.CommonErrorCode.PAGE_SIZE_OVER_MAX;
-
-import com.prograngers.backend.exception.InvalidValueException;
-import java.util.regex.Pattern;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidPageSizeException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.PageNumberUnderZeroException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.PageSizeOverMaxException;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import java.util.regex.Pattern;
 
 @Component
 public class CustomPageableArgumentResolver extends PageableHandlerMethodArgumentResolver {
@@ -26,8 +24,7 @@ public class CustomPageableArgumentResolver extends PageableHandlerMethodArgumen
     }
 
     @Override
-    public Pageable resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer,
-                                    NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Pageable resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String page = webRequest.getParameter(getParameterNameToUse(getPageParameterName(), methodParameter));
         validatePage(page);
         String pageSize = webRequest.getParameter(getParameterNameToUse(getSizeParameterName(), methodParameter));
@@ -40,7 +37,7 @@ public class CustomPageableArgumentResolver extends PageableHandlerMethodArgumen
             return;
         }
         if (!NUMBER_PATTERN.matcher(page).matches()) {
-            throw new InvalidValueException(PAGE_NUMBER_UNDER_ZERO);
+            throw new PageNumberUnderZeroException();
         }
     }
 
@@ -49,10 +46,10 @@ public class CustomPageableArgumentResolver extends PageableHandlerMethodArgumen
             return;
         }
         if (!NUMBER_PATTERN.matcher(pageSize).matches()) {
-            throw new InvalidValueException(PAGE_SIZE_MUST_NUMBER_OVER_THAN_ONE);
+            throw new InvalidPageSizeException();
         }
         if (Integer.parseInt(pageSize) > MAX_SIZE) {
-            throw new InvalidValueException(PAGE_SIZE_OVER_MAX);
+            throw new PageSizeOverMaxException();
         }
     }
 

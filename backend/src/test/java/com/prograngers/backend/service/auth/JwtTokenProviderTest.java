@@ -3,7 +3,10 @@ package com.prograngers.backend.service.auth;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
+import com.prograngers.backend.exception.unauthorization.IncorrectIssuerTokenException;
+import com.prograngers.backend.exception.unauthorization.InvalidClaimTypeException;
+import com.prograngers.backend.exception.unauthorization.MissingIssuerTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +23,7 @@ class JwtTokenProviderTest {
     public void 토큰_생성자가_없으면_예외를_반환한다() {
         String accessTokenWithoutIssuer = fakeJwtTokenProvider.createAccessTokenWithoutIssuer(1L);
         assertThatThrownBy(() -> jwtTokenProvider.validToken(accessTokenWithoutIssuer))
-                .isExactlyInstanceOf(UnAuthorizationException.class);
+                .isExactlyInstanceOf(MissingIssuerTokenException.class);
     }
 
     @Test
@@ -28,7 +31,7 @@ class JwtTokenProviderTest {
     public void 토큰_생성자가_틀리면_예외를_반환한다() {
         String accessTokenWithWrongIssuer = fakeJwtTokenProvider.createAccessTokenWithIssuer(1L, "fake");
         assertThatThrownBy(() -> jwtTokenProvider.validToken(accessTokenWithWrongIssuer))
-                .isExactlyInstanceOf(UnAuthorizationException.class);
+                .isExactlyInstanceOf(IncorrectIssuerTokenException.class);
     }
 
     @Test
@@ -36,7 +39,7 @@ class JwtTokenProviderTest {
     public void 토큰_기간이_만료되면_예외를_반환한다() {
         String accessToken = new FakeJwtTokenProvider(key, 0).createAccessToken(1L);
         assertThatThrownBy(() -> jwtTokenProvider.validToken(accessToken))
-                .isExactlyInstanceOf(UnAuthorizationException.class);
+                .isExactlyInstanceOf(ExpiredTokenException.class);
     }
 
     @Test
@@ -44,7 +47,7 @@ class JwtTokenProviderTest {
     public void 토큰에_들어가는_memberId는_long이어야한다() {
         String accessToken = fakeJwtTokenProvider.createAccessToken("memberId");
         assertThatThrownBy(() -> jwtTokenProvider.getMemberId(accessToken))
-                .isExactlyInstanceOf(UnAuthorizationException.class);
+                .isExactlyInstanceOf(InvalidClaimTypeException.class);
     }
 
 }

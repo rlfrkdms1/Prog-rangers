@@ -29,7 +29,7 @@ public class NotificationController {
 
     @GetMapping
     public ShowNotificationsResponse show(@LoggedInMember Long memberId,
-                                          @PageableDefault(page = 2) Pageable pageable) {
+                                          @PageableDefault(page = 2)Pageable pageable) {
         return notificationService.getNotifications(memberId, pageable);
     }
 }

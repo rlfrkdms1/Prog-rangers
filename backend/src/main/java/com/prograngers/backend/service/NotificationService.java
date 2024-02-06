@@ -3,8 +3,8 @@ package com.prograngers.backend.service;
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
 
-import com.prograngers.backend.dto.notification.response.NotificationResponse;
 import com.prograngers.backend.dto.notification.response.ShowNotificationsResponse;
+import com.prograngers.backend.dto.notification.response.NotificationResponse;
 import com.prograngers.backend.entity.Notification;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;

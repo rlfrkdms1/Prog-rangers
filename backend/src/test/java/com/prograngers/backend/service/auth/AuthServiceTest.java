@@ -1,24 +1,17 @@
 package com.prograngers.backend.service.auth;
 
-import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.verify;
-
 import com.prograngers.backend.dto.auth.request.LoginRequest;
 import com.prograngers.backend.dto.auth.request.SignUpRequest;
 import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.exception.InvalidValueException;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.ProhibitionNicknameException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistMemberException;
+import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
+import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.RefreshTokenRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.support.Encrypt;
-import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +19,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import java.util.UUID;
+
+import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -33,19 +36,16 @@ class AuthServiceTest {
     private AuthService authService;
     @Mock
     private MemberRepository memberRepository;
-    @Mock
-    private JwtTokenProvider jwtTokenProvider;
-    @Mock
-    private RefreshTokenRepository refreshTokenRepository;
+    @Mock private JwtTokenProvider jwtTokenProvider;
+    @Mock private RefreshTokenRepository refreshTokenRepository;
 
     @Test
     @DisplayName("같은 닉네임을 가진 회원이 이미 존재할 경우 중복 검사시 예외를 반환한다.")
-    void 닉네임이_중복검사시_예외를_반환할_수_있다() {
+    void 닉네임이_중복검사시_예외를_반환할_수_있다(){
         String nickname = "rlfrkdms1";
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
-                () -> assertThatThrownBy(() -> authService.validAlreadyExistNickname(nickname)).isExactlyInstanceOf(
-                        UnAuthorizationException.class),
+                () -> assertThatThrownBy(() -> authService.validAlreadyExistNickname(nickname)).isExactlyInstanceOf(AlreadyExistNicknameException.class),
                 () -> verify(memberRepository).findByNickname(nickname)
         );
     }
@@ -59,28 +59,24 @@ class AuthServiceTest {
     }
 
     @Test
-    void 이미_가입된_회원의_경우_예외를_반환한다() {
+    void 이미_가입된_회원의_경우_예외를_반환한다(){
         String email = "rlfrkdms1@naver.com";
         given(memberRepository.findByEmail(email)).willReturn(Optional.of(길가은.이메일_추가_생성(email)));
         assertAll(
-                () -> assertThatThrownBy(
-                        () -> authService.signUp(new SignUpRequest("1234", email, "rlfrkdms"))).isExactlyInstanceOf(
-                        UnAuthorizationException.class),
+                () -> assertThatThrownBy(() -> authService.signUp(new SignUpRequest("1234", email, "rlfrkdms"))).isExactlyInstanceOf(AlreadyExistMemberException.class),
                 () -> verify(memberRepository).findByEmail(email)
         );
     }
 
     @Test
     @DisplayName("회원가입시 존재하는 닉네임으로 요청하면 예외를 반환한다.")
-    void 이미_존재하는_닉네임의_경우_예외를_반환한다() {
+    void 이미_존재하는_닉네임의_경우_예외를_반환한다(){
         String email = "email";
         String nickname = "rlfrkdms1";
         given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
         given(memberRepository.findByNickname(nickname)).willReturn(Optional.of(길가은.기본_정보_생성()));
         assertAll(
-                () -> assertThatThrownBy(
-                        () -> authService.signUp(new SignUpRequest("1234", email, nickname))).isExactlyInstanceOf(
-                        UnAuthorizationException.class),
+                () -> assertThatThrownBy(() -> authService.signUp(new SignUpRequest("1234", email, nickname))).isExactlyInstanceOf(AlreadyExistNicknameException.class),
                 () -> verify(memberRepository).findByNickname(nickname),
                 () -> verify(memberRepository).findByEmail(email)
         );
@@ -95,8 +91,8 @@ class AuthServiceTest {
         String encodedPassword = "encodedPassword";
         SignUpRequest signUpRequest = 길가은.회원_가입_요청_생성(email, password);
         Member member = 길가은.일반_회원_생성(email, encodedPassword);
-        RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId())
-                .refreshToken(UUID.randomUUID().toString()).build();
+        RefreshToken refreshToken = RefreshToken.builder().memberId(member.getId()).refreshToken(UUID.randomUUID().toString()).build();
+
 
         try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
             given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
@@ -107,6 +103,7 @@ class AuthServiceTest {
             given(refreshTokenRepository.save(any())).willReturn(refreshToken);
             authService.signUp(signUpRequest);
         }
+
 
         assertAll(
                 () -> verify(memberRepository).findByNickname(nickname),
@@ -129,28 +126,27 @@ class AuthServiceTest {
         given(memberRepository.existsByNickname(wrongNickname)).willReturn(false);
         assertAll(
                 () -> assertThatThrownBy(() -> authService.signUp(wrongRequest))
-                        .isExactlyInstanceOf(InvalidValueException.class),
+                        .isExactlyInstanceOf(ProhibitionNicknameException.class),
                 () -> verify(memberRepository).existsByEmail(email),
                 () -> verify(memberRepository).existsByNickname(wrongNickname)
         );
     }
 
     @Test
-    void 일반_로그인_이메일이_틀렸을_떄() {
+    void 일반_로그인_이메일이_틀렸을_떄(){
         String email = "rlfrkdms@naver.com";
         String password = "rlfrkdms";
         LoginRequest loginRequest = 길가은.로그인_요청_생성(email, password);
         given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
         assertAll(
-                () -> assertThatThrownBy(() -> authService.login(loginRequest)).isExactlyInstanceOf(
-                        NotFoundException.class),
+                () -> assertThatThrownBy(() -> authService.login(loginRequest)).isExactlyInstanceOf(MemberNotFoundException.class),
                 () -> verify(memberRepository).findByEmail(email)
         );
 
     }
 
     @Test
-    void 일반_로그인_비밀번호_틀렸을_떄() {
+    void 일반_로그인_비밀번호_틀렸을_떄(){
         String email = "rlfrkdms@naver.com";
         String correctEncodedPassword = "rlfrkdms";
         String wrongPassword = "rlfrk";
@@ -162,15 +158,14 @@ class AuthServiceTest {
             encryptMockedStatic.when(() -> Encrypt.encoding(wrongPassword)).thenReturn(encodedWrongPassword);
 
             assertAll(
-                    () -> assertThatThrownBy(() -> authService.login(loginRequest)).isExactlyInstanceOf(
-                            UnAuthorizationException.class),
+                    () -> assertThatThrownBy(() -> authService.login(loginRequest)).isExactlyInstanceOf(IncorrectPasswordException.class),
                     () -> verify(memberRepository).findByEmail(email)
             );
         }
     }
 
     @Test
-    void 일반_로그인() {
+    void 일반_로그인(){
         String email = "rlfrkdms@naver.com";
         String password = "password";
         String encodedPassword = "encodedPassword";
@@ -199,8 +194,7 @@ class AuthServiceTest {
         LoginRequest request = 길가은.로그인_요청_생성();
         given(memberRepository.findByEmail(member.getEmail())).willReturn(Optional.of(member));
         assertAll(
-                () -> assertThatThrownBy(() -> authService.login(request)).isExactlyInstanceOf(
-                        UnAuthorizationException.class),
+                () -> assertThatThrownBy(() -> authService.login(request)).isExactlyInstanceOf(QuitMemberException.class),
                 () -> verify(memberRepository).findByEmail(member.getEmail())
         );
     }

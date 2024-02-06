@@ -1,5 +1,6 @@
-package com.prograngers.backend.exception;
+package com.prograngers.backend.exception.notfound;
 
+import com.prograngers.backend.exception.CustomException;
 import com.prograngers.backend.exception.errorcode.ErrorCode;
 import lombok.Getter;
 

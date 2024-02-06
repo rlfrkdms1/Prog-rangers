@@ -1,10 +1,8 @@
 package com.prograngers.backend.entity.sortconstant;
 
-import static com.prograngers.backend.exception.errorcode.CommonErrorCode.SORT_TYPE_NOT_EXISTS;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.prograngers.backend.exception.EnumTypeException;
+import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -23,7 +21,7 @@ public enum SortConstant {
                 return constant;
             }
         }
-        throw new EnumTypeException(SORT_TYPE_NOT_EXISTS);
+        throw new SortTypeNotFoundException();
     }
 
     @JsonValue

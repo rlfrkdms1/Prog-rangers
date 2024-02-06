@@ -3,6 +3,7 @@ package com.prograngers.backend.entity.review;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
+import static com.prograngers.backend.support.fixture.ReviewFixture.삭제된_리뷰;
 import static com.prograngers.backend.support.fixture.ReviewFixture.생성된_리뷰;
 import static com.prograngers.backend.support.fixture.ReviewFixture.수정된_리뷰;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
@@ -44,7 +45,8 @@ class ReviewTest {
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(updated.getContent())
+                () -> assertThat(review.getContent()).isEqualTo(updated.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(updated.getStatus())
         );
     }
 
@@ -59,7 +61,8 @@ class ReviewTest {
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(expected.getContent())
+                () -> assertThat(review.getContent()).isEqualTo(expected.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(expected.getStatus())
         );
     }
 
@@ -73,7 +76,23 @@ class ReviewTest {
 
         // then
         assertAll(
-                () -> assertThat(review.getContent()).isEqualTo(expected.getContent())
+                () -> assertThat(review.getContent()).isEqualTo(expected.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(expected.getStatus())
+        );
+    }
+
+    @Test
+    void 댓글을_삭제할_수_있다() {
+        // given
+        Review deleted = 삭제된_리뷰.기본_정보_생성(member, solution, review.getCreatedAt());
+
+        // when
+        review.delete();
+
+        // then
+        assertAll(
+                () -> assertThat(review.getContent()).isEqualTo(deleted.getContent()),
+                () -> assertThat(review.getStatus()).isEqualTo(deleted.getStatus())
         );
     }
 }

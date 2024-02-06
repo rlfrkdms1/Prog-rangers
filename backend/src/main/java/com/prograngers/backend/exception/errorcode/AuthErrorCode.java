@@ -24,8 +24,7 @@ public enum AuthErrorCode implements ErrorCode {
     INCORRECTLY_CONSTRUCTED_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 구조의 토큰입니다"),
     FAILED_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED, "서명에 실패한 토큰입니다"),
     UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "인가되지 않은 회원입니다"),
-    INVALID_CLAIM_TYPE(HttpStatus.UNAUTHORIZED, "토큰의 claim값은 Long 타입이어야 합니다"),
-    ;
+    INVALID_CLAIM_TYPE(HttpStatus.UNAUTHORIZED, "토큰의 claim값은 Long 타입이어야 합니다"),;
 
     private final HttpStatus httpStatus;
     private final String message;

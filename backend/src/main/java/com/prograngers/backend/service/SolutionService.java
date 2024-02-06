@@ -1,11 +1,5 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.exception.errorcode.AuthErrorCode.UNAUTHORIZED_MEMBER;
-import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER_NOT_FOUND;
-import static com.prograngers.backend.exception.errorcode.ProblemErrorCode.PROBLEM_NOT_FOUND;
-import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.PRIVATE_SOLUTION;
-import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.SOLUTION_NOT_FOUND;
-
 import com.prograngers.backend.dto.solution.reqeust.ScarpSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.UpdateSolutionRequest;
 import com.prograngers.backend.dto.solution.reqeust.WriteSolutionRequest;
@@ -34,9 +28,11 @@ import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
-import com.prograngers.backend.exception.InvalidValueException;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.PrivateSolutionException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.ProblemNotFoundException;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.likes.LikesRepository;
@@ -183,7 +179,7 @@ public class SolutionService {
     }
 
     private Solution findSolutionById(Long solutionId) {
-        return solutionRepository.findById(solutionId).orElseThrow(() -> new NotFoundException(SOLUTION_NOT_FOUND));
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
     private Long getScrapSolutionId(Solution solution) {
@@ -226,8 +222,7 @@ public class SolutionService {
     public ShowSolutionListResponse getSolutionList(
             Pageable pageable, Long problemId, LanguageConstant language, AlgorithmConstant algorithm,
             DataStructureConstant dataStructure, SortConstant sortBy) {
-        Problem problem = problemRepository.findById(problemId)
-                .orElseThrow(() -> new NotFoundException(PROBLEM_NOT_FOUND));
+        Problem problem = problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
         PageImpl<Solution> solutions = solutionRepository.getSolutionList(pageable, problem.getId(), language,
                 algorithm, dataStructure, sortBy);
         return ShowSolutionListResponse.from(solutions);
@@ -288,12 +283,12 @@ public class SolutionService {
     }
 
     private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private void validMemberAuthorization(Solution target, Member member) {
         if (target.getMember().getId() != member.getId()) {
-            throw new UnAuthorizationException(UNAUTHORIZED_MEMBER);
+            throw new MemberUnAuthorizedException();
         }
     }
 
@@ -309,7 +304,7 @@ public class SolutionService {
 
     private void validViewPrivateSolution(Solution solution, boolean isMine) {
         if (!solution.isPublic() && !isMine) {
-            throw new InvalidValueException(PRIVATE_SOLUTION);
+            throw new PrivateSolutionException();
         }
     }
 

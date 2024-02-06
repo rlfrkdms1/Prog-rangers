@@ -1,17 +1,13 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.exception.errorcode.AuthErrorCode.UNAUTHORIZED_MEMBER;
-import static com.prograngers.backend.exception.errorcode.LikeErrorCode.ALREADY_EXISTS_LIKE;
-import static com.prograngers.backend.exception.errorcode.LikeErrorCode.NOT_FOUND_LIKE;
-import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER_NOT_FOUND;
-import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.SOLUTION_NOT_FOUND;
-
 import com.prograngers.backend.entity.Likes;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.AlreadyExistsException;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.badrequest.alreadyexist.LikesAlreadyExistsException;
+import com.prograngers.backend.exception.notfound.LikesNotFoundException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.likes.LikesRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -51,21 +47,21 @@ public class LikesService {
 
     private void validMemberAuthorization(Member targetMember, Likes targetLikes) {
         if (targetLikes.getMember().getId() != targetMember.getId()) {
-            throw new UnAuthorizationException(UNAUTHORIZED_MEMBER);
+            throw new MemberUnAuthorizedException();
         }
     }
 
     private Likes getLikesBySolutionAndMember(Solution targetSolution, Member targetMember) {
         return likesRepository.findByMemberAndSolution(targetMember, targetSolution)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_LIKE));
+                .orElseThrow(LikesNotFoundException::new);
     }
 
     private Solution getTargetSolution(Long solutionId) {
-        return solutionRepository.findById(solutionId).orElseThrow(() -> new NotFoundException(SOLUTION_NOT_FOUND));
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
     private Member getTargetMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private Optional<Likes> getTargetLikes(Solution targetSolution, Member targetMember) {
@@ -74,7 +70,7 @@ public class LikesService {
 
     private void validLikeAlreadyExists(Solution targetSolution, Member targetMember) {
         if (getTargetLikes(targetSolution, targetMember).isPresent()) {
-            throw new AlreadyExistsException(ALREADY_EXISTS_LIKE);
+            throw new LikesAlreadyExistsException();
         }
     }
 

@@ -1,6 +1,8 @@
 package com.prograngers.backend.entity.comment;
 
+import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREATED;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
+import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.수정된_댓글;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
@@ -44,7 +46,9 @@ class CommentTest {
 
         // then
         assertAll(
-                () -> assertThat(comment.getContent()).isEqualTo(updated.getContent()));
+                () -> assertThat(comment.getContent()).isEqualTo(updated.getContent()),
+                () -> assertThat(comment.getStatus()).isEqualTo(updated.getStatus())
+        );
     }
 
     @ParameterizedTest
@@ -58,7 +62,9 @@ class CommentTest {
 
         // then
         assertAll(
-                () -> assertThat(comment.getContent()).isEqualTo(expected.getContent()));
+                () -> assertThat(comment.getContent()).isEqualTo(expected.getContent()),
+                () -> assertThat(comment.getStatus()).isEqualTo(CREATED)
+        );
     }
 
     @Test
@@ -71,7 +77,23 @@ class CommentTest {
 
         // then
         assertAll(
-                () -> assertThat(comment.getContent()).isEqualTo(expected.getContent())
+                () -> assertThat(comment.getContent()).isEqualTo(expected.getContent()),
+                () -> assertThat(comment.getStatus()).isEqualTo(expected.getStatus())
+        );
+    }
+
+    @Test
+    void 댓글을_삭제할_수_있다() {
+        // given
+        Comment deleted = 삭제된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
+
+        // when
+        comment.delete();
+
+        // then
+        assertAll(
+                () -> assertThat(comment.getContent()).isEqualTo(deleted.getContent()),
+                () -> assertThat(comment.getStatus()).isEqualTo(deleted.getStatus())
         );
     }
 }

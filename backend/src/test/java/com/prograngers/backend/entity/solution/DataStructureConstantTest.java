@@ -1,10 +1,10 @@
 package com.prograngers.backend.entity.solution;
 
-import static com.prograngers.backend.entity.solution.DataStructureConstant.from;
+import static com.prograngers.backend.entity.solution.DataStructureConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.prograngers.backend.exception.EnumTypeException;
+import com.prograngers.backend.exception.enumtype.DataStructureNotFoundException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -19,6 +19,6 @@ class DataStructureConstantTest {
     @ParameterizedTest
     @ValueSource(strings = {"바 보", "", "    "})
     void 잘못된_뷰에_대해_예외가_발생한다(String view) {
-        assertThatThrownBy(() -> from(view)).isInstanceOf(EnumTypeException.class);
+        assertThatThrownBy(() -> from(view)).isInstanceOf(DataStructureNotFoundException.class);
     }
 }

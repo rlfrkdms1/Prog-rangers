@@ -1,21 +1,17 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.exception.errorcode.AuthErrorCode.UNAUTHORIZED_MEMBER;
-import static com.prograngers.backend.exception.errorcode.CommentErrorCode.COMMENT_NOT_FOUND;
-import static com.prograngers.backend.exception.errorcode.CommonErrorCode.DIFFERENT_SOLUTION;
-import static com.prograngers.backend.exception.errorcode.CommonErrorCode.INVALID_PARENT;
-import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER_NOT_FOUND;
-import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.SOLUTION_NOT_FOUND;
-
 import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
 import com.prograngers.backend.dto.comment.request.WriteCommentRequest;
 import com.prograngers.backend.dto.comment.response.ShowMyCommentsResponse;
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.InvalidValueException;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentSolutionException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidParentException;
+import com.prograngers.backend.exception.notfound.CommentNotFoundException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
+import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -37,7 +33,7 @@ public class CommentService {
     private final MemberRepository memberRepository;
 
     private Comment findById(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new NotFoundException(COMMENT_NOT_FOUND));
+        return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
     public ShowMyCommentsResponse showMyComments(Long memberId, Pageable pageable) {
@@ -59,13 +55,13 @@ public class CommentService {
 
     private void validSameSolution(WriteCommentRequest writeCommentRequest, Long solutionId) {
         if (commentRepository.findById(writeCommentRequest.getParentId()).get().getSolution().getId() != solutionId) {
-            throw new InvalidValueException(DIFFERENT_SOLUTION);
+            throw new DifferentSolutionException();
         }
     }
 
     private void validParentExists(WriteCommentRequest writeCommentRequest) {
         if (!commentRepository.existsById(writeCommentRequest.getParentId())) {
-            throw new InvalidValueException(INVALID_PARENT);
+            throw new InvalidParentException();
         }
     }
 
@@ -93,16 +89,16 @@ public class CommentService {
 
 
     private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 
     private Solution findSolutionById(Long solutionId) {
-        return solutionRepository.findById(solutionId).orElseThrow(() -> new NotFoundException(SOLUTION_NOT_FOUND));
+        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
     }
 
     private void validMemberAuthorization(Comment comment, Member member) {
         if (!comment.getMember().getId().equals(member.getId())) {
-            throw new UnAuthorizationException(UNAUTHORIZED_MEMBER);
+            throw new MemberUnAuthorizedException();
         }
     }
 }
