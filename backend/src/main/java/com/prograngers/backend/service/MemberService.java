@@ -8,7 +8,7 @@ import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER
 import static com.prograngers.backend.exception.errorcode.MemberErrorCode.NOT_EXIST_OLD_PASSWORD;
 import static com.prograngers.backend.exception.errorcode.MemberErrorCode.QUIT_MEMBER;
 
-import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountRequest;
 import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
@@ -56,35 +56,35 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMemberAccount(Long memberId, UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
+    public void updateMemberAccount(Long memberId, UpdateMemberAccountRequest updateMemberAccountRequest) {
         Member member = findById(memberId);
-        validMemberAccount(updateMemberAccountInfoRequest, member);
-        member.update(updateMemberAccountInfoRequest.toMember());
+        validMemberAccount(updateMemberAccountRequest, member);
+        member.update(updateMemberAccountRequest.toMember());
     }
 
-    private void validMemberAccount(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
-        String nickname = updateMemberAccountInfoRequest.getNickname();
+    private void validMemberAccount(UpdateMemberAccountRequest updateMemberAccountRequest, Member member) {
+        String nickname = updateMemberAccountRequest.getNickname();
 
         if (nickname != null) {
             validNicknameBlank(nickname);
             validNicknameDuplication(nickname);
         }
 
-        if (updateMemberAccountInfoRequest.getNewPassword() != null) {
-            validExistOldPassword(updateMemberAccountInfoRequest);
-            validCorrectPassword(updateMemberAccountInfoRequest, member);
+        if (updateMemberAccountRequest.getNewPassword() != null) {
+            validExistOldPassword(updateMemberAccountRequest);
+            validCorrectPassword(updateMemberAccountRequest, member);
         }
 
     }
 
-    private void validExistOldPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
-        if (updateMemberAccountInfoRequest.getOldPassword() == null) {
+    private void validExistOldPassword(UpdateMemberAccountRequest updateMemberAccountRequest) {
+        if (updateMemberAccountRequest.getOldPassword() == null) {
             throw new InvalidValueException(NOT_EXIST_OLD_PASSWORD);
         }
     }
 
-    private void validCorrectPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
-        if (member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword())) {
+    private void validCorrectPassword(UpdateMemberAccountRequest updateMemberAccountRequest, Member member) {
+        if (member.getPassword().equals(updateMemberAccountRequest.getOldPassword())) {
             throw new UnAuthorizationException(INCORRECT_PASSWORD);
         }
     }
