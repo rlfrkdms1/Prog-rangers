@@ -168,4 +168,15 @@ public class Member {
         }
         return QUIT_NICKNAME;
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", type=" + type +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
+                ", usable=" + usable +
+                '}';
+    }
 }
