@@ -23,20 +23,20 @@ export const CommentForm = () => {
       })
     .then((res) => {
       console.log(res.data);
-      if (res.data && res.data.contents && res.data.hasNext) {
+      if (res.data && res.data.contents) {
         setData(prevData => ({
           ...prevData,
           contents: [...prevData.contents, ...res.data.contents]
         }));
       }
-      if(res.data.hasNext) 
+      // if(res.data.hasNext) 
         setPage((page) => page + 1)
       })
     .catch((err) => {console.log(err)});
     };
 
     useEffect(() => {
-      if (inView) { console.log(page, '페이지');
+      if (inView) {
       dataFetch();
       }
       }, [inView]);
