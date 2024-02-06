@@ -44,4 +44,13 @@ public class Likes {
     @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Override
+    public String toString() {
+        return "Likes{" +
+                "id=" + id +
+                ", solutionId=" + solution.getId() +
+                ", memberId=" + member.getId() +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
