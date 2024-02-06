@@ -47,7 +47,6 @@ export const LikeList = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
     .then((res) => {
-      console.log(res.data);
       if (res.data && res.data.contents) {
         setData(prevData => ({
           ...prevData,
@@ -61,8 +60,6 @@ export const LikeList = () => {
 
     useEffect(() => {
       if (inView) { 
-      console.log(inView, '무한 스크롤 요청 🎃');
-      console.log(data, '데이터');
       dataFetch();
       }
       }, [inView]);

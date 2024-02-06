@@ -22,15 +22,13 @@ export const CommentForm = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
     .then((res) => {
-      console.log(res.data);
       if (res.data && res.data.contents) {
         setData(prevData => ({
           ...prevData,
           contents: [...prevData.contents, ...res.data.contents]
         }));
       }
-      // if(res.data.hasNext) 
-        setPage((page) => page + 1)
+      setPage((page) => page + 1)
       })
     .catch((err) => {console.log(err)});
     };
