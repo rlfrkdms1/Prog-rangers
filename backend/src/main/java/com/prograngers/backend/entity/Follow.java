@@ -46,4 +46,13 @@ public class Follow {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "Follow{" +
+                "id=" + id +
+                ", followingId=" + followingId +
+                ", followerId=" + followerId +
+                '}';
+    }
 }
