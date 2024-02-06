@@ -60,4 +60,17 @@ public class Comment {
         this.content = content;
         this.updated = true;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", memberId=" + member.getId() +
+                ", solutionId=" + solution.getId() +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", parentId=" + parentId +
+                ", updated=" + updated +
+                '}';
+    }
 }
