@@ -1,12 +1,14 @@
 package com.prograngers.backend.service.auth;
 
-import com.prograngers.backend.exception.unauthorization.ExpiredTokenException;
-import com.prograngers.backend.exception.unauthorization.FailedSignatureTokenException;
-import com.prograngers.backend.exception.unauthorization.IncorrectIssuerTokenException;
-import com.prograngers.backend.exception.unauthorization.IncorrectlyConstructedTokenException;
-import com.prograngers.backend.exception.unauthorization.InvalidClaimTypeException;
-import com.prograngers.backend.exception.unauthorization.MissingIssuerTokenException;
-import com.prograngers.backend.exception.unauthorization.UnsupportedTokenException;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.EXPIRED_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.FAILED_SIGNATURE_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.INCORRECTLY_CONSTRUCTED_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.INVALID_CLAIM_TYPE;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.MISSING_ISSUER_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.NOT_PROGRANGERS_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.UNSUPPORTED_TOKEN;
+
+import com.prograngers.backend.exception.UnAuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.IncorrectClaimException;
@@ -57,17 +59,17 @@ public class JwtTokenProvider {
         try {
             getClaimsJwt(token);
         } catch (MissingClaimException e) {
-            throw new MissingIssuerTokenException();
+            throw new UnAuthorizationException(MISSING_ISSUER_TOKEN);
         } catch (IncorrectClaimException e) {
-            throw new IncorrectIssuerTokenException();
+            throw new UnAuthorizationException(NOT_PROGRANGERS_TOKEN);
         } catch (ExpiredJwtException e) {
-            throw new ExpiredTokenException();
+            throw new UnAuthorizationException(EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
-            throw new UnsupportedTokenException();
+            throw new UnAuthorizationException(UNSUPPORTED_TOKEN);
         } catch (SignatureException e) {
-            throw new FailedSignatureTokenException();
+            throw new UnAuthorizationException(FAILED_SIGNATURE_TOKEN);
         } catch (MalformedJwtException e) {
-            throw new IncorrectlyConstructedTokenException();
+            throw new UnAuthorizationException(INCORRECTLY_CONSTRUCTED_TOKEN);
         }
     }
 
@@ -83,7 +85,7 @@ public class JwtTokenProvider {
         try {
             return getClaimsJwt(accessToken).getBody().get(MEMBER_ID, Long.class);
         } catch (RequiredTypeException e) {
-            throw new InvalidClaimTypeException();
+            throw new UnAuthorizationException(INVALID_CLAIM_TYPE);
         }
 
     }

@@ -4,7 +4,7 @@ import static com.prograngers.backend.entity.solution.AlgorithmConstant.from;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.prograngers.backend.exception.enumtype.AlgorithmNotFoundException;
+import com.prograngers.backend.exception.EnumTypeException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -20,6 +20,6 @@ class AlgorithmConstantTest {
     @ParameterizedTest
     @ValueSource(strings = {"바보 정렬", "", "    "})
     void 잘못된_뷰에_대해_예외가_발생한다(String view) {
-        assertThatThrownBy(() -> from(view)).isInstanceOf(AlgorithmNotFoundException.class);
+        assertThatThrownBy(() -> from(view)).isInstanceOf(EnumTypeException.class);
     }
 }

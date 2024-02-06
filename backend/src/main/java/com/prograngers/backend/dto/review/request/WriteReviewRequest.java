@@ -1,7 +1,5 @@
 package com.prograngers.backend.dto.review.request;
 
-import static com.prograngers.backend.entity.review.ReviewStatusConstant.CREATED;
-
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;

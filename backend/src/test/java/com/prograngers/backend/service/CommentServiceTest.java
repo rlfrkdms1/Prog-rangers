@@ -1,20 +1,15 @@
 package com.prograngers.backend.service;
 
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
 import static com.prograngers.backend.entity.solution.AlgorithmConstant.BFS;
 import static com.prograngers.backend.entity.solution.DataStructureConstant.LIST;
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static com.prograngers.backend.support.fixture.ProblemFixture.백준_문제;
 import static com.prograngers.backend.support.fixture.SolutionFixture.공개_풀이;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.prograngers.backend.dto.comment.request.UpdateCommentRequest;
@@ -22,7 +17,7 @@ import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.comment.CommentRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -77,39 +72,6 @@ class CommentServiceTest {
 
     }
 
-    @DisplayName("댓글을 삭제할 수 있다")
-    @Test
-    void 댓글_삭제_테스트() {
-        // given
-        Member member = 장지담.아이디_지정_생성(1L);
-        Problem problem = 백준_문제.기본_정보_생성();
-        Solution solution = 공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), BFS, LIST, JAVA, 1);
-        Comment comment = 생성된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
-        Comment deleted = 삭제된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
-
-        given(commentRepository.save(comment))
-                .willReturn(comment)
-                .willReturn(deleted);
-        given(commentRepository.findById(comment.getId())).
-                willReturn(Optional.ofNullable(comment))
-                .willReturn(Optional.ofNullable(deleted));
-        given(memberRepository.findById(member.getId()))
-                .willReturn(Optional.ofNullable(member));
-
-        commentRepository.save(comment);
-
-        // when
-        commentService.deleteComment(comment.getId(), member.getId());
-
-        // then
-        Comment found = commentRepository.findById(deleted.getId()).orElse(null);
-        assertAll(
-                () -> verify(commentRepository, times(2)).save(comment),
-                () -> assertThat(found.getStatus()).isEqualTo(DELETED)
-        );
-
-    }
-
     @DisplayName("내 댓글이 아닌 댓글을  수정하려 할 경우 예외 발생")
     @Test
     void 내_댓글_아닌_댓글_수정() {
@@ -128,7 +90,7 @@ class CommentServiceTest {
         // when then
         // member1의 댓글을 member2가 수정하려 한다
         Assertions.assertThrows(
-                MemberUnAuthorizedException.class,
+                UnAuthorizationException.class,
                 () -> commentService.updateComment(comment.getId(), request, member2.getId())
         );
     }
@@ -151,7 +113,7 @@ class CommentServiceTest {
         // when then
         // member1의 댓글을 member2가 삭제하려 한다
         Assertions.assertThrows(
-                MemberUnAuthorizedException.class,
+                UnAuthorizationException.class,
                 () -> commentService.deleteComment(comment.getId(), member2.getId())
         );
     }

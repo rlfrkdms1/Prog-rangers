@@ -11,7 +11,6 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,7 @@ public class CommentController {
     @Login
     @GetMapping("/comments")
     public ShowMyCommentsResponse showMyComments(@LoggedInMember Long memberId,
-                                                 Pageable pageable ) {
+                                                 Pageable pageable) {
         return commentService.showMyComments(memberId, pageable);
     }
 
