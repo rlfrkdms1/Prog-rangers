@@ -4,12 +4,13 @@ import static com.prograngers.backend.entity.problem.QProblem.problem;
 import static com.prograngers.backend.entity.solution.QSolution.solution;
 import static com.prograngers.backend.entity.sortconstant.SortConstant.NEWEST;
 import static com.prograngers.backend.entity.sortconstant.SortConstant.SOLUTIONS;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.SORT_TYPE_NOT_EXISTS;
 
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.sortconstant.SortConstant;
-import com.prograngers.backend.exception.enumtype.SortTypeNotFoundException;
+import com.prograngers.backend.exception.EnumTypeException;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -66,7 +67,7 @@ public class QueryDslProblemRepositoryImpl implements QueryDslProblemRepository 
         if (orderBy.equals(SOLUTIONS)) {
             return problem.solutions.size().desc();
         }
-        throw new SortTypeNotFoundException();
+        throw new EnumTypeException(SORT_TYPE_NOT_EXISTS);
     }
 
     private BooleanExpression dataStructureEq(DataStructureConstant dataStructure) {

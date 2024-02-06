@@ -1,5 +1,13 @@
 package com.prograngers.backend.service;
 
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.UNAUTHORIZED_MEMBER;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.DIFFERENT_SOLUTION;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.INVALID_CODE_LINE_NUMBER;
+import static com.prograngers.backend.exception.errorcode.CommonErrorCode.INVALID_PARENT;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.prograngers.backend.exception.errorcode.ReviewErrorCode.REVIEW_NOT_FOUND;
+import static com.prograngers.backend.exception.errorcode.SolutionErrorCode.SOLUTION_NOT_FOUND;
+
 import com.prograngers.backend.dto.review.request.UpdateReviewRequest;
 import com.prograngers.backend.dto.review.request.WriteReviewRequest;
 import com.prograngers.backend.dto.review.response.CodeLineWithReview;
@@ -9,14 +17,9 @@ import com.prograngers.backend.dto.review.response.ShowReviewsResponse;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentCodeLineNumberException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.DifferentSolutionException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidCodeLIneNumberException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidParentException;
-import com.prograngers.backend.exception.notfound.MemberNotFoundException;
-import com.prograngers.backend.exception.notfound.ReviewNotFoundException;
-import com.prograngers.backend.exception.notfound.SolutionNotFoundException;
-import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
+import com.prograngers.backend.exception.InvalidValueException;
+import com.prograngers.backend.exception.NotFoundException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.review.ReviewRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -53,13 +56,13 @@ public class ReviewService {
     private void validSameCodeLineWithParent(WriteReviewRequest writeReviewRequest) {
         if (reviewRepository.findById(writeReviewRequest.getParentId()).get().getCodeLineNumber()
                 != writeReviewRequest.getCodeLineNumber()) {
-            throw new DifferentCodeLineNumberException();
+            throw new InvalidValueException(INVALID_CODE_LINE_NUMBER);
         }
     }
 
     private void validCodeLineNumber(WriteReviewRequest writeReviewRequest, int length) {
         if (writeReviewRequest.getCodeLineNumber() > length || writeReviewRequest.getCodeLineNumber() <= 0) {
-            throw new InvalidCodeLIneNumberException();
+            throw new InvalidValueException(INVALID_CODE_LINE_NUMBER);
         }
     }
 
@@ -68,13 +71,13 @@ public class ReviewService {
                 .get()
                 .getSolution()
                 .getId()) {
-            throw new DifferentSolutionException();
+            throw new InvalidValueException(DIFFERENT_SOLUTION);
         }
     }
 
     private void validParentExists(WriteReviewRequest writeReviewRequest) {
         if (!reviewRepository.existsById(writeReviewRequest.getParentId())) {
-            throw new InvalidParentException();
+            throw new InvalidValueException(INVALID_PARENT);
         }
     }
 
@@ -114,7 +117,7 @@ public class ReviewService {
     }
 
     private Solution findSolutionById(Long solutionId) {
-        return solutionRepository.findById(solutionId).orElseThrow(SolutionNotFoundException::new);
+        return solutionRepository.findById(solutionId).orElseThrow(() -> new NotFoundException(SOLUTION_NOT_FOUND));
     }
 
     private void addReviewAtLine(List<CodeLineWithReview> addedCodeLineResponsWithReviews, Long memberId) {
@@ -165,16 +168,16 @@ public class ReviewService {
     }
 
     private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
     }
 
     private Review findReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        return reviewRepository.findById(reviewId).orElseThrow(() -> new NotFoundException(REVIEW_NOT_FOUND));
     }
 
     private void validMemberAuthorization(Review targetReview, Member member) {
         if (!targetReview.getMember().getId().equals(member.getId())) {
-            throw new MemberUnAuthorizedException();
+            throw new UnAuthorizationException(UNAUTHORIZED_MEMBER);
         }
     }
 

@@ -1,11 +1,9 @@
 package com.prograngers.backend.entity.member;
 
-import static com.prograngers.backend.entity.comment.Comment.*;
-import static com.prograngers.backend.entity.member.Member.*;
+import static com.prograngers.backend.entity.member.Member.QUIT_NICKNAME;
 import static com.prograngers.backend.support.fixture.MemberFixture.장지담;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.prograngers.backend.entity.comment.Comment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

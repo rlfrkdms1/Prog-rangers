@@ -1,6 +1,5 @@
-package com.prograngers.backend.exception.unauthorization;
+package com.prograngers.backend.exception;
 
-import com.prograngers.backend.exception.CustomException;
 import com.prograngers.backend.exception.errorcode.ErrorCode;
 
 public class UnAuthorizationException extends CustomException {

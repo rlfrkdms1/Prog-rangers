@@ -1,7 +1,9 @@
 package com.prograngers.backend.controller.auth;
 
-import com.prograngers.backend.exception.unauthorization.InvalidAccessTokenException;
-import com.prograngers.backend.exception.unauthorization.NotExistAccessTokenException;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.INVALID_ACCESS_TOKEN;
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.NOT_EXIST_ACCESS_TOKEN;
+
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.service.auth.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,7 +50,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private void validHeader(String header) {
         if (!header.startsWith(AUTHORIZATION_HEADER_PREFIX)) {
-            throw new InvalidAccessTokenException();
+            throw new UnAuthorizationException(INVALID_ACCESS_TOKEN);
         }
     }
 
@@ -59,7 +61,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private void validLoginRequired(Login loginAnnotation) {
         if (loginAnnotation.required()) {
-            throw new NotExistAccessTokenException(); // required true인데 토큰이 없는 경우
+            throw new UnAuthorizationException(NOT_EXIST_ACCESS_TOKEN);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.prograngers.backend.repository.comment;
 
 import static com.prograngers.backend.entity.solution.LanguageConstant.JAVA;
-import static com.prograngers.backend.support.fixture.CommentFixture.삭제된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.생성된_댓글;
 import static com.prograngers.backend.support.fixture.CommentFixture.수정된_댓글;
 import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
@@ -47,7 +46,6 @@ class CommentRepositoryTest {
         Solution solution = 저장(공개_풀이.기본_정보_생성(problem, member1, LocalDateTime.now(), JAVA, 1));
         Comment comment1 = 저장(수정된_댓글.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 10, 10, 10)));
         Comment comment3 = 저장(생성된_댓글.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 11, 10, 10)));
-        저장(삭제된_댓글.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 12, 10, 10)));
         저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.of(2023, 9, 12, 10, 10)));
         저장(생성된_댓글.기본_정보_생성(member2, solution, LocalDateTime.of(2023, 9, 10, 15, 10)));
         Comment comment2 = 저장(생성된_댓글.기본_정보_생성(member1, solution, LocalDateTime.of(2023, 9, 10, 20, 10)));

@@ -16,9 +16,8 @@ import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.alreadyexist.AlreadyFollowingException;
-import com.prograngers.backend.exception.notfound.FollowNotFoundException;
-import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.NotFoundException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
@@ -100,7 +99,7 @@ class FollowServiceTest {
         given(memberRepository.existsById(followerId)).willReturn(false);
         assertAll(
                 () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
-                        MemberNotFoundException.class),
+                        NotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId)
         );
     }
@@ -114,7 +113,7 @@ class FollowServiceTest {
         given(memberRepository.existsById(followingId)).willReturn(false);
         assertAll(
                 () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
-                        MemberNotFoundException.class),
+                        NotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId)
         );
@@ -132,7 +131,7 @@ class FollowServiceTest {
 
         assertAll(
                 () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
-                        AlreadyFollowingException.class),
+                        UnAuthorizationException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId)
@@ -151,7 +150,7 @@ class FollowServiceTest {
 
         assertAll(
                 () -> assertThatThrownBy(() -> followService.unfollow(followerId, followingId)).isExactlyInstanceOf(
-                        FollowNotFoundException.class),
+                        NotFoundException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).findByFollowerIdAndFollowingId(followerId, followingId)

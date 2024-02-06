@@ -10,28 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static com.prograngers.backend.support.fixture.MemberFixture.길가은;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mockStatic;
 
-import com.prograngers.backend.dto.member.request.UpdateMemberAccountRequest;
-import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
-import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
-import com.prograngers.backend.dto.member.response.ShowSocialMemberAccountResponse;
-import com.prograngers.backend.entity.member.Member;
-import com.prograngers.backend.exception.badrequest.AlreadyDeletedMemberException;
-import com.prograngers.backend.exception.badrequest.BlankNicknameException;
-import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
+import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
-import com.prograngers.backend.support.Encrypt;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -187,7 +176,7 @@ class MemberServiceTest {
     void getMemberProfileTest() {
         // given
         final Long memberId = 1L;
-        final Member member = 장지담.기본_정보_생성(memberId);
+        final Member member = 장지담.아이디_지정_생성(memberId);
         final Problem problem = 백준_문제.기본_정보_생성();
         final Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
         final Solution solution2 = 공개_풀이.아이디_지정_생성(2L, problem, member, LocalDateTime.now(), JAVA, 2);
@@ -224,7 +213,7 @@ class MemberServiceTest {
     void getMemberProfileWhenLastPageTest() {
         // given
         final Long memberId = 1L;
-        final Member member = 장지담.기본_정보_생성(memberId);
+        final Member member = 장지담.아이디_지정_생성(memberId);
         final Problem problem = 백준_문제.기본_정보_생성();
         final Solution solution1 = 공개_풀이.아이디_지정_생성(1L, problem, member, LocalDateTime.now(), JAVA, 1);
         final Solution solution2 = 공개_풀이.아이디_지정_생성(2L, problem, member, LocalDateTime.now(), JAVA, 2);
@@ -263,7 +252,7 @@ class MemberServiceTest {
         final Member member = 장지담.기본_정보_생성();
         // when, then
         assertThatThrownBy(() -> memberService.getMemberProfile(notExistsNickname, Long.MAX_VALUE))
-                .isInstanceOf(MemberNotFoundException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("탈퇴한 회원 프로필 보기를 시도하면 예외가 발생한다.")
@@ -274,6 +263,6 @@ class MemberServiceTest {
         when(memberRepository.findByNickname(member.getNickname())).thenReturn(Optional.of(member));
         // when, then
         assertThatThrownBy(() -> memberService.getMemberProfile(member.getNickname(), Long.MAX_VALUE))
-                .isInstanceOf(QuitMemberException.class);
+                .isInstanceOf(UnAuthorizationException.class);
     }
 }
