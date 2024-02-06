@@ -29,7 +29,7 @@ public class WriteCommentRequest {
                 .content(content)
                 .createdAt(LocalDateTime.now())
                 .parentId(parentId)
-                .status(CREATED)
+                .updated(false)
                 .build();
     }
 

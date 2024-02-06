@@ -26,11 +26,12 @@ export const Header = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(
-        'http://13.124.131.171:8080/api/v1/problems'
+        'http://13.125.13.131:8080/api/v1/problems'
       );
       setData(result.data.problems);
     };
@@ -44,6 +45,15 @@ export const Header = () => {
 
   const handleSearch = (event) => {
     event.preventDefault();
+
+    const filteredData = data.filter((item) => {
+      return item.title
+        .toLowerCase()
+        .includes(search.toLocaleLowerCase());
+    });
+    // setData(filteredData);
+    setResults(filteredData);
+    setSearchTerm(search);
     navigate('/problems');
     setShowDropdown(false);
   };
@@ -56,17 +66,10 @@ export const Header = () => {
   const handleReset = (event) => {
     setSearch('');
     setSearchTerm('');
+    setResults([]);
     navigate('/problems');
     setShowDropdown(false);
   };
-
-  const results = !search
-    ? data
-    : data.filter((item) =>
-        item.title
-          .toLowerCase()
-          .includes(search.toLocaleLowerCase())
-      );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -155,8 +158,8 @@ export const Header = () => {
                 `}
               />
               <button
-                type="submit"
-                onClick={handleSearch}
+                type="button"
+                onClick={handleReset}
                 css={css`
                   line-height: 50px;
                 `}
@@ -174,7 +177,7 @@ export const Header = () => {
               </button>
             </form>
           </div>
-          <Link to="/problems">
+          {/* <Link to="/problems">
             <button
               type="button"
               onClick={handleReset}
@@ -193,7 +196,7 @@ export const Header = () => {
             >
               상세검색
             </button>
-          </Link>
+          </Link> */}
         </div>
         <div
           css={css`

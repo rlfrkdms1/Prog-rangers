@@ -9,6 +9,7 @@ import { SocialLoginButtons, ForSignUp } from '../../components/SignUp';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
+
 const OptionWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -32,8 +33,7 @@ const Label = styled.label`
   margin-left: 5px;
 `;
 
-export const SignIn = () => {
-
+const SignIn = () => {
   return (
     <div css={pageStyle}>
       <div css={css`${innerPageStyle}  margin-bottom: 100px;`}>
@@ -63,4 +63,6 @@ export const SignIn = () => {
       </div>
     </div>
   );
-}
+};
+
+export default SignIn;

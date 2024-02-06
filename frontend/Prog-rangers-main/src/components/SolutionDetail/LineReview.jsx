@@ -2,20 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { css } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CodeWindow3 } from '../Profile';
+import { CodeWindow4 } from '../Profile';
 import {
   contentLayout,
   contentMock,
 } from './solutionTabStyle';
 
 export const LineReview = () => {
-
   const { solutionId } = useParams();
-  const [ problem, setProblem ] = useState({});
-  const [ solution, setSolution ] = useState({});
+  const [problem, setProblem] = useState({});
+  const [solution, setSolution] = useState({});
 
   useEffect(() => {
-    const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
     axios
       .get(apiUrl)
       .then((response) => {
@@ -29,37 +28,45 @@ export const LineReview = () => {
 
   return (
     <>
-    <div className="contentWrap">
-      <div className="contentText" css={contentLayout}>
-        {solution && solution.description && (
-          solution.description.split('\n').map((line, index) => (
-          <p key={index}>{line}</p>
-          ))
-        )}
-      </div>
+      <div className="contentWrap">
+        <div className="contentText" css={contentLayout}>
+          {solution &&
+            solution.description &&
+            solution.description
+              .split('\n')
+              .map((line, index) => (
+                <p key={index}>{line}</p>
+              ))}
+        </div>
 
-      <div className="codeArea" css={contentMock}>
-      <div css={css`
-          padding: 15px 0 15px 60px;
-          font-size: 18px;
-          font-weight: 700;`}>
-          {problem.title}
+        <div className="codeArea" css={contentMock}>
+          <div
+            css={css`
+              padding: 15px 0 15px 60px;
+              font-size: 18px;
+              font-weight: 700;
+            `}
+          >
+            {problem.title}
           </div>
 
-          <div css={css`
-          width: 100%;
-          border-bottom: 1px solid #1A2333;
-          `}></div>
-          <div css={css`
-          margin-top: 3px;
-          width: 100%;
-          border-bottom: 1px solid #1A2333;
-          `}></div>
+          <div
+            css={css`
+              width: 100%;
+              border-bottom: 1px solid #1a2333;
+            `}
+          ></div>
+          <div
+            css={css`
+              margin-top: 3px;
+              width: 100%;
+              border-bottom: 1px solid #1a2333;
+            `}
+          ></div>
 
-      <CodeWindow3 />
+          <CodeWindow4 />
+        </div>
       </div>
-    </div>
     </>
   );
 };
-

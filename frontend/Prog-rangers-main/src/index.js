@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import loadable from '@loadable/component';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -7,33 +8,30 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import {
-  NotFound,
-  MainPage,
-  SignUp,
-  SignIn,
-  Problems,
-  Solutions,
-  SolutionDetail,
-  Profile,
-  MyPage,
-  Account,
-  AccountChange,
-  MySolution,
-  MySolutionDetail,
-  MyComment,
-  Like,
-  Follow,
-} from './pages';
-import { 
-  AddSolution,
-  EditSolution,
-  Scrap,
-  WriteSolution
-} from './pages/BoardPage';
 import { KakaoRedirect } from './components/SignUp/KakaoRedirect';
 import { NaverRedirect } from './components/SignUp/NaverRedirect';
 import { GoogleRedirect } from './components/SignUp/GoogleRedirect';
+
+const NotFound = loadable(() => import('./pages/NotFound'));
+const MainPage = loadable(() => import('./pages/MainPage/MainPage'));
+const SignUp = loadable(() => import('./pages/Auth/SignUp'));
+const SignIn = loadable(() => import('./pages/Auth/SignIn'));
+const Problems = loadable(() => import('./pages/Problems/Problems'));
+const Solutions = loadable(() => import('./pages/Solutions/Solutions'));
+const SolutionDetail = loadable(() => import('./pages/SolutionDetail'));
+const Profile = loadable(() => import('./pages/Profile/Profile'));
+const MyPage = loadable(() => import('./pages/MyPage/MyPage'));
+const Account = loadable(() => import('./pages/Account/Account'));
+const AccountChange = loadable(() => import('./pages/Account/AccountChange'));
+const MySolution = loadable(() => import('./pages/MySolution/MySolution'));
+const MySolutionDetail = loadable(() => import('./pages/MySolutionDetail'));
+const MyComment = loadable(() => import('./pages/MyComment/MyComment'));
+const Like = loadable(() => import('./pages/Like/Like'));
+const Follow = loadable(() => import('./pages/Follow/Follow'));
+const AddSolution = loadable(() => import('./pages/BoardPage/AddSolution'));
+const EditSolution = loadable(() => import('./pages/BoardPage/EditSolution'));
+const Scrap = loadable(() => import('./pages/BoardPage/Scrap'));
+const WriteSolution = loadable(() => import('./pages/BoardPage/WriteSolution'));
 
 const router = createBrowserRouter([
   {
@@ -66,9 +64,9 @@ const router = createBrowserRouter([
       { path: 'myComment', element: <MyComment /> },
       { path: 'like', element: <Like /> },
       { path: 'follow', element: <Follow /> },
-      { path: 'accountChange', element: <AccountChange /> },
+      { path: 'account/accountChange', element: <AccountChange /> },
       { path: 'myPage/addsolution', element: <AddSolution/> },
-      { path: 'solutions/:solutionId/editsolution', element: <EditSolution/> },
+      { path: 'mySolution/:solutionId/editsolution', element: <EditSolution/> },
     ],
   },
 ]);

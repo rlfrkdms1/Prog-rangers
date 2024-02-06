@@ -18,7 +18,7 @@ import {
 import { ScrollDownArrow } from '../../components/Home/ScrollDownArrow';
 import Sec2Mockup from '../../assets/main-sec2.png';
 import Sec3Mock1 from '../../assets/main-sec3-1.png';
-import Sec3Mock2 from '../../assets/main-sec3-2.png';
+import Sec3Mock2 from '../../assets/main-sec3-2.jpg';
 import {
   bookPosition,
   chatPosition,
@@ -27,12 +27,12 @@ import {
   notePosition,
   penPosition,
 } from './MainPageIcons';
-import IconPen from '../../assets/icons/main-pen.svg';
-import IconFolder from '../../assets/icons/main-folder.svg';
-import IconNote from '../../assets/icons/main-note-n-pen.svg';
-import IconCommets from '../../assets/icons/main-comments.svg';
-import IconChat from '../../assets/icons/main-chat.svg';
-import IconBook from '../../assets/icons/main-openbook.svg';
+import IconPen from '../../assets/icons/main-pen.png';
+import IconFolder from '../../assets/icons/main-folder.png';
+import IconNote from '../../assets/icons/main-note-n-pen.png';
+import IconCommets from '../../assets/icons/main-comments.png';
+import IconChat from '../../assets/icons/main-chat.png';
+import IconBook from '../../assets/icons/main-openbook.png';
 
 // aos
 import AOS from 'aos';
@@ -42,7 +42,7 @@ const displayBlock = css`
   display: block;
 `;
 
-export const MainPage = () => {
+const MainPage = () => {
   const element = useRef();
   const moveToElement = () => {
     element.current.scrollIntoView({ behavior: 'smooth' });
@@ -336,3 +336,5 @@ export const MainPage = () => {
     </div>
   );
 };
+
+export default MainPage;

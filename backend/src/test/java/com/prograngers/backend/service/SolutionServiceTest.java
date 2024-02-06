@@ -48,7 +48,7 @@ import com.prograngers.backend.entity.solution.AlgorithmConstant;
 import com.prograngers.backend.entity.solution.DataStructureConstant;
 import com.prograngers.backend.entity.solution.LanguageConstant;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.PrivateSolutionException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.PrivateSolutionException;
 import com.prograngers.backend.exception.notfound.ProblemLinkNotFoundException;
 import com.prograngers.backend.exception.unauthorization.MemberUnAuthorizedException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
@@ -264,10 +264,8 @@ class SolutionServiceTest {
 
         //when
         final ShowMySolutionDetailResponse expected = ShowMySolutionDetailResponse.of(
-                ProblemResponse.from(problem.getTitle(), problem.getOjName()),
-                MySolutionResponse.from(myMainSolution.getTitle(),
-                        Arrays.asList(myMainSolution.getAlgorithm(), myMainSolution.getDataStructure()),
-                        myMainSolution.getDescription(), myMainSolution.getCode().split("\n"), 3L, 2L),
+                ProblemResponse.from(problem),
+                MySolutionResponse.from(myMainSolution, 3L, 2L),
                 expectedComments,
                 expectedReviews,
                 expectedRecommendedSolutions,
@@ -343,7 +341,7 @@ class SolutionServiceTest {
                 new PageImpl<>(Arrays.asList(solution4, solution3, solution2, solution1), PageRequest.of(0, 4), 4L));
 
         ShowSolutionListResponse expected = ShowSolutionListResponse.from(
-                new PageImpl<>(Arrays.asList(solution4, solution3, solution2, solution1), PageRequest.of(0, 4), 4L), 0);
+                new PageImpl<>(Arrays.asList(solution4, solution3, solution2, solution1), PageRequest.of(0, 4), 4L));
         //when
         ShowSolutionListResponse result = solutionService.getSolutionList(PageRequest.of(0, 4), problemId, null, null,
                 null, NEWEST);
@@ -385,7 +383,7 @@ class SolutionServiceTest {
         when(reviewRepository.findAllBySolutionOrderByCodeLineNumberAsc(solution)).thenReturn(
                 List.of(review1, review2, review3, review4));
 
-        ProblemResponse problemResponse = ProblemResponse.from(problem.getTitle(), problem.getOjName());
+        ProblemResponse problemResponse = ProblemResponse.from(problem);
         SolutionResponse solutionResponse = SolutionResponse.from(solution, solution.getMember().getNickname(),
                 problem.getLink(), 1, 1, false, false, true, null);
         List<CommentWithRepliesResponse> commentsResponse = Arrays.asList(

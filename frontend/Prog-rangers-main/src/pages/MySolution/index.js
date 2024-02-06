@@ -1,1 +1,0 @@
-export { MySolution } from './MySolution';

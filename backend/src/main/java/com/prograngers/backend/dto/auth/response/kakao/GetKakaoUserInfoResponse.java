@@ -10,8 +10,10 @@ public class GetKakaoUserInfoResponse {
 
     private Long id;
 
-    public Member toMember() {
+    public Member toMember(String nickname) {
         return Member.builder()
+                .usable(true)
+                .nickname(nickname)
                 .socialId(id)
                 .type(KAKAO)
                 .build();

@@ -6,55 +6,64 @@ import { css } from '@emotion/react';
 import { theme } from '../Header/theme';
 import { CommentForm } from './CommentForm';
 import { CommentList } from './CommentList';
-import {
-  wrapStyle,
-  flexLayout
-} from './commentsStyle';
+import { wrapStyle, flexLayout } from './commentsStyle';
 
 export const Comments = () => {
-
   const { solutionId } = useParams();
-  const [ comment, setComment ] = useState([]);
-  const [ commentCount, setCommentCount ] = useState(0);
+  const [comment, setComment] = useState([]);
+  const [commentCount, setCommentCount] = useState(0); 
+  const [repliesCount, setRepliesCount] = useState(0); 
+  const [totalCount, setTotalCount] = useState(0);
 
-    useEffect(() => {
-      
-      const apiUrl = `http://13.124.131.171:8080/api/v1/solutions/${solutionId}`;
-      
-      axios
-        .get(apiUrl)
-        .then((response) => {
-          // 댓글 갯수          
-          setCommentCount(response.data.comments.length);
-          // 삭제된 댓글 제외
-          const newComments = response.data.comments;
-          setCommentsWithCountCheck(newComments);
-        })
-        .catch((error) => {
-          console.error('API 요청 오류:', error);
-        });
-    }, []);
+  useEffect(() => {
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
-    const addComment = (newComment) => {
-      setComment([...comment, newComment]);
-      setCommentCount(commentCount + 1);
+    axios
+      .get(apiUrl)
+      .then((response) => {    
+        setComment(response.data.comments);
+        const totalCommentCount = calculateTotalCommentCount(response.data.comments);
+        setCommentCount(totalCommentCount.commentCount);
+        setRepliesCount(totalCommentCount.repliesCount);  
+        
+        const newTotalCount = totalCommentCount.commentCount + totalCommentCount.repliesCount;
+        setTotalCount(newTotalCount);
+      })
+      .catch((error) => {
+        console.error('API 요청 오류:', error);
+      });
+  }, [solutionId]); 
+
+  const addComment = (newComment) => {
+    setComment([...comment, newComment]);
+    setCommentCount(commentCount + 1);
+  }
+
+  const calculateTotalCommentCount = (comments) => {
+    let totalCommentCount = 0;
+    let totalRepliesCount = 0;
+
+    if (comments && Array.isArray(comments)) {
+      comments.forEach((comment) => {
+        totalCommentCount += 1;
+
+        if (comment.replies && Array.isArray(comment.replies)) {
+          const nonDeletedReplies = comment.replies.filter(reply => reply.status !== 'DELETED');
+          totalRepliesCount += nonDeletedReplies.length;
+        }
+      });
     }
 
-    const setCommentsWithCountCheck = (newComments) => {
-      const deletedCommentsCount = newComments.reduce((count, comment) => {
-        return comment.status === "DELETED" ? count + 1 : count;
-      }, 0);
-  
-      setCommentCount((prevCount) => prevCount - deletedCommentsCount);
-  
-      const nonDeletedComments = newComments.filter(comment => comment.status !== "DELETED");
-      setComment(nonDeletedComments);
-    };
+    return { commentCount: totalCommentCount, repliesCount: totalRepliesCount };
+  };
 
   return (
     <div className="wrap" css={wrapStyle}>
       <div className="commentArea">
-      <CommentForm addComment={addComment} solutionId={solutionId} />
+        <CommentForm
+          addComment={addComment} 
+          solutionId={solutionId}
+        />
 
         <div className="title" css={flexLayout}>
           <div
@@ -75,12 +84,12 @@ export const Comments = () => {
               color: ${theme.colors.dark2};
             `}
           >
-            <span>{commentCount}</span>
+            <span>{totalCount}</span>
             <span>개</span>
           </div>
         </div>
 
-        <CommentList comments={comment} />
+        <CommentList comments={comment} key={totalCount} />
       </div>
     </div>
   );

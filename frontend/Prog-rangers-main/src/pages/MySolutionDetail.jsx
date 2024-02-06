@@ -10,7 +10,8 @@ import {
   RightBar
 } from '../components/MySolutionDetail';
 
-export const MySolutionDetail = () => {
+const MySolutionDetail = (solutionId) => {
+
   return (
     <div 
       className='container' 
@@ -30,8 +31,10 @@ export const MySolutionDetail = () => {
       <MyComments />
       <Recommand />
       </div>
-      <RightBar />
+      <RightBar key={solutionId} />
   
     </div>
   );
 };
+
+export default MySolutionDetail;

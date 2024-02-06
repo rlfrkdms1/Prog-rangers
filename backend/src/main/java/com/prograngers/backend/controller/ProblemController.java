@@ -26,7 +26,7 @@ public class ProblemController {
 
     @GetMapping
     public ShowProblemListResponse problems(
-            @PageableDefault Pageable pageable,
+            Pageable pageable,
             @RequestParam(required = false) AlgorithmConstant algorithm,
             @RequestParam(required = false) DataStructureConstant dataStructure,
             @RequestParam(defaultValue = SORT_CONSTANT_DEFAULT) SortConstant sortBy) {

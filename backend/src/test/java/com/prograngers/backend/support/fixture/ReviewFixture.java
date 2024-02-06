@@ -1,13 +1,14 @@
 package com.prograngers.backend.support.fixture;
 
+import static com.prograngers.backend.entity.review.Review.DELETED_CONTENT;
 import static com.prograngers.backend.entity.review.Review.ReviewBuilder;
+import static com.prograngers.backend.entity.review.Review.builder;
 import static com.prograngers.backend.entity.review.ReviewStatusConstant.CREATED;
 import static com.prograngers.backend.entity.review.ReviewStatusConstant.DELETED;
 import static com.prograngers.backend.entity.review.ReviewStatusConstant.FIXED;
 
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.review.Review;
-import com.prograngers.backend.entity.review.ReviewStatusConstant;
 import com.prograngers.backend.entity.solution.Solution;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -16,16 +17,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum ReviewFixture {
 
-    생성된_리뷰("리뷰내용", CREATED, 1),
-    수정된_리뷰("리뷰내용", FIXED, 2),
-    삭제된_리뷰("리뷰내용", DELETED, 3);
+    생성된_리뷰("리뷰 내용", CREATED, 1),
+    수정된_리뷰("수정 내용", FIXED, 1),
+    삭제된_리뷰(DELETED_CONTENT, DELETED, 1);
 
     private final String content;
     private final ReviewStatusConstant status;
     private final int codeLineNumber;
 
     public ReviewBuilder 기본_빌더_생성(Member member, Solution solution, LocalDateTime createdAt) {
-        return Review.builder()
+        return builder()
                 .content(content)
                 .status(status)
                 .codeLineNumber(codeLineNumber)

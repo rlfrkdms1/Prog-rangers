@@ -80,62 +80,78 @@ public class Solution {
     private LanguageConstant language;
 
     private void updateTitle(String title) {
-        if (title != null) {
-            this.title = title;
+        if (title == null || title.isBlank()) {
+            return;
         }
+        this.title = title;
     }
 
     private void updateCode(String code) {
-        if (!code.isEmpty()) {
-            this.code = code;
+        if (code == null || code.isBlank()) {
+            return;
         }
+        this.code = code;
     }
 
     private void updateDescription(String description) {
-        if (!code.isEmpty()) {
-            this.description = description;
+        if (description == null || description.isBlank()) {
+            return;
         }
+        this.description = description;
     }
 
     private void updateLevel(Integer level) {
-        this.level = level;
+        if (level != null) {
+            this.level = level;
+        }
     }
 
     private void updateAlgorithm(AlgorithmConstant algorithm) {
-        this.algorithm = algorithm;
+        if (algorithm != null) {
+            this.algorithm = algorithm;
+        }
     }
 
     private void updateDataStructure(DataStructureConstant dataStructure) {
-        this.dataStructure = dataStructure;
-    }
-
-    public void update(String title, AlgorithmConstant algorithm, DataStructureConstant dataStructure, int level,
-                       String code, String description) {
-        updateTitle(title);
-        updateAlgorithm(algorithm);
-        updateDataStructure(dataStructure);
-        updateLevel(level);
-        updateCode(code);
-        updateDescription(description);
-    }
-
-    public String getAlgorithmView() {
-        if (algorithm != null) {
-            return algorithm.getView();
-        }
-        return null;
-    }
-
-    public String getDataStructureView() {
         if (dataStructure != null) {
-            return dataStructure.getView();
+            this.dataStructure = dataStructure;
+        }
+    }
+
+    public void update(Solution update) {
+        updateTitle(update.getTitle());
+        updateAlgorithm(update.getAlgorithm());
+        updateDataStructure(update.getDataStructure());
+        updateLevel(update.getLevel());
+        updateCode(update.getCode());
+        updateDescription(update.getDescription());
+    }
+
+    public String getAlgorithmName() {
+        if (algorithm != null) {
+            return algorithm.name();
         }
         return null;
     }
 
+    public String getDataStructureName() {
+        if (dataStructure != null) {
+            return dataStructure.name();
+        }
+        return null;
+    }
 
     public boolean isScrapped() {
         return scrapSolution != null;
     }
 
+    /**
+     * 풀이의 id와 날짜을 { id : %d, date : %s }의 문자열 형태로 반환합니다
+     * { id : 880, date : 2024-01-24T19:26:01.658721100 } 입니다.
+     * 이 형식은 언제든 바뀔 수 있습니다
+     */
+    @Override
+    public String toString() {
+        return String.format("{ id : %d, date : %s }",id,createdAt);
+    }
 }

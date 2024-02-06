@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `comment`
 (
     `id`          BIGINT NOT NULL auto_increment,
     `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `status`      VARCHAR(255),
+    `updated`      TINYINT(1) NOT NULL DEFAULT 0,
     `content`     VARCHAR(255) NOT NULL,
     `parent_id`   BIGINT,
     `member_id`   BIGINT NOT NULL,
@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `likes`
     `id`          BIGINT NOT NULL auto_increment,
     `member_id`   BIGINT NOT NULL,
     `solution_id` BIGINT NOT NULL,
+    `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ( `id` )
 )
     engine = innodb
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `problem`
 CREATE TABLE IF NOT EXISTS `review`
 (
     `id`               BIGINT NOT NULL auto_increment,
+    `updated`           TINYINT(1) NOT NULL DEFAULT 0,
     `code_line_number` INT NOT NULL,
     `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `content`          VARCHAR(255) NOT NULL,
@@ -99,15 +101,15 @@ CREATE TABLE IF NOT EXISTS `solution`
 
 CREATE TABLE IF NOT EXISTS `notification`
 (
-    `id`          BIGINT NOT NULL auto_increment,
-    `title`       VARCHAR(255) NOT NULL,
-    `type`        VARCHAR(255) NOT NULL,
-    `created_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `id_read`     TINYINT(1) NOT NULL,
-    `member_id`   BIGINT NOT NULL,
-    `solution_id` BIGINT NOT NULL,
-    `comment_id`  BIGINT,
-    `review_id`   BIGINT,
+    `id`              BIGINT       NOT NULL auto_increment,
+    `writer_nickname` VARCHAR(255) NOT NULL,
+    `type`            VARCHAR(255) NOT NULL,
+    `created_at`      TIMESTAMP    NOT NULL,
+    `is_read`         TINYINT(1)   NOT NULL,
+    `receiver_id`     BIGINT       NOT NULL,
+    `solution_id`     BIGINT       NOT NULL,
+    `comment_id`      BIGINT,
+    `review_id`       BIGINT,
     PRIMARY KEY ( `id` )
 )
     engine = innodb

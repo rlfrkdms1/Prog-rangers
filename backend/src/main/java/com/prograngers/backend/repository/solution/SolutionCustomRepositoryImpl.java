@@ -62,7 +62,7 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
         return jpaQueryFactory
                 .select(solution)
                 .from(solution)
-                .where(solution.member.id.eq(memberId), solution.id.loe(page))
+                .where(solution.member.id.eq(memberId), solution.id.loe(page), solution.isPublic.eq(true))
                 .orderBy(solution.createdAt.desc())
                 .limit(3)
                 .fetch();
@@ -70,13 +70,14 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
 
 
     public List<Solution> findTopLimitsSolutionOfProblemOrderByLikesDesc(Problem problem, int limit) {
+
         return jpaQueryFactory
                 .select(solution)
                 .from(likes)
                 .rightJoin(likes.solution, solution)
                 .groupBy(solution)
                 .where(solution.problem.eq(problem))
-                .orderBy(likes.count().desc(), solution.createdAt.desc())
+                .orderBy(likes.count().desc())
                 .limit(limit)
                 .fetch();
     }
@@ -95,7 +96,10 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
         return jpaQueryFactory.selectFrom(solution)
                 .join(follow).on(solution.member.id.eq(follow.followingId))
                 .join(solution.problem).fetchJoin()
-                .where(follow.followerId.eq(memberId))
+                .where(
+                        follow.followerId.eq(memberId),
+                        solution.isPublic.isTrue()
+                )
                 .orderBy(solution.createdAt.desc())
                 .limit(limit)
                 .fetch();

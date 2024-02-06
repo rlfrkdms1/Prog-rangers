@@ -18,6 +18,7 @@ public class SolutionResponse {
     private String nickname;
     private String title;
     private String link;
+    private Integer level;
     private String algorithm;
     private String dataStructure;
     private String language;
@@ -26,6 +27,7 @@ public class SolutionResponse {
     private Integer likes;
     private Integer scraps;
     private Long scrapId;
+    private boolean isPublic;
     private boolean pushedLike;
     private boolean scraped;
     private boolean mine;
@@ -38,10 +40,11 @@ public class SolutionResponse {
                 .nickname(nickname)
                 .title(solution.getTitle())
                 .link(problemLink)
-                .algorithm(solution.getAlgorithmView())
-                .dataStructure(solution.getDataStructureView())
+                .level(solution.getLevel())
+                .algorithm(solution.getAlgorithmName())
+                .dataStructure(solution.getDataStructureName())
                 .language(solution.getLanguage().getView())
-                .code(solution.getCode().split("\n"))
+                .code(solution.getCode().split(System.lineSeparator()))
                 .description(solution.getDescription())
                 .likes(likeCount)
                 .scraps(scrapCount)
@@ -49,6 +52,7 @@ public class SolutionResponse {
                 .scraped(scraped)
                 .mine(mine)
                 .scrapId(scrapId)
+                .isPublic(solution.isPublic())
                 .build();
     }
 }

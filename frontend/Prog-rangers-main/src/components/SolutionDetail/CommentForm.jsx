@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { css } from "@emotion/react";
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { css } from '@emotion/react';
 
 export const CommentForm = ({ addComment }) => {
-  
   const commentInputRef = useRef(null);
 
   const focusCommentInput = () => {
@@ -20,12 +19,12 @@ export const CommentForm = ({ addComment }) => {
   // 로그인한 사용자 닉네임 API 요청
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const apiUrl = `http://13.124.131.171:8080/api/v1/members`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/members`;
 
     axios
       .get(apiUrl, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` }
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         setNickname(response.data.nickname);
@@ -44,32 +43,40 @@ export const CommentForm = ({ addComment }) => {
   const handleSubmit = () => {
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      alert("댓글을 작성하려면 로그인이 필요합니다.");
-    } else if (content.trim() !== '') {
+    if (content.trim() !== '') {
       const newComment = {
         nickname: nickname,
         content,
       };
 
       axios
-        .post(`http://13.124.131.171:8080/api/v1/solutions/${solutionId}/comments`, newComment, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        .post(
+          `http://13.125.13.131:8080/api/v1/solutions/${solutionId}/comments`,
+          newComment,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
         .then((response) => {
           addComment(...response.data);
           setContent('');
           focusCommentInput(); // 댓글 리스트로 포커스 이동
         })
         .catch((error) => {
-          console.error('댓글 등록 저장 API 요청 오류:', error);
+          console.error(
+            '댓글 등록 저장 API 요청 오류:',
+            error
+          );
+          
+      alert('로그인이 필요한 기능입니다.');
         });
     }
   };
 
   return (
-    <div className="search"
+    <div
+      className="search"
       css={css`
         width: 996px;
         height: 50px;
@@ -80,7 +87,8 @@ export const CommentForm = ({ addComment }) => {
         padding-left: 30px;
       `}
     >
-      <input type="text"
+      <input
+        type="text"
         placeholder="댓글을 입력해주세요"
         value={content}
         onChange={handleChange}
@@ -100,11 +108,11 @@ export const CommentForm = ({ addComment }) => {
           height: 30px;
           border-radius: 15px;
           align-items: center;
-          background-color: #C2DBE3
+          background-color: #c2dbe3;
         `}
       >
         등록
       </button>
-    </div>  
+    </div>
   );
 };

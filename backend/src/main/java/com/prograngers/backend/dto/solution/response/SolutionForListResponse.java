@@ -16,19 +16,19 @@ public class SolutionForListResponse {
     private String dataStructure;
     private String language;
     private int level;
-    private boolean isScrapped;
+    private boolean byScrap;
+    private boolean isPublic;
 
     public static SolutionForListResponse from(Solution solution) {
-        SolutionForListResponse response = SolutionForListResponse.builder()
+        return SolutionForListResponse.builder()
                 .id(solution.getId())
                 .title(solution.getTitle())
                 .language(solution.getLanguage().getView())
                 .level(solution.getLevel())
-                .algorithm(solution.getAlgorithmView())
-                .dataStructure(solution.getDataStructureView())
-                .isScrapped(solution.isScrapped())
+                .algorithm(solution.getAlgorithmName())
+                .dataStructure(solution.getDataStructureName())
+                .byScrap(solution.isScrapped())
+                .isPublic(solution.isPublic())
                 .build();
-        return response;
     }
-
 }

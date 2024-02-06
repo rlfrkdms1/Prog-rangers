@@ -33,7 +33,6 @@ export const fontSize18 = css`
 export const fontSize20 = css`
   font-size: 20px;
   font-weight: 700;
-  color: ${theme.colors.black}
   `;
 
 export const fontSizedark20 = css`
@@ -58,3 +57,9 @@ export const boxStyle = css`
   justify-content: center;
   align-items: center;
 `;
+
+export const badgeStyle = css`
+  width: 65px;
+  height: 65px;
+  margin: 15px 8px 0 8px;
+  `;

@@ -17,8 +17,7 @@ import { FilterBar } from "../FilterBar";
 import sort from '../../db/autocomplete.json';
 import { useAtomValue } from "jotai";
 import { targetAtom, targetScope, nameAtom, nameScope , valueAtom, valueScope} from "../../pages/BoardPage/AddSolution";
-import { ButtonDiv, SubmitButton } from "../../pages/BoardPage/buttonDiv";
-import { TagAction } from "./TagAction";
+import { SubmitButton } from "../../pages/BoardPage/buttonDiv";
 import axios from 'axios';
 
 //새로운 문제인 경우 링크를 새로 작성하고, 기존의 풀이에서 링크를 가져올 수도 있다.
@@ -40,13 +39,13 @@ export const AddMySolution = ({postURL}) => {
   const [ algo, setAlgo ] = useState([]);
   const [ data, setData ] = useState([]);
   useEffect(() => {
-    if(name == 'algorithm'){
+    if(name === 'algorithm'){
       setAlgo({
         value: value,
         name: target,
       });
     }
-    if(name == 'datastructure'){
+    if(name === 'datastructure'){
       setData({
         value: value,
         name: target,
@@ -156,8 +155,8 @@ export const AddMySolution = ({postURL}) => {
         headers: { Authorization: `Bearer ${token}`}
       });
     if(response.status === 201){
-      alert('질문이 등록되었습니다.');
-      window.location.href = `http://localhost:3000/mypage`;
+      alert('풀이가 등록되었습니다.');
+      window.location.href = `http://13.125.13.131/mypage`;
     }
     }
     catch(error){

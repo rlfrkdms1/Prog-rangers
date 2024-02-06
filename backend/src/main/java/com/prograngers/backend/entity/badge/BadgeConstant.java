@@ -21,7 +21,7 @@ public enum BadgeConstant {
         return null;
     }
 
-    private Long getCount() {
+    public Long getCount() {
         return count;
     }
 }

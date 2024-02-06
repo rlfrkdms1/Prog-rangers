@@ -9,9 +9,9 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.AlreadyDeletedMemberException;
-import com.prograngers.backend.exception.badrequest.BlankNicknameException;
-import com.prograngers.backend.exception.badrequest.NotExistOldPasswordException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.AlreadyDeletedMemberException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.BlankNicknameException;
+import com.prograngers.backend.exception.badrequest.invalidvalue.NotExistOldPasswordException;
 import com.prograngers.backend.exception.notfound.MemberNotFoundException;
 import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
 import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
@@ -102,8 +102,8 @@ public class MemberService {
         validQuitMember(member);
         List<Badge> badges = badgeRepository.findAllByMember(member);
         List<Solution> solutions = solutionRepository.findProfileSolutions(member.getId(), page);
-        Long followCount = followRepository.getFollowCount(member);
-        Long followingCount = followRepository.getFollowingCount(member);
+        Long followCount = followRepository.countFollow(member);
+        Long followingCount = followRepository.countFollowing(member);
         Long cursor = setCursor(solutions);
 
         return ShowMemberProfileResponse.from(member, badges, solutions, followCount, followingCount, cursor);
