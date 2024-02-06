@@ -19,9 +19,15 @@ import com.prograngers.backend.repository.problem.ProblemRepository;
 import com.prograngers.backend.repository.solution.SolutionRepository;
 import com.prograngers.backend.support.RepositoryTest;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
@@ -36,6 +42,18 @@ class CommentRepositoryTest {
     private ProblemRepository problemRepository;
     @Autowired
     private MemberRepository memberRepository;
+
+    @MockBean
+    DateTimeProvider dateTimeProvider;
+
+    @SpyBean
+    AuditingHandler auditingHandler;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        MockitoAnnotations.openMocks(this);
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+    }
 
     @Test
     @DisplayName("주어진 회원이 삭제한 댓글 외 작성한 댓글을 페이징해 조회할 수 있다.")
