@@ -16,6 +16,7 @@ import com.prograngers.backend.entity.Follow;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
+import com.prograngers.backend.exception.AlreadyExistsException;
 import com.prograngers.backend.exception.NotFoundException;
 import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.follow.FollowRepository;
@@ -131,7 +132,7 @@ class FollowServiceTest {
 
         assertAll(
                 () -> assertThatThrownBy(() -> followService.follow(followerId, followingId)).isExactlyInstanceOf(
-                        UnAuthorizationException.class),
+                        AlreadyExistsException.class),
                 () -> verify(memberRepository).existsById(followerId),
                 () -> verify(memberRepository).existsById(followingId),
                 () -> verify(followRepository).existsByFollowerIdAndFollowingId(followerId, followingId)
