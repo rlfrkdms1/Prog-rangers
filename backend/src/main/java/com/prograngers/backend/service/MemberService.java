@@ -1,5 +1,13 @@
 package com.prograngers.backend.service;
 
+import static com.prograngers.backend.exception.errorcode.AuthErrorCode.INCORRECT_PASSWORD;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.ALREADY_DELETED_MEMBER;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.ALREADY_EXIST_NICKNAME;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.BLANK_NICKNAME;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.NOT_EXIST_OLD_PASSWORD;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.QUIT_MEMBER;
+
 import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
 import com.prograngers.backend.dto.member.response.ShowBasicMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
@@ -9,13 +17,9 @@ import com.prograngers.backend.entity.badge.Badge;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.member.MemberType;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.badrequest.invalidvalue.AlreadyDeletedMemberException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.BlankNicknameException;
-import com.prograngers.backend.exception.badrequest.invalidvalue.NotExistOldPasswordException;
-import com.prograngers.backend.exception.notfound.MemberNotFoundException;
-import com.prograngers.backend.exception.unauthorization.AlreadyExistNicknameException;
-import com.prograngers.backend.exception.unauthorization.IncorrectPasswordException;
-import com.prograngers.backend.exception.unauthorization.QuitMemberException;
+import com.prograngers.backend.exception.InvalidValueException;
+import com.prograngers.backend.exception.NotFoundException;
+import com.prograngers.backend.exception.UnAuthorizationException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -48,7 +52,7 @@ public class MemberService {
     }
 
     private Member findById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
     }
 
     @Transactional
@@ -75,25 +79,25 @@ public class MemberService {
 
     private void validExistOldPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
         if (updateMemberAccountInfoRequest.getOldPassword() == null) {
-            throw new NotExistOldPasswordException();
+            throw new InvalidValueException(NOT_EXIST_OLD_PASSWORD);
         }
     }
 
     private void validCorrectPassword(UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest, Member member) {
         if (member.getPassword().equals(updateMemberAccountInfoRequest.getOldPassword())) {
-            throw new IncorrectPasswordException();
+            throw new UnAuthorizationException(INCORRECT_PASSWORD);
         }
     }
 
     private void validNicknameBlank(String nickname) {
         if (nickname.isBlank()) {
-            throw new BlankNicknameException();
+            throw new InvalidValueException(BLANK_NICKNAME);
         }
     }
 
     private void validNicknameDuplication(String nickname) {
         if (memberRepository.findByNickname(nickname).isPresent()) {
-            throw new AlreadyExistNicknameException();
+            throw new UnAuthorizationException(ALREADY_EXIST_NICKNAME);
         }
     }
 
@@ -120,12 +124,13 @@ public class MemberService {
 
     private void validQuitMember(Member member) {
         if (!member.isUsable()) {
-            throw new QuitMemberException();
+            throw new UnAuthorizationException(QUIT_MEMBER);
         }
     }
 
     private Member findByNickname(String memberNickname) {
-        return memberRepository.findByNickname(memberNickname).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findByNickname(memberNickname)
+                .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
     }
 
     @Transactional
@@ -137,7 +142,7 @@ public class MemberService {
 
     private void validAlreadyDeleted(Member member) {
         if (!member.isUsable()) {
-            throw new AlreadyDeletedMemberException();
+            throw new InvalidValueException(ALREADY_DELETED_MEMBER);
         }
     }
 }

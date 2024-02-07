@@ -1,11 +1,7 @@
 package com.prograngers.backend.support.fixture;
 
 import static com.prograngers.backend.entity.comment.Comment.CommentBuilder;
-import static com.prograngers.backend.entity.comment.Comment.DELETED_CONTENT;
 import static com.prograngers.backend.entity.comment.Comment.builder;
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.CREATED;
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.DELETED;
-import static com.prograngers.backend.entity.comment.CommentStatusConstant.FIXED;
 
 import com.prograngers.backend.entity.comment.Comment;
 import com.prograngers.backend.entity.member.Member;
@@ -15,19 +11,17 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum CommentFixture {
-    생성된_댓글("생성된 댓글", CREATED),
+    생성된_댓글("생성된 댓글", false),
 
-    수정된_댓글("수정된 댓글", FIXED),
-
-    삭제된_댓글(DELETED_CONTENT, DELETED);
+    수정된_댓글("수정된 댓글", true);
 
     private final String content;
-    private final CommentStatusConstant status;
+    private final boolean updated;
 
     public CommentBuilder 기본_빌더_생성() {
         return builder()
                 .content(content)
-                .status(status);
+                .updated(updated);
     }
 
     public Comment 기본_정보_생성(Member member, Solution solution, LocalDateTime createdDate) {

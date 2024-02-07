@@ -58,7 +58,7 @@ export const MySolHeader = () => {
   };
 
   useEffect(() => {
-    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}/mine`;
 
     axios
       .get(apiUrl, {
@@ -74,7 +74,7 @@ export const MySolHeader = () => {
         alert('접근 권한이 없습니다.');
         navigate(-1);
       });
-  }, []);
+  }, [solutionId]);
 
   // 풀이 삭제
   const deleteSolution = (solutionId) => {
@@ -141,10 +141,9 @@ export const MySolHeader = () => {
                 {solution.title}
               </span>
               <span>
-              <img src={starImages[1]}/>
-                {/* {starImages[item.solution.level] && (
-                  <img src={starImages[item.solution.level]} alt={`${item.solution.level}`} />
-                 )} */}
+                {starImages[solution.level] && (
+                  <img src={starImages[solution.level]} alt={`${solution.level}`} />
+                 )}
               </span>
             </div>
             <div css={css`display: flex; gap: 5px;`}>
@@ -180,21 +179,6 @@ export const MySolHeader = () => {
                 `}
               >
                 {solution.dataStructure}
-              </div>
-
-              <div
-                className="LanguageOptions"
-                css={css`
-                  width: 89px;
-                  height: 36px;
-                  background-color: ${theme.colors.light3};
-                  border-radius: 20px;
-                  text-align: center;
-                  line-height: 36px;
-                  color: ${theme.colors.dark1};
-                `}
-              >
-                {solution.language}
               </div>
             </div>
           </div>

@@ -2,9 +2,10 @@ package com.prograngers.backend.dto.notification.response;
 
 import static com.prograngers.backend.entity.NotificationType.COMMENT;
 import static com.prograngers.backend.entity.NotificationType.REVIEW;
+import static com.prograngers.backend.exception.errorcode.NotificationErrorCode.INVALID_NOTIFICATION_TYPE;
 
 import com.prograngers.backend.entity.Notification;
-import com.prograngers.backend.exception.badrequest.invalidvalue.InvalidNotificationTypeException;
+import com.prograngers.backend.exception.InvalidValueException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +34,7 @@ public class NotificationResponse {
         if (notification.getType() == COMMENT) {
             return notification.getComment().getContent();
         }
-        throw new InvalidNotificationTypeException();
+        throw new InvalidValueException(INVALID_NOTIFICATION_TYPE);
     }
 
 

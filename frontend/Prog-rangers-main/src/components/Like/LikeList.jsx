@@ -13,9 +13,13 @@ import {
   fontSize14,
 } from './LikeStyle.js';
 import hljs from 'highlight.js';
+import { useInView } from 'react-intersection-observer';
 
 export const LikeList = () => {
   const [data, setData] = useState({ contents: [] });
+  const [ref, inView] = useInView();
+  const [page, setPage] = useState(0);
+  const token = localStorage.getItem('token');
 
   const navigate = useNavigate();
   const onClickName = (nickname) => {
@@ -24,27 +28,41 @@ export const LikeList = () => {
   const onClickSolution = (solutionId) =>{
     navigate(`/solutions/${solutionId}`);
   };
+  const onClickScrape = (solutionId) => {
+    if (token) {
+      navigate(`/solutions/${solutionId}/detail/scrap`);
+    } 
+    else {
+      alert('로그인이 필요한 기능입니다.');
+    }
+  };
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const apiUrl = 'http://13.125.13.131:8080/api/v1/likes';
+  const dataFetch = () => {
+    const apiUrl =
+      `http://13.125.13.131:8080/api/v1/likes?page=${page}&size=3`;
 
     axios
-      .get(apiUrl, {
+    .get(apiUrl, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        setData(response.data);
+    .then((res) => {
+      if (res.data && res.data.contents) {
+        setData(prevData => ({
+          ...prevData,
+          contents: [...prevData.contents, ...res.data.contents]
+        }));
+      } 
+        setPage((page) => page + 1)
       })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, []);
+    .catch((err) => {console.log(err)});
+    };
 
-  if (data.contents && data.contents.length > 0) {
-    for (let i = 0; i < data.contents.length; i++) {
-      const item = data.contents[i];
+    useEffect(() => {
+      if (inView) { 
+      dataFetch();
+      }
+      }, [inView]);
 
       return (
         <>
@@ -54,19 +72,18 @@ export const LikeList = () => {
               css={css`
                 width: 835px;
                 margin-top: 50px;
-              `}
-            >
+              `}>
               <div
-                css={css`}
-        width: 835px;
-        margin-top: 30px;
-        `}
-              >
+                css={css`
+                  width: 835px;
+                  margin-top: 30px;
+                  `}>
                 <div
                   css={css`
                     ${fontSizedark20}
-                    cursor: default;
+                    cursor: pointer;
                   `}
+                  onClick={()=>onClickSolution(item.solution.id)}
                 >
                   {item.problem.title}
                 </div>
@@ -101,17 +118,10 @@ export const LikeList = () => {
                   </div>
                 </div>
 
-                <div
-                  css={css`
-                    ${boxStyle}
-                    ${fontSize16}
-                    background-color: ${theme.colors.light3};
-                    cursor: default;
-                  `}
-                >
-                  {item.solution.language}
-                </div>
-
+                {item.solution.algorithm && (<div key={item.solution.algorithm} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.algorithm}</div>)}
+                {item.solution.dataStructure && (<div key={item.solution.dataStructure} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.dataStructure}</div>)}
+                {item.solution.language && (<div key={item.solution.language} css={css`${boxStyle} ${fontSize16} background-color: ${theme.colors.light3}; margin-right: 12px; cursor: default;`}>{item.solution.language}</div>)}
+          
                 <button
                   css={css`
                     width: 30px;
@@ -119,6 +129,7 @@ export const LikeList = () => {
                     float: right;
                     padding-top: 13px;
                   `}
+                  onClick={()=>onClickScrape(item.solution.id)}
                 >
                   <img src={sharemark} alt="share_mark" />
                 </button>
@@ -204,7 +215,7 @@ export const LikeList = () => {
                     `}
                   >
                     <div
-                      key={item.solution.id + i}
+                      key={item.solution.id + index}
                       css={css`
                         overflow-y: auto;
                         max-height: 270px;
@@ -257,8 +268,7 @@ export const LikeList = () => {
               </div>
             </div>
           ))}
+          <div ref={ref} style={{ borderBottom: '1px solid #FFF' }}></div>
         </>
       );
-    }
-  }
 };

@@ -18,7 +18,7 @@ export const Recommand = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
+    const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}/mine`;
 
     axios
       .get(apiUrl, {
@@ -48,7 +48,7 @@ export const Recommand = () => {
       .catch((error) => {
         console.error('추천 리뷰 없음:', error);
       });
-  }, []);
+  }, [solutionId]);
 
   const gridContainerStyles = css`
     margin-top: 20px;

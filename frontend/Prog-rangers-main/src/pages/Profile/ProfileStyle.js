@@ -57,3 +57,9 @@ export const boxStyle = css`
   justify-content: center;
   align-items: center;
 `;
+
+export const badgeStyle = css`
+  width: 65px;
+  height: 65px;
+  margin: 15px 8px 0 8px;
+  `;

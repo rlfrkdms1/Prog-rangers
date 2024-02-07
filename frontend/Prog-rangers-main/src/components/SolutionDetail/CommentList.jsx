@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ import ProfileImg from './profile/default.png';
 import dot from '../../assets/icons/dotLight.svg';
 const token = localStorage.getItem('token');
 
-export const CommentList = () => {
+export const CommentList = ( totalCount ) => {
   const navigate = useNavigate();
   const onClickName = (nickname) => {
     navigate(`/profile/${nickname}`);
@@ -47,6 +47,7 @@ export const CommentList = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
     const apiUrl = `http://13.125.13.131:8080/api/v1/solutions/${solutionId}`;
 
     // 토큰이 있는 경우와 없는 경우에 대한 설정
@@ -64,7 +65,9 @@ export const CommentList = () => {
       .catch((error) => {
         console.error('API 요청 오류:', error);
       });
-  }, [solutionId, token]);
+    }
+    fetchData();
+  }, [solutionId, token, totalCount]);
   
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
@@ -131,7 +134,6 @@ export const CommentList = () => {
   // 수정 모드를 토글하는 함수
   const toggleEditComment = (commentId) => {
     const commentToUpdate = comments.find((comment) => comment.id === commentId);
-    console.log(commentToUpdate);
   
     // 댓글이 존재하고 해당 댓글의 mine 속성이 true일 때 수정 모드를 토글
     if (commentToUpdate && commentToUpdate.mine) {
@@ -150,8 +152,6 @@ export const CommentList = () => {
     }
   };
   
-
-
   // 댓글 내용 변경 시 호출되는 함수
   const onCommentContentChange = (
     commentId,
@@ -202,40 +202,53 @@ export const CommentList = () => {
     }
   };
   
-  // 외부 클릭시 dot 닫힘
-  const closeOnOutsideClick = (e) => {
-    if (isOpen) {
-      const dotMenus = document.querySelectorAll('.dot-menu');
-      dotMenus.forEach((dotMenu) => {
-        if (dotMenu && !dotMenu.contains(e.target)) {
-          const commentId = dotMenu.getAttribute('data-comment-id');
-          setIsOpen((prevState) => {
-            const updatedState = { ...prevState };
-            updatedState[commentId] = false;
-            return updatedState;
-          });
-        }
-      });
+  // // 외부 클릭시 dot 닫힘
+  // const closeOnOutsideClick = (e) => {
+  //   if (isOpen) {
+  //     const dotMenus = document.querySelectorAll('.dot-menu');
+  //     dotMenus.forEach((dotMenu) => {
+  //       if (dotMenu && !dotMenu.contains(e.target)) {
+  //         const commentId = dotMenu.getAttribute('data-comment-id');
+  //         setIsOpen((prevState) => {
+  //           const updatedState = { ...prevState };
+  //           updatedState[commentId] = false;
+  //           return updatedState;
+  //         });
+  //       }
+  //     });
+  //   }
+  // };
+  
+  // React.useEffect(() => {
+  //   window.addEventListener('click', closeOnOutsideClick);
+  //   return () => {
+  //     window.removeEventListener('click', closeOnOutsideClick);
+  //   };
+  // }, [isOpen]);
+
+  // 외부 클릭시 한줄리뷰 닫힘
+  const commentsRef = useRef();
+
+  const closeOnOutsideClick = (event) => {
+    if (
+      commentsRef.current &&
+      !commentsRef.current.contains(event.target)
+    ) {
+      setIsOpen(false);
     }
   };
-  
+
+
   React.useEffect(() => {
     window.addEventListener('click', closeOnOutsideClick);
     return () => {
       window.removeEventListener('click', closeOnOutsideClick);
     };
-  }, []);
-
-  
+  }, [isOpen]);
 
   return (
-    <div className="comments">
+    <div className="comments" ref={commentsRef}>
       {comments
-        .filter(
-          (commentItem) =>
-            commentItem.status !== 'DELETED' ||
-            commentItem.replies.length > 0
-        )
         .map((commentItem) => (
           <div className="comment" key={commentItem.id}>
             <div css={rowFlex}>
@@ -343,8 +356,6 @@ export const CommentList = () => {
                       css={css`
                         display: flex;
                         align-items: center;
-                        ${commentItem.status === 'DELETED' &&
-                        'display: none;'}
                       `}
                     >
                       <img src={dot} alt="dot" className="dot-menu" data-comment-id={commentItem.id} />
@@ -422,12 +433,6 @@ export const CommentList = () => {
               Array.isArray(commentItem.replies) && (
                 <div className="repliesSection">
                   {commentItem.replies
-                    .filter(
-                      (reply) =>
-                        reply &&
-                        reply.content !==
-                          '삭제된 댓글입니다'
-                    )
                     .map((reply) => (
                       <div
                         key={reply && reply.id}
@@ -504,7 +509,7 @@ export const CommentList = () => {
                               onClick={() => {
                                 handleDeleteComment(
                                   reply.id
-                                ); // 댓글 삭제 함수 호출
+                                );
                               }}
                             >
                               삭제

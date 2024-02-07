@@ -28,8 +28,10 @@ export const ScrapBoard = () => {
   const token = localStorage.getItem('token');
   const [Algo, setAlgo] = useState([]);
   const [Data, setData] = useState([]);
+  const [solutionTitle, setSolutionTitle] = useState('');
   const [problemTitle, setProblemTitle] = useState('');
   const [problemLink, setLink] = useState('');
+  const [solutionCode, setSolutionCode] = useState('');
   let algo = '';
   let data = '';
   let algoName = '';
@@ -51,6 +53,8 @@ export const ScrapBoard = () => {
       );
       const algo = response.data.solution.algorithm;
       const data = response.data.solution.dataStructure;
+      setSolutionTitle(response.data.solution.title);
+      setSolutionCode(response.data.solution.code);
 
       if (algo !== null) {
         const algoNameObject = sortArray.ALGORITHM.find(
@@ -94,7 +98,19 @@ export const ScrapBoard = () => {
   const postWrite = async () => {
 
     let star = clickedStar.filter(Boolean).length;
-    try {
+    try {     
+      if (inputs.solution === '') {
+        alert('제목을 입력해주세요.');
+        return;
+      }
+      if (star === 0) {
+        alert('난이도를 체크해주세요.');
+        return;
+      }
+      if (inputs.description === '') {
+        alert('풀이설명을 기록해주세요.');
+        return;
+      }
       const body = {
         problemTitle: problemTitle,
         title: inputs.solution,
@@ -222,9 +238,7 @@ export const ScrapBoard = () => {
         className="header"
         css={css`
           display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: flex-end;
+          flex-direction: column;
         `}
       >
         <div
@@ -232,7 +246,10 @@ export const ScrapBoard = () => {
             ${TitleBox}
           `}
         >
-          문제 제목은 올린 사람이 작성한 것으로 고정
+          문제 제목
+        </div>
+        <div css={css`${StyledInput} color: #303030; padding-top:10px; cursor: default;`}>
+          {solutionTitle}
         </div>
       </div>
       <div
@@ -327,6 +344,7 @@ export const ScrapBoard = () => {
           css={css`
             ${DetailInput} border: none;
           `}
+          placeholder="스크랩한 풀이의 설명을 입력해주세요"
           value={inputs.description}
           name="description"
           onChange={handleInput}
@@ -355,14 +373,15 @@ export const ScrapBoard = () => {
             css={css`
               border: none;
               resize: none;
-              color: #959595;
+              color: #303030;
+              cursor: default;
               &:placeholder {
-                color: #959595;
+                color: #303030;
                 font-size: 20px;
                 font-weight: 400;
               }
             `}
-            placeholder="다른 사람이 작성한 코드가 이미 써져 있음(수정불가)"
+            placeholder={Array.isArray(solutionCode) ? solutionCode.join('\n') : solutionCode}
             name="code"
             rows="30"
             cols="30"

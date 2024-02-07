@@ -79,7 +79,7 @@ export const ojName = css`
   color: white;
   `;
 
-  export const infoSytle = css`
+  export const infoStyle = css`
   width: 370px;
   height: 565px;
   border-radius: 5px;
@@ -109,3 +109,9 @@ export const ojName = css`
 
   background-color: ${theme.colors.light4}
 `;
+
+export const badgeStyle = css`
+  width: 50px;
+  height: 50px;
+  margin-right: 6px;
+  `;

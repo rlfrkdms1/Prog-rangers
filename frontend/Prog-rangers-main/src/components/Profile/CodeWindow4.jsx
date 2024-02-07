@@ -76,10 +76,13 @@ export const CodeWindow4 = () => {
   const handleToggleReviews = () => {
     setShowAllReviews(!showAllReviews);
     setIsReviewVisible(!isReviewVisible);
-  };
+  }
 
   const handleReviewChange = (codeLineNumber, value) => {
     const updatedReviews = [...reviews];
+    if (!Array.isArray(updatedReviews)) {
+    updatedReviews = [];
+  }
     updatedReviews[codeLineNumber] = value;
     setReviews(updatedReviews);
   };
@@ -166,6 +169,7 @@ export const CodeWindow4 = () => {
 
           // 대표 한줄리뷰 가리기
           setIsReviewVisible(false);
+          setShowAllReviews(true);
         })
         .catch((error) => {
           console.error('리뷰 저장 중 오류 발생:', error);
@@ -175,7 +179,7 @@ export const CodeWindow4 = () => {
   
   // 한줄리뷰 삭제
   const handleDeleteReview = (reviewId) => {
-    const reviewToDelete = reviews.find((review) => review.id === reviewId);
+    const reviewToDelete = codeData.reviews.find((review) => review.id === reviewId);
 
     if (reviewToDelete && reviewToDelete.mine) {
       axios
@@ -187,10 +191,9 @@ export const CodeWindow4 = () => {
           }
         )
         .then((response) => {
-          const updatedReviews = reviews.filter(
+          const updatedReviews = codeData.reviews.filter(
             (review) => review.id !== reviewId
           );
-  
           setData((prevData) => ({
             ...prevData,
             reviews: updatedReviews,
@@ -207,7 +210,7 @@ export const CodeWindow4 = () => {
 
   // 한줄리뷰 수정
   const handleEditReview = (reviewId, editValue) => {
-    const reviewToUpdate = reviews.find((review) => review.id === reviewId);
+    const reviewToUpdate = codeData.reviews.find((review) => review.id === reviewId);
   
     if (reviewToUpdate && reviewToUpdate.mine) {
     axios
@@ -222,7 +225,7 @@ export const CodeWindow4 = () => {
       )
 
       .then((response) => {
-        const updatedReviews = reviews.map((review) => {
+        const updatedReviews = codeData.reviews.map((review) => {
           if (review.id === reviewId) {
             review.content = editValue;
             review.editing = false; // 수정이 완료되면 편집 모드 종료
@@ -250,11 +253,13 @@ export const CodeWindow4 = () => {
         review.editing = !review.editing;
       }
       return review;
-    });  
-    setReviews(updatedReviews);
+    });
+    setData({
+      ...codeData,
+      reviews: updatedReviews,
+    });
   };
   
-
   // 한줄리뷰 내용 변경 시 호출되는 함수
   const onReviewContentChange = (reviewId, newContent) => {
     const updatedReviews = reviews.map((review) => {
@@ -404,9 +409,7 @@ React.useEffect(() => {
                               .filter(
                                 (review) =>
                                   review.codeLineNumber ===
-                                    codeLineNumber+1 &&
-                                  review.content !==
-                                    '삭제된 리뷰입니다'
+                                    codeLineNumber+1
                               )
                               .sort((a, b) => a.id - b.id)
                               .map((review) => (
@@ -545,7 +548,6 @@ React.useEffect(() => {
                           {codeData.reviews
                             .filter(
                               (review) =>
-                                review.content !== '삭제된 리뷰입니다' &&
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )
@@ -566,7 +568,6 @@ React.useEffect(() => {
                             {codeData.reviews
                             .filter(
                               (review) =>
-                                review.content !== '삭제된 리뷰입니다' &&
                                 review.codeLineNumber ===
                                   clickedLineId + 1
                             )

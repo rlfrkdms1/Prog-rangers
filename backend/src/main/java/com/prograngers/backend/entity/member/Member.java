@@ -1,6 +1,8 @@
 package com.prograngers.backend.entity.member;
 
-import com.prograngers.backend.exception.badrequest.invalidvalue.ProhibitionNicknameException;
+import static com.prograngers.backend.exception.errorcode.MemberErrorCode.PROHIBITION_NICKNAME;
+
+import com.prograngers.backend.exception.InvalidValueException;
 import com.prograngers.backend.support.Encrypt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -96,7 +98,7 @@ public class Member {
 
     private void validProhibitionNickname(String nickname) {
         if (nickname != null && PROHIBITED_NICKNAMES.contains(nickname)) {
-            throw new ProhibitionNicknameException();
+            throw new InvalidValueException(PROHIBITION_NICKNAME);
         }
     }
 
