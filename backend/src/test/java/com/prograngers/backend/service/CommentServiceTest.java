@@ -58,7 +58,6 @@ class CommentServiceTest {
         Solution solution = 공개_풀이.태그_추가_생성(problem, member, LocalDateTime.now(), BFS, LIST, JAVA, 1);
         Comment comment = 생성된_댓글.기본_정보_생성(member, solution, LocalDateTime.now());
 
-        given(commentRepository.save(comment)).willReturn(comment);
         given(commentRepository.findById(comment.getId())).willReturn(Optional.ofNullable(comment));
         given(memberRepository.findById(member.getId())).willReturn(Optional.ofNullable(member));
         UpdateCommentRequest request = new UpdateCommentRequest("수정내용");
