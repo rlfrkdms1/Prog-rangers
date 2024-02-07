@@ -4,27 +4,40 @@ import { ojNameTag, tags } from '../Question/tagsform';
 import axios from 'axios';
 import ProfileImg from '../../components/SolutionDetail/profile/default.png';
 import { useNavigate } from 'react-router-dom';
+import { useInView } from 'react-intersection-observer';
 
 export const CommentForm = () => {
   const [data, setData] = useState({ contents: [] });
+  const [ref, inView] = useInView();
+  const [page, setPage] = useState(0);
 
-  useEffect(() => {
+  const dataFetch = () => {
     const token = localStorage.getItem('token');
     const apiUrl =
-      'http://13.125.13.131:8080/api/v1/comments';
+      `http://13.125.13.131:8080/api/v1/comments?page=${page}&size=5`;
 
     axios
       .get(apiUrl, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        setData(response.data);
+    .then((res) => {
+      if (res.data && res.data.contents) {
+        setData(prevData => ({
+          ...prevData,
+          contents: [...prevData.contents, ...res.data.contents]
+        }));
+      }
+      setPage((page) => page + 1)
       })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, []);
+    .catch((err) => {console.log(err)});
+    };
+
+    useEffect(() => {
+      if (inView) {
+      dataFetch();
+      }
+      }, [inView]);
 
   const navigate = useNavigate();
   const onClickSolution = (solutionId) => {
@@ -200,6 +213,7 @@ export const CommentForm = () => {
           </div>
         </div>
       ))}
+      <div ref={ref} style={{ borderBottom: '1px solid #FFF' }}> </div>
     </>
   );
 };

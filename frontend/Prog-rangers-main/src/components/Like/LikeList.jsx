@@ -13,9 +13,12 @@ import {
   fontSize14,
 } from './LikeStyle.js';
 import hljs from 'highlight.js';
+import { useInView } from 'react-intersection-observer';
 
 export const LikeList = () => {
   const [data, setData] = useState({ contents: [] });
+  const [ref, inView] = useInView();
+  const [page, setPage] = useState(0);
   const token = localStorage.getItem('token');
 
   const navigate = useNavigate();
@@ -34,25 +37,33 @@ export const LikeList = () => {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const apiUrl = 'http://13.125.13.131:8080/api/v1/likes';
+  const dataFetch = () => {
+    const apiUrl =
+      `http://13.125.13.131:8080/api/v1/likes?page=${page}&size=3`;
 
     axios
-      .get(apiUrl, {
+    .get(apiUrl, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        setData(response.data);
+    .then((res) => {
+      if (res.data && res.data.contents) {
+        setData(prevData => ({
+          ...prevData,
+          contents: [...prevData.contents, ...res.data.contents]
+        }));
+      } 
+        setPage((page) => page + 1)
       })
-      .catch((error) => {
-        console.error('API 요청 오류:', error);
-      });
-  }, []);
+    .catch((err) => {console.log(err)});
+    };
 
-  if (data.contents && data.contents.length > 0) {
-    for (let i = 0; i < data.contents.length; i++) {
+    useEffect(() => {
+      if (inView) { 
+      dataFetch();
+      }
+      }, [inView]);
+
       return (
         <>
           {data.contents.map((item, index) => (
@@ -61,14 +72,12 @@ export const LikeList = () => {
               css={css`
                 width: 835px;
                 margin-top: 50px;
-              `}
-            >
+              `}>
               <div
-                css={css`}
-        width: 835px;
-        margin-top: 30px;
-        `}
-              >
+                css={css`
+                  width: 835px;
+                  margin-top: 30px;
+                  `}>
                 <div
                   css={css`
                     ${fontSizedark20}
@@ -206,7 +215,7 @@ export const LikeList = () => {
                     `}
                   >
                     <div
-                      key={item.solution.id + i}
+                      key={item.solution.id + index}
                       css={css`
                         overflow-y: auto;
                         max-height: 270px;
@@ -259,8 +268,7 @@ export const LikeList = () => {
               </div>
             </div>
           ))}
+          <div ref={ref} style={{ borderBottom: '1px solid #FFF' }}></div>
         </>
       );
-    }
-  }
 };
