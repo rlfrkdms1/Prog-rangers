@@ -11,4 +11,10 @@ public class CustomException extends RuntimeException {
     public CustomException(final ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
+
+    @Override
+    public String toString() {
+        return String.format("name : %s, message : %s, statuscode : %s", errorCode.name(), errorCode.getMessage(),
+                errorCode.getHttpStatus());
+    }
 }

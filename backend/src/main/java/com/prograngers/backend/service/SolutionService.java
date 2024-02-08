@@ -327,15 +327,6 @@ public class SolutionService {
                 .anyMatch(id -> id.equals(memberId));
     }
 
-    private Problem getProblem(WriteSolutionRequest writeSolutionRequest) {
-        Optional<Problem> recentProblem = problemRepository.findByLink(writeSolutionRequest.getProblemLink());
-        if (!recentProblem.isPresent()) {
-            return recentProblem.get();
-        }
-        JudgeConstant judgeName = validLink(writeSolutionRequest.getProblemLink());
-        return writeSolutionRequest.toProblem(judgeName);
-    }
-
     private JudgeConstant validLink(String problemLink) {
         return JudgeConstant.from(problemLink);
     }

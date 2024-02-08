@@ -76,7 +76,7 @@ public class SolutionCustomRepositoryImpl implements SolutionCustomRepository {
                 .from(likes)
                 .rightJoin(likes.solution, solution)
                 .groupBy(solution)
-                .where(solution.problem.eq(problem))
+                .where(solution.problem.eq(problem), solution.isPublic.eq(true))
                 .orderBy(likes.count().desc())
                 .limit(limit)
                 .fetch();
