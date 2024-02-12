@@ -19,9 +19,15 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import com.prograngers.backend.support.RepositoryTest;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
 
 @RepositoryTest
 class ReviewRepositoryTest {
@@ -34,6 +40,18 @@ class ReviewRepositoryTest {
     private ProblemRepository problemRepository;
     @Autowired
     private SolutionRepository solutionRepository;
+
+    @MockBean
+    DateTimeProvider dateTimeProvider;
+
+    @SpyBean
+    AuditingHandler auditingHandler;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        MockitoAnnotations.openMocks(this);
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+    }
 
     @Test
     @DisplayName("회원이 주어졌을 때 해당 회원이 작성한 주어진 달의 리뷰들을 조회할 수 있다.")

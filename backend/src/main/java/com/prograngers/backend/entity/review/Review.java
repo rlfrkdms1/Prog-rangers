@@ -63,4 +63,18 @@ public class Review {
         this.content = content;
         this.updated = true;
     }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", memberId=" + member.getId() +
+                ", solutionId=" + solution.getId() +
+                ", codeLineNumber=" + codeLineNumber +
+                ", parentId=" + parentId +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", updated=" + updated +
+                '}';
+    }
 }

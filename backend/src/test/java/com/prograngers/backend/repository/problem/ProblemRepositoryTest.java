@@ -22,9 +22,15 @@ import com.prograngers.backend.repository.solution.SolutionRepository;
 import com.prograngers.backend.support.RepositoryTest;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.PageRequest;
 
 @RepositoryTest
@@ -38,6 +44,19 @@ class ProblemRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @MockBean
+    DateTimeProvider dateTimeProvider;
+
+    @SpyBean
+    AuditingHandler auditingHandler;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        MockitoAnnotations.openMocks(this);
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+    }
+
+
     @DisplayName("문제 목록 조회시 가장 최근 풀이의 날짜에 따라 최신순으로 정렬된다")
     @Test
     void 문제_목록_조회_날짜_최신순() {
@@ -46,10 +65,10 @@ class ProblemRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
 
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
-        Problem problem2 = 백준_문제.기본_정보_생성();
-        Problem problem3 = 백준_문제.기본_정보_생성();
-        Problem problem4 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+        Problem problem2 = 저장(백준_문제.기본_정보_생성());
+        Problem problem3 = 저장(백준_문제.기본_정보_생성());
+        Problem problem4 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이  풀이 9 ~ 1 순으로 최신
         Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
@@ -91,10 +110,10 @@ class ProblemRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
 
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
-        Problem problem2 = 백준_문제.기본_정보_생성();
-        Problem problem3 = 백준_문제.기본_정보_생성();
-        Problem problem4 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+        Problem problem2 = 저장(백준_문제.기본_정보_생성());
+        Problem problem3 = 저장(백준_문제.기본_정보_생성());
+        Problem problem4 = 저장(백준_문제.기본_정보_생성());
 
         // 풀이
         Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
@@ -133,15 +152,15 @@ class ProblemRepositoryTest {
         Member member1 = 저장(장지담.기본_정보_생성());
 
         // 문제
-        Problem problem1 = 백준_문제.기본_정보_생성();
-        Problem problem2 = 백준_문제.기본_정보_생성();
-        Problem problem3 = 백준_문제.기본_정보_생성();
-        Problem problem4 = 백준_문제.기본_정보_생성();
-        Problem problem5 = 백준_문제.기본_정보_생성();
-        Problem problem6 = 백준_문제.기본_정보_생성();
-        Problem problem7 = 백준_문제.기본_정보_생성();
-        Problem problem8 = 백준_문제.기본_정보_생성();
-        Problem problem9 = 백준_문제.기본_정보_생성();
+        Problem problem1 = 저장(백준_문제.기본_정보_생성());
+        Problem problem2 = 저장(백준_문제.기본_정보_생성());
+        Problem problem3 = 저장(백준_문제.기본_정보_생성());
+        Problem problem4 = 저장(백준_문제.기본_정보_생성());
+        Problem problem5 = 저장(백준_문제.기본_정보_생성());
+        Problem problem6 = 저장(백준_문제.기본_정보_생성());
+        Problem problem7 = 저장(백준_문제.기본_정보_생성());
+        Problem problem8 = 저장(백준_문제.기본_정보_생성());
+        Problem problem9 = 저장(백준_문제.기본_정보_생성());
 
         //  풀이 :  풀이 9 ~ 1 순서로 최신
         Solution solution1 = 저장(공개_풀이.태그_추가_생성(problem1, member1, LocalDateTime.now(), BFS, QUEUE, JAVA, 1));
@@ -181,5 +200,9 @@ class ProblemRepositoryTest {
 
     private Solution 저장(Solution solution) {
         return solutionRepository.save(solution);
+    }
+
+    private Problem 저장(Problem problem) {
+        return problemRepository.save(problem);
     }
 }

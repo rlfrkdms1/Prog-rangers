@@ -41,5 +41,13 @@ public class Problem {
     @OneToMany(mappedBy = "problem")
     private List<Solution> solutions = new ArrayList<>();
 
-
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", link='" + link + '\'' +
+                ", ojName=" + ojName +
+                '}';
+    }
 }

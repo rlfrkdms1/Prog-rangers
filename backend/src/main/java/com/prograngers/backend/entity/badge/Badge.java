@@ -33,4 +33,9 @@ public class Badge {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     BadgeConstant badgeType;
+
+    @Override
+    public String toString() {
+        return String.format("BadgeId: %d, BadgeType: %s, MemberId : %d", id, badgeType, member.getId());
+    }
 }
