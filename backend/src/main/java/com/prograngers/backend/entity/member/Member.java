@@ -28,8 +28,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
-    public static final String QUIT_NICKNAME = "탈퇴한 사용자";
-    private static final List<String> PROHIBITED_NICKNAMES = List.of("탈퇴한 사용자");
+    private static final String QUIT_NICKNAME = "탈퇴한 사용자";
+    private static final List<String> PROHIBITED_NICKNAMES = List.of(QUIT_NICKNAME);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,6 +94,10 @@ public class Member {
         this.photo = photo;
         this.passwordModifiedAt = passwordModifiedAt;
         this.usable = usable;
+    }
+
+    public String getPassword() {
+        return Encrypt.decoding(this.password);
     }
 
     private void validProhibitionNickname(String nickname) {

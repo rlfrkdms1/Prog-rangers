@@ -167,15 +167,15 @@ class FollowServiceTest {
          * 5,6,7,8은 나랑 팔로우 팔로워 관계 X, 내가 가장 최근에 푼 문제를 풀지 않음, 각각 팔로워 6,5,4,3명
          */
         final Long myId = 1L;
-        final Member me = 장지담.아이디_지정_생성(myId);
-        final Member others1 = 장지담.아이디_지정_생성(2L);
-        final Member others2 = 장지담.아이디_지정_생성(3L);
-        final Member others3 = 장지담.아이디_지정_생성(4L);
-        final Member others4 = 장지담.아이디_지정_생성(5L);
-        final Member others5 = 장지담.아이디_지정_생성(6L);
-        final Member others6 = 장지담.아이디_지정_생성(7L);
-        final Member others7 = 장지담.아이디_지정_생성(8L);
-        final Member others8 = 장지담.아이디_지정_생성(9L);
+        final Member me = 장지담.기본_정보_생성(myId);
+        final Member others1 = 장지담.기본_정보_생성(2L);
+        final Member others2 = 장지담.기본_정보_생성(3L);
+        final Member others3 = 장지담.기본_정보_생성(4L);
+        final Member others4 = 장지담.기본_정보_생성(5L);
+        final Member others5 = 장지담.기본_정보_생성(6L);
+        final Member others6 = 장지담.기본_정보_생성(7L);
+        final Member others7 = 장지담.기본_정보_생성(8L);
+        final Member others8 = 장지담.기본_정보_생성(9L);
 
         final List<Member> following = Arrays.asList(others3, others4);
         final List<Member> follower = Arrays.asList(others1, others2);
@@ -219,15 +219,15 @@ class FollowServiceTest {
          * 5,6,7,8은 나랑 팔로우 팔로워 관계 X, 내가 가장 최근에 푼 문제를 풀지 않음, 각각 팔로워 6,5,4,3명
          */
         final Long myId = 1L;
-        final Member me = 장지담.아이디_지정_생성(myId);
-        final Member others1 = 장지담.아이디_지정_생성(2L);
-        final Member others2 = 장지담.아이디_지정_생성(3L);
-        final Member others3 = 장지담.아이디_지정_생성(4L);
-        final Member others4 = 장지담.아이디_지정_생성(5L);
-        final Member others5 = 장지담.아이디_지정_생성(6L);
-        final Member others6 = 장지담.아이디_지정_생성(7L);
-        final Member others7 = 장지담.아이디_지정_생성(8L);
-        final Member others8 = 장지담.아이디_지정_생성(9L);
+        final Member me = 장지담.기본_정보_생성(myId);
+        final Member others1 = 장지담.기본_정보_생성(2L);
+        final Member others2 = 장지담.기본_정보_생성(3L);
+        final Member others3 = 장지담.기본_정보_생성(4L);
+        final Member others4 = 장지담.기본_정보_생성(5L);
+        final Member others5 = 장지담.기본_정보_생성(6L);
+        final Member others6 = 장지담.기본_정보_생성(7L);
+        final Member others7 = 장지담.기본_정보_생성(8L);
+        final Member others8 = 장지담.기본_정보_생성(9L);
 
         List<Member> following = Arrays.asList(others3, others4);
         List<Member> follower = Arrays.asList(others1, others2);

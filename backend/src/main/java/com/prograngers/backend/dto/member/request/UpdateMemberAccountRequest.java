@@ -1,10 +1,18 @@
 package com.prograngers.backend.dto.member.request;
 
 import com.prograngers.backend.entity.member.Member;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-public class UpdateMemberAccountInfoRequest {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+public class UpdateMemberAccountRequest {
 
     private String nickname;
 

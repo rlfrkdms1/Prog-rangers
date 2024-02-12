@@ -2,7 +2,7 @@ package com.prograngers.backend.controller;
 
 import com.prograngers.backend.controller.auth.LoggedInMember;
 import com.prograngers.backend.controller.auth.Login;
-import com.prograngers.backend.dto.member.request.UpdateMemberAccountInfoRequest;
+import com.prograngers.backend.dto.member.request.UpdateMemberAccountRequest;
 import com.prograngers.backend.dto.member.response.ShowMemberAccountResponse;
 import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.service.MemberService;
@@ -35,8 +35,8 @@ public class MemberController {
     @Login
     @PatchMapping("/members")
     public ResponseEntity<Void> updateMemberAccount(@LoggedInMember Long memberId,
-                                                    @RequestBody UpdateMemberAccountInfoRequest updateMemberAccountInfoRequest) {
-        memberService.updateMemberAccount(memberId, updateMemberAccountInfoRequest);
+                                                    @RequestBody UpdateMemberAccountRequest updateMemberAccountRequest) {
+        memberService.updateMemberAccount(memberId, updateMemberAccountRequest);
         return ResponseEntity.noContent().build();
     }
 

@@ -30,7 +30,7 @@ public class ShowBasicMemberAccountResponse extends ShowMemberAccountResponse {
                 .github(member.getGithub())
                 .introduction(member.getIntroduction())
                 .passwordModifiedAt(member.getPasswordModifiedAt())
-                .password(Encrypt.decoding(member.getPassword()))
+                .password(member.getPassword())
                 .photo(member.getPhoto())
                 .build();
     }

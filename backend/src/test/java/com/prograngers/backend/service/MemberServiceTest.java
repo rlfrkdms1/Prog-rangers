@@ -15,8 +15,8 @@ import com.prograngers.backend.dto.member.response.ShowMemberProfileResponse;
 import com.prograngers.backend.entity.member.Member;
 import com.prograngers.backend.entity.problem.Problem;
 import com.prograngers.backend.entity.solution.Solution;
-import com.prograngers.backend.exception.NotFoundException;
-import com.prograngers.backend.exception.UnAuthorizationException;
+import com.prograngers.backend.exception.notfound.MemberNotFoundException;
+import com.prograngers.backend.exception.unauthorization.QuitMemberException;
 import com.prograngers.backend.repository.badge.BadgeRepository;
 import com.prograngers.backend.repository.follow.FollowRepository;
 import com.prograngers.backend.repository.member.MemberRepository;
@@ -35,6 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +43,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MemberServiceTest {
 
     private static final Long LAST_PAGE_CURSOR = -1L;
+
     @InjectMocks
     private MemberService memberService;
     @Mock
@@ -52,6 +54,122 @@ class MemberServiceTest {
     private SolutionRepository solutionRepository;
     @Mock
     private FollowRepository followRepository;
+
+    @Test
+    void 회원의_로그인_타입에_따라_계정_정보_조회시_반환되는_Response가_다르다_BASIC() {
+        Member member = 길가은.기본_정보_생성(1L);
+        String encodedPassword = "encoded";
+
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        ShowMemberAccountResponse memberAccount;
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            encryptMockedStatic.when(() -> Encrypt.decoding(member.getPassword())).thenReturn(encodedPassword);
+            memberAccount = memberService.getMemberAccount(member.getId());
+        }
+
+        assertAll(
+                () -> assertThat(memberAccount).isExactlyInstanceOf(ShowBasicMemberAccountResponse.class),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 회원의_로그인_타입에_따라_계정_정보_조회시_반환되는_Response가_다르다_SOCIAL() {
+        Member member = 장지담.기본_정보_생성(1L);
+        String encodedPassword = "encoded";
+
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        ShowMemberAccountResponse memberAccount;
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            encryptMockedStatic.when(() -> Encrypt.decoding(member.getPassword())).thenReturn(encodedPassword);
+            memberAccount = memberService.getMemberAccount(member.getId());
+        }
+
+        assertAll(
+                () -> assertThat(memberAccount).isExactlyInstanceOf(ShowSocialMemberAccountResponse.class),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 계정정보_조회시_존재하지_않는_회원인_경우_예외를_반환한다() {
+        Member member = 길가은.기본_정보_생성(1L);
+
+        given(memberRepository.findById(member.getId())).willReturn(Optional.empty());
+
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.getMemberAccount(member.getId()))
+                        .isExactlyInstanceOf(MemberNotFoundException.class),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 회원은_계정_정보를_수정할_수_있다() {
+        Member member = 길가은.기본_정보_생성(1L);
+        String newNickname = "newNickname";
+        String newGithub = "newGithub";
+        String introduction = "newIntroduction";
+        String oldPassword = "decodedOriginPassword";
+        String newPassword = "newPassword";
+        String photo = "newPhoto";
+        UpdateMemberAccountRequest updateMemberAccountRequest = new UpdateMemberAccountRequest(newNickname, newGithub, introduction, oldPassword, newPassword, photo);
+        try (MockedStatic<Encrypt> encryptMockedStatic = mockStatic(Encrypt.class)) {
+            given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+            encryptMockedStatic.when(() -> Encrypt.decoding("testPassword")).thenReturn(oldPassword);
+            memberService.updateMemberAccount(member.getId(), updateMemberAccountRequest);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " "})
+    void 계정_수정시_닉네임을_공백으로_요청한_경우_예외를_반환한다(String blank) {
+        Member member = 길가은.기본_정보_생성(1L);
+        UpdateMemberAccountRequest request = UpdateMemberAccountRequest.builder().nickname(blank).build();
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.updateMemberAccount(member.getId(), request))
+                        .isExactlyInstanceOf(BlankNicknameException.class),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 계정_수정시_중복된_닉네임으로_요청한_경우_예외를_반환한다() {
+        Member member = 길가은.기본_정보_생성(1L);
+        String existNickname = "existNickname";
+        UpdateMemberAccountRequest request = UpdateMemberAccountRequest.builder().nickname(existNickname).build();
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        given(memberRepository.existsByNickname(existNickname)).willReturn(true);
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.updateMemberAccount(member.getId(), request))
+                        .isExactlyInstanceOf(AlreadyExistNicknameException.class),
+                () -> verify(memberRepository).findById(member.getId()),
+                () -> verify(memberRepository).existsByNickname(existNickname)
+        );
+    }
+
+    @Test
+    void 회원탈퇴를_할_수_있다() {
+        Member member = 길가은.기본_정보_생성(1L);
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        memberService.delete(member.getId());
+        assertAll(
+                () -> assertThat(member.isUsable()).isFalse(),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
+
+    @Test
+    void 이미_탈퇴한_회원이_탈퇴요청을_할_경우_예외를_반환한다() {
+        Member member = 길가은.탈퇴_회원_생성(1L);
+        given(memberRepository.findById(member.getId())).willReturn(Optional.of(member));
+        assertAll(
+                () -> assertThatThrownBy(() -> memberService.delete(member.getId()))
+                        .isExactlyInstanceOf(AlreadyDeletedMemberException.class),
+                () -> verify(memberRepository).findById(member.getId())
+        );
+    }
 
     @DisplayName("회원 프로필을 조회할 수 있다. 마지막 페이지가 아닌 경우 다음 풀이의 id를 커서값으로 반환한다.")
     @Test
